@@ -8,3 +8,4 @@ set hlsearch
 set ruler
 set paste
 highlight Comment ctermfg=green
+map 9 $
