@@ -11,5 +11,3 @@ autoload -U compinit
 compinit
 
 alias brewlist="brew leaves | xargs brew deps --include-build --tree"
-
-export TERM=screen-256color
