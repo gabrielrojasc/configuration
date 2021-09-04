@@ -1,8 +1,8 @@
 syntax on
 colorscheme peachpuff
 set mouse=a
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set expandtab
 set ai
 set number
@@ -13,4 +13,7 @@ set scrolloff=10
 set encoding=utf-8
 set clipboard^=unnamed,unnamedplus
 set backspace=indent,eol,start
+set backupdir=/$TMPDIR//
+set directory=/$TMPDIR//
+set undodir=/$TMPDIR//
 highlight Comment ctermfg=green
