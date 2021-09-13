@@ -1,8 +1,9 @@
 syntax on
 colorscheme peachpuff
 set mouse=a
-set tabstop=2
 set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 set expandtab
 set ai
 set number

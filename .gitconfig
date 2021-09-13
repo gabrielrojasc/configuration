@@ -1,0 +1,10 @@
+[user]
+	name = Gabriel Rojas
+	email = gabo06123@gmail.com
+	signingkey = F1D20B2535E0D9CB
+[color]
+	ui = auto
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
