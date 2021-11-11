@@ -10,6 +10,6 @@ export PATH=/usr/local/sbin:/usr/local/opt/python@3.9/libexec/bin:/usr/local/opt
 export EDITOR='vim'
 export GPG_TTY=$(tty)
 
-autoload -U compinit
+autoload -Uz compinit
 compinit
 
