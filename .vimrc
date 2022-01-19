@@ -1,9 +1,10 @@
+filetype plugin indent on
 syntax on
 colorscheme peachpuff
 set mouse=a
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
 set expandtab
 set ai
 set number
@@ -18,3 +19,5 @@ set backupdir=/$TMPDIR//
 set directory=/$TMPDIR//
 set undodir=/$TMPDIR//
 highlight Comment ctermfg=green
+
+autocmd BufNewFile,BufReadPost *.pug set filetype=pug

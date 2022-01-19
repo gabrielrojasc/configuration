@@ -1,7 +1,13 @@
+# ls aliases
 alias ls='ls -Gh'
 alias ll='ls -l'
 alias la='ls -la'
 alias l='ls -CF'
+
+# git aliases
+function gl() { git log --oneline -n "${1:-5}"; }
+
+# other aliases
 alias pip-upgrade-outdated='pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U'
 alias brewlist="brew leaves | xargs brew deps --include-build --tree"
 
