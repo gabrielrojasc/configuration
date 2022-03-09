@@ -1,11 +1,11 @@
+colorscheme peachpuff
 filetype on
 filetype plugin on
 syntax on
-colorscheme peachpuff
 set mouse=a
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 set expandtab
 set ai
 set number

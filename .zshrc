@@ -6,6 +6,16 @@ alias l='ls -CF'
 
 # git aliases
 function gl() { git log --oneline -n "${1:-5}"; }
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+
+# django
+alias dj="poetry run python3 manage.py"
+alias drs="poetry run python3 manage.py runserver"
+alias dsp="poetry run python3 manage.py shell_plus"
+alias dcm="poetry run python3 manage.py makemigrations --check --dry-run"
+alias dmm="poetry run python3 manage.py makemigrations"
+alias dt="poetry run python3 manage.py test"
 
 # other aliases
 alias pip-upgrade-outdated="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"

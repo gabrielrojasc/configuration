@@ -20,3 +20,7 @@ syn match pythonStringModifier /![sra]/ contained containedin=pythonInterpolatio
 hi link pythonfString String
 hi link pythonfDocstring String
 hi link pythonStringModifier PreProc
+
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
