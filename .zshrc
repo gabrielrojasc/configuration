@@ -29,4 +29,9 @@ export EDITOR='vim'
 export GPG_TTY=$(tty)
 export PRE_COMMIT_COLOR=always
 
+# keep env if using tmux
+if [ "$TMUX" ] && [ "$VIRTUAL_ENV" ];then
+  source "$VIRTUAL_ENV/bin/activate"
+fi
+
 autoload -Uz compinit && compinit
