@@ -5,7 +5,17 @@ alias la='ls -la'
 alias l='ls -CF'
 
 # git aliases
-function gl() { git log --oneline -n "${1:-5}"; }
+function gl() {
+  if [ "$1" ] ; then
+    if [[ "$1" =~ ^[0-9]+$ ]]; then
+      git log --oneline -n "${1:-5}" "${2:-"$(git branch --show-current)"}";
+    elif [[ "$1" =~ ^[a-zA-Z0-9_]+$ ]]; then
+      git log --oneline -n "${2:-5}" "${1:-"$(git branch --show-current)"}";
+    fi
+  else
+    git log --oneline -n "${1:-5}";
+  fi
+}
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 

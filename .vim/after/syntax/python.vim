@@ -21,6 +21,4 @@ hi link pythonfString String
 hi link pythonfDocstring String
 hi link pythonStringModifier PreProc
 
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
+"set shiftwidth=2 tabstop=2 softtabstop=2
