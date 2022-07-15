@@ -1,3 +1,4 @@
+set nocompatible
 colorscheme peachpuff
 filetype on
 filetype plugin on
@@ -20,5 +21,3 @@ set backupdir=/$TMPDIR//
 set directory=/$TMPDIR//
 set undodir=/$TMPDIR//
 highlight Comment ctermfg=green
-
-autocmd BufNewFile,BufReadPost *.pug set filetype=pug
