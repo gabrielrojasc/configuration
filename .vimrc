@@ -1,7 +1,5 @@
 set nocompatible
 colorscheme peachpuff
-filetype on
-filetype plugin on
 syntax on
 set mouse=a
 set shiftwidth=2
@@ -13,7 +11,9 @@ set number
 set hlsearch
 set ruler
 set linebreak
-set scrolloff=5
+set nowrap
+set incsearch
+set scrolloff=8
 set encoding=utf-8
 set clipboard^=unnamed,unnamedplus
 set backspace=indent,eol,start
