@@ -1,8 +1,10 @@
-cp -r ~/.bashrc .
-cp -r ~/.gitconfig .
-cp -r ~/.pylintrc .
-cp -r ~/.screenrc .
-cp -r ~/.tmux.conf .
+cp ~/.bashrc .
+cp ~/.gitconfig .
+cp ~/.pylintrc .
+cp ~/.screenrc .
+cp ~/.tmux.conf .
+cp ~/.vimrc .
+cp ~/.zshrc .
 cp -r ~/.vim .
-cp -r ~/.vimrc .
-cp -r ~/.zshrc .
+cp -r ~/.config/nvim .config/
+git submodule foreach git pull origin HEAD

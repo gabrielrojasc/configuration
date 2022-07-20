@@ -1,0 +1,7 @@
+require("settings")
+require("packer-config")
+require("nvim-tree-config")
+require("mappings")
+require("treesitter-config")
+require("lsp-config.language-servers")
+require("lsp-config.null-ls")
