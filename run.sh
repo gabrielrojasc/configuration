@@ -5,6 +5,7 @@ cp ~/.screenrc .
 cp ~/.tmux.conf .
 cp ~/.vimrc .
 cp ~/.zshrc .
+cp ~/.zsh_aliases .
 cp -r ~/.vim .
 cp -r ~/.config/nvim .config/
 cp -r ~/.local/bin .local/
