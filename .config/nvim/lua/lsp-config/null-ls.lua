@@ -1,7 +1,7 @@
 local sources = {
   require("null-ls").builtins.formatting.stylua,
   require("null-ls").builtins.formatting.black,
-  require("null-ls").builtins.formatting.beautysh,
+  require("null-ls").builtins.formatting.shfmt,
   require("null-ls").builtins.formatting.eslint,
 }
 
