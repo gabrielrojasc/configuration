@@ -9,11 +9,11 @@ return require("packer").startup(function()
   use("williamboman/nvim-lsp-installer")
 
   -- cmp
-  use('hrsh7th/cmp-nvim-lsp')
-  use('hrsh7th/cmp-buffer')
-  use('hrsh7th/cmp-path')
-  use('hrsh7th/cmp-cmdline')
-  use('hrsh7th/nvim-cmp')
+  use("hrsh7th/cmp-nvim-lsp")
+  use("hrsh7th/cmp-buffer")
+  use("hrsh7th/cmp-path")
+  use("hrsh7th/cmp-cmdline")
+  use("hrsh7th/nvim-cmp")
 
   -- lua snip
   use("L3MON4D3/LuaSnip")
@@ -26,6 +26,8 @@ return require("packer").startup(function()
   })
   -- ts rainbow
   use("p00f/nvim-ts-rainbow")
+  -- ts context
+  use("nvim-treesitter/nvim-treesitter-context")
 
   -- telescope
   use({

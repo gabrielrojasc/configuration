@@ -1,10 +1,10 @@
 -- Setup nvim-cmp.
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+local cmp = require("cmp")
+local luasnip = require("luasnip")
 
 local check_backspace = function()
-  local col = vim.fn.col "." - 1
-  return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
+  local col = vim.fn.col(".") - 1
+  return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
 require("luasnip/loaders/from_vscode").lazy_load()
@@ -13,7 +13,7 @@ cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
     end,
   },
   window = {
@@ -21,11 +21,11 @@ cmp.setup({
     -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -56,36 +56,36 @@ cmp.setup({
     }),
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' }, -- For luasnip users.
+    { name = "nvim_lsp" },
+    { name = "luasnip" }, -- For luasnip users.
   }, {
-    { name = 'buffer' },
-  })
+    { name = "buffer" },
+  }),
 })
 
 -- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
+cmp.setup.filetype("gitcommit", {
   sources = cmp.config.sources({
-    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+    { name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
   }, {
-    { name = 'buffer' },
-  })
+    { name = "buffer" },
+  }),
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline('/', {
+cmp.setup.cmdline("/", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = 'buffer' }
-  }
+    { name = "buffer" },
+  },
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
+cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'path' }
+    { name = "path" },
   }, {
-    { name = 'cmdline' }
-  })
+    { name = "cmdline" },
+  }),
 })

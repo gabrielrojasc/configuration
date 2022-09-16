@@ -7,7 +7,7 @@ vim.cmd("nnoremap Y Y")
 
 g.netrw_banner = 0
 g.netrw_liststyle = 3
-g.netrw_localrmdir = 'rm -r'
+g.netrw_localrmdir = "rm -r"
 
 set.compatible = false
 set.expandtab = true
