@@ -10,3 +10,7 @@
 	gpgsign = true
 [init]
 	defaultBranch = main
+
+# magnet config
+[includeIf "gitdir:~/magnet/"]
+    path = ~/magnet/.gitconfig
