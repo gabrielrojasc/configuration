@@ -25,3 +25,4 @@ set.backupdir = os.getenv("TMPDIR")
 set.directory = os.getenv("TMPDIR")
 set.undodir = os.getenv("TMPDIR")
 set.guicursor = ""
+set.relativenumber = true
