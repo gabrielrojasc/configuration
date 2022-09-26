@@ -70,3 +70,7 @@ lspconfig["html"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
+lspconfig["racket_langserver"].setup({
+	on_attach = on_attach,
+	flags = lsp_flags,
+})

@@ -4,6 +4,7 @@ local g = vim.g
 vim.cmd("colorscheme peachpuff")
 vim.cmd("highlight Comment ctermfg=green")
 vim.cmd("nnoremap Y Y")
+vim.cmd("autocmd BufNewFile,BufRead *.rkt :set filetype=racket")
 
 g.netrw_banner = 0
 g.netrw_liststyle = 3
