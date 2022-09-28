@@ -22,6 +22,7 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 # django aliases
 alias dj="python3 manage.py"
 alias drs="python3 manage.py runserver"
+alias drss="gunicorn saleor.asgi:application -k uvicorn.workers.UvicornWorker"
 alias dsp="python3 manage.py shell_plus"
 alias dcm="python3 manage.py makemigrations --check --dry-run"
 alias dmm="python3 manage.py makemigrations"
