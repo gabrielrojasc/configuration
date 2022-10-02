@@ -11,7 +11,6 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 local on_attach = function(client, bufnr)
 	-- Enable completion triggered by <c-x><c-o>
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-	client.resolved_capabilities.document_formatting = false
 
 	-- Mappings.
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -20,7 +19,9 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
-	vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
+	vim.keymap.set("n", "<space>f", function()
+		vim.lsp.buf.format({ async = true })
+	end, bufopts)
 end
 
 local lsp_flags = {
@@ -32,45 +33,43 @@ require("nvim-lsp-installer").setup({
 	automatic_installation = true,
 })
 
-local lspconfig = require("lspconfig")
-
-lspconfig["sumneko_lua"].setup({
+require("lspconfig")["sumneko_lua"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["clangd"].setup({
+require("lspconfig")["clangd"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["bashls"].setup({
+require("lspconfig")["bashls"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["dockerls"].setup({
+require("lspconfig")["dockerls"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["emmet_ls"].setup({
+require("lspconfig")["emmet_ls"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["eslint"].setup({
+require("lspconfig")["eslint"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["marksman"].setup({
+require("lspconfig")["marksman"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["pyright"].setup({
+require("lspconfig")["pyright"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["html"].setup({
+require("lspconfig")["html"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
-lspconfig["racket_langserver"].setup({
+require("lspconfig")["racket_langserver"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
 })
