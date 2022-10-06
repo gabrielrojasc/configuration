@@ -11,6 +11,7 @@ g.netrw_banner = 0
 g.netrw_liststyle = 3
 g.netrw_localrmdir = "rm -r"
 
+set.cmdheight = 0
 set.compatible = false
 set.expandtab = true
 set.number = true
