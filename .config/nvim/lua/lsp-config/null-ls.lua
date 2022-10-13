@@ -3,6 +3,7 @@ local sources = {
 	require("null-ls").builtins.formatting.black,
 	require("null-ls").builtins.formatting.shfmt,
 	require("null-ls").builtins.formatting.eslint,
+	require("null-ls").builtins.formatting.rustfmt,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})

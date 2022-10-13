@@ -1,4 +1,5 @@
 # files
+cp ~/.profile .
 cp ~/.bashrc .
 cp ~/.gitconfig .
 cp ~/.pylintrc .
@@ -6,6 +7,7 @@ cp ~/.screenrc .
 cp ~/.tmux.conf .
 cp ~/.vimrc .
 cp ~/.zshrc .
+cp ~/.zshenv .
 cp ~/.zsh_aliases .
 
 # directories

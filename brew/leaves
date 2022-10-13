@@ -13,6 +13,7 @@ gtk+
 htop
 isort
 libmagic
+libssh2
 neovim
 nvm
 poetry
@@ -20,9 +21,11 @@ postgresql@14
 python@3.8
 python@3.9
 ripgrep
+rustfmt
+rustup-init
 shfmt
-speedtest-cli
 stylua
+teamookla/speedtest/speedtest
 tldr
 tmux
 tree
