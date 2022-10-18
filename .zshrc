@@ -3,7 +3,6 @@ export PATH=/usr/local/sbin:$PATH  # for brew
 export PATH=/usr/local/opt/python@3.9/libexec/bin:$PATH  # for python
 export EDITOR="nvim"
 export GPG_TTY=$(tty)
-export PRE_COMMIT_COLOR=always
 
 # source aliases
 source ~/.zsh_aliases

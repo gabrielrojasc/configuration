@@ -5,8 +5,10 @@ return require("packer").startup(function()
 
 	-- lsp config
 	use("neovim/nvim-lspconfig")
-	-- nvim lsp installer
-	use("williamboman/nvim-lsp-installer")
+
+	-- mason.nvim
+	use({ "williamboman/mason.nvim" })
+	use({ "williamboman/mason-lspconfig.nvim" })
 
 	-- cmp
 	use("hrsh7th/cmp-nvim-lsp")

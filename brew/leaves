@@ -12,6 +12,7 @@ gnupg
 gtk+
 htop
 isort
+libffi
 libmagic
 libssh2
 neovim
