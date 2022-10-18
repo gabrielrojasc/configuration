@@ -24,13 +24,6 @@ require("mason-lspconfig").setup({
 	automatic_installation = true,
 })
 
---setup to run automatically the installed lsps
-require("mason-lspconfig").setup_handlers({
-	function(server_name)
-		require("lspconfig")[server_name].setup({})
-	end,
-})
-
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -56,3 +49,12 @@ local on_attach = function(client, bufnr)
 		vim.lsp.buf.format({ async = true })
 	end, bufopts)
 end
+
+-- this setups every language server automatically
+require("mason-lspconfig").setup_handlers({
+	function(server_name)
+		require("lspconfig")[server_name].setup({
+			on_attach = on_attach,
+		})
+	end,
+})

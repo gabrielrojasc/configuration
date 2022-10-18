@@ -4,11 +4,18 @@ return require("packer").startup(function()
 	use("jose-elias-alvarez/null-ls.nvim")
 
 	-- lsp config
-	use("neovim/nvim-lspconfig")
-
-	-- mason.nvim
-	use({ "williamboman/mason.nvim" })
-	use({ "williamboman/mason-lspconfig.nvim" })
+	use({
+		"neovim/nvim-lspconfig",
+		-- mason.nvim
+		wants = {
+			"mason.nvim",
+			"mason-lspconfig.nvim",
+		},
+		requires = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+		},
+	})
 
 	-- cmp
 	use("hrsh7th/cmp-nvim-lsp")
