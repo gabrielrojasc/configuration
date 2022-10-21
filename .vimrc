@@ -1,10 +1,14 @@
 set nocompatible
 colorscheme peachpuff
 syntax on
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+
 set mouse=a
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
 set expandtab
 set ai
 set number
@@ -17,7 +21,14 @@ set scrolloff=8
 set encoding=utf-8
 set clipboard^=unnamed,unnamedplus
 set backspace=indent,eol,start
-set backupdir=/$TMPDIR//
-set directory=/$TMPDIR//
-set undodir=/$TMPDIR//
+set relativenumber
+
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
+
 highlight Comment ctermfg=green
+
+nnoremap <silent> t :Ex<CR>
