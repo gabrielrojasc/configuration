@@ -1,6 +1,4 @@
 black
-cloc
-concurrencykit
 diffutils
 direnv
 eslint
@@ -13,15 +11,12 @@ gnupg
 gtk+
 htop
 isort
-ldns
 libffi
 libmagic
-libssh2
 neovim
 nvm
 poetry
 postgresql@14
-python@3.8
 python@3.9
 ripgrep
 rustfmt
@@ -36,4 +31,3 @@ vim
 virtualenv
 watch
 wget
-yarn
