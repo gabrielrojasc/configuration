@@ -3,7 +3,6 @@ local g = vim.g
 
 vim.cmd("colorscheme peachpuff")
 vim.cmd("highlight Comment ctermfg=green")
-vim.cmd("nnoremap Y Y")
 vim.cmd("autocmd BufNewFile,BufRead *.rkt :set filetype=racket")
 vim.cmd("hi rainbowcol1 guifg='#458588'")
 
@@ -21,8 +20,11 @@ set.mouse = "a"
 set.scrolloff = 8
 set.encoding = "utf-8"
 set.clipboard = "unnamed,unnamedplus"
-set.backupdir = os.getenv("TMPDIR")
-set.directory = os.getenv("TMPDIR")
-set.undodir = os.getenv("TMPDIR")
 set.guicursor = ""
 set.relativenumber = true
+
+-- no more swaps, embrace the undodir
+set.swapfile = false
+set.backup = false
+set.undodir = os.getenv("HOME") .. "/.local/share/nvim/undodir"
+set.undofile = true

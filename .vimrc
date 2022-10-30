@@ -23,11 +23,11 @@ set clipboard^=unnamed,unnamedplus
 set backspace=indent,eol,start
 set relativenumber
 
-set backup
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set backupskip=/tmp/*,/private/tmp/*
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set writebackup
+" no more swaps, embrace the undodir
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
 
 highlight Comment ctermfg=green
 
