@@ -20,4 +20,4 @@ brew leaves >brew/leaves
 brew list --cask >brew/casks
 
 # update submodules
-git submodule foreach git pull origin HEAD
+git submodule update --remote --rebase
