@@ -24,6 +24,7 @@ rustup-init
 shfmt
 stylua
 teamookla/speedtest/speedtest
+tig
 tldr
 tmux
 tree
