@@ -3,6 +3,7 @@ diffutils
 direnv
 eslint
 flake8
+fnm
 fzf
 gcc
 git
@@ -14,7 +15,6 @@ isort
 libffi
 libmagic
 neovim
-nvm
 poetry
 postgresql@14
 python@3.9

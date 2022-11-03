@@ -58,3 +58,7 @@ require("mason-lspconfig").setup_handlers({
 		})
 	end,
 })
+
+require("lspconfig")["racket_langserver"].setup({
+	on_attach = on_attach,
+})
