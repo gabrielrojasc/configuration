@@ -1,6 +1,6 @@
 export PS1='%n %F{1}::%f %F{2}%~%f %F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
 export PATH=/usr/local/sbin:$PATH  # for brew
-export PATH=/usr/local/opt/python@3.9/libexec/bin:$PATH  # for python
+export PATH=/usr/local/opt/python/libexec/bin:$PATH  # for python
 export EDITOR="nvim"
 export GPG_TTY=$(tty)
 
