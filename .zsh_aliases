@@ -1,7 +1,7 @@
 # ls aliases
-alias ls='ls -Gh'
-alias ll='ls -l'
-alias la='ls -la'
+alias ls='ls -Gp'
+alias ll='ls -lh'
+alias la='ls -lha'
 alias l='ls -CF'
 
 # nvim alias

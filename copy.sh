@@ -1,6 +1,6 @@
 # files
 cp ~/.profile .
-cp ~/.bashrc .
+cp ~/.bash_profile .
 cp ~/.gitconfig .
 cp ~/.pylintrc .
 cp ~/.screenrc .
