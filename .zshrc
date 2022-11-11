@@ -9,7 +9,7 @@ source ~/.zsh_aliases
 
 # keep env if using tmux
 if [ "$TMUX" ] && [ "$VIRTUAL_ENV" ];then
-  source "$VIRTUAL_ENV/bin/activate"
+  . "$VIRTUAL_ENV/bin/activate"
 fi
 
 # Colors

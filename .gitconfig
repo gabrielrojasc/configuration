@@ -10,6 +10,10 @@
 	gpgsign = true
 [init]
 	defaultBranch = main
+[pull]
+  rebase = true
+[rebase]
+  autoStash = true
 
 # magnet config
 [includeIf "gitdir:~/magnet/"]
