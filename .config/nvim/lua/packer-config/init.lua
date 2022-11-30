@@ -51,4 +51,11 @@ return require("packer").startup(function()
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
+
+	-- tabnine
+	-- use({
+	-- 	"tzachar/cmp-tabnine",
+	-- 	run = "./install.sh",
+	-- 	requires = "hrsh7th/nvim-cmp",
+	-- })
 end)

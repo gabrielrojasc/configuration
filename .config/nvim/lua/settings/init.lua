@@ -19,6 +19,7 @@ set.tabstop = 2
 set.softtabstop = 2
 set.expandtab = true
 set.linebreak = true
+set.wrap = false
 
 set.signcolumn = "yes"
 

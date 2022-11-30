@@ -13,8 +13,10 @@ gnupg
 gtk+
 htop
 isort
+jsonschema
 libffi
 libmagic
+minimal-racket
 neovim
 poetry
 postgresql@14
@@ -31,6 +33,5 @@ tldr
 tmux
 tree
 vim
-virtualenv
 watch
 wget
