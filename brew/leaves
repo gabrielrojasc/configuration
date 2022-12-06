@@ -13,7 +13,6 @@ gnupg
 gtk+
 htop
 isort
-jsonschema
 libffi
 libmagic
 minimal-racket
