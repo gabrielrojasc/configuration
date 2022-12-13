@@ -1,4 +1,5 @@
 require("settings")
+require("ts-fix")
 require("packer-config")
 require("mappings")
 require("treesitter-config")
