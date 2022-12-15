@@ -29,6 +29,8 @@ alias dcm="python3 manage.py makemigrations --check --dry-run"
 alias dmm="python3 manage.py makemigrations"
 alias dm="python3 manage.py migrate"
 alias dt="python3 manage.py test"
+# saleor
+alias saleor-reset-db="dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input"
 
 # other aliases
 alias pip-upgrade-outdated="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"

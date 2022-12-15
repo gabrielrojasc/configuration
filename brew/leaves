@@ -1,4 +1,5 @@
 black
+composer
 diffutils
 direnv
 eslint
@@ -15,7 +16,6 @@ htop
 isort
 libffi
 libmagic
-minimal-racket
 neovim
 poetry
 postgresql@14
