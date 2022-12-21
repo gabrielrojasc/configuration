@@ -1,9 +1,8 @@
 local set = vim.opt
 local g = vim.g
 
-vim.cmd("colorscheme peachpuff")
+vim.cmd.colorscheme("peachpuff")
 vim.cmd("highlight Comment ctermfg=green")
-vim.cmd("autocmd BufNewFile,BufRead *.rkt :set filetype=racket")
 vim.cmd("hi rainbowcol1 guifg='#458588'")
 
 g.netrw_banner = 0

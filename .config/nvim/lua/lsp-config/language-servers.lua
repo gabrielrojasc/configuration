@@ -17,9 +17,9 @@ require("mason-lspconfig").setup({
 		"html",
 		"bashls",
 		"dockerls",
-		"emmet_ls",
 		"marksman",
-		"quick_lint_js",
+		"eslint",
+		"tsserver",
 	},
 	automatic_installation = true,
 })
@@ -57,8 +57,4 @@ require("mason-lspconfig").setup_handlers({
 			on_attach = on_attach,
 		})
 	end,
-})
-
-require("lspconfig")["racket_langserver"].setup({
-	on_attach = on_attach,
 })

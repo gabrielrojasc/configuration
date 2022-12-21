@@ -1,4 +1,4 @@
-return require("packer").startup(function()
+return require("packer").startup(function(use)
 	-- package manager
 	use("wbthomason/packer.nvim")
 	use("jose-elias-alvarez/null-ls.nvim")
