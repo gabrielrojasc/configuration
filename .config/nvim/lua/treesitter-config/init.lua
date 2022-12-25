@@ -8,6 +8,8 @@ require("nvim-treesitter.configs").setup({
 	-- Automatically install missing parsers when entering buffer
 	auto_install = true,
 
+	indent = { enable = true, disable = { "python" } },
+
 	highlight = {
 		-- `false` will disable the whole extension
 		enable = true,

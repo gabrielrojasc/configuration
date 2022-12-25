@@ -22,7 +22,7 @@ alias git-branch-clean="git branch | grep -v 'main\|master\|development' | xargs
 
 # django aliases
 alias dj="python3 manage.py"
-alias drs="python3 manage.py runserver"
+alias drs="python3 manage.py runserver_plus"
 alias drss="gunicorn saleor.asgi:application -k uvicorn.workers.UvicornWorker"
 alias dsp="python3 manage.py shell_plus"
 alias dcm="python3 manage.py makemigrations --check --dry-run"

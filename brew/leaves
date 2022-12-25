@@ -16,6 +16,7 @@ htop
 isort
 libffi
 libmagic
+mypy
 neovim
 poetry
 postgresql@14
