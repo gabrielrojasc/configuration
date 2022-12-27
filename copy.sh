@@ -2,12 +2,10 @@
 cp ~/.profile . &
 cp ~/.bash_profile . &
 cp ~/.gitconfig . &
-cp ~/.pylintrc . &
 cp ~/.screenrc . &
 cp ~/.tmux.conf . &
 cp ~/.vimrc . &
 cp ~/.zshrc . &
-cp ~/.zshenv . &
 cp ~/.zsh_aliases . &
 
 # directories
