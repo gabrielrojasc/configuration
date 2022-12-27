@@ -1,6 +1,5 @@
 export PS1='%n %F{1}::%f %F{2}%~%f %F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH # for brew
-export PATH=/usr/local/opt/python/libexec/bin:$PATH  # for python
+export PATH=/opt/homebrew/opt/python@3.10/libexec/bin:$PATH  # for python
 export EDITOR="nvim"
 export GPG_TTY=$(tty)
 
@@ -25,7 +24,8 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:ssh:*' hosts
 
 # Initialize the autocompletion
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+compinit
 
 # direnv
 eval "$(direnv hook zsh)"

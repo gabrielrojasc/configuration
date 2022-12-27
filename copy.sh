@@ -1,5 +1,5 @@
 # files
-cp ~/.profile . &
+cp ~/.zprofile . &
 cp ~/.bash_profile . &
 cp ~/.gitconfig . &
 cp ~/.screenrc . &
