@@ -23,9 +23,14 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # Tab complete hosts from ssh config
 zstyle ':completion:*:ssh:*' hosts
 
-# Initialize the autocompletion
-autoload -Uz compinit
-compinit
+# autocompletion 
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
 
 # direnv
 eval "$(direnv hook zsh)"
