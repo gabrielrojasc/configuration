@@ -54,11 +54,4 @@ return require("packer").startup(function(use)
 
 	-- editorconfig
 	use("gpanders/editorconfig.nvim")
-
-	-- tabnine
-	-- use({
-	-- 	"tzachar/cmp-tabnine",
-	-- 	run = "./install.sh",
-	-- 	requires = "hrsh7th/nvim-cmp",
-	-- })
 end)
