@@ -1,5 +1,5 @@
 export PS1='%n %F{1}::%f %F{2}%~%f %F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
-export PATH=/opt/homebrew/opt/python@3.10/libexec/bin:$PATH  # for python
+export PATH=/opt/homebrew/opt/python3/libexec/bin:$PATH  # for python
 export EDITOR="nvim"
 export GPG_TTY=$(tty)
 

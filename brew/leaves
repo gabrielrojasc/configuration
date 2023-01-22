@@ -19,6 +19,7 @@ mypy
 neovim
 poetry
 postgresql@14
+python@3.10
 python@3.9
 ripgrep
 rustfmt
