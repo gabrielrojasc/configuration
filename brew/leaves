@@ -1,4 +1,7 @@
+ansible
+bash
 black
+cocoapods
 composer
 diffutils
 direnv

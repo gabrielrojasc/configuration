@@ -1,7 +1,9 @@
 [user]
-	name = Gabriel Rojas
-	email = gabriel.rojas@magnet.cl
+  name = Gabriel Rojas
+  email = gabriel.rojas@magnet.cl
 [commit]
-	gpgsign = false
+  gpgsign = false
 [tag]
-	gpgsign = false
+  gpgsign = false
+[credential]
+  username = gabriel.rojas@magnet.cl

@@ -1,25 +1,27 @@
 [user]
-	name = Gabriel Rojas
-	email = gabo06123@gmail.com
-	signingkey = 2F4D5CEF45A56B8C 
+  name = Gabriel Rojas
+  email = gabo06123@gmail.com
+  signingkey = 2F4D5CEF45A56B8C
 [color]
-	ui = auto
+  ui = auto
 [commit]
-	gpgsign = true
+  gpgsign = true
 [tag]
-	gpgsign = true
+  gpgsign = true
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [pull]
   rebase = true
 [rebase]
   autoStash = true
+[credential]
+  username = gabo06123@gmail.com
 
 # magnet config
 [includeIf "gitdir:~/magnet/"]
     path = ~/magnet/.gitconfig
 [filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process

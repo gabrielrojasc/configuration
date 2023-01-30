@@ -32,10 +32,10 @@ alias dt="python3 manage.py test"
 
 # saleor
 alias saleor-reset-db="dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input"
-alias saleor-docker-down="dco down && rm -rf .volumes/{pgdata,redis_data} && dco build"
-alias saleor-docker-up="dco run --rm api ./manage.py migrate \
-                        && dco run --rm api ./manage.py createsuperuser --no-input \
-                        && dco up -d"
+alias saleor-docker-down="dco down && rm -rf .volumes/{pgdata,redis_data}"
+alias saleor-docker-up="dco run --rm api ./manage.py migrate && \ 
+                        dco run --rm api ./manage.py createsuperuser --no-input && \ 
+                        dco up -d"
 
 # docker-compose
 (( ${+commands[docker-compose]} )) && dccmd='docker-compose' || dccmd='docker compose'
