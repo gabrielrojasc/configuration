@@ -30,6 +30,8 @@ set.encoding = "utf-8"
 
 set.clipboard = "unnamed,unnamedplus"
 
+set.splitright = true
+
 -- no more swaps, embrace the undodir
 set.swapfile = false
 set.backup = false
