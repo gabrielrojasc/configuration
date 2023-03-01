@@ -1,4 +1,3 @@
-export PS1='%n %F{1}::%f %F{2}%~%f %F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
 export PATH=/opt/homebrew/opt/python3/libexec/bin:$PATH  # for python
 export EDITOR="nvim"
 export GPG_TTY=$(tty)
@@ -37,3 +36,18 @@ eval "$(direnv hook zsh)"
 
 # fnm
 eval "$(fnm env --use-on-cd)"
+
+# prompt
+## Enabling and setting git info var to be used in prompt config.
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git svn
+## This line obtains information from the vcs.
+zstyle ':vcs_info:git*' formats "%F{3}(%b)%f "
+precmd() {
+    vcs_info
+}
+
+## Enable substitution in the prompt.
+setopt prompt_subst
+
+export PS1='%n %F{1}::%f %F{2}%~%f %F{1}%(?..%? )%f${vcs_info_msg_0_}%F{4}'$'\U00BB''%f '
