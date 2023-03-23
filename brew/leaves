@@ -11,10 +11,12 @@ fzf
 gcc
 git
 git-quick-stats
+gnu-sed
 gnupg
 gtk+
 htop
 isort
+jq
 libffi
 libmagic
 mypy
