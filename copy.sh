@@ -13,9 +13,8 @@ cp -r ~/.vim . &
 cp -r ~/.config/nvim .config/ &
 cp -r ~/magnet/.gitconfig magnet/ &
 
-# dump brew leaves and casks
-brew leaves >brew/leaves &
-brew list --cask >brew/casks &
+# dump brew bundle
+brew bundle dump --force &
 
 # update submodules
 git submodule update --remote --rebase &
