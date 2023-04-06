@@ -13,6 +13,7 @@ git
 git-quick-stats
 gnu-sed
 gnupg
+graphviz
 gtk+
 htop
 isort
