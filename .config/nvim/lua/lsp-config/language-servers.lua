@@ -12,7 +12,7 @@ require("mason").setup({
 -- setup for installing lsps
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"sumneko_lua",
+		"lua_ls",
 		-- ruff_lsp",
 		"pyright",
 		"html",
