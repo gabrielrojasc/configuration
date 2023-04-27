@@ -1,9 +1,13 @@
 # path
 export PATH="/opt/homebrew/opt/python3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
+export PATH="$HOME/.docker/bin:$PATH" # for gnu-sed
 
 # editor
 export EDITOR="nvim"
+
+# to keep keybindings in tmux
+bindkey -e
 
 # for gpg signing (?)
 export GPG_TTY=$(tty)
