@@ -4,9 +4,8 @@ local sources = {
 	require("null-ls").builtins.formatting.eslint,
 	require("null-ls").builtins.formatting.rustfmt,
 	require("null-ls").builtins.formatting.black,
-	require("null-ls").builtins.formatting.isort,
-	require("null-ls").builtins.diagnostics.flake8,
-	-- require("null-ls").builtins.diagnostics.mypy,
+	require("null-ls").builtins.formatting.ruff,
+	require("null-ls").builtins.diagnostics.ruff,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})

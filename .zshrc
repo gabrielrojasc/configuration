@@ -1,7 +1,7 @@
 # path
 export PATH="/opt/homebrew/opt/python3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
-export PATH="$HOME/.docker/bin:$PATH" # for gnu-sed
+export PATH="$HOME/.docker/bin:$PATH" # for docker
 
 # editor
 export EDITOR="nvim"

@@ -29,10 +29,12 @@ brew "libmagic"
 brew "mypy"
 brew "neovim"
 brew "poetry"
-brew "postgresql@14", restart_service: true
+brew "postgresql@14"
+brew "postgresql@15", link: true
 brew "python@3.10"
 brew "python@3.9"
 brew "ripgrep"
+brew "ruff"
 brew "rustfmt"
 brew "rustup-init"
 brew "shfmt"
