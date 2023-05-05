@@ -14,15 +14,14 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
 	-- null-ls
 	"jose-elias-alvarez/null-ls.nvim",
-	-- lsp config
+	-- mason
 	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			-- mason
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-		},
+		"williamboman/mason.nvim",
+		build = ":MasonUpdate",
 	},
+	"williamboman/mason-lspconfig.nvim",
+	-- lsp config
+	"neovim/nvim-lspconfig",
 	-- cmp
 	"hrsh7th/cmp-nvim-lsp",
 	"hrsh7th/cmp-buffer",
@@ -44,8 +43,10 @@ local plugins = {
 	-- telescope
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.x",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		version = "0.1.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
 	},
 	-- lualine
 	{
