@@ -7,6 +7,7 @@ cp ~/.tmux.conf . &
 cp ~/.vimrc . &
 cp ~/.zshrc . &
 cp ~/.zsh_aliases . &
+cp ~/.zsh_exports . &
 
 # directories
 cp -r ~/.vim . &

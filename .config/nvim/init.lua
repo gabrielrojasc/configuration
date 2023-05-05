@@ -1,6 +1,6 @@
 require("settings")
 require("ts-fix")
-require("packer-config")
+require("lazy-config")
 require("mappings")
 require("treesitter-config")
 require("lsp-config.language-servers")
