@@ -1,11 +1,14 @@
+local null_ls = require("null-ls")
+
 local sources = {
-	require("null-ls").builtins.formatting.stylua,
-	require("null-ls").builtins.formatting.shfmt,
-	require("null-ls").builtins.formatting.eslint,
-	require("null-ls").builtins.formatting.rustfmt,
-	require("null-ls").builtins.formatting.black,
-	require("null-ls").builtins.formatting.ruff,
-	require("null-ls").builtins.diagnostics.ruff,
+	null_ls.builtins.formatting.stylua,
+	null_ls.builtins.formatting.shfmt,
+	null_ls.builtins.formatting.eslint,
+	null_ls.builtins.formatting.stylelint,
+	null_ls.builtins.formatting.rustfmt,
+	null_ls.builtins.formatting.black,
+	null_ls.builtins.formatting.ruff,
+	null_ls.builtins.diagnostics.ruff,
 }
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -23,7 +26,7 @@ local on_attach = function(client, bufnr)
 	end
 end
 
-require("null-ls").setup({
+null_ls.setup({
 	sources = sources,
 	on_attach = on_attach,
 })
