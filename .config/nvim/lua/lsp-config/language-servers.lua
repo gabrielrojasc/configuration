@@ -13,14 +13,12 @@ require("mason").setup({
 require("mason-lspconfig").setup({
 	ensure_installed = {
 		"lua_ls",
-		-- "ruff_lsp",
 		"pyright",
 		"html",
 		"bashls",
 		"dockerls",
 		"marksman",
 		"eslint",
-		"tsserver",
 	},
 	automatic_installation = true,
 })
