@@ -12,6 +12,8 @@ cp ~/.zsh_exports . &
 # directories
 cp -r ~/.vim . &
 cp -r ~/.config/nvim .config/ &
+cp -r ~/.config/direnv .config/ &
+cp -r ~/.config/htop .config/ &
 
 # magnet
 cp ~/magnet/.gitconfig magnet/ &
