@@ -1,0 +1,10 @@
+default:
+  just --list
+
+# start root
+root:
+  ./scripts/start-dpt-project.sh magnet-root-d3pt root
+
+# start asset-intranet
+asset:
+  ./scripts/start-dpt-project.sh asset-intranet asset

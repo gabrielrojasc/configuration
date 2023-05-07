@@ -12,11 +12,13 @@ cp ~/.zsh_exports . &
 # directories
 cp -r ~/.vim . &
 cp -r ~/.config/nvim .config/ &
-cp -r ~/magnet/.gitconfig magnet/ &
+
+# magnet
+cp ~/magnet/.gitconfig magnet/ &
+cp ~/magnet/justfile magnet/ &
+cp -r ~/magnet/scripts magnet/ &
 
 # dump brew bundle
 brew bundle dump --force &
 
-# update submodules
-git submodule update --remote --rebase &
 wait
