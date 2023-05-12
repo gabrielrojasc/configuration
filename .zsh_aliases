@@ -14,6 +14,7 @@ alias vim='nvim'
 
 # git aliases
 alias gl='git log --oneline -n20'
+alias gia='git add -NA'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 alias git-branch-clean="git branch | grep -v 'main\|master\|development\|release' | xargs git branch -d"
@@ -27,6 +28,7 @@ alias dcm="python3 manage.py makemigrations --check --dry-run"
 alias dmm="python3 manage.py makemigrations"
 alias dm="python3 manage.py migrate"
 alias dt="python3 manage.py test"
+alias dsu='python3 manage.py createsuperuser --no-input'
 
 # saleor
 alias saleor-reset-db="dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input"
