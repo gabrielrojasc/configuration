@@ -1,6 +1,12 @@
 default:
   just --list
 
+alias sp:=start-dpt-project
+
+# start dpt project
+start-dpt-project DIR ALIAS='dpt':
+  ./scripts/start-dpt-project.sh {{DIR}} {{ALIAS}}
+
 # start root
 root:
   ./scripts/start-dpt-project.sh magnet-root-d3pt root

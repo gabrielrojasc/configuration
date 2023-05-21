@@ -35,7 +35,7 @@ brew "mysql"
 brew "neovim"
 brew "ninja"
 brew "poetry"
-brew "postgresql@14"
+brew "postgresql@14", restart_service: true
 brew "postgresql@15"
 brew "python@3.10"
 brew "python@3.9"

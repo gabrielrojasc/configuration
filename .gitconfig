@@ -24,6 +24,9 @@
 [credential]
   username = gabo06123@gmail.com
 
+[push]
+	autoSetupRemote = true
+
 # magnet config
 [includeIf "gitdir:~/magnet/"]
     path = ~/magnet/.gitconfig
