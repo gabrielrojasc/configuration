@@ -29,6 +29,7 @@ alias dmm="python3 manage.py makemigrations"
 alias dm="python3 manage.py migrate"
 alias dt="python3 manage.py test"
 alias dsu='python3 manage.py createsuperuser --no-input'
+alias dmsu='dm && dsu'
 
 # saleor
 alias saleor-reset-db="dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input"
