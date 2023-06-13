@@ -2,6 +2,7 @@ default:
   just --list
 
 alias sp:=start-dpt-project
+alias cpdb:=copy-dpt-db
 
 # start dpt project
 start-dpt-project DIR ALIAS='dpt':
@@ -14,3 +15,7 @@ root:
 # start asset-intranet
 asset:
   ./scripts/start-dpt-project.sh asset-intranet asset
+
+
+copy-dpt-db *ARGS:
+  cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}
