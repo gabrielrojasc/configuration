@@ -49,11 +49,16 @@ local plugins = {
 		},
 	},
 	-- lualine
-	{
-		"nvim-lualine/lualine.nvim",
-	},
+	"nvim-lualine/lualine.nvim",
 	-- editorconfig
 	"gpanders/editorconfig.nvim",
+	-- git blame
+	"f-person/git-blame.nvim",
+	-- comments
+	{
+		"numToStr/Comment.nvim",
+		config = true,
+	},
 }
 
 local opts = {
