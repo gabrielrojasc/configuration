@@ -8,6 +8,9 @@ vim.cmd("hi rainbowcol1 guifg='#458588'")
 g.netrw_banner = 0
 g.netrw_liststyle = 3
 
+g.gitblame_highlight_group = "DiagnosticHint"
+g.gitblame_delay = 300
+
 set.number = true
 set.relativenumber = true
 

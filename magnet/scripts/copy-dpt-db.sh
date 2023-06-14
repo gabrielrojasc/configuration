@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -euo pipefail
+
 host=${1:-$(basename $(pwd))}
 server=${2:-dev}
 service=${3:-postgres}

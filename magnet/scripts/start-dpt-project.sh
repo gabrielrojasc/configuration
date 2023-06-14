@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -euo pipefail
+
 # start tmux within poetry shell
 cd "/Users/gabriel/magnet/$1"
 source "$(poetry env info --path)/bin/activate"

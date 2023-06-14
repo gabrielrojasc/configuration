@@ -1,21 +1,19 @@
-default:
-  just --list
-
 alias sp:=start-dpt-project
 alias cpdb:=copy-dpt-db
 
+default:
+  @just --list --unsorted
+
 # start dpt project
-start-dpt-project DIR ALIAS='dpt':
-  ./scripts/start-dpt-project.sh {{DIR}} {{ALIAS}}
+start-dpt-project DIR:
+  @./scripts/start-dpt-project.sh {{DIR}} $(basename {{DIR}})
 
 # start root
-root:
-  ./scripts/start-dpt-project.sh magnet-root-d3pt root
+root: (start-dpt-project 'magnet-root-d3pt')
 
 # start asset-intranet
-asset:
-  ./scripts/start-dpt-project.sh asset-intranet asset
+asset: (start-dpt-project 'asset-intranet')
 
-
+# copy the database from a server, defaults to {{current_dir}}.dev
 copy-dpt-db *ARGS:
   cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}

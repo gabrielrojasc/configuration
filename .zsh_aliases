@@ -4,6 +4,9 @@ alias ll='ls -l'
 alias la='ls -la'
 alias l='ls -C'
 
+# just
+alias j='just'
+
 # grep, diff with colors
 alias diff='diff --color'
 alias grep='grep --color'
