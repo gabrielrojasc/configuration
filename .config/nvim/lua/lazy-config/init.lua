@@ -50,8 +50,6 @@ local plugins = {
 	},
 	-- lualine
 	"nvim-lualine/lualine.nvim",
-	-- editorconfig
-	"gpanders/editorconfig.nvim",
 	-- git blame
 	"f-person/git-blame.nvim",
 	-- comments

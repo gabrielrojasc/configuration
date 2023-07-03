@@ -1,6 +1,7 @@
 # path
 export PATH="/opt/homebrew/opt/python3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
+export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
 
 # source exports
 source ~/.zsh_exports

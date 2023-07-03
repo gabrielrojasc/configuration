@@ -9,7 +9,10 @@ g.netrw_banner = 0
 g.netrw_liststyle = 3
 
 g.gitblame_highlight_group = "DiagnosticHint"
+g.gitblame_date_format = "%r"
 g.gitblame_delay = 300
+
+g.editorconfig = true
 
 set.number = true
 set.relativenumber = true
