@@ -5,10 +5,8 @@ local sources = {
 	null_ls.builtins.formatting.shfmt,
 	null_ls.builtins.formatting.eslint,
 	null_ls.builtins.formatting.stylelint,
-	null_ls.builtins.formatting.rustfmt,
 	null_ls.builtins.formatting.black,
 	null_ls.builtins.formatting.ruff,
-	-- null_ls.builtins.diagnostics.mypy,
 	null_ls.builtins.diagnostics.ruff,
 }
 

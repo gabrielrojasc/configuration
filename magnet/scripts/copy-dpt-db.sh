@@ -16,7 +16,7 @@ psql \
 
 ssh $host.$server "cd $host && docker-compose exec -T $service pg_dump --format=custom" >$local_dump_path
 pg_restore --dbname="${PGDATABASE}" --no-owner --no-acl --jobs="$(sysctl -n hw.logicalcpu)" "$local_dump_path"
-rm $local_dump_path
 
 ./manage.py migrate
+./manage.py shell -c 'from django.contrib.sites.models import Site; Site.objects.filter(id=1).update(domain="localhost:8000", name="localhost, port:8000");'
 ./manage.py createsuperuser --no-input
