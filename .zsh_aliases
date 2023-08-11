@@ -7,6 +7,8 @@ alias l='ls -C'
 # just
 alias j='just'
 
+alias bat='bat -pp'
+
 # grep, diff with colors
 alias diff='diff --color'
 alias grep='grep --color'

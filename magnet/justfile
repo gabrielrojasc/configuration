@@ -17,6 +17,10 @@ root: (start-dpt-project 'magnet-root-d3pt')
 # start asset-intranet
 asset: (start-dpt-project 'asset-intranet')
 
+# start aes-essprim
+aes: 
+  @./scripts/start-aes-essprim.sh
+
 # copy the database from a server, defaults to {{current_dir}}.dev
 copy-dpt-db *ARGS:
   cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}
