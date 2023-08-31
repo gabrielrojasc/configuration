@@ -27,7 +27,7 @@ tmux send-keys -t "aes" "dce django bash" Enter
 tmux send-keys -t "aes" "npm start" Enter
 tmux new-window -t "aes"
 tmux send-keys -t "aes" "dce celery bash" Enter
-tmux send-keys -t "aes" "celery -A project worker --loglevel=INFO" Enter
+tmux send-keys -t "aes" "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A project worker --loglevel=INFO" Enter
 
 # attach
 tmux attach -t "aes"
