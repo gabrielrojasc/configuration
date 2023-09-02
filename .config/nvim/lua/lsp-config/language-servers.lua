@@ -1,28 +1,3 @@
--- setup needs to be mason -> mason-lspconfig -> lspconfig
-require("mason").setup({
-	ui = {
-		icons = {
-			package_installed = "✓",
-			package_pending = "➜",
-			package_uninstalled = "✗",
-		},
-	},
-})
-
--- setup for installing lsps
-require("mason-lspconfig").setup({
-	ensure_installed = {
-		"lua_ls",
-		"pyright",
-		"html",
-		"bashls",
-		"dockerls",
-		"marksman",
-		"eslint",
-	},
-	automatic_installation = true,
-})
-
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -44,6 +19,8 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
+	vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+	vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
 	vim.keymap.set("n", "<space>f", function()
 		vim.lsp.buf.format({ async = true })
 	end, bufopts)
