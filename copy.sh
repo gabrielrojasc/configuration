@@ -1,3 +1,6 @@
+# dump brew bundle
+brew bundle dump --force &
+
 # files
 cp ~/.zprofile . &
 cp ~/.bash_profile . &
@@ -19,8 +22,5 @@ cp -r ~/.config/htop .config/ &
 cp ~/magnet/.gitconfig magnet/ &
 cp ~/magnet/justfile magnet/ &
 cp -r ~/magnet/scripts magnet/ &
-
-# dump brew bundle
-brew bundle dump --force &
 
 wait
