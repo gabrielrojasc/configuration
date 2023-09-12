@@ -1,0 +1,63 @@
+{
+  "window.confirmBeforeClose": "keyboardOnly",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "none",
+  "editor.formatOnSave": true,
+  "editor.fontFamily": "Source Code Pro",
+  "editor.fontWeight": "500",
+  "editor.cursorBlinking": "solid",
+  "editor.tabSize": 4,
+  "editor.inlineSuggest.enabled": true,
+  "editor.cursorSurroundingLines": 8,
+  "editor.lineNumbers": "relative",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.minimap.enabled": false,
+  "python.formatting.provider": "none",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll": true
+    }
+  },
+  "[typst]": {
+    "editor.defaultFormatter": "nvarner.typst-lsp"
+  },
+  "git.openRepositoryInParentFolders": "always",
+  "vim.vimrc.enable": true,
+  "vim.useSystemClipboard": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["g", "r"],
+      "commands": ["references-view.findReferences"],
+      "silent": true
+    },
+    {
+      "before": ["j"],
+      "after": ["g", "j"],
+      "silent": true
+    },
+    {
+      "before": ["k"],
+      "after": ["g", "k"],
+      "silent": true
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": ["p"],
+      "commands": [
+        "editor.action.clipboardPasteAction",
+        "extension.vim_escape"
+      ],
+      "silent": true
+    }
+  ],
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+  "languageToolLinter.enabled": false
+}

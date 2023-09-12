@@ -26,6 +26,7 @@ alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias git-branch-clean="git branch | grep -v 'main\|master\|development\|release' | xargs git branch -d"
 alias gd='git diff'
 alias gdo='git diff @{upstream}'
+alias gst='git status'
 
 # django aliases
 alias dj="python3 manage.py"
