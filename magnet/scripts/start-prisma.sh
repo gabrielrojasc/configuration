@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -20,12 +20,15 @@ done
 
 # source venv/bin/activate
 tmux new-session -d -s "aes"
+
 # start npm and runserver
 tmux send-keys -t "aes" "dce django bash" Enter
-tmux send-keys -t "aes" "./manage.py runserver 0:8000" Enter
-tmux split-window -hf -t "aes"
-tmux send-keys -t "aes" "dce django bash" Enter
 tmux send-keys -t "aes" "npm start" Enter
+tmux split-window -hfb -t "aes"
+tmux send-keys -t "aes" "dce django bash" Enter
+tmux send-keys -t "aes" "./manage.py runserver 0:8000" Enter
+
+# celery in new window
 tmux new-window -t "aes"
 tmux send-keys -t "aes" "dce celery bash" Enter
 tmux send-keys -t "aes" "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A project worker --loglevel=INFO" Enter

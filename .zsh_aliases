@@ -27,6 +27,8 @@ alias git-branch-clean="git branch | grep -v 'main\|master\|development\|release
 alias gd='git diff'
 alias gdo='git diff @{upstream}'
 alias gst='git status'
+alias ga='git add'
+alias gaa='git add --all'
 
 # django aliases
 alias dj="python3 manage.py"

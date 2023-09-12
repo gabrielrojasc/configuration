@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -euo pipefail
 
-host=${1:-$(basename $(pwd))}
+host=${1:-$(basename "$(pwd)")}
 server=${2:-dev}
 service=${3:-postgres}
 
@@ -14,7 +14,7 @@ psql \
 	-c "create database \"${PGDATABASE}\";" \
 	postgres
 
-ssh $host.$server "cd $host && docker-compose exec -T $service pg_dump --format=custom" >$local_dump_path
+ssh "$host.$server" "cd $host && docker-compose exec -T $service pg_dump --format=custom" >$local_dump_path
 pg_restore --dbname="${PGDATABASE}" --no-owner --no-acl --jobs="$(sysctl -n hw.logicalcpu)" "$local_dump_path"
 
 ./manage.py migrate
