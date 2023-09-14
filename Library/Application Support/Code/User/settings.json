@@ -20,9 +20,6 @@
       "source.fixAll": true
     }
   },
-  "[typst]": {
-    "editor.defaultFormatter": "nvarner.typst-lsp"
-  },
   "git.openRepositoryInParentFolders": "always",
   "vim.vimrc.enable": true,
   "vim.useSystemClipboard": true,

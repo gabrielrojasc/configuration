@@ -12,6 +12,7 @@ cp ~/.zshrc . &
 cp ~/.zsh_aliases . &
 cp ~/.zsh_exports . &
 cp ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
+cp ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
 
 # directories
 cp -r ~/.vim . &
