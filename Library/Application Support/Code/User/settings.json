@@ -48,6 +48,16 @@
         "extension.vim_escape"
       ],
       "silent": true
+    },
+    {
+      "before": ["j"],
+      "after": ["g", "j"],
+      "silent": true
+    },
+    {
+      "before": ["k"],
+      "after": ["g", "k"],
+      "silent": true
     }
   ],
   "github.copilot.enable": {
