@@ -1,0 +1,8 @@
+default:
+  @just --list --unsorted
+
+front:
+    @./scripts/start-sk-front.sh
+
+back:
+    @./scripts/start-sk-back.sh
