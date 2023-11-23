@@ -8,8 +8,8 @@ default:
 start-dpt-project DIR:
   @./scripts/start-dpt-project.sh {{DIR}} $(basename {{DIR}})
 
-# start django3-project-template
-d3pt: (start-dpt-project 'django3-project-template')
+# start magnet-dpt
+dpt: (start-dpt-project 'magnet-dpt')
 
 # start root
 root: (start-dpt-project 'magnet-root-d3pt')

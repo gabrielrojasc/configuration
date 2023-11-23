@@ -14,15 +14,15 @@ cp ~/.zsh_exports . &
 cp ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
 cp ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
 
-# dcc
-cp ~/dcc/justfile dcc/ &
-cp -r ~/dcc/scripts dcc/ &
-
 # directories
 cp -r ~/.vim . &
 cp -r ~/.config/nvim .config/ &
 cp -r ~/.config/direnv .config/ &
 cp -r ~/.config/htop .config/ &
+
+# dcc
+cp ~/dcc/justfile dcc/ &
+cp -r ~/dcc/scripts dcc/ &
 
 # magnet
 cp ~/magnet/.gitconfig magnet/ &
