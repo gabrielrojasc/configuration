@@ -6,3 +6,6 @@ front:
 
 back:
     @./scripts/start-sk-back.sh
+
+memoria:
+    @./scripts/start-memoria.sh

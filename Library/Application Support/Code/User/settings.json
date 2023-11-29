@@ -38,6 +38,16 @@
       "before": ["k"],
       "after": ["g", "k"],
       "silent": true
+    },
+    {
+      "before": ["0"],
+      "after": ["g", "0"],
+      "silent": true
+    },
+    {
+      "before": ["$"],
+      "after": ["g", "_"],
+      "silent": true
     }
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
@@ -66,5 +76,9 @@
     "markdown": true,
     "scminput": false
   },
-  "languageToolLinter.enabled": false
+  "languageToolLinter.enabled": false,
+  "languageToolLinter.languageTool.ignoredWordsGlobal": [
+    "facil"
+  ],
+  "diffEditor.renderSideBySide": false
 }
