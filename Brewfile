@@ -21,7 +21,6 @@ brew "htop"
 brew "jq"
 brew "just"
 brew "krb5"
-brew "mysql", restart_service: true
 brew "neovim"
 brew "pkg-config"
 brew "poetry"

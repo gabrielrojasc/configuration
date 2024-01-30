@@ -16,8 +16,8 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true,
-      "source.fixAll": true
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
     }
   },
   "git.openRepositoryInParentFolders": "always",
@@ -80,5 +80,6 @@
   "languageToolLinter.languageTool.ignoredWordsGlobal": [
     "facil"
   ],
-  "diffEditor.renderSideBySide": false
+  "diffEditor.renderSideBySide": false,
+  "remote.autoForwardPortsSource": "hybrid"
 }
