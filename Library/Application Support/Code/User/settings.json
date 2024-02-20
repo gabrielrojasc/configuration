@@ -30,6 +30,11 @@
       "silent": true
     },
     {
+      "before": ["K"],
+      "after": ["g", "h"],
+      "silent": true
+    },
+    {
       "before": ["j"],
       "after": ["g", "j"],
       "silent": true

@@ -1,38 +1,52 @@
 [user]
-  name = Gabriel Rojas
-  email = gabo06123@gmail.com
-  signingkey = 2F4D5CEF45A56B8C
+    name = Gabriel Rojas
+    email = gabo06123@gmail.com
+    signingkey = 2F4D5CEF45A56B8C
 
 [color]
-  ui = auto
+    ui = auto
 
 [commit]
-  gpgsign = true
+    gpgsign = true
 
 [tag]
-  gpgsign = true
+    gpgsign = true
 
 [init]
-  defaultBranch = main
+    defaultBranch = main
 
 [pull]
-  rebase = true
+    rebase = true
 
 [rebase]
-  autoStash = true
+    autostash = true
+    autosquash = true
 
 [credential]
-  username = gabo06123@gmail.com
+    username = gabo06123@gmail.com
 
 [push]
-  autoSetupRemote = true
+    autoSetupRemote = true
 
 [pager]
-  # Use `diff-highlight`
-  log = diff-highlight | less
-  show = diff-highlight | less
-  diff = diff-highlight | less
+# Use `diff-highlight`
+    log = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less
+
+[merge]
+    conflictStyle = zdiff3
+
+[rerere]
+	enabled = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[branch]
+	sort = -committerdate
 
 # magnet config
 [includeIf "gitdir:~/magnet/"]
-  path = ~/magnet/.gitconfig
+    path = ~/magnet/.gitconfig
