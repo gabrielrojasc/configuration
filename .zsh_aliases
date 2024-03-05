@@ -23,28 +23,29 @@ alias gl='git log --oneline -n20'
 alias gia='git add -NA'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
-alias git-branch-clean="git branch | grep -v 'main\|master\|development' | xargs git branch -d"
+alias git-branch-clean='(git branch | grep -v "main\|master\|development\|*" | xargs git branch -d) && (git pull --prune)'
 alias gd='git diff'
 alias gdo='git diff @{upstream}'
+alias gdh='git diff HEAD'
 alias gst='git status'
 alias ga='git add'
 alias gaa='git add --all'
 
 # django aliases
-alias dj="python3 manage.py"
-alias drs="python3 manage.py runserver_plus"
-alias drss="gunicorn saleor.asgi:application -k uvicorn.workers.UvicornWorker"
-alias djs="python3 manage.py shell_plus"
-alias dcm="python3 manage.py makemigrations --check --dry-run"
-alias dmm="python3 manage.py makemigrations"
-alias dm="python3 manage.py migrate"
-alias dt="python3 manage.py test"
+alias dj='python3 manage.py'
+alias drs='python3 manage.py runserver_plus'
+alias drss='gunicorn saleor.asgi:application -k uvicorn.workers.UvicornWorker'
+alias djs='python3 manage.py shell_plus'
+alias dcm='python3 manage.py makemigrations --check --dry-run'
+alias dmm='python3 manage.py makemigrations'
+alias dm='python3 manage.py migrate'
+alias dt='python3 manage.py test'
 alias dsu='python3 manage.py createsuperuser --no-input'
 alias dmsu='dm && dsu'
 
 # saleor
-alias saleor-reset-db="dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input"
-alias saleor-docker-down="dco down && rm -rf .volumes/{pgdata,redis_data}"
+alias saleor-reset-db='dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input'
+alias saleor-docker-down='dco down && rm -rf .volumes/{pgdata,redis_data}'
 alias saleor-docker-up="dcr --rm api ./manage.py migrate && \ 
                         dcr --rm api ./manage.py createsuperuser --no-input && \ 
                         dcupd"
@@ -70,10 +71,7 @@ alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/C
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
-alias map="xargs -n1"
-
-# upgrade all pip installed pkgs
-alias pip-upgrade-outdated="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+alias map='xargs -n1'
 
 # list as a tree all brew installed pkgs
-alias brewlist="brew leaves | xargs brew deps --tree"
+alias brewlist='brew leaves | xargs brew deps --tree'
