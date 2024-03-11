@@ -2,25 +2,20 @@ alias sp:=start-dpt-project
 alias cpdb:=copy-dpt-db
 
 default:
-  @just --list --unsorted
+    @just --list --unsorted
 
 # start dpt project
 start-dpt-project DIR:
-  @./scripts/start-dpt-project.sh {{DIR}} $(basename {{DIR}})
+    @./scripts/start-dpt-project.sh {{DIR}}
 
-# start magnet-dpt
-dpt: (start-dpt-project 'magnet-dpt')
-
-# start root
-root: (start-dpt-project 'magnet-root-d3pt')
-
-# start asset-intranet
-asset: (start-dpt-project 'asset-intranet')
+# start sgsi
+sgsi: (start-dpt-project 'magnet-sgsi')
 
 # start prisma
 prisma: 
-  @./scripts/start-prisma.sh
+    @./scripts/start-prisma.sh
+
 
 # copy the database from a server, defaults to {{current_dir}}.dev
 copy-dpt-db *ARGS:
-  cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}
+    cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}

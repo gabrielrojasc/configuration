@@ -86,5 +86,7 @@
     "facil"
   ],
   "diffEditor.renderSideBySide": false,
-  "remote.autoForwardPortsSource": "hybrid"
+  "remote.autoForwardPortsSource": "hybrid",
+  "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
+  "dotfiles.repository": "https://github.com/gabrielrojasc/configuration"
 }

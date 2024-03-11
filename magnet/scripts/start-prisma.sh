@@ -13,7 +13,7 @@ cd "/Users/gabriel/magnet/aes-essprim"
 devcontainer open
 
 # wait for containers to spin up
-until [ "$(docker inspect -f {{.State.Running}} aes-essprim-django)" == "true" ]; do
+until [ "$(docker inspect -f \{\{.State.Running\}\} aes-essprim-django)" == "true" ]; do
 	echo 'Waiting for containers to be running'
 	sleep 1
 done

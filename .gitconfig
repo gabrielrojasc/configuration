@@ -50,3 +50,6 @@
 # magnet config
 [includeIf "gitdir:~/magnet/"]
     path = ~/magnet/.gitconfig
+
+[includeIf "gitdir:/usr/src/app/"]
+    path = ~/magnet/.gitconfig
