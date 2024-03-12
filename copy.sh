@@ -1,3 +1,5 @@
+cd "$(dirname "$0")" || exit 1
+
 # dump brew bundle
 brew bundle dump --force &
 
