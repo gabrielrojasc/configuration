@@ -87,6 +87,10 @@
   ],
   "diffEditor.renderSideBySide": false,
   "remote.autoForwardPortsSource": "hybrid",
+  "settingsSync.ignoredSettings": [
+    "-dotfiles.installCommand",
+    "-dotfiles.repository",
+  ],
   "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
   "dotfiles.repository": "https://github.com/gabrielrojasc/configuration"
 }

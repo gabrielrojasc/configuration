@@ -1,29 +1,29 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 set -euo pipefail
 
-# Change directory to the script's directory
+# Change directory to the root of this repo
 cd "$(dirname "$0")/.."
 
 # Function for error handling
 handle_error() {
-    echo "Error occurred on line $1"
-    exit 1
+	echo "Error occurred on line $1"
+	exit 1
 }
 
 # Trap errors and call the error handling function
 trap 'handle_error $LINENO' ERR
 
-# Ensure necessary directories exist
-mkdir -p ~/magnet/
-
 # Copy vimrc
-echo 'Copying gitconfig'
+echo 'Copying vimrc'
 cp .vimrc ~
 
 # Copy gitconfig
 echo 'Copying gitconfig'
 cp .gitconfig ~
+
+# Ensure necessary directories exist
+mkdir -p ~/magnet/
 
 # Copy magnet gitconfig
 echo 'Copying magnet gitconfig'
@@ -36,8 +36,8 @@ cd "$diff_highlight_dir" && sudo make
 
 # Verify diff-highlight exists
 if [ ! -f "$diff_highlight_dir/diff-highlight" ]; then
-    echo "Error: diff-highlight not found"
-    exit 1
+	echo "Error: diff-highlight not found"
+	exit 1
 fi
 
 # Setup diff-highlight
@@ -48,7 +48,7 @@ git config --global pager.show "$diff_highlight_cmd"
 git config --global pager.diff "$diff_highlight_cmd"
 
 # Setup git conflict style to diff3 as zdiff3 is not yet available
-git config --global	merge.conflictStyle 'diff3'
+git config --global merge.conflictStyle 'diff3'
 
 # Set git editor to vim
 git config --global core.editor "vim"
