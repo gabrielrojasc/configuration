@@ -19,6 +19,7 @@ brew "htop"
 brew "jq"
 brew "just"
 brew "krb5"
+brew "mas"
 brew "neovim"
 brew "pkg-config"
 brew "poetry"
@@ -55,6 +56,17 @@ cask "stats"
 cask "stremio"
 cask "visual-studio-code"
 cask "whatsapp"
+mas "AdGuard for Safari", id: 1440147259
+mas "Amphetamine", id: 937984704
+mas "Auto HD FPS for YouTube", id: 1546729687
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Magnet", id: 441258766
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Spark Desktop", id: 6445813049
+mas "Telegram", id: 747648890
+mas "Xcode", id: 497799835
 vscode "charliermarsh.ruff"
 vscode "davidlday.languagetool-linter"
 vscode "dbaeumer.vscode-eslint"
