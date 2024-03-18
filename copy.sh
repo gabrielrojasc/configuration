@@ -1,4 +1,8 @@
-cd "$(dirname "$0")" || exit 1
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")"
 
 # dump brew bundle
 brew bundle dump --force &
@@ -16,19 +20,19 @@ cp ~/.zsh_exports . &
 cp ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
 cp ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
 
-# directories
-cp -r ~/.vim . &
-cp -r ~/.config/nvim .config/ &
-cp -r ~/.config/direnv .config/ &
-cp -r ~/.config/htop .config/ &
-
-# dcc
 cp ~/dcc/justfile dcc/ &
-cp -r ~/dcc/scripts dcc/ &
 
-# magnet
 cp ~/magnet/.gitconfig magnet/ &
 cp ~/magnet/justfile magnet/ &
-cp -r ~/magnet/scripts magnet/ &
+
+# directories
+rsync --recursive --archive --delete-after ~/.vim . &
+rsync --recursive --archive --delete-after ~/.config/nvim .config/ &
+rsync --recursive --archive --delete-after ~/.config/direnv .config/ &
+rsync --recursive --archive --delete-after ~/.config/htop .config/ &
+
+rsync --recursive --archive --delete-after ~/dcc/scripts dcc/ &
+
+rsync --recursive --archive --delete-after ~/magnet/scripts magnet/ &
 
 wait
