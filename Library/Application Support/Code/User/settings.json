@@ -11,16 +11,17 @@
   "editor.cursorSurroundingLines": 8,
   "editor.lineNumbers": "relative",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
   "editor.minimap.enabled": false,
   "editor.snippetSuggestions": "top",
-  "python.formatting.provider": "none",
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit",
-      "source.fixAll": "explicit"
-    }
-  },
+  "editor.linkedEditing": true,
   "git.openRepositoryInParentFolders": "always",
   "vim.vimrc.enable": true,
   "vim.useSystemClipboard": true,
@@ -83,15 +84,14 @@
     "scminput": false
   },
   "languageToolLinter.enabled": false,
-  "languageToolLinter.languageTool.ignoredWordsGlobal": [
-    "facil"
-  ],
   "diffEditor.renderSideBySide": false,
   "remote.autoForwardPortsSource": "hybrid",
+  "remote.SSH.useExecServer": false,
   "settingsSync.ignoredSettings": [
-    "-dotfiles.installCommand",
     "-dotfiles.repository",
+    "-dotfiles.installCommand"
   ],
+  "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
   "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
-  "dotfiles.repository": "https://github.com/gabrielrojasc/configuration"
+  "editor.accessibilitySupport": "off"
 }

@@ -7,6 +7,8 @@ defaults write com.apple.Dock "autohide" -bool "true"
 
 defaults write com.apple.screencapture "location" ~/Downloads
 
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 
 defaults write -g ApplePressAndHoldEnabled -bool false

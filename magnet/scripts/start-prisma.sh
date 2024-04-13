@@ -26,7 +26,7 @@ tmux send-keys -t "aes" "dce django bash" Enter
 tmux send-keys -t "aes" "npm start" Enter
 tmux split-window -hfb -t "aes"
 tmux send-keys -t "aes" "dce django bash" Enter
-tmux send-keys -t "aes" "./manage.py runserver 0:8000" Enter
+tmux send-keys -t "aes" "./manage.py runserver 8000" Enter
 
 # celery in new window
 tmux new-window -t "aes"

@@ -2,12 +2,17 @@
 
 set -euo pipefail
 
+function print_red() {
+	echo -e "\033[31m$1\033[39m"
+}
+
 # check docker is running
 if (! docker version >/dev/null 2>&1); then
-	echo 'Docker is not running'
+	print_red 'Docker is not running'
 	exit 1
 fi
 
+cd
 cd "/Users/gabriel/magnet/$1"
 
 devcontainer open
@@ -15,7 +20,7 @@ devcontainer open
 # wait for containers to spin up
 until [ "$(docker-compose ps -q django)" ] && [ "$(docker inspect -f \{\{.State.Running\}\} "$(docker-compose ps -q django)")" == "true" ]; do
 	echo 'Waiting for containers to be running'
-	sleep 1
+	sleep 3
 done
 
 # source venv/bin/activate
