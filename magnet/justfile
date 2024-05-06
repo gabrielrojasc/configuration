@@ -11,6 +11,9 @@ start-dpt-project DIR:
 # start sgsi
 sgsi: (start-dpt-project 'magnet-sgsi')
 
+# start dpt
+dpt: (start-dpt-project 'magnet-dpt')
+
 # start prisma
 prisma: 
     @./scripts/start-prisma.sh

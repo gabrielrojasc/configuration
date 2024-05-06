@@ -1,5 +1,6 @@
 {
   "window.confirmBeforeClose": "keyboardOnly",
+  "window.restoreWindows": "none",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.startupEditor": "none",
   "editor.formatOnSave": true,
@@ -86,12 +87,13 @@
   "languageToolLinter.enabled": false,
   "diffEditor.renderSideBySide": false,
   "remote.autoForwardPortsSource": "hybrid",
-  "remote.SSH.useExecServer": false,
   "settingsSync.ignoredSettings": [
     "-dotfiles.repository",
-    "-dotfiles.installCommand"
+    "-dotfiles.installCommand",
+    "-dev.containers.gitCredentialHelperConfigLocation"
   ],
   "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
   "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
+  "dev.containers.gitCredentialHelperConfigLocation": "none",
   "editor.accessibilitySupport": "off"
 }

@@ -41,6 +41,9 @@ eval "$(direnv hook zsh)"
 # fnm
 eval "$(fnm env --use-on-cd)"
 
+# fzf
+eval "$(fzf --zsh)"
+
 # prompt
 ## Enabling and setting git info var to be used in prompt config.
 autoload -Uz vcs_info

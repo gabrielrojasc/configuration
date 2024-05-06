@@ -38,14 +38,14 @@
     conflictStyle = zdiff3
 
 [rerere]
-	enabled = true
+    enabled = true
 
 [diff]
-	algorithm = histogram
-	colorMoved = default
+    algorithm = histogram
+    colorMoved = default
 
 [branch]
-	sort = -committerdate
+    sort = -committerdate
 
 # magnet config
 [includeIf "gitdir:~/magnet/"]
