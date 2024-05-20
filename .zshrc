@@ -9,6 +9,10 @@ source ~/.zsh_exports
 # source aliases
 source ~/.zsh_aliases
 
+# glcoud
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+
 # extend history
 setopt EXTENDED_HISTORY
 

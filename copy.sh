@@ -26,13 +26,13 @@ cp ~/magnet/.gitconfig magnet/ &
 cp ~/magnet/justfile magnet/ &
 
 # directories
-rsync --recursive --archive --delete-after ~/.vim . &
-rsync --recursive --archive --delete-after ~/.config/nvim .config/ &
-rsync --recursive --archive --delete-after ~/.config/direnv .config/ &
-rsync --recursive --archive --delete-after ~/.config/htop .config/ &
+rsync --recursive --archive --delete ~/.vim . &
+rsync --recursive --archive --delete ~/.config/nvim .config/ &
+rsync --recursive --archive --delete ~/.config/direnv .config/ &
+rsync --recursive --archive --delete ~/.config/htop .config/ &
 
-rsync --recursive --archive --delete-after ~/dcc/scripts dcc/ &
+rsync --recursive --archive --delete ~/dcc/scripts dcc/ &
 
-rsync --recursive --archive --delete-after ~/magnet/scripts magnet/ &
+rsync --recursive --archive --delete ~/magnet/scripts magnet/ &
 
 wait
