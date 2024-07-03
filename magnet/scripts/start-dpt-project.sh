@@ -12,8 +12,11 @@ if (! docker version >/dev/null 2>&1); then
 	exit 1
 fi
 
-cd
 cd "/Users/gabriel/magnet/$1"
+
+if [ -f .env ]; then
+	set -o allexport && source .env && set +o allexport
+fi
 
 devcontainer open
 
