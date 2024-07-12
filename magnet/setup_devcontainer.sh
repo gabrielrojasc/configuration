@@ -38,20 +38,12 @@ git config --global core.editor "vim"
 # Set usr/src/app as git safe directory
 git config --global safe.directory /usr/src/app
 
-# Make diff-highlight
-echo 'Making diff-highlight'
-diff_highlight_dir='/usr/share/doc/git/contrib/diff-highlight/'
-cd "$diff_highlight_dir" && sudo make
-
-# Verify diff-highlight exists
-if [ ! -f "$diff_highlight_dir/diff-highlight" ]; then
-	echo "Error: diff-highlight not found"
-	exit 1
-fi
+# Install diff-highlight
+pip install diff-highlight
 
 # Setup diff-highlight
 echo 'Setting diff-highlight in gitconfig'
-diff_highlight_cmd="$diff_highlight_dir/diff-highlight | less -FX"
+diff_highlight_cmd="diff-highlight | less -FX"
 git config --global pager.log "$diff_highlight_cmd"
 git config --global pager.show "$diff_highlight_cmd"
 git config --global pager.diff "$diff_highlight_cmd"

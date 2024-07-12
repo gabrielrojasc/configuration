@@ -14,12 +14,11 @@ sgsi: (start-dpt-project 'magnet-sgsi')
 # start dpt
 dpt: (start-dpt-project 'magnet-dpt')
 
-# start dpt
+# start asset
 asset: (start-dpt-project 'asset-intranet')
 
 # start prisma
 prisma: (start-dpt-project 'aes-essprim')
 
-# copy the database from a server, defaults to {{current_dir}}.dev
-copy-dpt-db *ARGS:
-    cd {{invocation_directory()}} && {{justfile_directory()}}/scripts/copy-dpt-db.sh {{ARGS}}
+# start root
+root: (start-dpt-project 'magnet-root-d3pt')
