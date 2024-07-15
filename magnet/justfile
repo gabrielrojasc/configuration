@@ -1,5 +1,4 @@
 alias sp:=start-dpt-project
-alias cpdb:=copy-dpt-db
 
 default:
     @just --list --unsorted

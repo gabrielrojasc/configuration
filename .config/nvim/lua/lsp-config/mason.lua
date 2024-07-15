@@ -11,17 +11,19 @@ require("mason").setup({
 
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"lua_ls",
-		"pyright",
-		"ruff_lsp",
-		"html",
-		"eslint",
-		"stylelint_lsp",
-		"marksman",
 		"ansiblels",
 		"bashls",
-		"dockerls",
 		"docker_compose_language_service",
+		"dockerls",
+		"eslint",
+		"html",
+		"lua_ls",
+		"marksman",
+		"pyright",
+		"ruff_lsp",
+		"stylelint_lsp",
+		"typst_lsp",
+		"yamlls",
 	},
 	automatic_installation = true,
 })
