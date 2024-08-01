@@ -38,6 +38,11 @@ git config --global core.editor "vim"
 # Set usr/src/app as git safe directory
 git config --global safe.directory /usr/src/app
 
+# Install tig
+if ! command -v tig &>/dev/null; then
+	sudo apt update && sudo apt install -y tig && sudo rm -rf /var/lib/apt/lists/*
+fi
+
 # Install diff-highlight
 pip install diff-highlight
 

@@ -1,6 +1,7 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/services"
+brew "awscli"
 brew "bash"
 brew "bat"
 brew "diffutils"

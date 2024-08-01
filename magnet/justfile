@@ -21,3 +21,6 @@ prisma: (start-dpt-project 'aes-essprim')
 
 # start root
 root: (start-dpt-project 'magnet-root-d3pt')
+
+# start ats
+ats: (start-dpt-project 'magnet-ats')

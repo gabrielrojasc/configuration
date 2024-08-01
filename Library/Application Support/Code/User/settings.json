@@ -90,7 +90,8 @@
   "settingsSync.ignoredSettings": [
     "-dotfiles.repository",
     "-dotfiles.installCommand",
-    "-dev.containers.gitCredentialHelperConfigLocation"
+    "-dev.containers.gitCredentialHelperConfigLocation",
+    "-python.defaultInterpreterPath"
   ],
   "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
   "dotfiles.installCommand": "magnet/setup_devcontainer.sh",

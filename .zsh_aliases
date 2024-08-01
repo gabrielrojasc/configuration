@@ -50,20 +50,20 @@ alias saleor-docker-up="dcr --rm api ./manage.py migrate && \
                         dcr --rm api ./manage.py createsuperuser --no-input && \ 
                         dcupd"
 
-# docker-compose
-alias dco='docker-compose'
-alias dcb='docker-compose build'
-alias dce='docker-compose exec'
-alias dcps='docker-compose ps'
-alias dcrestart='docker-compose restart'
-alias dcrm='docker-compose rm'
-alias dcr='docker-compose run'
-alias dcstop='docker-compose stop'
-alias dcup='docker-compose up'
-alias dcupd='docker-compose up -d'
-alias dcupdb='docker-compose up -d --build'
-alias dcl='docker-compose logs'
-alias dclf='docker-compose logs -f'
+# docker compose
+alias dco='docker compose'
+alias dcb='docker compose build'
+alias dce='docker compose exec'
+alias dcps='docker compose ps'
+alias dcrestart='docker compose restart'
+alias dcrm='docker compose rm'
+alias dcr='docker compose run'
+alias dcstop='docker compose stop'
+alias dcup='docker compose up'
+alias dcupd='docker compose up -d'
+alias dcupdb='docker compose up -d --build'
+alias dcl='docker compose logs'
+alias dclf='docker compose logs -f'
 
 # Airport CLI alias
 alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
