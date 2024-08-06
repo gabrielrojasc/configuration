@@ -40,6 +40,7 @@ git config --global safe.directory /usr/src/app
 
 # Install tig
 if ! command -v tig &>/dev/null; then
+	echo 'Installing tig'
 	sudo apt update && sudo apt install -y tig && sudo rm -rf /var/lib/apt/lists/*
 fi
 
