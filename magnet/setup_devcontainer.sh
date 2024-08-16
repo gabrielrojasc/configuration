@@ -45,7 +45,7 @@ if ! command -v tig &>/dev/null; then
 fi
 
 # Install diff-highlight
-pip install diff-highlight
+sudo -H pip install diff-highlight
 
 # Setup diff-highlight
 echo 'Setting diff-highlight in gitconfig'
