@@ -7,8 +7,8 @@ alias l='ls -C'
 # just
 alias j='just'
 
-alias bat='bat -pp'
-alias cat='bat'
+# use bat instead of cat
+alias cat='bat -pp'
 
 # grep, diff with colors
 alias diff='diff --color'
@@ -30,25 +30,7 @@ alias gdh='git diff HEAD'
 alias gst='git status'
 alias ga='git add'
 alias gaa='git add --all'
-
-# django aliases
-alias dj='python3 manage.py'
-alias drs='python3 manage.py runserver_plus'
-alias drss='gunicorn saleor.asgi:application -k uvicorn.workers.UvicornWorker'
-alias djs='python3 manage.py shell_plus'
-alias dcm='python3 manage.py makemigrations --check --dry-run'
-alias dmm='python3 manage.py makemigrations'
-alias dm='python3 manage.py migrate'
-alias dt='python3 manage.py test'
-alias dsu='python3 manage.py createsuperuser --no-input'
-alias dmsu='dm && dsu'
-
-# saleor
-alias saleor-reset-db='dropdb saleor && createdb --owner=saleor saleor && dm && dj createsuperuser --no-input'
-alias saleor-docker-down='dco down && rm -rf .volumes/{pgdata,redis_data}'
-alias saleor-docker-up="dcr --rm api ./manage.py migrate && \ 
-                        dcr --rm api ./manage.py createsuperuser --no-input && \ 
-                        dcupd"
+alias grhu='git reset --hard @{u}'
 
 # docker compose
 alias dco='docker compose'
@@ -64,9 +46,6 @@ alias dcupd='docker compose up -d'
 alias dcupdb='docker compose up -d --build'
 alias dcl='docker compose logs'
 alias dclf='docker compose logs -f'
-
-# Airport CLI alias
-alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
 
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
