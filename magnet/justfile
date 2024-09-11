@@ -24,3 +24,9 @@ root: (start-dpt-project 'magnet-root-d3pt')
 
 # start ats
 ats: (start-dpt-project 'magnet-ats')
+
+# start lifeplan cms
+lp-cms: (start-dpt-project 'lifeplan-cms')
+
+# start lifeplan cms
+lp-sim: (start-dpt-project 'lifeplan-simulators')

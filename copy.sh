@@ -8,22 +8,24 @@ cd "$(dirname "$0")"
 brew bundle dump --force &
 
 # files
-cp ~/.zprofile . &
-cp ~/.bash_profile . &
-cp ~/.gitconfig . &
-cp ~/.screenrc . &
-cp ~/.tmux.conf . &
-cp ~/.vimrc . &
-cp ~/.zshrc . &
-cp ~/.zsh_aliases . &
-cp ~/.zsh_exports . &
-cp ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
-cp ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
+cp -a ~/.zprofile . &
+cp -a ~/.bash_profile . &
+cp -a ~/.gitconfig . &
+cp -a ~/.screenrc . &
+cp -a ~/.tmux.conf . &
+cp -a ~/.vimrc . &
+cp -a ~/.zshrc . &
+cp -a ~/.zsh_aliases . &
+cp -a ~/.zsh_exports . &
+cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
+cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
+cp -a ~/Library/LaunchAgents/loadsshkeys.plist Library/LaunchAgents/loadsshkeys.plist &
+cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
 
-cp ~/dcc/justfile dcc/ &
+cp -a ~/dcc/justfile dcc/ &
 
-cp ~/magnet/.gitconfig magnet/ &
-cp ~/magnet/justfile magnet/ &
+cp -a ~/magnet/.gitconfig magnet/ &
+cp -a ~/magnet/justfile magnet/ &
 
 # directories
 rsync --recursive --archive --delete ~/.vim . &
