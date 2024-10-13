@@ -30,3 +30,6 @@ lp-cms: (start-dpt-project 'lifeplan-cms')
 
 # start lifeplan cms
 lp-sim: (start-dpt-project 'lifeplan-simulators')
+
+# start mpc ticketing
+mpc-ticketing: (start-dpt-project 'mpc-ticketing')
