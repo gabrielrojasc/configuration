@@ -99,5 +99,7 @@
   "dev.containers.dockerComposePath": "docker compose",
   "editor.accessibilitySupport": "off",
   "github.copilot.editor.enableAutoCompletions": true,
-  "update.mode": "none"
+  "update.mode": "none",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "editor.wordWrap": "off"
 }

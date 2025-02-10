@@ -28,8 +28,20 @@ ats: (start-dpt-project 'magnet-ats')
 # start lifeplan cms
 lp-cms: (start-dpt-project 'lifeplan-cms')
 
-# start lifeplan cms
+# start lifeplan sim
 lp-sim: (start-dpt-project 'lifeplan-simulators')
 
 # start mpc ticketing
 mpc-ticketing: (start-dpt-project 'mpc-ticketing')
+
+# start makitec erp
+makitect-erp: (start-dpt-project 'makitec-erp')
+
+# start aides backend
+aides-backend:
+    @./scripts/start-aides-backend.sh
+
+# start aides frontend
+aides-frontend:
+    @./scripts/start-aides-frontend.sh
+

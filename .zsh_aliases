@@ -47,10 +47,5 @@ alias dcupdb='docker-compose up -d --build'
 alias dcl='docker-compose logs'
 alias dclf='docker-compose logs -f'
 
-# Intuitive map function
-# For example, to list all directories that contain a certain file:
-# find . -name .gitattributes | map dirname
-alias map='xargs -n1'
-
 # list as a tree all brew installed pkgs
 alias brewlist='brew leaves | xargs brew deps --tree'

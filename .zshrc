@@ -60,3 +60,12 @@ precmd() {
 ## Enable substitution in the prompt.
 setopt prompt_subst
 export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
+
+diffh() {
+    command diff "$@" | colordiff | diff-highlight
+}
+compdef diffh=diff
+
+map() {
+    xargs -I {} $@ {}
+}
