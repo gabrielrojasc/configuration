@@ -24,9 +24,6 @@ cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
 
 cp -a ~/dcc/justfile dcc/ &
 
-cp -a ~/magnet/.gitconfig magnet/ &
-cp -a ~/magnet/justfile magnet/ &
-
 # directories
 rsync --recursive --archive --delete ~/.vim . &
 rsync --recursive --archive --delete ~/.config/nvim .config/ &
@@ -34,7 +31,5 @@ rsync --recursive --archive --delete ~/.config/direnv .config/ &
 rsync --recursive --archive --delete ~/.config/htop .config/ &
 
 rsync --recursive --archive --delete ~/dcc/scripts dcc/ &
-
-rsync --recursive --archive --delete ~/magnet/scripts magnet/ &
 
 wait
