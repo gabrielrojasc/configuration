@@ -1,10 +1,13 @@
+# source exports
+source ~/.zsh_exports
+
 # path
 export PATH="/opt/homebrew/opt/python3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
 export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
-
-# source exports
-source ~/.zsh_exports
+export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
+export PATH="$PYENV_ROOT/bin:$PATH" # for pyenv
+export PATH="$GOPATH/bin:$PATH"; # for go
 
 # source aliases
 source ~/.zsh_aliases
@@ -48,6 +51,10 @@ eval "$(fnm env --use-on-cd)"
 # fzf
 eval "$(fzf --zsh)"
 
+# pyenv
+eval "$(pyenv init - zsh)"
+
+
 # prompt
 ## Enabling and setting git info var to be used in prompt config.
 autoload -Uz vcs_info
@@ -66,6 +73,7 @@ diffh() {
 }
 compdef diffh=diff
 
+# map
 map() {
     xargs -I {} $@ {}
 }

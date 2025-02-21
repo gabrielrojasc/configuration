@@ -1,13 +1,19 @@
 [user]
     name = Gabriel Rojas
-    email = gabo06123@gmail.com
-    signingkey = 2F4D5CEF45A56B8C
+    email = grojas@zerofox.com
+    signingkey = 29F3609CCAA1522E32791E56A4E9D5C4F1799165
 
 [color]
+    status = auto
+    branch = auto
+    interactive = auto
+    diff = auto
+    grep = auto
     ui = auto
 
 [commit]
     gpgsign = true
+    template = /Users/grojas/.gitmessage
 
 [tag]
     gpgsign = true
@@ -23,7 +29,7 @@
     autosquash = true
 
 [credential]
-    username = gabo06123@gmail.com
+    username = grojas@zerofox.com
 
 [push]
     autoSetupRemote = true
@@ -46,3 +52,9 @@
 
 [branch]
     sort = -committerdate
+
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+
+[core]
+    excludesFile = /Users/grojas/.gitignore_global

@@ -24,6 +24,9 @@ defaults write NSGlobalDomain "ApplePressAndHoldEnabled" -bool "false"
 defaults write NSGlobalDomain KeyRepeat -int 1.8
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
+# https://github.com/jorgelbg/pinentry-touchid
+defaults write org.gpgtools.common DisableKeychain -bool yes
+
 for app in "Dock" \
 	"SystemUIServer" \
 	"Finder"; do

@@ -23,3 +23,17 @@ export LC_ALL='en_US.UTF-8';
 
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
+
+# ssh private key
+export SSH_PRIVATE_KEY="$(cat ~/.ssh/id_ed25519)"
+
+# vault_auth_github_token
+export VAULT_AUTH_GITHUB_TOKEN="$(cat ~/.config/zerofox/vault_auth_github_token)"
+
+# go
+export GOPRIVATE="github.com/riskive"
+export GOPATH="$HOME/go"
+export GOROOT="$HOME/.go"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
