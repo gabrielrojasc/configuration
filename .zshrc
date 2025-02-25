@@ -37,6 +37,7 @@ zstyle ':completion:*:ssh:*' hosts
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
 
   autoload -Uz compinit
   compinit
@@ -68,6 +69,7 @@ precmd() {
 setopt prompt_subst
 export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
 
+# diff with word highlight
 diffh() {
     command diff "$@" | colordiff | diff-highlight
 }

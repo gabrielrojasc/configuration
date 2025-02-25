@@ -101,5 +101,8 @@
   "github.copilot.editor.enableAutoCompletions": true,
   "update.mode": "none",
   "terminal.integrated.enableMultiLinePasteWarning": false,
-  "editor.wordWrap": "off"
+  "editor.wordWrap": "off",
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  }
 }

@@ -32,7 +32,7 @@ export VAULT_AUTH_GITHUB_TOKEN="$(cat ~/.config/zerofox/vault_auth_github_token)
 
 # go
 export GOPRIVATE="github.com/riskive"
-export GOPATH="$HOME/go"
+export GOPATH="$HOME/zerofox/go"
 export GOROOT="$HOME/.go"
 
 # pyenv
