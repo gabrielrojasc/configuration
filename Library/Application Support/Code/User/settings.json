@@ -104,5 +104,6 @@
   "editor.wordWrap": "off",
   "[go]": {
     "editor.defaultFormatter": "golang.go"
-  }
+  },
+  "github.copilot.selectedCompletionModel": "gpt-4o-copilot"
 }
