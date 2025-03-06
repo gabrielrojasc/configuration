@@ -24,7 +24,7 @@ bindkey -e
 
 # keep env if using tmux
 if [ "$TMUX" ] && [ "$VIRTUAL_ENV" ];then
-  source "$VIRTUAL_ENV/bin/activate"
+    source "$VIRTUAL_ENV/bin/activate"
 fi
 
 # Highlight the current autocomplete option
@@ -36,11 +36,11 @@ zstyle ':completion:*:ssh:*' hosts
 # autocompletion 
 if type brew &>/dev/null
 then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
 
-  autoload -Uz compinit
-  compinit
+    autoload -Uz compinit
+    compinit
 fi
 
 # direnv
@@ -54,7 +54,6 @@ eval "$(fzf --zsh)"
 
 # pyenv
 eval "$(pyenv init - zsh)"
-
 
 # prompt
 ## Enabling and setting git info var to be used in prompt config.
@@ -78,4 +77,15 @@ compdef diffh=diff
 # map
 map() {
     xargs -I {} $@ {}
+}
+
+restore_config_from_backup() {
+    local backup_dir="$(ls -dt ~/.config-Backups/.config-*/ | head -n 1)"
+
+    if [[ -z "$backup_dir" ]]; then
+        echo "Error: No backup directories found."
+        return 1
+    fi
+
+    rsync -aq --exclude='AWS VPN Client' --exclude='AWSVPNClient' "$backup_dir/" ~/.config/
 }

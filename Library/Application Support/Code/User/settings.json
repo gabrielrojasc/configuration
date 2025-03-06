@@ -105,5 +105,12 @@
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },
-  "github.copilot.selectedCompletionModel": "gpt-4o-copilot"
+  "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
+  "makefile.configureOnOpen": true,
+  "[go.mod]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  }
 }
