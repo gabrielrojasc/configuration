@@ -14,9 +14,11 @@
 [commit]
     gpgsign = true
     template = /Users/grojas/.gitmessage
+	verbose = true
 
 [tag]
     gpgsign = true
+    sort = version:refname
 
 [init]
     defaultBranch = main
@@ -25,14 +27,16 @@
     rebase = true
 
 [rebase]
-    autostash = true
-    autosquash = true
+	autoStash = true
+	autoSquash = true
+	updateRefs = true
 
 [credential]
     username = grojas@zerofox.com
 
 [push]
     autoSetupRemote = true
+	followTags = true
 
 [pager]
 # Use `diff-highlight`
@@ -45,16 +49,26 @@
 
 [rerere]
     enabled = true
+	autoupdate = true
 
 [diff]
     algorithm = histogram
-    colorMoved = default
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 
 [branch]
     sort = -committerdate
 
-[url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
-
 [core]
     excludesFile = /Users/grojas/.gitignore_global
+
+[column]
+    ui = auto
+
+[fetch]
+	pruneTags = true
+	all = true
+
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
