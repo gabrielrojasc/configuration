@@ -6,15 +6,14 @@ export PATH="/opt/homebrew/opt/python3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
 export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
 export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
-export PATH="$PYENV_ROOT/bin:$PATH" # for pyenv
 export PATH="$GOPATH/bin:$PATH"; # for go
 
 # source aliases
 source ~/.zsh_aliases
 
 # glcoud
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+# source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+# source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 # extend history
 setopt EXTENDED_HISTORY
@@ -33,7 +32,7 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # Tab complete hosts from ssh config
 zstyle ':completion:*:ssh:*' hosts
 
-# autocompletion 
+# autocompletion
 if type brew &>/dev/null
 then
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
@@ -41,6 +40,9 @@ then
 
     autoload -Uz compinit
     compinit
+
+    autoload -Uz compdump
+    compdump
 fi
 
 # direnv
@@ -51,9 +53,6 @@ eval "$(fnm env --use-on-cd)"
 
 # fzf
 eval "$(fzf --zsh)"
-
-# pyenv
-eval "$(pyenv init - zsh)"
 
 # prompt
 ## Enabling and setting git info var to be used in prompt config.

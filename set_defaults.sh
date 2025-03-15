@@ -5,6 +5,10 @@ osascript -e 'tell application "System Preferences" to quit'
 # Disable the sound effects on boot
 sudo nvram StartupMute=%01
 
+# Show battery percentage on control center
+_user=$(who | grep console | awk '{ print $1 }')
+sudo -u $_user defaults write /Users/$_user/Library/Preferences/ByHost/com.apple.controlcenter.plist BatteryShowPercentage -bool true
+
 # Trackpad: enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
