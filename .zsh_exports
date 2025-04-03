@@ -30,6 +30,13 @@ export SSH_PRIVATE_KEY="$(cat ~/.ssh/id_ed25519)"
 # vault_auth_github_token
 export VAULT_AUTH_GITHUB_TOKEN="$(cat ~/.config/zerofox/vault_auth_github_token)"
 
+# ui_arch_auth_github_token
+export GITHUB_REGISTRY_READ_TOKEN="$(cat ~/.config/zerofox/ui_arch_auth_github_token)"
+export GITHUB_REGISTRY_WRITE_TOKEN=$GITHUB_REGISTRY_READ_TOKEN
+
 # go
 export GOPRIVATE="github.com/riskive"
 export GOPATH="$HOME/zerofox/go"
+
+# docker
+export COMPOSE_BAKE=true

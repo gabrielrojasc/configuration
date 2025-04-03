@@ -1,0 +1,25 @@
+# diff with word highlight
+diffh() {
+    command diff "$@" | colordiff | diff-highlight
+}
+compdef diffh=diff
+
+# map
+map() {
+    xargs -I {} $@ {}
+}
+
+restore_config_from_backup() {
+    local backup_dir="$(ls -dt ~/.config-Backups/.config-*/ | head -n 1)"
+
+    if [[ -z "$backup_dir" ]]; then
+        echo "Error: No backup directories found."
+        return 1
+    fi
+
+    rsync -aq --exclude='AWS VPN Client' --exclude='AWSVPNClient' "$backup_dir/" ~/.config/
+}
+
+get-zf-token() {
+    curl --silent -d "username=grojas@zerofox.com&password=$(cat $HOME/.config/zerofox/api_password)" -X POST https://api-qa.zerofox.com/auth/token/ | jq -r ".access"
+}

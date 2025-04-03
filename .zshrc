@@ -49,7 +49,7 @@ fi
 eval "$(direnv hook zsh)"
 
 # fnm
-eval "$(fnm env --use-on-cd)"
+eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 
 # fzf
 eval "$(fzf --zsh)"
@@ -67,24 +67,5 @@ precmd() {
 setopt prompt_subst
 export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
 
-# diff with word highlight
-diffh() {
-    command diff "$@" | colordiff | diff-highlight
-}
-compdef diffh=diff
-
-# map
-map() {
-    xargs -I {} $@ {}
-}
-
-restore_config_from_backup() {
-    local backup_dir="$(ls -dt ~/.config-Backups/.config-*/ | head -n 1)"
-
-    if [[ -z "$backup_dir" ]]; then
-        echo "Error: No backup directories found."
-        return 1
-    fi
-
-    rsync -aq --exclude='AWS VPN Client' --exclude='AWSVPNClient' "$backup_dir/" ~/.config/
-}
+# source functions
+source ~/.zsh_functions

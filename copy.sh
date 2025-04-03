@@ -17,6 +17,7 @@ cp -a ~/.vimrc . &
 cp -a ~/.zshrc . &
 cp -a ~/.zsh_aliases . &
 cp -a ~/.zsh_exports . &
+cp -a ~/.zsh_functions . &
 cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
 cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
 cp -a ~/Library/Scripts/keyboardremap Library/Scripts/keyboardremap &

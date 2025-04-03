@@ -52,3 +52,6 @@ alias brewlist='brew leaves | xargs brew deps --tree'
 
 # pientry
 alias pinentry='pinentry-mac'
+
+# add time in history
+alias history='history -t"%F %R"'
