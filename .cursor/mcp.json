@@ -1,0 +1,25 @@
+{
+    "mcpServers": {
+        "sequential-thinking": {
+            "command": "fnm",
+            "args": [
+                "exec",
+                "--using",
+                "22",
+                "npx",
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        },
+        "mcp-atlassian": {
+            "command": "uvx",
+            "args": ["--env-file", "~/.config/zerofox/uv.env", "mcp-atlassian"]
+        },
+        "repomix": {
+            "command": "repomix",
+            "args": ["--mcp"],
+            "disabled": false,
+            "autoApprove": []
+        }
+    }
+}

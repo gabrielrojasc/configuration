@@ -1,0 +1,139 @@
+{
+    "window.confirmBeforeClose": "keyboardOnly",
+    "window.restoreWindows": "none",
+    "workbench.startupEditor": "none",
+    "editor.formatOnSave": true,
+    "editor.fontFamily": "Source Code Pro",
+    "editor.fontWeight": "500",
+    "editor.cursorBlinking": "solid",
+    "editor.tabSize": 4,
+    "editor.inlineSuggest.enabled": true,
+    "editor.cursorSurroundingLines": 8,
+    "editor.lineNumbers": "relative",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "editor.minimap.enabled": false,
+    "editor.snippetSuggestions": "top",
+    "editor.linkedEditing": true,
+    "git.openRepositoryInParentFolders": "always",
+    "vim.vimrc.enable": true,
+    "vim.useSystemClipboard": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["g", "r"],
+            "commands": ["references-view.findReferences"],
+            "silent": true
+        },
+        {
+            "before": ["K"],
+            "after": ["g", "h"],
+            "silent": true
+        },
+        {
+            "before": ["<C-d>"],
+            "after": ["<C-d>", "z", "z"],
+            "silent": true
+        },
+        {
+            "before": ["<C-u>"],
+            "after": ["<C-u>", "z", "z"],
+            "silent": true
+        },
+        {
+            "before": ["n"],
+            "after": ["n", "z", "z", "z", "v"],
+            "silent": true
+        },
+        {
+            "before": ["N"],
+            "after": ["N", "z", "z", "z", "v"],
+            "silent": true
+        },
+        {
+            "before": ["j"],
+            "after": ["g", "j"],
+            "silent": true
+        },
+        {
+            "before": ["k"],
+            "after": ["g", "k"],
+            "silent": true
+        },
+        {
+            "before": ["0"],
+            "after": ["g", "0"],
+            "silent": true
+        },
+        {
+            "before": ["$"],
+            "after": ["g", "_"],
+            "silent": true
+        }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["p"],
+            "commands": [
+                "editor.action.clipboardPasteAction",
+                "extension.vim_escape"
+            ],
+            "silent": true
+        },
+        {
+            "before": ["j"],
+            "after": ["g", "j"],
+            "silent": true
+        },
+        {
+            "before": ["k"],
+            "after": ["g", "k"],
+            "silent": true
+        }
+    ],
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false
+    },
+    "languageToolLinter.enabled": false,
+    "diffEditor.renderSideBySide": false,
+    "remote.autoForwardPortsSource": "hybrid",
+    "settingsSync.ignoredSettings": [
+        "-dotfiles.repository",
+        "-dotfiles.installCommand",
+        "-dev.containers.gitCredentialHelperConfigLocation",
+        "-python.defaultInterpreterPath"
+    ],
+    "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
+    "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
+    "dev.containers.gitCredentialHelperConfigLocation": "none",
+    "dev.containers.dockerComposePath": "docker compose",
+    "editor.accessibilitySupport": "off",
+    "github.copilot.editor.enableAutoCompletions": true,
+    "update.mode": "none",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "editor.wordWrap": "off",
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    },
+    "cursor.cpp.disabledLanguages": ["plaintext", "scminput"],
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.activityBar.orientation": "vertical",
+    "cursor.diffs.useCharacterLevelDiffs": true,
+    "markdownlint.config": {
+        "MD024": {
+            "siblings_only": true
+        }
+    }
+}

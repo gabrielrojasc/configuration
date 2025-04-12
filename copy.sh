@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 brew bundle dump --force &
 
 # files
+## Config files
 cp -a ~/.zprofile . &
 cp -a ~/.bash_profile . &
 cp -a ~/.gitconfig . &
@@ -18,8 +19,14 @@ cp -a ~/.zshrc . &
 cp -a ~/.zsh_aliases . &
 cp -a ~/.zsh_exports . &
 cp -a ~/.zsh_functions . &
+## VS Code
 cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
 cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
+## Cursor
+cp -a ~/Library/Application\ Support/Cursor/User/settings.json Library/Application\ Support/Cursor/User/ &
+cp -a ~/Library/Application\ Support/Cursor/User/keybindings.json Library/Application\ Support/Cursor/User/ &
+cp -a ~/.cursor/mcp.json .cursor/ &
+## utils
 cp -a ~/Library/Scripts/keyboardremap Library/Scripts/keyboardremap &
 cp -a ~/.gnupg/gpg-agent.conf .gnupg &
 

@@ -23,3 +23,223 @@ restore_config_from_backup() {
 get-zf-token() {
     curl --silent -d "username=grojas@zerofox.com&password=$(cat $HOME/.config/zerofox/api_password)" -X POST https://api-qa.zerofox.com/auth/token/ | jq -r ".access"
 }
+
+psgrep() {
+  local pids
+  pids=$(pgrep -f $@)
+  if ! [[ $pids ]]; then
+    echo "No processes found." >&2; return 1
+  fi
+  ps up $(pgrep -f $@)
+}
+
+# Function to fetch paginated GitHub events since yesterday 7 AM
+# and format them for standup with color.
+# Usage: fetch_gh_standup_summary [--debug] [github_username]
+gh-standup-summary() {
+  # --- Argument Parsing ---
+  local debug_mode=0
+  local username=""
+  local args_to_process=() # Hold non-flag arguments
+
+  for arg in "$@"; do
+    case "$arg" in
+      --debug)
+        debug_mode=1
+        ;;
+      -*)
+        # Handle other potential flags/options in the future or ignore/error
+        echo "Warning: Unknown option '$arg' ignored." >&2
+        ;;
+      *)
+        # Collect non-flag arguments (expecting username at most)
+        args_to_process+=("$arg")
+        ;;
+    esac
+  done
+
+  # Assume the first non-flag argument is the username
+  if [[ ${#args_to_process[@]} -gt 0 ]]; then
+    username="${args_to_process[1]}" # Zsh arrays are 1-indexed
+  fi
+  # If more than one non-flag argument was given, warn
+  if [[ ${#args_to_process[@]} -gt 1 ]]; then
+     echo "Warning: Multiple non-flag arguments provided. Using '${username}' as username. Ignoring others: ${args_to_process[@]:1}" >&2
+  fi
+
+  # Helper function for conditional debug output
+  _debug_echo() {
+    if [[ $debug_mode -eq 1 ]]; then
+      # Prepend "DEBUG: " to the message and output to stderr
+      echo "DEBUG: $@" >&2
+    fi
+  }
+
+  # --- Configuration ---
+  # Use parsed username or default
+  local GITHUB_USER="${username:-gabrielrojasc}"
+  if [[ -z "$VAULT_AUTH_GITHUB_TOKEN" ]]; then
+      echo "Error: VAULT_AUTH_GITHUB_TOKEN is not set." >&2; return 1
+  fi
+  local GITHUB_TOKEN="$VAULT_AUTH_GITHUB_TOKEN"
+  local PER_PAGE=100
+
+  # --- Dependencies Check ---
+  if ! command -v jq &> /dev/null; then echo "Error: jq not installed." >&2; return 1; fi
+  if ! command -v curl &> /dev/null; then echo "Error: curl not installed." >&2; return 1; fi
+  if ! command -v date &> /dev/null; then echo "Error: date command not found." >&2; return 1; fi
+  zmodload zsh/datetime &> /dev/null || { echo "Error: zsh/datetime module not loaded. Cannot calculate date reliably." >&2; return 1; }
+
+  # --- Calculate Target Start Time ---
+  local target_start_utc=""
+  local target_epoch=""
+  local return_status=0
+
+  local now_epoch=$EPOCHSECONDS
+  local seconds_today=$(strftime "%H*3600 + %M*60 + %S" $now_epoch)
+  local today_midnight_epoch=$((now_epoch - seconds_today))
+  _debug_echo "Today midnight epoch: $today_midnight_epoch ($(strftime '%Y-%m-%d %H:%M:%S %Z' $today_midnight_epoch))"
+  local yesterday_midnight_epoch=$((today_midnight_epoch - 86400))
+  _debug_echo "Yesterday midnight epoch: $yesterday_midnight_epoch ($(strftime '%Y-%m-%d %H:%M:%S %Z' $yesterday_midnight_epoch))"
+  target_epoch=$((yesterday_midnight_epoch + 7 * 3600))
+  _debug_echo "Target epoch (yesterday 7am local): $target_epoch ($(strftime '%Y-%m-%d %H:%M:%S %Z' $target_epoch))"
+
+  if date --version >/dev/null 2>&1; then # GNU date
+      target_start_utc=$(date -u -d "@$target_epoch" '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null)
+      return_status=$?
+  elif [[ "$(uname)" == "Darwin" ]]; then # macOS date
+      target_start_utc=$(date -u -r "$target_epoch" '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null)
+      return_status=$?
+  else # Fallback attempt
+      target_start_utc=$(date -u --date="@$target_epoch" '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null)
+      return_status=$?
+  fi
+
+  if [[ $return_status -ne 0 ]] || [[ -z "$target_start_utc" ]]; then
+      _debug_echo "Formatting epoch with 'date' failed (Status: $return_status)."
+      target_start_utc=$(strftime -z GMT -s $target_epoch "%Y-%m-%dT%H:%M:%SZ" 2>/dev/null)
+      if [[ $? -ne 0 ]] || [[ -z "$target_start_utc" ]]; then
+          echo "Error: Failed to format epoch '$target_epoch' to UTC using 'date' and zsh/datetime." >&2
+          return 1
+      else
+           echo "Warning: Used zsh/datetime for final UTC formatting." >&2
+      fi
+  fi
+
+  if [[ -z "$target_start_utc" ]]; then
+      echo "Error: Could not determine the target start time in UTC." >&2
+      return 1
+  fi
+  # --- End Date Calculation ---
+
+  # Use standard echo for user-facing info, _debug_echo for internal details
+  echo "Fetching events for user '$GITHUB_USER' since: ${target_start_utc}" >&2
+
+  # --- Fetching Loop ---
+  local page=1
+  local temp_events_file=$(mktemp "${TMPDIR:-/tmp}/github_events.XXXXXX")
+  trap 'rm -f $temp_events_file' EXIT INT TERM HUP
+
+  while true; do
+    _debug_echo -n "Fetching page $page... " # Use -n with debug helper if needed
+    local response_file=$(mktemp "${TMPDIR:-/tmp}/github_page.XXXXXX")
+    local http_status
+    # (Curl command remains the same)
+    http_status=$(curl --silent --show-error --location \
+      -H "Authorization: Bearer $GITHUB_TOKEN" \
+      -H "Accept: application/vnd.github.v3+json" \
+      "https://api.github.com/users/${GITHUB_USER}/events?per_page=${PER_PAGE}&page=${page}" \
+      -w "%{http_code}" -o "$response_file")
+
+    if [[ "$http_status" -ne 200 ]]; then
+      # Error messages should always go to stderr
+      echo "\nError: GitHub API request failed (HTTP Status: $http_status) for page $page." >&2
+      cat "$response_file" >&2; rm "$response_file"; return 1
+    fi
+    if ! jq -e '. | type == "array"' "$response_file" > /dev/null 2>&1; then
+        echo "\nError: Invalid JSON array received for page $page." >&2
+        cat "$response_file" >&2; rm "$response_file"; return 1
+    fi
+
+    local events_count=$(jq 'length' "$response_file")
+    _debug_echo "$events_count events." # Changed normal echo to debug echo
+
+    if [[ "$events_count" -eq 0 ]]; then rm "$response_file"; break; fi
+
+    jq -c '.[]' "$response_file" >> "$temp_events_file"
+    local last_event_ts=$(jq -r '.[-1].created_at' "$response_file")
+    rm "$response_file"
+
+    if [[ "$last_event_ts" < "$target_start_utc" ]]; then
+      _debug_echo "Reached events older than target start time ($last_event_ts). Stopping fetch."
+      break
+    fi
+    if [[ "$events_count" -lt "$PER_PAGE" ]]; then
+        _debug_echo "Fetched last page ($events_count events)."
+        break
+    fi
+    ((page++))
+    # sleep 0.2
+  done
+
+  # --- Process Collected Events ---
+  _debug_echo "Processing collected events..." # Changed normal echo to debug echo
+  if [[ ! -s "$temp_events_file" ]]; then
+      # User-facing message
+      echo "No relevant events found since $target_start_utc." >&2
+      return 0
+  fi
+
+  # (JQ filter definition remains the same)
+  local final_jq_filter
+  final_jq_filter=$(cat <<- 'EOF'
+  # Input is the combined array using -s flag
+  # Step 1: Filter by date (using $target_start_utc passed as --arg)
+  map(select(.created_at >= $target_start_utc)) |
+
+  # Step 2: Process relevant events into structured objects {repo, summary}
+  map(
+    select(.type == "PushEvent" or .type == "PullRequestEvent" or .type == "CreateEvent" or .type == "DeleteEvent" or .type == "ReleaseEvent") | # Ensure type filter remains
+    (.created_at) as $timestamp |
+    (.repo.name) as $repo |
+    if .type == "PushEvent" then
+      (.payload.ref | split("/") | .[-1]) as $branch |
+      (.payload.commits[0]?.message // "(no message)") as $message |
+      (.payload.commits[0]?.sha[0:7] // "-------") as $sha |
+      {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[32m\u001b[1mPUSH\u001b[0m   to (\u001b[36m\($branch)\u001b[0m): \(.payload.size) commit(s) (latest: \"\($message)\" - \u001b[90m\($sha)\u001b[0m)"}
+    elif .type == "PullRequestEvent" then
+      (.payload.action) as $action |
+      (if $action == "opened" then "\u001b[33m" elif $action == "closed" or $action == "merged" then "\u001b[35m" else "\u001b[34m" end) as $pr_color |
+      {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \($pr_color)\u001b[1mPR\u001b[0m     \($pr_color)\($action)\u001b[0m: #\(.payload.number) \"\(.payload.pull_request.title)\""}
+    elif .type == "CreateEvent" then
+      {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[34m\u001b[1mCREATE\u001b[0m \(.payload.ref_type): \u001b[36m\(.payload.ref)\u001b[0m"}
+    elif .type == "DeleteEvent" then
+      {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[31m\u001b[1mDELETE\u001b[0m \(.payload.ref_type): \u001b[36m\(.payload.ref)\u001b[0m"}
+    elif .type == "ReleaseEvent" then
+      (.payload.release.name // "") as $release_name |
+      if $release_name != "" and $release_name != .payload.release.tag_name then
+        {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[35m\u001b[1mRELEASE\u001b[0m published: \u001b[33m\(.payload.release.tag_name)\u001b[0m (\($release_name))"}
+      else
+        {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[35m\u001b[1mRELEASE\u001b[0m published: \u001b[33m\(.payload.release.tag_name)\u001b[0m"}
+      end
+    else
+      empty # Filter out irrelevant types
+    end
+  ) | # End map to create structured objects
+
+  # Step 3: Group by repository name
+  group_by(.repo) |
+
+  # Step 4: Format the output for each group
+  .[] | # Iterate through each group array
+  "--- \u001b[1m\u001b[34m\(. [0].repo)\u001b[0m ---", # Header: Bold Blue
+  (.[].summary),         # Print the summary string for each event in the group
+  ""                     # Print a blank line after each group
+EOF
+)
+
+  # (JQ execution remains the same)
+  jq -s -r --arg target_start_utc "$target_start_utc" "$final_jq_filter" < "$temp_events_file"
+
+  _debug_echo "Processing complete." # Changed normal echo to debug echo
+}
