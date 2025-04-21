@@ -54,6 +54,10 @@ eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 # fzf
 eval "$(fzf --zsh)"
 
+# sdkman
+export SDKMAN_DIR='/opt/homebrew/opt/sdkman-cli/libexec'
+[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+
 # prompt
 ## Enabling and setting git info var to be used in prompt config.
 autoload -Uz vcs_info
