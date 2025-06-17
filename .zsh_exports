@@ -40,3 +40,6 @@ export GOPATH="$HOME/zerofox/go"
 
 # docker
 export COMPOSE_BAKE=true
+
+# pkg-config
+export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"

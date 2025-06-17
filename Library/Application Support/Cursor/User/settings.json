@@ -135,5 +135,23 @@
         "MD024": {
             "siblings_only": true
         }
-    }
+    },
+    "files.trimTrailingWhitespace": true,
+    "cursor.general.globalCursorIgnoreList": [
+        "**/.env",
+        "**/credentials.json",
+        "**/credentials.*.json",
+        "**/secret.json",
+        "**/secrets.json",
+        "**/*.key",
+        "**/*.pem",
+        "**/*.pfx",
+        "**/*.p12",
+        "**/*.crt",
+        "**/*.cer",
+        "**/id_rsa",
+        "**/id_dsa",
+        "**/.ssh/id_*"
+    ],
+    "editor.largeFileOptimizations": false
 }
