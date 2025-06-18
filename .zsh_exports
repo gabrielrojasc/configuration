@@ -43,3 +43,6 @@ export COMPOSE_BAKE=true
 
 # pkg-config
 export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
+
+# brew
+export HOMEBREW_UPGRADE_GREEDY=1
