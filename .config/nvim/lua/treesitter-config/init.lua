@@ -1,6 +1,10 @@
 require("nvim-treesitter.configs").setup({
-	-- A list of parser names, or "all"
-	ensure_installed = "all",
+	-- A list of parser names for commonly used languages
+	ensure_installed = {
+		"lua", "python", "javascript", "typescript", "html", "css", "json",
+		"yaml", "toml", "bash", "vim", "vimdoc", "markdown", "markdown_inline",
+		"go", "rust", "java", "c", "cpp", "dockerfile", "sql"
+	},
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,
@@ -19,13 +23,18 @@ require("nvim-treesitter.configs").setup({
 		-- Instead of true it can also be a list of languages
 		additional_vim_regex_highlighting = false,
 	},
+})
 
-	rainbow = {
-		enable = true,
-		-- disable = {}, -- list of languages you want to disable the plugin for
-		extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-		max_file_lines = nil, -- Do not enable for files with more than n lines, int
-		-- colors = {}, -- table of hex strings
-		-- termcolors = {} -- table of colour name strings
-	},
+-- Configure treesitter-context (sticky headers)
+require('treesitter-context').setup({
+    enable = true,            -- Enable the plugin
+    max_lines = 4,           -- How many lines the window should span
+    min_window_height = 0,   -- Minimum editor window height to enable context
+    line_numbers = true,     -- Display line numbers
+    multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
+    trim_scope = 'outer',    -- Which context lines to discard if max_lines is exceeded
+    mode = 'cursor',         -- Line used to calculate context
+    separator = nil,         -- Separator between context and content
+    zindex = 20,            -- The Z-index of the context window
+    on_attach = nil,        -- Function to run when attaching to buffer
 })

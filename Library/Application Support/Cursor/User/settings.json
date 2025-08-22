@@ -9,7 +9,7 @@
     "editor.tabSize": 4,
     "editor.inlineSuggest.enabled": true,
     "editor.cursorSurroundingLines": 8,
-    "editor.lineNumbers": "relative",
+    "editor.lineNumbers": "on",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[python]": {
         "editor.formatOnSave": true,
@@ -153,5 +153,15 @@
         "**/id_dsa",
         "**/.ssh/id_*"
     ],
-    "editor.largeFileOptimizations": false
+    "editor.largeFileOptimizations": false,
+    "java.imports.gradle.wrapper.checksums": [
+        {
+            "sha256": "2cfc8836c845a44dadf0a3849fb65366c8570af027b3994327ef3b983f135bd7",
+            "allowed": true
+        }
+    ],
+    "ruff.importStrategy": "useBundled",
+    "extensions.allowed": "*",
+    "cursorpyright.analysis.typeCheckingMode": "off",
+    "go.toolsManagement.autoUpdate": true
 }

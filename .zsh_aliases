@@ -56,3 +56,6 @@ alias pinentry='pinentry-mac'
 
 # add time in history
 alias history='history -t"%F %R"'
+
+# gemini
+alias gemini='GOOGLE_CLOUD_PROJECT=zf-gemini-cli gemini'

@@ -12,8 +12,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	-- null-ls
-	"jose-elias-alvarez/null-ls.nvim",
+	-- none-ls (maintained fork of null-ls)
+	"nvimtools/none-ls.nvim",
 	-- mason
 	{
 		"williamboman/mason.nvim",
@@ -36,8 +36,8 @@ local plugins = {
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 	},
-	-- ts rainbow
-	"p00f/nvim-ts-rainbow",
+	-- ts rainbow v2 (compatible with newer treesitter)
+	"HiPhish/rainbow-delimiters.nvim",
 	-- ts context
 	"nvim-treesitter/nvim-treesitter-context",
 	-- telescope

@@ -9,6 +9,7 @@ export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for gi
 export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
 export PATH="$GOPATH/bin:$PATH"; # for go
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH" # for mysql-client
+export PATH="$HOME/.pub-cache/bin:$PATH" # melos
 
 # source aliases
 source ~/.zsh_aliases

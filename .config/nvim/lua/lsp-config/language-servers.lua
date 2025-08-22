@@ -1,6 +1,9 @@
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
+
+-- Ensure mason-lspconfig is available
+local mason_lspconfig = require("mason-lspconfig")
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
@@ -27,10 +30,11 @@ local on_attach = function(client, bufnr)
 end
 
 -- this setups every language server automatically
-require("mason-lspconfig").setup_handlers({
-	function(server_name)
-		require("lspconfig")[server_name].setup({
-			on_attach = on_attach,
-		})
-	end,
-})
+local lspconfig = require("lspconfig")
+
+-- Get all installed servers and set them up
+for _, server in ipairs(mason_lspconfig.get_installed_servers()) do
+	lspconfig[server].setup({
+		on_attach = on_attach,
+	})
+end

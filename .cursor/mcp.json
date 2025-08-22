@@ -11,14 +11,8 @@
                 "@modelcontextprotocol/server-sequential-thinking"
             ]
         },
-        "mcp-atlassian": {
-            "command": "uvx",
-            "args": [
-                "--env-file",
-                "~/.config/zerofox/uv.env",
-                "mcp-atlassian",
-                "--read-only"
-            ]
+        "zf-atlassian-read-only": {
+            "url": "https://mcp.nixhoodwink.com/atlassian/mcp/"
         },
         "repomix": {
             "command": "repomix",
