@@ -355,3 +355,47 @@ EOF
   trap - EXIT INT TERM HUP
   return 0 # Explicitly return success
 }
+
+
+# wrap npm with socket cli to ensure safe npm installs
+update_npm_wrapper() {
+  local current_node=$(node -v 2>/dev/null)
+
+  if [[ "$current_node" != "$LAST_NODE_VERSION" ]] && command -v npm >/dev/null 2>&1; then
+    # Extract major version number (e.g., "v18.19.0" -> "18")
+    local node_major_version=$(echo "$current_node" | sed 's/^v\([0-9]*\)\..*$/\1/')
+
+    # Check if Node.js version is below 20
+    if [[ "$node_major_version" -lt 20 ]]; then
+      echo "⚠️  Warning: Node.js $current_node detected. Socket security scanning requires Node.js v20 or higher."
+      echo "   npm installs will proceed without security scanning."
+      # Remove any existing npm wrapper function for older Node versions
+      unset -f npm 2>/dev/null
+    else
+      if command -v socket >/dev/null 2>&1; then
+        npm() {
+          if command -v socket >/dev/null 2>&1; then
+            command socket npm "$@"
+          else
+            command npm "$@"
+          fi
+        }
+      else
+        # Install socket and create wrapper
+        echo "Installing socket for Node $current_node..."
+        npm install -g socket
+
+        # Create wrapper regardless of install success
+        npm() {
+          if command -v socket >/dev/null 2>&1; then
+            command socket npm "$@"
+          else
+            command npm "$@"
+          fi
+        }
+      fi
+    fi
+
+    LAST_NODE_VERSION="$current_node"
+  fi
+}

@@ -76,3 +76,5 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
 
 # source functions
 source ~/.zsh_functions
+
+precmd() { update_npm_wrapper; }
