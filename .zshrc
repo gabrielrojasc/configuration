@@ -67,9 +67,6 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
 ## This line obtains information from the vcs.
 zstyle ':vcs_info:git*' formats "%F{3}%b%f "
-precmd() {
-    vcs_info
-}
 ## Enable substitution in the prompt.
 setopt prompt_subst
 export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
@@ -77,4 +74,4 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
 # source functions
 source ~/.zsh_functions
 
-precmd() { update_npm_wrapper; }
+precmd() { vcs_info; update_npm_wrapper; }
