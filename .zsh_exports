@@ -41,8 +41,12 @@ export GOPATH="$HOME/zerofox/go"
 # docker
 export COMPOSE_BAKE=true
 
-# pkg-config
-export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
-
 # brew
 export HOMEBREW_UPGRADE_GREEDY=1
+
+# mysql-client
+## compilers
+export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
+## pkgconfig
+export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"

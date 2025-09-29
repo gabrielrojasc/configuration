@@ -9,21 +9,12 @@ map() {
     xargs -I {} $@ {}
 }
 
-restore_config_from_backup() {
-    local backup_dir="$(ls -dt ~/.config-Backups/.config-*/ | head -n 1)"
-
-    if [[ -z "$backup_dir" ]]; then
-        echo "Error: No backup directories found."
-        return 1
-    fi
-
-    rsync -aq --exclude='AWS VPN Client' --exclude='AWSVPNClient' "$backup_dir/" ~/.config/
-}
-
+# get jwt token from qa api
 get-zf-token() {
     curl --silent -d "username=grojas@zerofox.com&password=$(cat $HOME/.config/zerofox/api_password)" -X POST https://api-qa.zerofox.com/auth/token/ | jq -r ".access"
 }
 
+# ps + grep
 psgrep() {
   local pids
   pids=$(pgrep -f $@)
@@ -398,4 +389,13 @@ update_npm_wrapper() {
 
     LAST_NODE_VERSION="$current_node"
   fi
+}
+
+
+
+# rotate ~/tmp dir
+function rotate-tmp() {
+  rm -rf ~/tmp
+  mkdir ~/tmp
+  echo 'Succesfully rotated ~/tmp dir'
 }

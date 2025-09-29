@@ -163,5 +163,6 @@
     "ruff.importStrategy": "useBundled",
     "extensions.allowed": "*",
     "cursorpyright.analysis.typeCheckingMode": "off",
-    "go.toolsManagement.autoUpdate": true
+    "go.toolsManagement.autoUpdate": true,
+    "security.workspace.trust.enabled": true
 }
