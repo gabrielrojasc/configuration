@@ -164,5 +164,34 @@
     "extensions.allowed": "*",
     "cursorpyright.analysis.typeCheckingMode": "off",
     "go.toolsManagement.autoUpdate": true,
-    "security.workspace.trust.enabled": true
+    "security.workspace.trust.enabled": true,
+    "[dockercompose]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "snyk.advanced.cliPath": "/Users/grojas/Library/Application Support/snyk/vscode-cli/snyk-macos-arm64",
+    "snyk.folderConfigs": [
+        {
+            "folderPath": "/Users/grojas/git/cti-tools",
+            "baseBranch": "master",
+            "localBranches": ["delta-tool", "master"]
+        }
+    ],
+    "snyk.yesWelcomeNotification": false,
+    "snyk.trustedFolders": [
+        "/Users/grojas/git/mace-cac-feed",
+        "/Users/grojas/git/cti-tools",
+        "/Users/grojas/git/intel-backend",
+        "/Users/grojas/git/wellspring-snowflake",
+        "/Users/grojas/git/sf-api",
+        "/Users/grojas/git/unified-query-service",
+        "/Users/grojas/git/airflow",
+        "/Users/grojas/git/cti-etl-flows",
+        "/Users/grojas/git/intel-api"
+    ]
 }

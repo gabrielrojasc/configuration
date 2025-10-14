@@ -21,7 +21,7 @@
     sort = version:refname
 
 [init]
-    defaultBranch = main
+    defaultBranch = master
 
 [pull]
     rebase = true

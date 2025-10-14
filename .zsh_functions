@@ -26,14 +26,16 @@ psgrep() {
 
 # Function to fetch paginated GitHub events and format them for standup with color.
 # Looks back a specified number of days until 7 AM local time.
-# Usage: gh-standup-summary [--debug] [--days N] [github_username]
+# Usage: gh-standup-summary [--debug] [--days N | -d N | --days=N] [--include-commits] [github_username]
 #   --debug: Enable verbose debug output to stderr.
-#   --days N: Look back N days instead of the default 1 (yesterday).
-#   github_username: Specify GitHub username (defaults to GITHUB_USER env var or 'gabrielrojasc').
+#   --days N | -d N | --days=N: Look back N days instead of the default 1 (yesterday).
+#   --include-commits: Include commit/push events (default: only PR, tags, releases).
+#   github_username: Specify GitHub username (defaults to GITHUB_USER env var or 'grojas_zfox').
 gh-standup-summary() {
   # --- Argument Parsing ---
   local debug_mode=0
   local days_back=1 # Default to 1 day (yesterday)
+  local include_commits=0 # Default to exclude commits (only show PRs, tags, releases)
   local username=""
   local args_to_process=() # Hold non-flag arguments
   local skip_next=0        # Flag to skip the next argument (used for --days N)
@@ -61,6 +63,17 @@ gh-standup-summary() {
         debug_mode=1
         _debug_echo "Debug mode enabled." # Announce debug mode ASAP
         ;;
+      --days=*) # Handle --days=N format
+        local days_value="${arg#--days=}" # Extract value after =
+        # Basic validation: check if it's a positive integer
+        if [[ "$days_value" =~ ^[1-9][0-9]*$ ]]; then
+          days_back="$days_value"
+          _debug_echo "Set days_back to $days_back"
+        else
+          echo "Error: --days= requires a positive integer argument, got '$days_value'." >&2
+          return 1
+        fi
+        ;;
       --days|-d) # Allow -d as a shorthand
         # Check if there is a next argument
         if [[ $((i + 1)) -le $# ]]; then
@@ -78,6 +91,10 @@ gh-standup-summary() {
           echo "Error: --days requires an argument (number of days)." >&2
           return 1
         fi
+        ;;
+      --include-commits)
+        include_commits=1
+        _debug_echo "Include commits mode enabled."
         ;;
       -*)
         echo "Warning: Unknown option '$arg' ignored." >&2
@@ -100,20 +117,22 @@ gh-standup-summary() {
 
   # --- Configuration ---
   # Use parsed username, then GITHUB_USER env var, then default
-  local GITHUB_USER="${username:-${GITHUB_USER:-gabrielrojasc}}"
-  if [[ -z "$VAULT_AUTH_GITHUB_TOKEN" ]]; then
-      # Ensure GITHUB_TOKEN is exported if needed by subshells, though direct use here is fine.
-      echo "Error: VAULT_AUTH_GITHUB_TOKEN is not set." >&2; return 1
-  fi
-  local GITHUB_TOKEN="$VAULT_AUTH_GITHUB_TOKEN"
+  local GITHUB_USER="${username:-${GITHUB_USER:-grojas_zfox}}"
   local PER_PAGE=100
 
   # --- Dependencies Check ---
   if ! command -v jq &> /dev/null; then echo "Error: jq not installed." >&2; return 1; fi
-  if ! command -v curl &> /dev/null; then echo "Error: curl not installed." >&2; return 1; fi
   if ! command -v date &> /dev/null; then echo "Error: date command not found." >&2; return 1; fi
+  if ! command -v gh &> /dev/null; then echo "Error: gh CLI not installed." >&2; return 1; fi
   # Ensure zsh/datetime module is loaded for reliable date calculations
   zmodload zsh/datetime &> /dev/null || { echo "Error: zsh/datetime module not loaded. Cannot calculate date reliably." >&2; return 1; }
+
+  # --- Verify gh CLI Authentication ---
+  if ! gh auth status &> /dev/null; then
+    echo "Error: gh CLI is not authenticated. Please run 'gh auth login' first." >&2
+    return 1
+  fi
+  _debug_echo "gh CLI is authenticated and ready."
 
   # --- Calculate Target Start Time ---
   local target_start_utc=""
@@ -183,25 +202,18 @@ gh-standup-summary() {
   # Declare response_file here so trap can see it even if loop doesn't run
   local response_file=""
   # Ensure temp files are cleaned up on exit, interrupt, termination, or hangup
-  # The &> /dev/null suppresses errors if a file doesn't exist (e.g., if curl failed before creating response_file)
+  # The &> /dev/null suppresses errors if a file doesn't exist (e.g., if API call failed before creating response_file)
   trap 'rm -f "$temp_events_file" "$response_file" &> /dev/null' EXIT INT TERM HUP
 
   while true; do
     _debug_echo -n "Fetching page $page... "
     # Create a new temp file for each page's response
     response_file=$(mktemp "${TMPDIR:-/tmp}/github_page.XXXXXX")
-    local http_status
 
-    # Fetch the page from GitHub API
-    http_status=$(curl --silent --show-error --location \
-      -H "Authorization: Bearer $GITHUB_TOKEN" \
-      -H "Accept: application/vnd.github.v3+json" \
-      "https://api.github.com/users/${GITHUB_USER}/events?per_page=${PER_PAGE}&page=${page}" \
-      -w "%{http_code}" -o "$response_file") # Write HTTP status code to stdout, response body to file
-
-    # Check for curl errors or non-200 HTTP status
-    if [[ "$http_status" -ne 200 ]]; then
-      echo "\nError: GitHub API request failed (HTTP Status: $http_status) for page $page." >&2
+    # Fetch the page from GitHub API using gh api
+    # gh api automatically handles the correct hostname (github.com or enterprise) and authentication
+    if ! gh api "/users/${GITHUB_USER}/events?per_page=${PER_PAGE}&page=${page}" > "$response_file" 2>&1; then
+      echo "\nError: GitHub API request failed for page $page." >&2
       # Show API error message from the response file
       cat "$response_file" >&2
       rm -f "$response_file" # Clean up this page's temp file immediately
@@ -275,7 +287,14 @@ gh-standup-summary() {
   # Step 2: Process relevant events from the filtered array into structured objects {repo, summary}. map() iterates again.
   map(
     # Select only the event types we care about formatting
-    select(.type == "PushEvent" or .type == "PullRequestEvent" or .type == "CreateEvent" or .type == "DeleteEvent" or .type == "ReleaseEvent") |
+    # PushEvent is conditionally included based on $include_commits flag
+    select(
+      ($include_commits == "1" and .type == "PushEvent") or
+      .type == "PullRequestEvent" or
+      .type == "CreateEvent" or
+      .type == "DeleteEvent" or
+      .type == "ReleaseEvent"
+    ) |
     # Store timestamp and repo name
     (.created_at) as $timestamp |
     (.repo.name) as $repo |
@@ -322,11 +341,11 @@ EOF
 )
 
   # --- Execute JQ ---
-  # Use jq with --arg to pass the calculated UTC start time.
+  # Use jq with --arg to pass the calculated UTC start time and include_commits flag.
   # Use -s (--slurp) to read all JSON objects from the file into one large array.
   # Use -r (--raw-output) to get plain text lines instead of JSON strings.
   # Input is redirected from the accumulated temporary events file.
-  if ! jq -s -r --arg target_start_utc "$target_start_utc" "$final_jq_filter" < "$temp_events_file"; then
+  if ! jq -s -r --arg target_start_utc "$target_start_utc" --arg include_commits "$include_commits" "$final_jq_filter" < "$temp_events_file"; then
       echo "Error: jq processing failed. Check filter logic or input data in $temp_events_file (if --debug was used)." >&2
       # Keep the temp file if debug is on and jq fails, otherwise the trap cleans it.
       if [[ $debug_mode -eq 0 ]]; then
