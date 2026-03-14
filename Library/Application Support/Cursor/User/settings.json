@@ -15,12 +15,12 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.fixAll": "explicit",
-            "source.organizeImports": "explicit"
+            "source.organizeImports": "explicit",
         },
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "charliermarsh.ruff",
     },
     "[javascript]": {
-        "editor.formatOnSave": false
+        "editor.formatOnSave": false,
     },
     "editor.minimap.enabled": false,
     "editor.snippetSuggestions": "top",
@@ -32,88 +32,81 @@
         {
             "before": ["g", "r"],
             "commands": ["references-view.findReferences"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["K"],
             "after": ["g", "h"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["<C-d>"],
             "after": ["<C-d>", "z", "z"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["<C-u>"],
             "after": ["<C-u>", "z", "z"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["n"],
             "after": ["n", "z", "z", "z", "v"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["N"],
             "after": ["N", "z", "z", "z", "v"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["j"],
             "after": ["g", "j"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["k"],
             "after": ["g", "k"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["0"],
             "after": ["g", "0"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["$"],
             "after": ["g", "_"],
-            "silent": true
-        }
+            "silent": true,
+        },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         {
             "before": ["p"],
             "commands": [
                 "editor.action.clipboardPasteAction",
-                "extension.vim_escape"
+                "extension.vim_escape",
             ],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["j"],
             "after": ["g", "j"],
-            "silent": true
+            "silent": true,
         },
         {
             "before": ["k"],
             "after": ["g", "k"],
-            "silent": true
-        }
+            "silent": true,
+        },
     ],
-    "github.copilot.enable": {
-        "*": true,
-        "plaintext": false,
-        "markdown": true,
-        "scminput": false
-    },
-    "languageToolLinter.enabled": false,
     "diffEditor.renderSideBySide": false,
     "remote.autoForwardPortsSource": "hybrid",
     "settingsSync.ignoredSettings": [
         "-dotfiles.repository",
         "-dotfiles.installCommand",
         "-dev.containers.gitCredentialHelperConfigLocation",
-        "-python.defaultInterpreterPath"
+        "-python.defaultInterpreterPath",
     ],
     "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
     "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
@@ -121,11 +114,10 @@
     "dev.containers.dockerComposePath": "docker compose",
     "editor.accessibilitySupport": "off",
     "github.copilot.editor.enableAutoCompletions": true,
-    "update.mode": "none",
     "terminal.integrated.enableMultiLinePasteWarning": "never",
-    "editor.wordWrap": "off",
+    "editor.wordWrap": "on",
     "[go]": {
-        "editor.defaultFormatter": "golang.go"
+        "editor.defaultFormatter": "golang.go",
     },
     "cursor.cpp.disabledLanguages": ["plaintext", "scminput"],
     "workbench.colorTheme": "Default Dark Modern",
@@ -133,8 +125,8 @@
     "cursor.diffs.useCharacterLevelDiffs": true,
     "markdownlint.config": {
         "MD024": {
-            "siblings_only": true
-        }
+            "siblings_only": true,
+        },
     },
     "files.trimTrailingWhitespace": true,
     "cursor.general.globalCursorIgnoreList": [
@@ -151,14 +143,14 @@
         "**/*.cer",
         "**/id_rsa",
         "**/id_dsa",
-        "**/.ssh/id_*"
+        "**/.ssh/id_*",
     ],
     "editor.largeFileOptimizations": false,
     "java.imports.gradle.wrapper.checksums": [
         {
             "sha256": "2cfc8836c845a44dadf0a3849fb65366c8570af027b3994327ef3b983f135bd7",
-            "allowed": true
-        }
+            "allowed": true,
+        },
     ],
     "ruff.importStrategy": "useBundled",
     "extensions.allowed": "*",
@@ -169,29 +161,11 @@
         "editor.insertSpaces": true,
         "editor.tabSize": 2,
         "editor.autoIndent": "advanced",
-        "editor.defaultFormatter": "redhat.vscode-yaml"
+        "editor.defaultFormatter": "redhat.vscode-yaml",
     },
     "[github-actions-workflow]": {
-        "editor.defaultFormatter": "redhat.vscode-yaml"
+        "editor.defaultFormatter": "redhat.vscode-yaml",
     },
-    "snyk.advanced.cliPath": "/Users/grojas/Library/Application Support/snyk/vscode-cli/snyk-macos-arm64",
-    "snyk.folderConfigs": [
-        {
-            "folderPath": "/Users/grojas/git/cti-tools",
-            "baseBranch": "master",
-            "localBranches": ["delta-tool", "master"]
-        }
-    ],
-    "snyk.yesWelcomeNotification": false,
-    "snyk.trustedFolders": [
-        "/Users/grojas/git/mace-cac-feed",
-        "/Users/grojas/git/cti-tools",
-        "/Users/grojas/git/intel-backend",
-        "/Users/grojas/git/wellspring-snowflake",
-        "/Users/grojas/git/sf-api",
-        "/Users/grojas/git/unified-query-service",
-        "/Users/grojas/git/airflow",
-        "/Users/grojas/git/cti-etl-flows",
-        "/Users/grojas/git/intel-api"
-    ]
+    "ruff.lineLength": 120,
+    "explorer.confirmDelete": false,
 }

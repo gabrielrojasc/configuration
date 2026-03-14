@@ -24,8 +24,9 @@ setopt EXTENDED_HISTORY
 # to keep keybindings in tmux
 bindkey -e
 
-# keep env if using tmux
-if [ "$TMUX" ] && [ "$VIRTUAL_ENV" ];then
+# Re-activate inherited virtualenv in new tmux panes/shells when PATH
+# has not already been updated for the active environment.
+if [[ -n "$TMUX" && -n "$VIRTUAL_ENV" && -f "$VIRTUAL_ENV/bin/activate" && ":$PATH:" != *":$VIRTUAL_ENV/bin:"* ]]; then
     source "$VIRTUAL_ENV/bin/activate"
 fi
 
@@ -57,6 +58,9 @@ eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 # fzf
 eval "$(fzf --zsh)"
 
+# logcli
+eval "$(logcli --completion-script-zsh)"
+
 # sdkman
 export SDKMAN_DIR='/opt/homebrew/opt/sdkman-cli/libexec'
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
@@ -74,4 +78,11 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
 # source functions
 source ~/.zsh_functions
 
-precmd() { vcs_info; update_npm_wrapper; }
+ensure_op_env SSH_PRIVATE_KEY 'op://Employee/id_ed25519/private key'
+ensure_op_env GITHUB_REGISTRY_READ_TOKEN 'op://Employee/GitHub Personal Access Token/token'
+ensure_op_env GITHUB_REGISTRY_WRITE_TOKEN 'op://Employee/GitHub Personal Access Token/token'
+
+autoload -Uz add-zsh-hook
+
+add-zsh-hook precmd vcs_info
+add-zsh-hook precmd _tmux_update_virtual_env

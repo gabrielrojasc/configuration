@@ -15,7 +15,7 @@ cp -a ~/.gitconfig . &
 cp -a ~/.screenrc . &
 cp -a ~/.tmux.conf . &
 cp -a ~/.vimrc . &
-cp -a ~/.npmrc . &
+grep -vE '^//' ~/.npmrc >.npmrc &
 cp -a ~/.zshrc . &
 cp -a ~/.zsh_aliases . &
 cp -a ~/.zsh_exports . &

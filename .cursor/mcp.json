@@ -1,24 +1,19 @@
 {
     "mcpServers": {
-        "sequential-thinking": {
-            "command": "fnm",
-            "args": [
-                "exec",
-                "--using",
-                "22",
-                "npx",
-                "-y",
-                "@modelcontextprotocol/server-sequential-thinking"
-            ]
+        "Atlassian": {
+            "url": "https://mcp.atlassian.com/v1/mcp"
         },
-        "zf-atlassian-read-only": {
-            "url": "https://mcp.nixhoodwink.com/atlassian/mcp/"
+        "zf-google-workspace": {
+            "url": "https://mcp-gworkspace.nixhoodwink.com/mcp"
         },
-        "repomix": {
-            "command": "repomix",
-            "args": ["--mcp"],
-            "disabled": false,
-            "autoApprove": []
+        "zf-grafana-prod": {
+            "url": "https://mcp.nixhoodwink.com/grafana/mcp"
+        },
+        "zf-grafana-stag": {
+            "url": "https://mcp-stag.nixhoodwink.com/grafana/mcp"
+        },
+        "zf-grafana-qa": {
+            "url": "https://mcp-qa.nixhoodwink.com/grafana/mcp"
         }
     }
 }

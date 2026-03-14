@@ -23,7 +23,6 @@ alias gl='git log --oneline -n20'
 alias gia='git add -NA'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
 alias gunwip='git log -n 1 | grep -q -F -- "--wip--" && git reset HEAD~1'
-alias git-branch-clean='(git branch | grep -v "main\|master\|development\|*" | xargs git branch -d) && (git pull --prune)'
 alias gd='git diff'
 alias gdo='git diff @{upstream}'
 alias gdh='git diff HEAD'
@@ -31,22 +30,23 @@ alias gst='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias grhu='git reset --hard @{u}'
+alias gbc='git-branch-clean'
 
 # docker compose, cmd with hyphen for completion
-alias dco='docker-compose'
-alias dcb='docker-compose build'
-alias dce='docker-compose exec'
-alias dcps='docker-compose ps'
-alias dcrestart='docker-compose restart'
-alias dcrm='docker-compose rm'
-alias dcr='docker-compose run'
-alias dcstop='docker-compose stop'
-alias dcup='docker-compose up'
-alias dcupb='docker-compose up --build'
-alias dcupd='docker-compose up -d'
-alias dcupdb='docker-compose up -d --build'
-alias dcl='docker-compose logs'
-alias dclf='docker-compose logs -f'
+alias dco='docker compose'
+alias dcb='docker compose build'
+alias dce='docker compose exec'
+alias dcps='docker compose ps'
+alias dcrestart='docker compose restart'
+alias dcrm='docker compose rm'
+alias dcr='docker compose run'
+alias dcstop='docker compose stop'
+alias dcup='docker compose up'
+alias dcupb='docker compose up --build'
+alias dcupd='docker compose up -d'
+alias dcupdb='docker compose up -d --build'
+alias dcl='docker compose logs'
+alias dclf='docker compose logs -f'
 
 # list as a tree all brew installed pkgs
 alias brewlist='brew leaves | xargs brew deps --tree'
@@ -57,5 +57,17 @@ alias pinentry='pinentry-mac'
 # add time in history
 alias history='history -t"%F %R"'
 
-# gemini
-alias gemini='GOOGLE_CLOUD_PROJECT=zf-gemini-cli gemini'
+# clipsize
+alias clipsize="pbpaste | wc -c | awk '{ split( \"B KB MB GB TB\", v ); s=1; while( \$1>1024 ){ \$1/=1024; s++ } printf \"%.2f %s\n\", \$1, v[s] }'"
+
+# cursor
+alias c='cursor'
+
+# vt
+alias vt-dbi='vt database info'
+
+# claude code
+alias cc='claude'
+
+# codex
+alias cx='codex'

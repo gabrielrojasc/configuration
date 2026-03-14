@@ -1,3 +1,8 @@
+local parser_install_dir = vim.fn.stdpath("data") .. "/site/parser"
+vim.fn.mkdir(parser_install_dir, "p")
+
+vim.opt.runtimepath:append(parser_install_dir)
+
 require("nvim-treesitter.configs").setup({
 	-- A list of parser names for commonly used languages
 	ensure_installed = {
@@ -5,6 +10,7 @@ require("nvim-treesitter.configs").setup({
 		"yaml", "toml", "bash", "vim", "vimdoc", "markdown", "markdown_inline",
 		"go", "rust", "java", "c", "cpp", "dockerfile", "sql"
 	},
+	parser_install_dir = parser_install_dir,
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,

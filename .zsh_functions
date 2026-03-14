@@ -4,14 +4,51 @@ diffh() {
 }
 compdef diffh=diff
 
+# Keep tmux's VIRTUAL_ENV in sync with the current shell.
+_tmux_update_virtual_env() {
+    [[ -n "$TMUX" ]] || return
+
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        tmux set-environment VIRTUAL_ENV "$VIRTUAL_ENV"
+    else
+        tmux set-environment -u VIRTUAL_ENV
+    fi
+}
+
 # map
 map() {
     xargs -I {} $@ {}
 }
 
-# get jwt token from qa api
+# get jwt token from specified environment (qa or stag)
 get-zf-token() {
-    curl --silent -d "username=grojas@zerofox.com&password=$(cat $HOME/.config/zerofox/api_password)" -X POST https://api-qa.zerofox.com/auth/token/ | jq -r ".access"
+    local env="$1"
+
+    if [[ -z "$env" ]]; then
+        echo "Usage: get-zf-token <qa|stag>"
+        return 1
+    fi
+
+    # normalize
+    env=$(echo "$env" | tr '[:lower:]' '[:upper:]')
+
+    case "$env" in
+        QA)
+            api_host="https://api-qa.zerofox.com"
+            ;;
+        STAG)
+            api_host="https://api-stag.zerofox.com"
+            ;;
+        *)
+            echo "Invalid environment. Use 'qa' or 'stag'."
+            return 1
+            ;;
+    esac
+
+    curl --silent \
+        -d "username=grojas@zerofox.com&password=$(op read "op://Employee/ZeroFOX ${env}/password")" \
+        -X POST "${api_host}/auth/token/" \
+    | jq -r ".access"
 }
 
 # ps + grep
@@ -277,9 +314,47 @@ gh-standup-summary() {
   fi
 
   # --- JQ Filter Definition ---
-  # CORRECTED JQ Filter to handle the array input from -s flag
+  # First pass: Extract PR events that need titles fetched
+  local pr_fetch_filter
+  pr_fetch_filter=$(cat <<- 'EOF'
+  map(select(.created_at >= $target_start_utc and .type == "PullRequestEvent")) |
+  map({
+    repo: .repo.name,
+    number: .payload.number,
+    key: "\(.repo.name)#\(.payload.number)"
+  }) |
+  unique_by(.key) |
+  .[]
+EOF
+)
+
+  # Fetch PR titles and store in a temporary file
+  local pr_titles_file=$(mktemp "${TMPDIR:-/tmp}/pr_titles.XXXXXX")
+  trap 'rm -f "$temp_events_file" "$response_file" "$pr_titles_file" &> /dev/null' EXIT INT TERM HUP
+
+  _debug_echo "Fetching PR titles..."
+  # Extract unique PR events and fetch their titles
+  # Use -c for compact output (each JSON object on a single line)
+  jq -s -c --arg target_start_utc "$target_start_utc" "$pr_fetch_filter" < "$temp_events_file" | while IFS= read -r pr_event; do
+    if [[ -n "$pr_event" ]] && [[ "$pr_event" != "null" ]]; then
+      local pr_repo=$(echo "$pr_event" | jq -r '.repo')
+      local pr_number=$(echo "$pr_event" | jq -r '.number')
+      local pr_key=$(echo "$pr_event" | jq -r '.key')
+      
+      _debug_echo "  Fetching title and description for $pr_key..."
+      # Fetch PR title and body using gh api, add the key field directly in jq to avoid shell escaping issues
+      gh api "/repos/${pr_repo}/pulls/${pr_number}" 2>/dev/null | \
+        jq --arg key "$pr_key" '{key: $key, title: .title, body: .body}' >> "$pr_titles_file" || \
+        jq -n --arg key "$pr_key" '{key: $key, title: "", body: ""}' >> "$pr_titles_file"
+    fi
+  done
+
+  # Main JQ Filter with PR title and description lookup
   local final_jq_filter
   final_jq_filter=$(cat <<- 'EOF'
+  # Load PR data (title and body) into lookup objects
+  ($pr_titles | map({key: .key, value: {title: .title, body: .body}}) | from_entries) as $pr_data_map |
+  
   # Input is the combined array using -s flag
   # Step 1: Filter the entire array by date first. map() iterates over the input array.
   map(select(.created_at >= $target_start_utc)) |
@@ -307,7 +382,18 @@ gh-standup-summary() {
     elif .type == "PullRequestEvent" then
       (.payload.action) as $action |
       (if $action == "opened" then "\u001b[33m" elif $action == "closed" or $action == "merged" then "\u001b[35m" else "\u001b[34m" end) as $pr_color |
-      {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \($pr_color)\u001b[1mPR\u001b[0m      \($pr_color)\($action)\u001b[0m: #\(.payload.number) \"\(.payload.pull_request.title)\""}
+      ("\($repo)#\(.payload.number)") as $pr_key |
+      ($pr_data_map[$pr_key] // {title: "Title unavailable", body: ""}) as $pr_data |
+      ($pr_data.title) as $pr_title |
+      ($pr_data.body // "") as $pr_body |
+      # Format PR with description only for "opened" action
+      if $action == "opened" and $pr_body != "" and $pr_body != "null" then
+        # Split body into lines and indent each line
+        ($pr_body | split("\n") | map("         \u001b[90m" + . + "\u001b[0m") | join("\n")) as $pr_body_formatted |
+        {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \($pr_color)\u001b[1mPR\u001b[0m      \($pr_color)\($action)\u001b[0m: #\(.payload.number) \"\($pr_title)\"\n\($pr_body_formatted)"}
+      else
+        {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \($pr_color)\u001b[1mPR\u001b[0m      \($pr_color)\($action)\u001b[0m: #\(.payload.number) \"\($pr_title)\""}
+      end
     elif .type == "CreateEvent" then
       {repo: $repo, summary: "\u001b[90m\($timestamp)\u001b[0m \u001b[34m\u001b[1mCREATE\u001b[0m  \(.payload.ref_type): \u001b[36m\(.payload.ref // "N/A")\u001b[0m"}
     elif .type == "DeleteEvent" then
@@ -342,17 +428,18 @@ EOF
 
   # --- Execute JQ ---
   # Use jq with --arg to pass the calculated UTC start time and include_commits flag.
+  # Use --slurpfile to load PR titles into a variable.
   # Use -s (--slurp) to read all JSON objects from the file into one large array.
   # Use -r (--raw-output) to get plain text lines instead of JSON strings.
   # Input is redirected from the accumulated temporary events file.
-  if ! jq -s -r --arg target_start_utc "$target_start_utc" --arg include_commits "$include_commits" "$final_jq_filter" < "$temp_events_file"; then
+  if ! jq -s -r --arg target_start_utc "$target_start_utc" --arg include_commits "$include_commits" --slurpfile pr_titles "$pr_titles_file" "$final_jq_filter" < "$temp_events_file"; then
       echo "Error: jq processing failed. Check filter logic or input data in $temp_events_file (if --debug was used)." >&2
       # Keep the temp file if debug is on and jq fails, otherwise the trap cleans it.
       if [[ $debug_mode -eq 0 ]]; then
          _debug_echo "JQ failed and not in debug mode, removing $temp_events_file"
-         rm -f "$temp_events_file"
+         rm -f "$temp_events_file" "$pr_titles_file"
       else
-         _debug_echo "JQ failed in debug mode, leaving $temp_events_file for inspection."
+         _debug_echo "JQ failed in debug mode, leaving $temp_events_file and $pr_titles_file for inspection."
       fi
       # Reset trap to default behavior now that we've handled potential error cleanup
       trap - EXIT INT TERM HUP
@@ -366,55 +453,123 @@ EOF
   return 0 # Explicitly return success
 }
 
-
-# wrap npm with socket cli to ensure safe npm installs
-update_npm_wrapper() {
-  local current_node=$(node -v 2>/dev/null)
-
-  if [[ "$current_node" != "$LAST_NODE_VERSION" ]] && command -v npm >/dev/null 2>&1; then
-    # Extract major version number (e.g., "v18.19.0" -> "18")
-    local node_major_version=$(echo "$current_node" | sed 's/^v\([0-9]*\)\..*$/\1/')
-
-    # Check if Node.js version is below 20
-    if [[ "$node_major_version" -lt 20 ]]; then
-      echo "⚠️  Warning: Node.js $current_node detected. Socket security scanning requires Node.js v20 or higher."
-      echo "   npm installs will proceed without security scanning."
-      # Remove any existing npm wrapper function for older Node versions
-      unset -f npm 2>/dev/null
-    else
-      if command -v socket >/dev/null 2>&1; then
-        npm() {
-          if command -v socket >/dev/null 2>&1; then
-            command socket npm "$@"
-          else
-            command npm "$@"
-          fi
-        }
-      else
-        # Install socket and create wrapper
-        echo "Installing socket for Node $current_node..."
-        npm install -g socket
-
-        # Create wrapper regardless of install success
-        npm() {
-          if command -v socket >/dev/null 2>&1; then
-            command socket npm "$@"
-          else
-            command npm "$@"
-          fi
-        }
-      fi
-    fi
-
-    LAST_NODE_VERSION="$current_node"
-  fi
-}
-
-
-
 # rotate ~/tmp dir
 function rotate-tmp() {
   rm -rf ~/tmp
   mkdir ~/tmp
   echo 'Succesfully rotated ~/tmp dir'
+}
+
+# Checks if currently authenticated with npm; logs in only if necessary.
+function npm-auth() {
+  if npm whoami > /dev/null 2>&1; then
+    echo "✅ Already logged in as $(npm whoami)"
+  else
+    echo "🔑 Not logged in. Starting login..."
+    npm login --auth-type=web
+  fi
+}
+
+# Cleans local git branches excluding main, master, development, and the current branch.
+# Usage: 
+#   git-branch-clean         -> Safe delete (git branch -d)
+#   git-branch-clean -f      -> Force delete (git branch -D)
+function git-branch-clean() {
+    local flag="-d" 
+    
+    if [[ "$1" == "-f" || "$1" == "--force" ]]; then
+        flag="-D"
+        echo "🚨 Running FORCE clean..."
+    else
+        echo "🧹 Running SAFE clean..."
+    fi
+
+    git branch | grep -v "main\|master\|development\|*" | xargs git branch $flag
+    git pull --prune
+}
+
+# Session-level env bootstrap from 1Password:
+# reuses launchd value when available; otherwise reads once via `op read`, caches in launchd, and exports.
+# Usage: ensure_op_env VAR_NAME 'op://vault/item/field'
+ensure_op_env() {
+  [[ -o interactive ]] || return 0
+
+  local env_var="$1"
+  local op_path="$2"
+  local value=""
+
+  if [[ -z "$env_var" || -z "$op_path" ]]; then
+    print -u2 "[ERROR] Usage: ensure_op_env VAR_NAME 'op://vault/item/field'"
+    return 1
+  fi
+
+  # Already set in this shell
+  value="${(P)env_var}"
+  if [[ -n "$value" ]]; then
+    export "$env_var"
+    return 0
+  fi
+
+  # Fast path: reuse cached value from launchd
+  value="$(launchctl getenv "$env_var" 2>/dev/null)"
+
+  # Slow path: fetch once from 1Password (may fail if locked/not running)
+  if [[ -z "$value" ]]; then
+    value="$(op read "$op_path" 2>/dev/null)" || true
+    if [[ -z "$value" ]]; then
+      print -u2 "[ERROR] ${env_var} not set (1Password locked/not available). Run: op read '$op_path'"
+      return 1
+    fi
+    launchctl setenv "$env_var" "$value"
+  fi
+
+  export "$env_var=$value"
+}
+
+
+# Logs into all configured Codex MCP servers by parsing `codex mcp list --json`
+codex-mcp-login-all() {
+  local delay=0.1
+  local servers
+  servers=($(codex mcp list --json \
+    | jq -r '.[] 
+      | select(.enabled == true and .auth_status != "unsupported") 
+      | .name'))
+
+  if [[ ${#servers[@]} -eq 0 ]]; then
+    echo "No MCP servers found in configuration."
+    return
+  fi
+
+  for srv in "${servers[@]}"; do
+    echo "Logging in to MCP server: $srv"
+    codex mcp login "$srv"
+    echo "Waiting ${delay}s before next login..."
+    sleep "$delay"
+  done
+}
+
+# vt-db: prints params used + MySQL connection string and copies URL to clipboard; defaults to --env qa --filter monolith-db --role all-readonly
+vt-db() {
+  local env="qa"
+  local filter="monolith-db"
+  local role="all-readonly"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --env=*)    env="${1#*=}"; shift ;;
+      --env)      env="$2"; shift 2 ;;
+      --filter=*) filter="${1#*=}"; shift ;;
+      --filter|-f) filter="$2"; shift 2 ;;
+      --role=*)   role="${1#*=}"; shift ;;
+      --role)     role="$2"; shift 2 ;;
+      *) echo "Unknown flag: $1" >&2; return 1 ;;
+    esac
+  done
+
+  echo "env=$env filter=$filter role=$role"
+
+  vt database login --env "$env" -f "$filter" --role "$role" --format json \
+  | jq -r '"mysql://\(.Username|@uri):\(.Password|@uri)@\(.Address)"' \
+  | tee >(pbcopy)
 }

@@ -1,9 +1,9 @@
-local map = vim.api.nvim_set_keymap
-local opts = { noremap = true, silent = true }
+local map = vim.keymap.set
+local opts = { silent = true }
 
-map("n", "t", ":Ex<CR>", opts)
-map("n", "ff", ":Telescope find_files hidden=true<CR>", opts)
-map("n", "fg", ":Telescope live_grep<CR>", opts)
+map("n", "t", "<cmd>Ex<CR>", opts)
+map("n", "ff", "<cmd>Telescope find_files hidden=true<CR>", opts)
+map("n", "fg", "<cmd>Telescope live_grep<CR>", opts)
 map("n", "<C-d>", "<C-d>zz", opts)
 map("n", "<C-u>", "<C-u>zz", opts)
 map("n", "N", "Nzzzv", opts)

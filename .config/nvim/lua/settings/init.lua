@@ -1,9 +1,21 @@
 local set = vim.opt
 local g = vim.g
 
+local function apply_peachpuff_bg_override()
+	set.background = "dark"
+	vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+	vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE", ctermbg = "NONE" })
+	vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
+end
+
 vim.cmd.colorscheme("peachpuff")
+apply_peachpuff_bg_override()
 vim.cmd("highlight Comment ctermfg=green")
-vim.cmd("hi rainbowcol1 guifg='#458588'")
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "peachpuff",
+	callback = apply_peachpuff_bg_override,
+})
 
 g.netrw_banner = 0
 g.netrw_liststyle = 3
@@ -28,6 +40,7 @@ set.linebreak = true
 set.signcolumn = "yes"
 
 set.guicursor = ""
+set.termguicolors = false
 
 set.mouse = "a"
 

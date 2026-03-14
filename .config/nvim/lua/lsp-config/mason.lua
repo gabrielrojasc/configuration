@@ -22,8 +22,9 @@ require("mason-lspconfig").setup({
 		"pyright",
 		"ruff",
 		"stylelint_lsp",
+		"taplo",
 		"tinymist",
 		"yamlls",
 	},
-	automatic_installation = true,
+	automatic_enable = false,
 })
