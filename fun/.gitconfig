@@ -1,0 +1,13 @@
+[user]
+  name = Gabriel Rojas
+  email = gabo06123@gmail.com
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGgaqrPX/5SSyHksueMC58KZsykOu5iB70iocn4JwgVE
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[credential]
+  username = gabo06123@gmail.com

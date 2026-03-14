@@ -24,8 +24,8 @@ export LC_ALL='en_US.UTF-8'
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}"
 
-# ssh private key
-# export SSH_PRIVATE_KEY=$(op read "op://Employee/id_ed25519/private key")
+# ssh 1pwd sock
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 # ui_arch_auth_github_token
 # export GITHUB_REGISTRY_READ_TOKEN="$(cat ~/.config/zerofox/ui_arch_auth_github_token)"

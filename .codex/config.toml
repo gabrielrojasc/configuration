@@ -1,0 +1,89 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+plan_mode_reasoning_effort = "high"
+tool_output_token_limit = 25000
+# Leave room for native compaction near the 1,050,000 context window.
+# Formula: 1,050,000 - (tool_output_token_limit + 15000)
+# With tool_output_token_limit=25000 ⇒ 1,050,000 - (25000 + 15000) = 1,010,000
+model_context_window = 1050000
+model_auto_compact_token_limit = 1010000
+web_search = "live"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true
+
+[features]
+unified_exec = true
+apply_patch_freeform = true
+shell_snapshot = true
+multi_agent = true
+js_repl = true
+
+[agents]
+max_threads = 6
+max_depth = 2
+
+[mcp_servers.zf-google-workspace]
+url = "https://mcp-gworkspace.nixhoodwink.com/mcp"
+
+[mcp_servers.zf-grafana-prod]
+url = "https://mcp.nixhoodwink.com/grafana/mcp"
+enabled = true
+
+[mcp_servers.zf-grafana-stag]
+url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
+enabled = false
+
+[mcp_servers.zf-grafana-qa]
+url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
+enabled = false
+
+[projects."/Users/grojas/tmp"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/git"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/levels"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Downloads"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/git/distributed-agent-workflow"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/fun/artifact-first-engineering-workflow"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/.claude"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/git/gold-docker"]
+trust_level = "trusted"
+
+[projects."/Users/grojas"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/.codex"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/git/API"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/work"]
+trust_level = "trusted"
+
+[projects."/"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/fun/pr-metrics"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/fun/configuration"]
+trust_level = "trusted"
+
+[notice]
+hide_rate_limit_model_nudge = true

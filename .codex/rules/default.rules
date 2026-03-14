@@ -1,0 +1,107 @@
+# Allow known-safe read-only prefixes for GitHub and Jira
+
+prefix_rule(
+  pattern = ["gh", "auth", "status"],
+  decision = "allow",
+  justification = "Read-only auth status",
+)
+
+prefix_rule(
+  pattern = ["gh", ["repo", "pr", "issue", "run", "workflow", "release"], ["list", "view"]],
+  decision = "allow",
+  justification = "Allow common read-only gh list/view commands",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "auth", "status"],
+  decision = "allow",
+  justification = "Allow Jira auth status checks for token-backed acli usage",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "project", ["list", "view"]],
+  decision = "allow",
+  justification = "Allow read-only Jira project inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "workitem", ["search", "view"]],
+  decision = "allow",
+  justification = "Allow read-only Jira work item inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "board", ["get", "search", "list-projects", "list-sprints"]],
+  decision = "allow",
+  justification = "Allow read-only Jira board inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "sprint", ["view", "list-workitems"]],
+  decision = "allow",
+  justification = "Allow read-only Jira sprint inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "filter", ["get", "get-columns", "list", "search"]],
+  decision = "allow",
+  justification = "Allow read-only Jira filter inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "dashboard", "search"],
+  decision = "allow",
+  justification = "Allow read-only Jira dashboard searches",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "workitem", "comment", ["list", "visibility"]],
+  decision = "allow",
+  justification = "Allow read-only Jira comment inspection",
+)
+
+prefix_rule(
+  pattern = ["acli", "jira", "workitem", "watcher", "list"],
+  decision = "allow",
+  justification = "Allow read-only Jira watcher inspection",
+)
+
+# Allow only selected gh api read patterns
+prefix_rule(
+  pattern = ["gh", "api", "user"],
+  decision = "allow",
+  justification = "Allow reading the authenticated user via gh api",
+)
+
+prefix_rule(
+  pattern = ["gh", "api", ["orgs/", "repos/"]],
+  decision = "prompt",
+  justification = "Prefix matching is argv-token based, so path fragments with flags are safer to review manually",
+)
+
+# Block selected mutating gh subcommands
+prefix_rule(
+  pattern = ["gh", ["repo", "pr", "issue", "release"], ["create", "edit", "delete"]],
+  decision = "forbidden",
+  justification = "Mutating gh commands are blocked",
+)
+
+prefix_rule(
+  pattern = ["gh", "pr", ["close", "reopen", "merge", "review", "comment"]],
+  decision = "forbidden",
+  justification = "PR mutation commands are blocked",
+)
+
+prefix_rule(
+  pattern = ["gh", "issue", ["close", "reopen", "comment"]],
+  decision = "forbidden",
+  justification = "Issue mutation commands are blocked",
+)
+
+# Keep generic gh api gated because method and endpoint can mutate
+prefix_rule(
+  pattern = ["gh", "api"],
+  decision = "prompt",
+  justification = "gh api may be read-only or mutating depending on method and endpoint",
+)
+prefix_rule(pattern=["python3", "/Users/grojas/.codex/skills/gh-address-comments/scripts/fetch_comments.py"], decision="allow")

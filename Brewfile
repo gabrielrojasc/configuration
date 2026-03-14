@@ -7,7 +7,7 @@ brew "bash"
 brew "bat"
 brew "cloc"
 brew "cocoapods"
-brew "colima", args: ["HEAD"]
+brew "colima"
 brew "colordiff"
 brew "cosign"
 brew "diffutils"
