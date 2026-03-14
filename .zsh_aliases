@@ -49,3 +49,9 @@ alias dclf='docker-compose logs -f'
 
 # list as a tree all brew installed pkgs
 alias brewlist='brew leaves | xargs brew deps --tree'
+
+# claude code
+alias cc='claude'
+
+# codex
+alias cx='codex'

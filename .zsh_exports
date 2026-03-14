@@ -23,3 +23,6 @@ export LC_ALL='en_US.UTF-8';
 
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
+
+# brew
+export HOMEBREW_UPGRADE_GREEDY=1
