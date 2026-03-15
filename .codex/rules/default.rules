@@ -1,0 +1,4 @@
+prefix_rule(pattern=["go", "mod"], decision="allow")
+prefix_rule(pattern=["swift", "build"], decision="allow")
+prefix_rule(pattern=["swift", "test"], decision="allow")
+prefix_rule(pattern=["go", "test"], decision="allow")

@@ -1,4 +1,5 @@
 .vim/.netrwhist
 .config/nvim/plugin
+.config/nvim/.nvim/
 lazy-lock.json
 .DS_Store

@@ -21,6 +21,13 @@ cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application
 cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
 cp -a ~/Library/LaunchAgents/loadsshkeys.plist Library/LaunchAgents/loadsshkeys.plist &
 cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
+## Codex
+cp -a ~/.codex/config.toml .codex/ &
+cp -a ~/.codex/AGENTS.md .codex/ &
+cp -a ~/.codex/rules/default.rules .codex/rules/ &
+## Claude
+cp -a ~/.claude/settings.json .claude/ &
+cp -a ~/.claude/statusline.sh .claude/ &
 
 cp -a ~/dcc/justfile dcc/ &
 

@@ -1,17 +1,17 @@
+# source exports
+source ~/.zsh_exports
+
 # path
 export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"  # for python
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
 export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
 
-# source exports
-source ~/.zsh_exports
-
 # source aliases
 source ~/.zsh_aliases
 
 # glcoud
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+# source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+# source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 # extend history
 setopt EXTENDED_HISTORY
@@ -19,9 +19,10 @@ setopt EXTENDED_HISTORY
 # to keep keybindings in tmux
 bindkey -e
 
-# keep env if using tmux
-if [ "$TMUX" ] && [ "$VIRTUAL_ENV" ];then
-  source "$VIRTUAL_ENV/bin/activate"
+# Re-activate inherited virtualenv in new tmux panes/shells when PATH
+# has not already been updated for the active environment.
+if [[ -n "$TMUX" && -n "$VIRTUAL_ENV" && -f "$VIRTUAL_ENV/bin/activate" && ":$PATH:" != *":$VIRTUAL_ENV/bin:"* ]]; then
+    source "$VIRTUAL_ENV/bin/activate"
 fi
 
 # Highlight the current autocomplete option
@@ -54,18 +55,13 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
 ## This line obtains information from the vcs.
 zstyle ':vcs_info:git*' formats "%F{3}%b%f "
-precmd() {
-    vcs_info
-}
 ## Enable substitution in the prompt.
 setopt prompt_subst
 export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U00BB''%f '
 
-diffh() {
-    command diff "$@" | colordiff | diff-highlight
-}
-compdef diffh=diff
+# source functions
+source ~/.zsh_functions
 
-map() {
-    xargs -I {} $@ {}
-}
+autoload -Uz add-zsh-hook
+
+add-zsh-hook precmd vcs_info

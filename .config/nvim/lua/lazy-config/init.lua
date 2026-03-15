@@ -1,5 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -12,8 +12,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	-- null-ls
-	"jose-elias-alvarez/null-ls.nvim",
+	-- formatting and linting
+	"stevearc/conform.nvim",
+	"mfussenegger/nvim-lint",
 	-- mason
 	{
 		"williamboman/mason.nvim",
@@ -34,16 +35,17 @@ local plugins = {
 	-- tree sitter
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
+		lazy = false,
 		build = ":TSUpdate",
 	},
-	-- ts rainbow
-	"p00f/nvim-ts-rainbow",
+	-- ts rainbow v2 (compatible with newer treesitter)
+	"HiPhish/rainbow-delimiters.nvim",
 	-- ts context
 	"nvim-treesitter/nvim-treesitter-context",
 	-- telescope
 	{
 		"nvim-telescope/telescope.nvim",
-		version = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
