@@ -528,7 +528,7 @@ ensure_op_env() {
 
 
 # Logs into all configured Codex MCP servers by parsing `codex mcp list --json`
-codex-mcp-login-all() {
+cx-mcp-login-all() {
   local delay=0.1
   local servers
   servers=($(codex mcp list --json \

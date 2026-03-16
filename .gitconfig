@@ -75,3 +75,5 @@
 
 [includeIf "gitdir:~/fun/"]
   path = ~/fun/.gitconfig
+[gpg "ssh"]
+	allowedSignersFile = /Users/grojas/.ssh/allowed_signers

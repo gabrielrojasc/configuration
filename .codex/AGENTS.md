@@ -125,52 +125,26 @@ ref: <Jira ticket or URL>
 
 ## Workspace Conventions
 
-- Code repositories usually live under `~/git`.
+- Code repositories live under `~/git`.
 - Shared cross-repo engineering context lives under `~/git/engineering-context`.
-- Ephemeral scratch work lives under `~/tmp/_ai_scratch`.
+- Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
 
-## Repo Discovery Conventions
+## Repo Discovery
 
-- Treat `AGENTS.md`, `README.md`, and repo-local `docs/` indexes as the first stop.
-- Prefer repository-local, versioned artifacts over chat history.
+- First stops: `AGENTS.md`, `README.md`, repo-local `docs/` indexes. Prefer versioned artifacts over chat history.
 - Keep `AGENTS.md` short and map-like.
 
-## Docs Map Expectations
+## Docs & Planning Layout
 
-- Repo-local docs live under `docs/`.
-- Repo-specific plans live under `docs/exec-plans/active/` and `docs/exec-plans/completed/`.
-- Supporting knowledge lives under `docs/references/`.
-- `docs/services/` is used only when the repo has multiple runtime components.
-
-## Planning Locations
-
-- Repo-local work keeps plans in the repo.
-- Cross-repo work keeps research and plans under `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/`.
-- When a ticket exists, use `<clear-initiative>_<ticket-key>` so the initiative is clear at a glance and the ticket remains a suffix.
+- Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
+- Repo-local plans live under `docs/exec-plans/{active,completed}/`.
+- Cross-repo plans live under `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/`; decisions in a `decisions/` subfolder when cross-repo tradeoffs need a durable record.
+- Stable service reference cards go in `~/git/engineering-context/service-catalog/`; cross-repo dependency maps in `~/git/engineering-context/dependency-maps/`.
 - Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
-
-## Shared Context Extras
-
-- Keep initiative-local decision records under `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/decisions/` when cross-repo tradeoffs need a durable record.
-- Keep stable service or component reference cards under `~/git/engineering-context/service-catalog/`.
-- Keep durable cross-repo dependency or contract maps under `~/git/engineering-context/dependency-maps/`.
 
 ## Workflow Rules
 
-- Plans are first-class artifacts.
-- Compact useful exploration into durable Markdown.
+- Plans are first-class artifacts. Compact useful exploration into durable Markdown.
 - Distinguish automated verification from manual verification.
-- If ownership, boundaries, or evidence are unclear, do more research instead of guessing.
-
-## Multi-Agent Context Engineering
-
-- For medium and larger tasks, prefer splitting bounded work across sub-agents so the main agent keeps its context focused on orchestration, decisions, and integration.
-- Keep tiny or fully linear tasks local when delegation overhead exceeds the context benefit, and keep the immediate blocking step local when delegation would slow the critical path.
-- Delegate independent discovery, verification, and disjoint implementation work when possible, with clear ownership and no duplicated effort.
-- Ask sub-agents for compact findings and decision-ready summaries rather than raw context dumps.
-- When work spans repos or produces durable decisions, prefer concise artifact-backed summaries aligned with `~/git/engineering-context`.
-
-## Scratch Guidance
-
-- Use scratch for copied logs, rough notes, temporary summaries, and intermediate output.
-- Scratch is not a second documentation system.
+- Verify framework/library behavior against repo-detected versions and official docs, not memory.
+- When ownership, boundaries, or evidence are unclear, research before guessing.

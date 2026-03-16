@@ -86,3 +86,7 @@ autoload -Uz add-zsh-hook
 
 add-zsh-hook precmd vcs_info
 add-zsh-hook precmd _tmux_update_virtual_env
+
+# BEGIN VT 1PASSWORD INTEGRATION
+export VT_VAULT_qa_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-qa/token"
+# END VT 1PASSWORD INTEGRATION

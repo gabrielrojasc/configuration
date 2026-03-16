@@ -51,3 +51,6 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 # github
 export GH_PAGER=cat
 export GITHUB_MCP_TOKEN="$(gh auth token)"
+
+# vault
+export OP_VAULT_ID="p3cej3nz64dcu7ownprpdadjie"
