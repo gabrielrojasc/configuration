@@ -82,5 +82,8 @@ trust_level = "trusted"
 [projects."/Users/grojas/fun/configuration"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/fun"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
