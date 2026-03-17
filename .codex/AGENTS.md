@@ -43,6 +43,8 @@ Use:
 - Default to fetch-only, read-only external-service operations for lookup and discovery work.
 - Use mutating external-service operations only when the user explicitly asks for them or when they are indispensable to complete the requested task.
 - Assume external-service tools are already authenticated. Do not run auth-changing commands unless the user explicitly asks.
+- If an external-service CLI returns `unauthorized`, `forbidden`, or a similar auth error, first verify auth with a non-mutating status command such as `acli jira auth status` or `gh auth status`.
+- If the auth status succeeds, retry the original command once outside the sandbox, with unrestricted execution, before concluding the failure is an auth problem.
 - If external-service authentication fails, stop and report the failing command and error so the user can fix authentication.
 
 ## GitHub Operations

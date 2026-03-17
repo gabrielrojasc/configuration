@@ -7,10 +7,11 @@
         "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
         "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
     },
-    "attribution": {
-        "commit": "",
-        "pr": ""
-    },
+    "model": "opus",
+    "effortLevel": "high",
+    "alwaysThinkingEnabled": true,
+    "spinnerTipsEnabled": false,
+    "enableAllProjectMcpServers": false,
     "permissions": {
         "allow": [
             "Bash(gh auth status)",
@@ -78,24 +79,43 @@
             "Bash(git stash show *)",
             "Bash(git restore --staged *)",
             "Bash(git restore *)",
-            "Bash(xargs cat:*)",
-            "Read(~/.claude/skills/*)",
 
-            "mcp__zf-grafana-qa__get*",
-            "mcp__zf-grafana-qa__list*",
-            "mcp__zf-grafana-qa__search*",
-            "mcp__zf-grafana-qa__query*",
-            "mcp__zf-grafana-qa__generate_deeplink",
-            "mcp__zf-grafana-stag__get*",
-            "mcp__zf-grafana-stag__list*",
-            "mcp__zf-grafana-stag__search*",
-            "mcp__zf-grafana-stag__query*",
-            "mcp__zf-grafana-stag__generate_deeplink",
-            "mcp__zf-grafana-prod__get*",
-            "mcp__zf-grafana-prod__list*",
-            "mcp__zf-grafana-prod__search*",
-            "mcp__zf-grafana-prod__query*",
-            "mcp__zf-grafana-prod__generate_deeplink",
+            "Bash(xargs cat:*)",
+            "Bash(find:*)",
+            "Bash(grep:*)",
+
+            "Read",
+            "WebFetch",
+
+            "mcp__zf-grafana-qa__search_dashboards",
+            "mcp__zf-grafana-qa__get_dashboard_summary",
+            "mcp__zf-grafana-qa__get_dashboard_panel_queries",
+            "mcp__zf-grafana-qa__list_datasources",
+            "mcp__zf-grafana-qa__list_loki_label_values",
+            "mcp__zf-grafana-qa__list_loki_label_names",
+            "mcp__zf-grafana-qa__query_loki_logs",
+            "mcp__zf-grafana-qa__list_prometheus_metric_names",
+            "mcp__zf-grafana-qa__query_prometheus",
+
+            "mcp__zf-grafana-stag__search_dashboards",
+            "mcp__zf-grafana-stag__get_dashboard_summary",
+            "mcp__zf-grafana-stag__get_dashboard_panel_queries",
+            "mcp__zf-grafana-stag__list_datasources",
+            "mcp__zf-grafana-stag__list_loki_label_values",
+            "mcp__zf-grafana-stag__list_loki_label_names",
+            "mcp__zf-grafana-stag__query_loki_logs",
+            "mcp__zf-grafana-stag__list_prometheus_metric_names",
+            "mcp__zf-grafana-stag__query_prometheus",
+
+            "mcp__zf-grafana-prod__search_dashboards",
+            "mcp__zf-grafana-prod__get_dashboard_summary",
+            "mcp__zf-grafana-prod__get_dashboard_panel_queries",
+            "mcp__zf-grafana-prod__list_datasources",
+            "mcp__zf-grafana-prod__list_loki_label_values",
+            "mcp__zf-grafana-prod__list_loki_label_names",
+            "mcp__zf-grafana-prod__query_loki_logs",
+            "mcp__zf-grafana-prod__list_prometheus_metric_names",
+            "mcp__zf-grafana-prod__query_prometheus",
 
             "mcp__zf-google-workspace__get_drive_file_content"
         ],
@@ -144,8 +164,16 @@
             "Bash(git config *)"
         ]
     },
-    "model": "opus",
-    "enableAllProjectMcpServers": false,
+    "sandbox": {
+        "enabled": true,
+        "autoAllowBashIfSandboxed": true,
+        "filesystem": {
+            "allowWrite": ["."]
+        },
+        "network": {
+            "allowedDomains": ["*"]
+        }
+    },
     "hooks": {
         "Stop": [
             {
@@ -170,14 +198,15 @@
             }
         ]
     },
+    "attribution": {
+        "commit": "",
+        "pr": ""
+    },
     "statusLine": {
         "type": "command",
         "command": "~/.claude/statusline.sh",
         "padding": 1
     },
-    "spinnerTipsEnabled": false,
-    "alwaysThinkingEnabled": true,
-    "effortLevel": "high",
     "enabledPlugins": {
         "frontend-design@claude-plugins-official": true
     }

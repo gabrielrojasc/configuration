@@ -30,15 +30,12 @@ url = "https://mcp-gworkspace.nixhoodwink.com/mcp"
 
 [mcp_servers.zf-grafana-prod]
 url = "https://mcp.nixhoodwink.com/grafana/mcp"
-enabled = true
 
 [mcp_servers.zf-grafana-stag]
 url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
-enabled = false
 
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
-enabled = false
 
 [projects."/Users/grojas/tmp"]
 trust_level = "trusted"
