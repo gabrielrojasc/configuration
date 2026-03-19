@@ -13,6 +13,12 @@ prefix_rule(
 )
 
 prefix_rule(
+  pattern = ["gh", "pr", "diff"],
+  decision = "allow",
+  justification = "Allow read-only PR diffs",
+)
+
+prefix_rule(
   pattern = ["acli", "jira", "auth", "status"],
   decision = "allow",
   justification = "Allow Jira auth status checks for token-backed acli usage",

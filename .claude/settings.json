@@ -7,11 +7,10 @@
         "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
         "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
     },
-    "model": "opus",
-    "effortLevel": "high",
-    "alwaysThinkingEnabled": true,
-    "spinnerTipsEnabled": false,
-    "enableAllProjectMcpServers": false,
+    "attribution": {
+        "commit": "",
+        "pr": ""
+    },
     "permissions": {
         "allow": [
             "Bash(gh auth status)",
@@ -79,14 +78,11 @@
             "Bash(git stash show *)",
             "Bash(git restore --staged *)",
             "Bash(git restore *)",
-
             "Bash(xargs cat:*)",
             "Bash(find:*)",
             "Bash(grep:*)",
-
             "Read",
             "WebFetch",
-
             "mcp__zf-grafana-qa__search_dashboards",
             "mcp__zf-grafana-qa__get_dashboard_summary",
             "mcp__zf-grafana-qa__get_dashboard_panel_queries",
@@ -96,7 +92,6 @@
             "mcp__zf-grafana-qa__query_loki_logs",
             "mcp__zf-grafana-qa__list_prometheus_metric_names",
             "mcp__zf-grafana-qa__query_prometheus",
-
             "mcp__zf-grafana-stag__search_dashboards",
             "mcp__zf-grafana-stag__get_dashboard_summary",
             "mcp__zf-grafana-stag__get_dashboard_panel_queries",
@@ -106,7 +101,6 @@
             "mcp__zf-grafana-stag__query_loki_logs",
             "mcp__zf-grafana-stag__list_prometheus_metric_names",
             "mcp__zf-grafana-stag__query_prometheus",
-
             "mcp__zf-grafana-prod__search_dashboards",
             "mcp__zf-grafana-prod__get_dashboard_summary",
             "mcp__zf-grafana-prod__get_dashboard_panel_queries",
@@ -116,7 +110,6 @@
             "mcp__zf-grafana-prod__query_loki_logs",
             "mcp__zf-grafana-prod__list_prometheus_metric_names",
             "mcp__zf-grafana-prod__query_prometheus",
-
             "mcp__zf-google-workspace__get_drive_file_content"
         ],
         "deny": [
@@ -164,16 +157,8 @@
             "Bash(git config *)"
         ]
     },
-    "sandbox": {
-        "enabled": true,
-        "autoAllowBashIfSandboxed": true,
-        "filesystem": {
-            "allowWrite": ["."]
-        },
-        "network": {
-            "allowedDomains": ["*"]
-        }
-    },
+    "model": "opus[1m]",
+    "enableAllProjectMcpServers": false,
     "hooks": {
         "Stop": [
             {
@@ -198,10 +183,6 @@
             }
         ]
     },
-    "attribution": {
-        "commit": "",
-        "pr": ""
-    },
     "statusLine": {
         "type": "command",
         "command": "~/.claude/statusline.sh",
@@ -209,5 +190,18 @@
     },
     "enabledPlugins": {
         "frontend-design@claude-plugins-official": true
-    }
+    },
+    "sandbox": {
+        "enabled": true,
+        "autoAllowBashIfSandboxed": true,
+        "network": {
+            "allowedDomains": ["*"]
+        },
+        "filesystem": {
+            "allowWrite": ["."]
+        }
+    },
+    "spinnerTipsEnabled": false,
+    "alwaysThinkingEnabled": true,
+    "effortLevel": "high"
 }

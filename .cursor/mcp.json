@@ -1,16 +1,16 @@
 {
-  "mcpServers": {
-    "zf-google-workspace": {
-      "url": "https://mcp-gworkspace.nixhoodwink.com/mcp"
-    },
-    "zf-grafana-prod": {
-      "url": "https://mcp.nixhoodwink.com/grafana/mcp"
-    },
-    "zf-grafana-stag": {
-      "url": "https://mcp-stag.nixhoodwink.com/grafana/mcp"
-    },
-    "zf-grafana-qa": {
-      "url": "https://mcp-qa.nixhoodwink.com/grafana/mcp"
+    "mcpServers": {
+        "zf-google-workspace": {
+            "url": "https://mcp-gworkspace.nixhoodwink.com/mcp"
+        },
+        "zf-grafana-prod": {
+            "url": "https://mcp.nixhoodwink.com/grafana/mcp"
+        },
+        "zf-grafana-stag": {
+            "url": "https://mcp-stag.nixhoodwink.com/grafana/mcp"
+        },
+        "zf-grafana-qa": {
+            "url": "https://mcp-qa.nixhoodwink.com/grafana/mcp"
+        }
     }
-  }
 }
