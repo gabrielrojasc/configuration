@@ -54,7 +54,6 @@ Use:
 ## Commit Instructions
 
 - Write commit messages in Conventional Commits format.
-- For any branch intended to be merged, **AT LEAST ONE** commit on that branch **MUST** include a `ref:` footer.
 - Use non-sandbox commits so they can be signed.
 - Output real line breaks in commit messages, not escaped `\n`.
 - Format:
@@ -111,3 +110,45 @@ Use:
 - Delegate independent discovery, verification, and disjoint implementation work when possible, with clear ownership and no duplicated effort.
 - Ask sub-agents for compact findings and decision-ready summaries rather than raw context dumps.
 
+# Default Agent Workflow
+
+## Workspace Conventions
+
+- Code repositories live under `~/fun`.
+- Shared engineering context lives under `~/fun/engineering-context`.
+- Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
+
+## Repo Discovery
+
+- First stops: `AGENTS.md`, `README.md`, repo-local `docs/` indexes. Prefer versioned artifacts over chat history.
+- Keep `AGENTS.md` short and map-like.
+
+## Docs & Planning Layout
+
+- Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
+- Execution artifacts default to `~/fun/engineering-context/active/<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- Use repo-local docs for durable knowledge worth preserving from completed work: architecture notes, commands, pitfalls, service cards, and implementation learnings with ongoing value.
+- Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts; keep `decisions/` for tradeoffs that need a durable record.
+- Stable service reference cards go in `~/fun/engineering-context/service-catalog/`; cross-repo dependency maps in `~/fun/engineering-context/dependency-maps/`.
+- Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
+
+## Workflow Rules
+
+- Plans are first-class artifacts. Compact useful exploration into durable Markdown.
+- Distinguish automated verification from manual verification.
+- Verify framework/library behavior against repo-detected versions and official docs, not memory.
+- When ownership, boundaries, or evidence are unclear, research before guessing.
+
+## Artifact Readability
+
+Human-facing artifacts -- plans, research, decision records -- must optimize for scanning and comprehension. Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness instead.
+
+- Lead each section with the conclusion or key takeaway, then supporting detail.
+- Short declarative sentences. Cut filler phrases ("it should be noted", "in order to", "it is important that").
+- Concrete over abstract: specific file paths, function names, and version numbers over vague references.
+- Use bullet lists for three or more related items. Use tables for comparisons or structured attribute sets.
+- One idea per paragraph. No wall-of-text blocks.
+- Write headings that state the finding or decision, not just the topic (prefer "Auth middleware stores tokens in plaintext" over "Auth middleware analysis").
+- Use **bold** for key terms on first mention and for emphasis.
+- Use Mermaid diagrams for flows, dependency graphs, and architecture when visual structure aids comprehension over prose.
+- Consistent terminology throughout the artifact. Pick one term for a concept and keep it.

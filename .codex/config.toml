@@ -46,7 +46,52 @@ trust_level = "trusted"
 [projects."/Users/gabriel/fun/configuration"]
 trust_level = "trusted"
 
+[projects."/Users/gabriel/.claude"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/.codex"]
+trust_level = "trusted"
+
 [mcp_servers.playwright]
 args = ["@playwright/mcp@latest"]
 command = "npx"
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/skill-installer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/skill-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/openai-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/imagegen/SKILL.md"
+enabled = false
+
+[[skills.config]]
+name = "github:yeet"
+enabled = false
+
+[[skills.config]]
+name = "github:github"
+enabled = false
+
+[[skills.config]]
+name = "github:gh-fix-ci"
+enabled = false
+
+[[skills.config]]
+name = "github:gh-address-comments"
+enabled = false
 
