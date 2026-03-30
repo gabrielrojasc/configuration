@@ -89,4 +89,12 @@ add-zsh-hook precmd _tmux_update_virtual_env
 
 # BEGIN VT 1PASSWORD INTEGRATION
 export VT_VAULT_qa_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-qa/token"
+export VT_VAULT_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-prod/token"
+export VT_DB_monolith_db_prod_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/username"
+export VT_DB_monolith_db_qa_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-qa/username"
+export VT_DB_monolith_db_qa_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-qa/password"
+export VT_VAULT_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-stag/token"
+export VT_DB_monolith_db_stag_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/username"
+export VT_DB_monolith_db_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/password"
+export VT_DB_monolith_db_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/password"
 # END VT 1PASSWORD INTEGRATION

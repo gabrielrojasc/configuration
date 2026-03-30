@@ -33,6 +33,7 @@ Use:
 - Python venvs MUST be created with `uv venv` (infer Python version from project config; use `--python <version>` only if explicitly specified).
 - Activate the venv before running commands, and use the repo’s existing dependency manager inside it. Use `uv run` only if the repo uses `uv` for dependencies. Do not migrate tooling.
 - If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
+- npm package fetches and Docker image pulls may require prior registry login. If an install or pull fails with `unauthorized`, `forbidden`, or similar registry/auth errors, treat missing login as a likely cause and tell the user before assuming a generic network problem.
 
 - Follow existing repo workflows and tooling.
 - Use defined scripts (npm, Makefile, etc.) instead of creating new ones.
@@ -128,7 +129,7 @@ ref: <Jira ticket or URL>
 ## Workspace Conventions
 
 - Code repositories live under `~/git`.
-- Shared cross-repo engineering context lives under `~/git/engineering-context`.
+- Shared engineering context lives under `~/git/engineering-context`.
 - Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
 
 ## Repo Discovery
@@ -139,8 +140,9 @@ ref: <Jira ticket or URL>
 ## Docs & Planning Layout
 
 - Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
-- Repo-local plans live under `docs/exec-plans/{active,completed}/`.
-- Cross-repo plans live under `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/`; decisions in a `decisions/` subfolder when cross-repo tradeoffs need a durable record.
+- Execution artifacts default to `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- Use repo-local docs for durable knowledge worth preserving from completed work: architecture notes, commands, pitfalls, service cards, and implementation learnings with ongoing value.
+- Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts; keep `decisions/` for tradeoffs that need a durable record.
 - Stable service reference cards go in `~/git/engineering-context/service-catalog/`; cross-repo dependency maps in `~/git/engineering-context/dependency-maps/`.
 - Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
 
@@ -150,3 +152,17 @@ ref: <Jira ticket or URL>
 - Distinguish automated verification from manual verification.
 - Verify framework/library behavior against repo-detected versions and official docs, not memory.
 - When ownership, boundaries, or evidence are unclear, research before guessing.
+
+## Artifact Readability
+
+Human-facing artifacts -- plans, research, decision records -- must optimize for scanning and comprehension. Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness instead.
+
+- Lead each section with the conclusion or key takeaway, then supporting detail.
+- Short declarative sentences. Cut filler phrases ("it should be noted", "in order to", "it is important that").
+- Concrete over abstract: specific file paths, function names, and version numbers over vague references.
+- Use bullet lists for three or more related items. Use tables for comparisons or structured attribute sets.
+- One idea per paragraph. No wall-of-text blocks.
+- Write headings that state the finding or decision, not just the topic (prefer "Auth middleware stores tokens in plaintext" over "Auth middleware analysis").
+- Use **bold** for key terms on first mention and for emphasis.
+- Use Mermaid diagrams for flows, dependency graphs, and architecture when visual structure aids comprehension over prose.
+- Consistent terminology throughout the artifact. Pick one term for a concept and keep it.

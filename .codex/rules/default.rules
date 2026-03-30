@@ -111,3 +111,4 @@ prefix_rule(
   justification = "gh api may be read-only or mutating depending on method and endpoint",
 )
 prefix_rule(pattern=["python3", "/Users/grojas/.codex/skills/gh-address-comments/scripts/fetch_comments.py"], decision="allow")
+prefix_rule(pattern=["docker", "--version"], decision="allow")
