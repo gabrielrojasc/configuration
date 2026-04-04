@@ -466,7 +466,7 @@ function npm-auth() {
     echo "✅ Already logged in as $(npm whoami)"
   else
     echo "🔑 Not logged in. Starting login..."
-    npm login --auth-type=web
+    npm login --auth-type=web --force
   fi
 }
 

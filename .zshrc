@@ -10,6 +10,7 @@ export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
 export PATH="$GOPATH/bin:$PATH"; # for go
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH" # for mysql-client
 export PATH="$HOME/.pub-cache/bin:$PATH" # melos
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
 
 # source aliases
 source ~/.zsh_aliases
@@ -98,3 +99,4 @@ export VT_DB_monolith_db_stag_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monoli
 export VT_DB_monolith_db_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/password"
 export VT_DB_monolith_db_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/password"
 # END VT 1PASSWORD INTEGRATION
+

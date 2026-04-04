@@ -54,3 +54,6 @@ export GITHUB_MCP_TOKEN="$(gh auth token)"
 
 # vault
 export OP_VAULT_ID="p3cej3nz64dcu7ownprpdadjie"
+
+# proto
+export PROTO_HOME="$HOME/.proto"
