@@ -573,3 +573,18 @@ vt-db() {
   | jq -r '"mysql://\(.Username|@uri):\(.Password|@uri)@\(.Address)"' \
   | tee >(pbcopy)
 }
+
+
+svg2png() {
+  local in="$1"
+  local scale="${2:-4}"
+  local out
+
+  [[ -n "$in" ]] || { echo "usage: svg2png input.svg [scale]" >&2; return 1; }
+  [[ -f "$in" ]] || { echo "file not found: $in" >&2; return 1; }
+  [[ "$in" == *.svg ]] || { echo "input must be an .svg file" >&2; return 1; }
+
+  out="${in%.svg}.png"
+  rsvg-convert -f png -b white -z "$scale" "$in" -o "$out" || return 1
+  printf '%s\n' "$out"
+}

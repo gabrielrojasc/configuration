@@ -5,7 +5,9 @@
         "DISABLE_TELEMETRY": "1",
         "DISABLE_ERROR_REPORTING": "1",
         "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+        "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+        "CLAUDE_CODE_EFFORT_LEVEL": "max"
     },
     "attribution": {
         "commit": "",
@@ -46,6 +48,10 @@
             "Bash(gh api \"repos/*/actions/jobs/*/logs\")",
             "Bash(gh api /repos/*/actions/jobs/*/logs)",
             "Bash(gh api \"/repos/*/actions/jobs/*/logs\")",
+            "Bash(gh api repos/*/check-runs*)",
+            "Bash(gh api \"repos/*/check-runs*\")",
+            "Bash(gh api /repos/*/check-runs*)",
+            "Bash(gh api \"/repos/*/check-runs*\")",
             "Bash(gh api repos/*/contents*)",
             "Bash(acli jira auth status)",
             "Bash(acli jira board list-sprints *)",
@@ -95,7 +101,8 @@
             "Bash(grep:*)",
             "Bash(ls:*)",
             "Read",
-            "WebFetch(*)",
+            "WebFetch",
+            "WebSearch",
             "mcp__zf-grafana-qa__search_dashboards",
             "mcp__zf-grafana-qa__get_dashboard_summary",
             "mcp__zf-grafana-qa__get_dashboard_panel_queries",
@@ -204,6 +211,14 @@
         "command": "~/.claude/statusline.sh",
         "padding": 1
     },
+    "extraKnownMarketplaces": {
+        "openai-codex": {
+            "source": {
+                "source": "github",
+                "repo": "openai/codex-plugin-cc"
+            }
+        }
+    },
     "sandbox": {
         "enabled": false,
         "autoAllowBashIfSandboxed": true,
@@ -216,9 +231,11 @@
     },
     "spinnerTipsEnabled": false,
     "alwaysThinkingEnabled": true,
-    "effortLevel": "high",
     "autoUpdatesChannel": "stable",
     "autoMemoryEnabled": true,
     "autoDreamEnabled": true,
-    "skipAutoPermissionPrompt": true
+    "skipAutoPermissionPrompt": true,
+    "enabledPlugins": {
+        "codex@openai-codex": true
+    }
 }

@@ -25,6 +25,10 @@ Use:
 - **UPPERCASE** for priorities (REQUIRED, WARNING, IMPORTANT)
 - Clear headings and structured lists
 
+## Deployments
+
+- All deployments are made either through GitHub Actions or Jenkins and manually triggered by the user.
+
 ## Environment & Tooling
 
 - Use repo-local tooling and environment managers.
@@ -34,6 +38,8 @@ Use:
 - Activate the venv before running commands, and use the repo’s existing dependency manager inside it. Use `uv run` only if the repo uses `uv` for dependencies. Do not migrate tooling.
 - If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
 - npm package fetches and Docker image pulls may require prior registry login. If an install or pull fails with `unauthorized`, `forbidden`, or similar registry/auth errors, treat missing login as a likely cause and tell the user before assuming a generic network problem.
+
+- When using `find` or `fd`, include the flag to follow symlinks (`find -L` or `fd -L`/`fd --follow`).
 
 - Follow existing repo workflows and tooling.
 - Use defined scripts (npm, Makefile, etc.) instead of creating new ones.
@@ -130,6 +136,7 @@ ref: <Jira ticket or URL>
 
 - Code repositories live under `~/git`.
 - Shared engineering context lives under `~/git/engineering-context`.
+- Implementation worktrees live under `~/worktree`.
 - Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
 
 ## Repo Discovery
@@ -140,7 +147,8 @@ ref: <Jira ticket or URL>
 ## Docs & Planning Layout
 
 - Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
-- Execution artifacts default to `~/git/engineering-context/active/<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- Execution artifacts default to `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- `NNNN` is a zero-padded sequence number assigned globally across `active/` and `archive/`. Scan both directories for the highest existing number and increment by one.
 - Use repo-local docs for durable knowledge worth preserving from completed work: architecture notes, commands, pitfalls, service cards, and implementation learnings with ongoing value.
 - Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts; keep `decisions/` for tradeoffs that need a durable record.
 - Stable service reference cards go in `~/git/engineering-context/service-catalog/`; cross-repo dependency maps in `~/git/engineering-context/dependency-maps/`.
@@ -149,6 +157,7 @@ ref: <Jira ticket or URL>
 ## Workflow Rules
 
 - Plans are first-class artifacts. Compact useful exploration into durable Markdown.
+- The structure-approval proposal is also a first-class Markdown artifact, not just a chat message.
 - Distinguish automated verification from manual verification.
 - Verify framework/library behavior against repo-detected versions and official docs, not memory.
 - When ownership, boundaries, or evidence are unclear, research before guessing.
@@ -165,4 +174,32 @@ Human-facing artifacts -- plans, research, decision records -- must optimize for
 - Write headings that state the finding or decision, not just the topic (prefer "Auth middleware stores tokens in plaintext" over "Auth middleware analysis").
 - Use **bold** for key terms on first mention and for emphasis.
 - Use Mermaid diagrams for flows, dependency graphs, and architecture when visual structure aids comprehension over prose.
+- For planning artifacts, include Mermaid sequence diagrams in both the proposal and the final plan when they clarify flow, rollout, or ownership; skip them only when they would add no value.
 - Consistent terminology throughout the artifact. Pick one term for a concept and keep it.
+
+## Implementation Workspace
+
+Do not create branches or edit code directly in `~/git`. Use git worktrees so each initiative gets an isolated working copy and the main checkouts stay clean.
+
+Setup: run the installed `af-implement` helper script. It assigns the next sequence number, creates the initiative folder structure, fetches all repos, and creates worktrees under `~/worktree/NNNN/<repo>/`.
+
+```bash
+<SKILLS_ROOT>/af-implement/scripts/init-initiative.sh \
+  --repos-root ~/git \
+  --context-root ~/git/engineering-context \
+  --worktrees-root ~/worktree \
+  [--branch-prefix feature] \
+  <initiative-name> [ticket-key]
+```
+
+All implementation happens inside `~/worktree/NNNN/<repo>/`. Branch naming follows the repo's branch prefix convention (e.g., `feature/`, `bugfix/`, `hotfix/`).
+
+Cleanup: run the installed `af-archive` helper script to remove worktrees, delete local branches, and move the initiative to `~/git/engineering-context/archive/`.
+
+```bash
+<SKILLS_ROOT>/af-archive/scripts/archive-initiative.sh \
+  --repos-root ~/git \
+  --context-root ~/git/engineering-context \
+  --worktrees-root ~/worktree \
+  [--delete-remote] <NNNN>
+```

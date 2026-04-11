@@ -10,7 +10,7 @@ export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
 export PATH="$GOPATH/bin:$PATH"; # for go
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH" # for mysql-client
 export PATH="$HOME/.pub-cache/bin:$PATH" # melos
-export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
+# export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
 
 # source aliases
 source ~/.zsh_aliases
@@ -59,8 +59,11 @@ eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 # fzf
 eval "$(fzf --zsh)"
 
-# logcli
+# logcli completion
 eval "$(logcli --completion-script-zsh)"
+
+# codex completion
+eval "$(codex completion zsh)"
 
 # sdkman
 export SDKMAN_DIR='/opt/homebrew/opt/sdkman-cli/libexec'
