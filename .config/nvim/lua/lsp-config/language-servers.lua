@@ -42,8 +42,20 @@ end
 -- this setups every language server automatically
 local installed_servers = mason_lspconfig.get_installed_servers()
 
+local function should_enable_server(server)
+	if server == "tinymist" then
+		return false
+	end
+
+	if server == "rust_analyzer" then
+		return vim.fn.executable(vim.env.RUSTC or "rustc") == 1
+	end
+
+	return true
+end
+
 for _, server in ipairs(installed_servers) do
-	if server ~= "tinymist" then
+	if should_enable_server(server) then
 		vim.lsp.config(server, {
 			on_attach = on_attach,
 			capabilities = capabilities,

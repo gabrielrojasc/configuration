@@ -4,7 +4,8 @@
     "DISABLE_TELEMETRY": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1"
   },
   "attribution": {
     "commit": "",
@@ -124,7 +125,7 @@
       "Bash(git config *)"
     ]
   },
-  "model": "opus",
+  "model": "best",
   "hooks": {
     "Stop": [
       {
@@ -154,11 +155,8 @@
     "command": "~/.claude/statusline.sh",
     "padding": 1
   },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
-  },
   "sandbox": {
-    "enabled": true,
+    "enabled": false,
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "network": {
@@ -167,5 +165,9 @@
   },
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "autoMemoryEnabled": true,
+  "autoDreamEnabled": true,
+  "auto-update": "stable",
+  "skipAutoPermissionPrompt": true
 }

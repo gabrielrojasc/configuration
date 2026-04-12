@@ -21,6 +21,7 @@ local plugins = {
 		build = ":MasonUpdate",
 	},
 	"williamboman/mason-lspconfig.nvim",
+	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	-- lsp config
 	"neovim/nvim-lspconfig",
 	-- cmp
@@ -35,7 +36,7 @@ local plugins = {
 	-- tree sitter
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
+		branch = "main",
 		lazy = false,
 		build = ":TSUpdate",
 	},

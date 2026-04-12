@@ -20,6 +20,7 @@ apply_patch_freeform = true
 shell_snapshot = true
 multi_agent = true
 js_repl = true
+memories = true
 
 [agents]
 max_threads = 6
@@ -52,9 +53,11 @@ trust_level = "trusted"
 [projects."/Users/gabriel/.codex"]
 trust_level = "trusted"
 
-[mcp_servers.playwright]
-args = ["@playwright/mcp@latest"]
-command = "npx"
+[projects."/Users/gabriel/Library/Mobile Documents/iCloud~md~obsidian/Documents/brain"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/.config/nvim"]
+trust_level = "trusted"
 
 [plugins."github@openai-curated"]
 enabled = true
