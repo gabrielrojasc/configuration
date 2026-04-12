@@ -28,6 +28,9 @@ Use:
 ## Environment & Tooling
 
 - Use repo-local tooling and environment managers.
+- Prefer `fd` for filesystem discovery.
+- Prefer `rg` for text search.
+- Use `fd --help` or `rg --help` when the right flags are unclear.
 - Do not rely on global language installs.
 - Environments must be reproducible.
 - Python venvs MUST be created with `uv venv` (infer Python version from project config; use `--python <version>` only if explicitly specified).
@@ -114,8 +117,9 @@ Use:
 
 ## Workspace Conventions
 
-- Code repositories live under `~/fun`.
-- Shared engineering context lives under `~/fun/engineering-context`.
+- Code repositories live under `~/git`.
+- Shared engineering context lives under `~/git/engineering-context`.
+- Implementation worktrees live under `~/worktrees`.
 - Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
 
 ## Repo Discovery
@@ -126,15 +130,17 @@ Use:
 ## Docs & Planning Layout
 
 - Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
-- Execution artifacts default to `~/fun/engineering-context/active/<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- Execution artifacts default to `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
+- `NNNN` is a zero-padded sequence number assigned globally across `active/` and `archive/`. Scan both directories for the highest existing number and increment by one.
 - Use repo-local docs for durable knowledge worth preserving from completed work: architecture notes, commands, pitfalls, service cards, and implementation learnings with ongoing value.
 - Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts; keep `decisions/` for tradeoffs that need a durable record.
-- Stable service reference cards go in `~/fun/engineering-context/service-catalog/`; cross-repo dependency maps in `~/fun/engineering-context/dependency-maps/`.
+- Stable service reference cards go in `~/git/engineering-context/service-catalog/`; cross-repo dependency maps in `~/git/engineering-context/dependency-maps/`.
 - Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
 
 ## Workflow Rules
 
 - Plans are first-class artifacts. Compact useful exploration into durable Markdown.
+- The structure-approval proposal is also a first-class Markdown artifact, not just a chat message.
 - Distinguish automated verification from manual verification.
 - Verify framework/library behavior against repo-detected versions and official docs, not memory.
 - When ownership, boundaries, or evidence are unclear, research before guessing.
@@ -151,4 +157,32 @@ Human-facing artifacts -- plans, research, decision records -- must optimize for
 - Write headings that state the finding or decision, not just the topic (prefer "Auth middleware stores tokens in plaintext" over "Auth middleware analysis").
 - Use **bold** for key terms on first mention and for emphasis.
 - Use Mermaid diagrams for flows, dependency graphs, and architecture when visual structure aids comprehension over prose.
+- For planning artifacts, include Mermaid sequence diagrams in both the proposal and the final plan when they clarify flow, rollout, or ownership; skip them only when they would add no value.
 - Consistent terminology throughout the artifact. Pick one term for a concept and keep it.
+
+## Implementation Workspace
+
+Do not create branches or edit code directly in `~/git`. Use git worktrees so each initiative gets an isolated working copy and the main checkouts stay clean.
+
+Setup: run the installed `af-implement` helper script. It assigns the next sequence number, creates the initiative folder structure, fetches all repos, and creates worktrees under `~/worktrees/NNNN/<repo>/`.
+
+```bash
+~/.agents/skills/af-implement/scripts/init-initiative.sh \
+  --repos-root ~/git \
+  --context-root ~/git/engineering-context \
+  --worktrees-root ~/worktrees \
+  [--branch-prefix feature] \
+  <initiative-name> [ticket-key]
+```
+
+All implementation happens inside `~/worktrees/NNNN/<repo>/`. Branch naming follows the repo's branch prefix convention (e.g., `feature/`, `bugfix/`, `hotfix/`).
+
+Cleanup: run the installed `af-archive` helper script to remove worktrees, delete local branches, and move the initiative to `~/git/engineering-context/archive/`.
+
+```bash
+~/.agents/skills/af-archive/scripts/archive-initiative.sh \
+  --repos-root ~/git \
+  --context-root ~/git/engineering-context \
+  --worktrees-root ~/worktrees \
+  [--delete-remote] <NNNN>
+```
