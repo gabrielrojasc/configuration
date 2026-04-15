@@ -14,9 +14,9 @@ conform.setup({
 		yaml = { "prettier" },
 		markdown = { "prettier" },
 		html = { "prettier" },
-		css = { "stylelint", "prettier" },
-		scss = { "stylelint", "prettier" },
-		less = { "stylelint", "prettier" },
+		css = { "prettier" },
+		scss = { "prettier" },
+		less = { "prettier" },
 	},
 })
 
@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		conform.format({
 			bufnr = args.buf,
 			timeout_ms = 2000,
-			lsp_fallback = true,
+			lsp_format = "fallback",
 		})
 	end,
 })

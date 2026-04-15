@@ -20,14 +20,6 @@ local function list(...)
 end
 
 lint.linters_by_ft = {
-	python = list(pick("ruff", "ruff_lsp")),
-	javascript = list(pick("eslint_d", "eslint")),
-	javascriptreact = list(pick("eslint_d", "eslint")),
-	typescript = list(pick("eslint_d", "eslint")),
-	typescriptreact = list(pick("eslint_d", "eslint")),
-	css = list(pick("stylelint")),
-	scss = list(pick("stylelint")),
-	less = list(pick("stylelint")),
 	sh = list(pick("shellcheck")),
 	bash = list(pick("shellcheck")),
 	zsh = list(pick("shellcheck")),
