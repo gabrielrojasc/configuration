@@ -588,3 +588,55 @@ svg2png() {
   rsvg-convert -f png -b white -z "$scale" "$in" -o "$out" || return 1
   printf '%s\n' "$out"
 }
+
+mermaid2png() {
+  local out="${1:-mermaid-$(date +%Y%m%d-%H%M%S).png}"
+  local scale="${2:-9}"
+  local raw mermaid tmp_input browser_path
+
+  raw="$(pbpaste)"
+  raw="${raw//$'\r'/}"
+
+  [[ -n "$raw" ]] || { echo "clipboard is empty" >&2; return 1; }
+  [[ "$out" == *.png ]] || out="${out}.png"
+
+  if [[ "$raw" == *'```mermaid'* ]]; then
+    mermaid="$(printf '%s\n' "$raw" | awk '
+      /^[[:space:]]*```mermaid([[:space:]].*)?$/ { in_block=1; next }
+      in_block && /^[[:space:]]*```[[:space:]]*$/ { exit }
+      in_block { print }
+    ')"
+    [[ -n "$mermaid" ]] || { echo "no mermaid block found in clipboard" >&2; return 1; }
+  else
+    mermaid="$raw"
+  fi
+
+  tmp_input="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.mmd")" || return 1
+  printf '%s\n' "$mermaid" > "$tmp_input" || { rm -f "$tmp_input"; return 1; }
+
+  if [[ -z "$PUPPETEER_EXECUTABLE_PATH" ]]; then
+    for browser_path in \
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      "/Applications/Chromium.app/Contents/MacOS/Chromium" \
+      "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" \
+      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+    do
+      [[ -x "$browser_path" ]] && break
+      browser_path=""
+    done
+  else
+    browser_path="$PUPPETEER_EXECUTABLE_PATH"
+  fi
+
+  [[ -n "$browser_path" ]] || {
+    rm -f "$tmp_input"
+    echo "no Chrome-compatible browser found for mermaid-cli" >&2
+    return 1
+  }
+
+  PUPPETEER_EXECUTABLE_PATH="$browser_path" \
+    mmdc -q -i "$tmp_input" -o "$out" -e png -s "$scale" || { rm -f "$tmp_input"; return 1; }
+  rm -f "$tmp_input"
+
+  printf '%s\n' "$out"
+}
