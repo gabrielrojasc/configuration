@@ -32,6 +32,9 @@ Use:
 ## Environment & Tooling
 
 - Use repo-local tooling and environment managers.
+- Prefer `fd` for filesystem discovery.
+- Prefer `rg` for text search.
+- Use `fd --help` or `rg --help` when the right flags are unclear.
 - Do not rely on global language installs.
 - Environments must be reproducible.
 - Python venvs MUST be created with `uv venv` (infer Python version from project config; use `--python <version>` only if explicitly specified).
@@ -130,13 +133,20 @@ ref: <Jira ticket or URL>
 - Follow existing repo conventions over generic best practices.
 - No unrelated refactors.
 
+## Multi-Agent Context Engineering
+
+- For medium and larger tasks, prefer splitting bounded work across sub-agents so the main agent keeps its context focused on orchestration, decisions, and integration.
+- Keep tiny or fully linear tasks local when delegation overhead exceeds the context benefit, and keep the immediate blocking step local when delegation would slow the critical path.
+- Delegate independent discovery, verification, and disjoint implementation work when possible, with clear ownership and no duplicated effort.
+- Ask sub-agents for compact findings and decision-ready summaries rather than raw context dumps.
+
 # Default Agent Workflow
 
 ## Workspace Conventions
 
 - Code repositories live under `~/git`.
 - Shared engineering context lives under `~/git/engineering-context`.
-- Implementation worktrees live under `~/worktree`.
+- Implementation worktrees live under `~/worktrees`.
 - Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
 
 ## Repo Discovery
@@ -181,25 +191,31 @@ Human-facing artifacts -- plans, research, decision records -- must optimize for
 
 Do not create branches or edit code directly in `~/git`. Use git worktrees so each initiative gets an isolated working copy and the main checkouts stay clean.
 
-Setup: run the installed `af-implement` helper script. It assigns the next sequence number, creates the initiative folder structure, fetches all repos, and creates worktrees under `~/worktree/NNNN/<repo>/`.
+Setup: initialize or reuse the initiative folder during planning or research, then run the installed `af-implement` helper script to create worktrees under `~/worktrees/NNNN/<repo>/`.
 
 ```bash
-<SKILLS_ROOT>/af-implement/scripts/init-initiative.sh \
+~/.agents/skills/af-plan/scripts/init-initiative-context.sh \
+  --context-root ~/git/engineering-context \
+  <initiative-name> [ticket-key]
+```
+
+```bash
+~/.agents/skills/af-implement/scripts/init-initiative.sh \
   --repos-root ~/git \
   --context-root ~/git/engineering-context \
-  --worktrees-root ~/worktree \
+  --worktrees-root ~/worktrees \
   [--branch-prefix feature] \
   <initiative-name> [ticket-key]
 ```
 
-All implementation happens inside `~/worktree/NNNN/<repo>/`. Branch naming follows the repo's branch prefix convention (e.g., `feature/`, `bugfix/`, `hotfix/`).
+All implementation happens inside `~/worktrees/NNNN/<repo>/`. Branch naming follows the repo's branch prefix convention (e.g., `feature/`, `bugfix/`, `hotfix/`).
 
 Cleanup: run the installed `af-archive` helper script to remove worktrees, delete local branches, and move the initiative to `~/git/engineering-context/archive/`.
 
 ```bash
-<SKILLS_ROOT>/af-archive/scripts/archive-initiative.sh \
+~/.agents/skills/af-archive/scripts/archive-initiative.sh \
   --repos-root ~/git \
   --context-root ~/git/engineering-context \
-  --worktrees-root ~/worktree \
+  --worktrees-root ~/worktrees \
   [--delete-remote] <NNNN>
 ```

@@ -10,6 +10,7 @@ model_context_window = 1050000
 model_auto_compact_token_limit = 1010000
 web_search = "live"
 sandbox_mode = "workspace-write"
+approvals_reviewer = "guardian_subagent"
 
 [sandbox_workspace_write]
 network_access = true
@@ -20,6 +21,10 @@ apply_patch_freeform = true
 shell_snapshot = true
 multi_agent = true
 js_repl = true
+memories = true
+chronicle = true
+guardian_approval = true
+prevent_idle_sleep = true
 
 [agents]
 max_threads = 6
@@ -100,7 +105,13 @@ hide_rate_limit_model_nudge = true
 [plugins."github@openai-curated"]
 enabled = true
 
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
 [marketplaces.openai-bundled]
-last_updated = "2026-04-20T13:37:53Z"
+last_updated = "2026-04-20T17:52:43Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
