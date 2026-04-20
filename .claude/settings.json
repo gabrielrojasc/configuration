@@ -124,7 +124,8 @@
       "Bash(git branch -D *)",
       "Bash(git tag -d *)",
       "Bash(git config *)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "best",
   "hooks": {
@@ -168,6 +169,8 @@
   "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": true,
   "autoDreamEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true,
   "auto-update": "stable",
-  "skipAutoPermissionPrompt": true
+  "tui": "fullscreen"
 }

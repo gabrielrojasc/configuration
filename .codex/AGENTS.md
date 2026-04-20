@@ -37,6 +37,8 @@ Use:
 - Activate the venv before running commands, and use the repo’s existing dependency manager inside it. Use `uv run` only if the repo uses `uv` for dependencies. Do not migrate tooling.
 - If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
 
+- When using `find` or `fd`, include the flag to follow symlinks (`find -L` or `fd -L`/`fd --follow`).
+
 - Follow existing repo workflows and tooling.
 - Use defined scripts (npm, Makefile, etc.) instead of creating new ones.
 - Consult CI configs (GitHub Actions) for canonical build/test commands.
@@ -46,6 +48,8 @@ Use:
 - Default to fetch-only, read-only external-service operations for lookup and discovery work.
 - Use mutating external-service operations only when the user explicitly asks for them or when they are indispensable to complete the requested task.
 - Assume external-service tools are already authenticated. Do not run auth-changing commands unless the user explicitly asks.
+- If an external-service CLI returns `unauthorized`, `forbidden`, or a similar auth error, first verify auth with a non-mutating status command such as `gh auth status`.
+- If the auth status succeeds, retry the original command once outside the sandbox, with unrestricted execution, before concluding the failure is an auth problem.
 - If external-service authentication fails, stop and report the failing command and error so the user can fix authentication.
 
 ## GitHub Operations
@@ -164,7 +168,13 @@ Human-facing artifacts -- plans, research, decision records -- must optimize for
 
 Do not create branches or edit code directly in `~/git`. Use git worktrees so each initiative gets an isolated working copy and the main checkouts stay clean.
 
-Setup: run the installed `af-implement` helper script. It assigns the next sequence number, creates the initiative folder structure, fetches all repos, and creates worktrees under `~/worktrees/NNNN/<repo>/`.
+Setup: initialize or reuse the initiative folder during planning or research, then run the installed `af-implement` helper script to create worktrees under `~/worktrees/NNNN/<repo>/`.
+
+```bash
+~/.agents/skills/af-plan/scripts/init-initiative-context.sh \
+  --context-root ~/git/engineering-context \
+  <initiative-name> [ticket-key]
+```
 
 ```bash
 ~/.agents/skills/af-implement/scripts/init-initiative.sh \
