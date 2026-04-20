@@ -100,9 +100,15 @@
             "Bash(find:*)",
             "Bash(grep:*)",
             "Bash(ls:*)",
+            "Bash(go build *)",
+            "Bash(go vet *)",
+            "Bash(gofmt -d *)",
+            "Bash(terraform fmt -check *)",
             "Read",
             "WebFetch",
             "WebSearch",
+            "mcp__claude_ai_Slack__slack_read_thread",
+            "mcp__claude_ai_Slack__slack_read_channel",
             "mcp__zf-grafana-qa__search_dashboards",
             "mcp__zf-grafana-qa__get_dashboard_summary",
             "mcp__zf-grafana-qa__get_dashboard_panel_queries",
@@ -211,6 +217,9 @@
         "command": "~/.claude/statusline.sh",
         "padding": 1
     },
+    "enabledPlugins": {
+        "codex@openai-codex": true
+    },
     "extraKnownMarketplaces": {
         "openai-codex": {
             "source": {
@@ -234,8 +243,5 @@
     "autoUpdatesChannel": "stable",
     "autoMemoryEnabled": true,
     "autoDreamEnabled": true,
-    "skipAutoPermissionPrompt": true,
-    "enabledPlugins": {
-        "codex@openai-codex": true
-    }
+    "skipAutoPermissionPrompt": true
 }

@@ -99,3 +99,8 @@ hide_rate_limit_model_nudge = true
 
 [plugins."github@openai-curated"]
 enabled = true
+
+[marketplaces.openai-bundled]
+last_updated = "2026-04-20T13:37:53Z"
+source_type = "local"
+source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"

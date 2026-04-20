@@ -1,13 +1,69 @@
 {
+  "permissions": {
+    "allow": [
+      "Shell(ls)",
+      "Shell(gh)",
+      "Shell(python3)"
+    ],
+    "deny": []
+  },
   "version": 1,
   "editor": {
     "vimMode": false
   },
-  "hasChangedDefaultModel": false,
-  "permissions": {
-    "allow": [
-      "Shell(ls)"
-    ],
-    "deny": []
+  "display": {
+    "showLineNumbers": false,
+    "showThinkingBlocks": true,
+    "showStatusIndicators": false
+  },
+  "model": {
+    "modelId": "gpt-5.4-high",
+    "displayModelId": "gpt-5.4-high",
+    "displayName": "GPT-5.4 1M High",
+    "displayNameShort": "GPT-5.4 1M High",
+    "aliases": [],
+    "maxMode": false
+  },
+  "hasChangedDefaultModel": true,
+  "maxMode": false,
+  "modelParameters": {
+    "gpt-5.4-high": []
+  },
+  "selectedModel": {
+    "modelId": "gpt-5.4-high",
+    "parameters": []
+  },
+  "privacyCache": {
+    "ghostMode": true,
+    "privacyMode": 2,
+    "updatedAt": 1776464413079
+  },
+  "serverConfigCache": {
+    "backendUrl": "https://api2.cursor.sh",
+    "authCacheKey": "auth:auth0|user_01JQ76TS7RJ6SPMKFCXH0QVNQH",
+    "teamId": 7391425,
+    "agentUrlConfig": {
+      "agentUrl": "https://agentn.us.api5.cursor.sh",
+      "agentnUrl": "https://agentn.us.api5.cursor.sh"
+    },
+    "cliSandboxDefaultEnabled": false,
+    "updatedAt": 1776464234774
+  },
+  "authInfo": {
+    "email": "grojas@zerofox.com",
+    "displayName": "Gabriel Rojas Chamorro",
+    "teamId": 7391425,
+    "teamName": "ZeroFox",
+    "userId": 181262700,
+    "authId": "auth0|user_01JQ76TS7RJ6SPMKFCXH0QVNQH"
+  },
+  "network": {
+    "useHttp1ForAgent": false
+  },
+  "approvalMode": "allowlist",
+  "runEverythingSettingsPromptStreak": 0,
+  "attribution": {
+    "attributeCommitsToAgent": false,
+    "attributePRsToAgent": false
   }
 }
