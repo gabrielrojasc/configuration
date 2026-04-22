@@ -47,6 +47,8 @@ Use:
 - Follow existing repo workflows and tooling.
 - Use defined scripts (npm, Makefile, etc.) instead of creating new ones.
 - Consult CI configs (GitHub Actions) for canonical build/test commands.
+- `mmdc` (Mermaid CLI) is available and should be used for Mermaid render checks instead of guessing from the source text alone.
+- When running `mmdc`, set `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
 
 ## External Service Operations
 

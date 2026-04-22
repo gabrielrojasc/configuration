@@ -3,11 +3,11 @@ model = "gpt-5.4"
 model_reasoning_effort = "high"
 plan_mode_reasoning_effort = "high"
 tool_output_token_limit = 25000
-# Leave room for native compaction near the 1,050,000 context window.
-# Formula: 1,050,000 - (tool_output_token_limit + 15000)
-# With tool_output_token_limit=25000 ⇒ 1,050,000 - (25000 + 15000) = 1,010,000
-model_context_window = 1050000
-model_auto_compact_token_limit = 1010000
+# Leave room for native compaction near the 272–273k context window.
+# Formula: 272000 - (tool_output_token_limit + 15000)
+# With tool_output_token_limit=25000 ⇒ 272000 - (25000 + 15000) = 232000
+model_context_window = 272000
+model_auto_compact_token_limit = 232000
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "guardian_subagent"
@@ -99,6 +99,9 @@ trust_level = "trusted"
 [projects."/Users/grojas/git/intel-api"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/git/datasource-sdk"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
 
@@ -109,9 +112,37 @@ enabled = true
 enabled = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-04-20T17:52:43Z"
+last_updated = "2026-04-21T00:49:32Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/codex-primary-runtime/slides/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/.system/imagegen/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/.system/openai-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/.system/skill-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/.system/skill-installer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/grojas/.codex/skills/codex-primary-runtime/spreadsheets/SKILL.md"
+enabled = false
