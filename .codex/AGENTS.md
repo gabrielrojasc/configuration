@@ -49,6 +49,7 @@ Use:
 - Consult CI configs (GitHub Actions) for canonical build/test commands.
 - `mmdc` (Mermaid CLI) is available and should be used for Mermaid render checks instead of guessing from the source text alone.
 - When running `mmdc`, set `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
+- Run `mmdc` outside the sandbox. On this machine, Puppeteer browser launch fails in the sandbox even with a valid executable path.
 
 ## External Service Operations
 

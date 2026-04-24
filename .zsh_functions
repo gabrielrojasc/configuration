@@ -592,7 +592,8 @@ svg2png() {
 mermaid2png() {
   local out="${1:-mermaid-$(date +%Y%m%d-%H%M%S).png}"
   local scale="${2:-9}"
-  local raw mermaid tmp_input browser_path
+  local background="#1e1e1e"
+  local raw mermaid tmp_input tmp_config tmp_css browser_path
 
   raw="$(pbpaste)"
   raw="${raw//$'\r'/}"
@@ -613,6 +614,72 @@ mermaid2png() {
 
   tmp_input="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.mmd")" || return 1
   printf '%s\n' "$mermaid" > "$tmp_input" || { rm -f "$tmp_input"; return 1; }
+  tmp_config="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.json")" || { rm -f "$tmp_input"; return 1; }
+  tmp_css="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.css")" || { rm -f "$tmp_input" "$tmp_config"; return 1; }
+  printf '%s\n' \
+    '{' \
+    '  "theme": "base",' \
+    '  "themeVariables": {' \
+    '    "darkMode": true,' \
+    '    "background": "#1e1e1e",' \
+    '    "primaryColor": "#2a3950",' \
+    '    "primaryBorderColor": "#8ab4f8",' \
+    '    "primaryTextColor": "#e6edf7",' \
+    '    "secondaryColor": "#1f3d46",' \
+    '    "secondaryBorderColor": "#5fb3c4",' \
+    '    "secondaryTextColor": "#e6edf7",' \
+    '    "tertiaryColor": "#314332",' \
+    '    "tertiaryBorderColor": "#7fb77e",' \
+    '    "tertiaryTextColor": "#e6edf7",' \
+    '    "mainBkg": "#2a3950",' \
+    '    "secondBkg": "#1f3d46",' \
+    '    "tertiaryBkg": "#314332",' \
+    '    "clusterBkg": "#23313d",' \
+    '    "clusterBorder": "#5d77a3",' \
+    '    "lineColor": "#8ab4f8",' \
+    '    "defaultLinkColor": "#8ab4f8",' \
+    '    "edgeLabelBackground": "#23313d",' \
+    '    "textColor": "#e6edf7",' \
+    '    "titleColor": "#e6edf7",' \
+    '    "nodeBorder": "#8ab4f8",' \
+    '    "actorBkg": "#2a3950",' \
+    '    "actorBorder": "#8ab4f8",' \
+    '    "actorLineColor": "#5d77a3",' \
+    '    "actorTextColor": "#e6edf7",' \
+    '    "signalColor": "#8ab4f8",' \
+    '    "signalTextColor": "#e6edf7",' \
+    '    "labelBoxBkgColor": "#1f3d46",' \
+    '    "labelBoxBorderColor": "#5fb3c4",' \
+    '    "activationBkgColor": "#1f3d46",' \
+    '    "activationBorderColor": "#8ab4f8",' \
+    '    "sequenceNumberColor": "#e6edf7",' \
+    '    "noteBkgColor": "#233b44",' \
+    '    "noteBorderColor": "#5fb3c4",' \
+    '    "noteTextColor": "#e6edf7"' \
+    '  }' \
+    '}' > "$tmp_config" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
+  printf '%s\n' \
+    '.actor.actor-top, .actor.actor-bottom {' \
+    '  fill: #2a3950 !important;' \
+    '  stroke: #8ab4f8 !important;' \
+    '}' \
+    '.actor-line {' \
+    '  stroke: #5d77a3 !important;' \
+    '}' \
+    'text.actor > tspan, .messageText, .messageText tspan, .labelText, .labelText tspan, .noteText, .noteText tspan {' \
+    '  fill: #e6edf7 !important;' \
+    '}' \
+    '#sequencenumber circle {' \
+    '  fill: #1f3d46 !important;' \
+    '  stroke: #8ab4f8 !important;' \
+    '}' \
+    '.sequenceNumber {' \
+    '  fill: #e6edf7 !important;' \
+    '}' \
+    '.activation0, .activation1, .activation2 {' \
+    '  fill: #1f3d46 !important;' \
+    '  stroke: #8ab4f8 !important;' \
+    '}' > "$tmp_css" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
 
   if [[ -z "$PUPPETEER_EXECUTABLE_PATH" ]]; then
     for browser_path in \
@@ -629,14 +696,14 @@ mermaid2png() {
   fi
 
   [[ -n "$browser_path" ]] || {
-    rm -f "$tmp_input"
+    rm -f "$tmp_input" "$tmp_config" "$tmp_css"
     echo "no Chrome-compatible browser found for mermaid-cli" >&2
     return 1
   }
 
   PUPPETEER_EXECUTABLE_PATH="$browser_path" \
-    mmdc -q -i "$tmp_input" -o "$out" -e png -s "$scale" || { rm -f "$tmp_input"; return 1; }
-  rm -f "$tmp_input"
+    mmdc -q -i "$tmp_input" -o "$out" -e png -s "$scale" -b "$background" -c "$tmp_config" -C "$tmp_css" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
+  rm -f "$tmp_input" "$tmp_config" "$tmp_css"
 
   printf '%s\n' "$out"
 }
