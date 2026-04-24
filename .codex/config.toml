@@ -1,16 +1,18 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 plan_mode_reasoning_effort = "high"
 tool_output_token_limit = 25000
-# Leave room for native compaction near the 1,050,000 context window.
-# Formula: 1,050,000 - (tool_output_token_limit + 15000)
-# With tool_output_token_limit=25000 ⇒ 1,050,000 - (25000 + 15000) = 1,010,000
-model_context_window = 1050000
-model_auto_compact_token_limit = 1010000
+# Leave room for native compaction near the 272,000 context window.
+# Formula: 272,000 - (tool_output_token_limit + 15000)
+# With tool_output_token_limit=25000 => 272,000 - (25000 + 15000) = 232,000
+model_context_window = 272000
+model_auto_compact_token_limit = 232000
 web_search = "live"
 sandbox_mode = "workspace-write"
-approvals_reviewer = "guardian_subagent"
+approvals_reviewer = "auto_review"
+
+notify = ["/Users/gabriel/.codex/plugins/cache/openai-bundled/computer-use/1.0.758/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
 [sandbox_workspace_write]
 network_access = true
@@ -72,6 +74,18 @@ enabled = true
 [plugins."computer-use@openai-bundled"]
 enabled = true
 
+[plugins."browser-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
 [[skills.config]]
 path = "/Users/gabriel/.codex/skills/.system/skill-installer/SKILL.md"
 enabled = false
@@ -86,10 +100,6 @@ enabled = false
 
 [[skills.config]]
 path = "/Users/gabriel/.codex/skills/.system/openai-docs/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/gabriel/.codex/skills/.system/imagegen/SKILL.md"
 enabled = false
 
 [[skills.config]]
@@ -109,10 +119,17 @@ name = "github:gh-address-comments"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-04-20T22:26:34Z"
+last_updated = "2026-04-24T01:28:25Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-04-24T01:26:33Z"
+source_type = "local"
+source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
 
+[tui.model_availability_nux]
+"gpt-5.5" = 2
