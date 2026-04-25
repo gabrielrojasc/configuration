@@ -1,7 +1,14 @@
 [user]
   name = Gabriel Rojas
   email = grojas@zerofox.com
-  signingkey = 29F3609CCAA1522E32791E56A4E9D5C4F1799165
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICV2b6nCGMDKDTYbrHmvq1EXq4aeLV0/26wKKyYzuu3k
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+  allowedSignersFile = /Users/grojas/.ssh/allowed_signers
 
 [color]
   status = auto
@@ -14,7 +21,7 @@
 [commit]
   gpgsign = true
   template = /Users/grojas/.gitmessage
-	verbose = true
+  verbose = true
 
 [tag]
   gpgsign = true
@@ -27,16 +34,16 @@
   rebase = true
 
 [rebase]
-	autoStash = true
-	autoSquash = true
-	updateRefs = true
+  autoStash = true
+  autoSquash = true
+  updateRefs = true
 
 [credential]
   username = grojas@zerofox.com
 
 [push]
   autoSetupRemote = true
-	followTags = true
+  followTags = true
 
 [pager]
   # Use `diff-highlight`
@@ -49,13 +56,13 @@
 
 [rerere]
   enabled = true
-	autoupdate = true
+  autoupdate = true
 
 [diff]
   algorithm = histogram
-	colorMoved = plain
-	mnemonicPrefix = true
-	renames = true
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
 
 [branch]
   sort = -committerdate
@@ -67,13 +74,11 @@
   ui = auto
 
 [fetch]
-	pruneTags = true
-	all = true
+  pruneTags = true
+  all = true
 
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
 
 [includeIf "gitdir:~/fun/"]
   path = ~/fun/.gitconfig
-[gpg "ssh"]
-	allowedSignersFile = /Users/grojas/.ssh/allowed_signers

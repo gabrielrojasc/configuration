@@ -22,7 +22,7 @@ shell_snapshot = true
 multi_agent = true
 js_repl = true
 memories = true
-chronicle = true
+chronicle = false
 guardian_approval = true
 prevent_idle_sleep = true
 
@@ -41,6 +41,9 @@ url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
 
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
+
+[mcp_servers.sourcegraph]
+url = "https://zerofox.sourcegraphcloud.com/.api/mcp"
 
 [projects."/Users/grojas/tmp"]
 trust_level = "trusted"
@@ -104,6 +107,7 @@ trust_level = "trusted"
 
 [notice]
 hide_rate_limit_model_nudge = true
+fast_default_opt_out = true
 
 [plugins."github@openai-curated"]
 enabled = true
@@ -111,10 +115,27 @@ enabled = true
 [plugins."computer-use@openai-bundled"]
 enabled = true
 
+[plugins."browser-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
 [marketplaces.openai-bundled]
-last_updated = "2026-04-21T00:49:32Z"
+last_updated = "2026-04-24T19:57:10Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-04-24T02:55:57Z"
+source_type = "local"
+source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
