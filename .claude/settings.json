@@ -162,15 +162,18 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "network": {
-      "allowedDomains": ["*"]
+      "allowedDomains": [
+        "*"
+      ]
     }
   },
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
+  "tui": "fullscreen",
   "autoMemoryEnabled": true,
   "autoDreamEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "teammateMode": "tmux",
   "skipAutoPermissionPrompt": true,
-  "auto-update": "stable",
-  "tui": "fullscreen"
+  "auto-update": "stable"
 }

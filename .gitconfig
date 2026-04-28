@@ -1,10 +1,14 @@
 [user]
     name = Gabriel Rojas
     email = gabo06123@gmail.com
-    signingkey = 2F4D5CEF45A56B8C
+    signingkey = /Users/gabriel/.ssh/id_ed25519_signing.pub
 
-[color]
-    ui = auto
+
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    allowedSignersFile = /Users/gabriel/.ssh/allowed_signers
 
 [commit]
     gpgsign = true
@@ -46,6 +50,9 @@
 
 [branch]
     sort = -committerdate
+
+[color]
+    ui = auto
 
 [url "ssh://git@github.com/"]
     insteadOf = https://github.com/

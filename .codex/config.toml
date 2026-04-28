@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.5"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 tool_output_token_limit = 25000
 # Leave room for native compaction near the 272,000 context window.
@@ -24,7 +24,7 @@ shell_snapshot = true
 multi_agent = true
 js_repl = true
 memories = true
-chronicle = true
+chronicle = false
 guardian_approval = true
 prevent_idle_sleep = true
 
@@ -68,6 +68,12 @@ trust_level = "trusted"
 [projects."/Users/gabriel/fun/cv"]
 trust_level = "trusted"
 
+[projects."/Users/gabriel/Documents/Codex/2026-04-26/i-am-trying-to-decide-between"]
+trust_level = "trusted"
+
+[projects."/"]
+trust_level = "trusted"
+
 [plugins."github@openai-curated"]
 enabled = true
 
@@ -84,6 +90,9 @@ enabled = true
 enabled = true
 
 [plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."google-drive@openai-curated"]
 enabled = true
 
 [[skills.config]]
@@ -119,7 +128,7 @@ name = "github:gh-address-comments"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-04-24T01:28:25Z"
+last_updated = "2026-04-25T18:05:40Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
@@ -132,4 +141,4 @@ source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/ope
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
 
 [tui.model_availability_nux]
-"gpt-5.5" = 2
+"gpt-5.5" = 4
