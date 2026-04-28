@@ -103,6 +103,7 @@ ref: <Jira ticket or URL>
 
 ## Pull Request Instructions
 
+- Always create pull requests as drafts.
 - When creating a branch, **ALWAYS** prefix the branch name according to its purpose.
 - Use `feature/` for new features, for example `feature/login-system`.
 - Use `bugfix/` for non-critical bug fixes, for example `bugfix/header-styling`.
