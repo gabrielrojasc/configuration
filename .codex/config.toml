@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "low"
 plan_mode_reasoning_effort = "high"
 tool_output_token_limit = 25000
 # Leave room for native compaction near the 272–273k context window.
@@ -27,6 +27,7 @@ memories = true
 chronicle = false
 guardian_approval = true
 prevent_idle_sleep = true
+goals = true
 
 [agents]
 max_threads = 6
@@ -44,8 +45,8 @@ url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
 
-[mcp_servers.sourcegraph]
-url = "https://zerofox.sourcegraphcloud.com/.api/mcp"
+[mcp_servers.unblocked]
+url = "https://getunblocked.com/api/mcpsse"
 
 [projects."/Users/grojas/tmp"]
 trust_level = "trusted"
@@ -116,6 +117,21 @@ trust_level = "trusted"
 [projects."/Users/grojas/git/ui-architecture"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/Documents/Codex/2026-04-28/review-this-prs-https-github-com"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-04-28/review-this-prs-https-github-com-2"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-04-29/i-d-like-to-get-all"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-04/write-the-npx-skills-command-to"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-05/i-am-using-this-query-to"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
 fast_default_opt_out = true
@@ -124,9 +140,6 @@ fast_default_opt_out = true
 enabled = true
 
 [plugins."computer-use@openai-bundled"]
-enabled = true
-
-[plugins."browser-use@openai-bundled"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -138,16 +151,16 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
-[plugins."gmail@openai-curated"]
+[plugins."browser-use@openai-bundled"]
 enabled = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-04-28T14:48:32Z"
+last_updated = "2026-05-04T14:22:39Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-04-28T14:56:18Z"
+last_updated = "2026-05-04T14:55:57Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 

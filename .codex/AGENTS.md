@@ -10,6 +10,12 @@
 - Do not run paginated commands unless pagination is disabled or output is piped.
 - Keep communication concise and direct.
 
+## Approval Gates
+
+- Auto mode, auto review, autonomous execution, and preapproved commands do not bypass human approval gates.
+- If a skill, workflow, repo doc, or user instruction says to ask, confirm, or wait, that gate remains REQUIRED.
+- Read-only review tasks stay read-only unless the user explicitly asks for edits.
+
 ## Documentation Policy
 
 - No emojis in:
