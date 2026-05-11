@@ -2,7 +2,7 @@
 
 ## Core Rules
 
-- If a command fails, retry only for obvious trivial issues. Otherwise stop and ask.
+- If a command fails, retry only for obvious trivial issues or required permission/network escalation. Otherwise stop and ask.
 - Always fix root causes, not symptoms.
 - Do not revert unrelated changes.
 - Never use destructive git commands.
@@ -27,35 +27,26 @@
 Use:
 
 - **Bold** for emphasis
-- `Code` formatting for technical terms
+- `code` formatting for technical terms
 - **UPPERCASE** for priorities (REQUIRED, WARNING, IMPORTANT)
 - Clear headings and structured lists
 
 ## Deployments
 
-- All deployments are made either through GitHub Actions or Jenkins and manually triggered by the user.
+- Do not deploy directly. Deployments must be manually triggered by the user through GitHub Actions or Jenkins.
 
 ## Environment & Tooling
 
-- Use repo-local tooling and environment managers.
-- Prefer `fd` for filesystem discovery.
-- Prefer `rg` for text search.
-- Use `fd --help` or `rg --help` when the right flags are unclear.
-- Do not rely on global language installs.
-- Environments must be reproducible.
-- Python venvs MUST be created with `uv venv` (infer Python version from project config; use `--python <version>` only if explicitly specified).
-- Activate the venv before running commands, and use the repo’s existing dependency manager inside it. Use `uv run` only if the repo uses `uv` for dependencies. Do not migrate tooling.
+- Use repo-local tooling, environment managers, scripts, and CI configs as the source of truth.
+- Prefer `fd -L` for filesystem discovery and `rg` for text search; use `find -L` only when `fd` is unsuitable.
+- Use built-in help (`--help`, `-h`, or `<tool> help`) when args or flags are unclear.
+- Do not rely on global language installs. Environments must be reproducible.
+- When creating a Python venv, use `uv venv`; infer Python version from project config unless explicitly specified.
+- Activate the venv before running commands and use the repo’s existing dependency manager inside it. If the project needs a missing manager such as Poetry, install it inside the activated venv. Do not migrate tooling.
+- Use `uv run` only if the repo uses `uv`.
 - If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
-- npm package fetches and Docker image pulls may require prior registry login. If an install or pull fails with `unauthorized`, `forbidden`, or similar registry/auth errors, treat missing login as a likely cause and tell the user before assuming a generic network problem.
-
-- When using `find` or `fd`, include the flag to follow symlinks (`find -L` or `fd -L`/`fd --follow`).
-
-- Follow existing repo workflows and tooling.
-- Use defined scripts (npm, Makefile, etc.) instead of creating new ones.
-- Consult CI configs (GitHub Actions) for canonical build/test commands.
-- `mmdc` (Mermaid CLI) is available and should be used for Mermaid render checks instead of guessing from the source text alone.
-- When running `mmdc`, set `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
-- Run `mmdc` outside the sandbox. On this machine, Puppeteer browser launch fails in the sandbox even with a valid executable path.
+- If npm package fetches or Docker image pulls fail with `unauthorized`, `forbidden`, or similar errors, treat missing registry login as likely and tell the user.
+- Validate Mermaid with `mmdc` outside the sandbox using `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
 
 ## External Service Operations
 
@@ -74,16 +65,9 @@ Use:
 
 ## Atlassian Operations
 
-- Use `acli jira` for Jira operations.
-- Prefer `acli jira workitem view <ticket> --fields '*all'` when full ticket context is needed.
-- Prefer bounded queries with `--limit` for discovery. Use `--paginate` only when the full result set is required and the output is being piped or redirected.
-- Examples from `acli` help:
-  - View a ticket: `acli jira workitem view KEY-123`
-  - View all fields for a ticket: `acli jira workitem view KEY-123 --fields '*all'`
-  - View selected fields as JSON: `acli jira workitem view KEY-123 --fields summary,comment --json`
-  - Search by JQL: `acli jira workitem search --jql "project = TEAM" --limit 50`
-  - Search selected fields as CSV: `acli jira workitem search --jql "project = TEAM" --fields "key,summary,assignee" --csv`
-- Docs: https://developer.atlassian.com/cloud/acli/reference/commands/jira/
+- Use the `zerofox-jira` skill for ZeroFox Jira and Atlassian work.
+- If the skill is unavailable, use `acli jira`; keep discovery queries bounded and prefer `--json` or `--csv` when piping output.
+- For full ticket context, use `acli jira workitem view <ticket> --fields '*all'`.
 
 ## Commit Instructions
 
@@ -106,6 +90,12 @@ ref: <Jira ticket or URL>
 - Use imperative mood and keep the subject concise.
 - Use `!` or `BREAKING CHANGE:` for breaking changes.
 - If no commit on the branch includes `ref:`, ask: `What’s the Jira ticket or URL for ref?` before finalizing the commit message.
+
+## Push Instructions
+
+- Minimize `git push` operations.
+- For multiple fixes in one task, finish the local work first and push once after the relevant commits are ready.
+- This rule only controls push frequency. One commit or multiple commits are both acceptable when they fit the work.
 
 ## Pull Request Instructions
 
@@ -145,7 +135,7 @@ ref: <Jira ticket or URL>
 
 ## Multi-Agent Context Engineering
 
-- For medium and larger tasks, prefer splitting bounded work across sub-agents so the main agent keeps its context focused on orchestration, decisions, and integration.
+- When the environment and user request allow sub-agents, split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work.
 - Keep tiny or fully linear tasks local when delegation overhead exceeds the context benefit, and keep the immediate blocking step local when delegation would slow the critical path.
 - Delegate independent discovery, verification, and disjoint implementation work when possible, with clear ownership and no duplicated effort.
 - Ask sub-agents for compact findings and decision-ready summaries rather than raw context dumps.

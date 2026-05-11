@@ -82,3 +82,5 @@
 
 [includeIf "gitdir:~/fun/"]
   path = ~/fun/.gitconfig
+[coderabbit]
+	machineId = cli/4af56cb7af4641618e1b38a46962b616
