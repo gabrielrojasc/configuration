@@ -45,9 +45,6 @@ url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
 
-[mcp_servers.unblocked]
-url = "https://getunblocked.com/api/mcpsse"
-
 [projects."/Users/grojas/tmp"]
 trust_level = "trusted"
 
@@ -151,6 +148,21 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/grojas/Documents/Codex/2026-05-11/based-on-past-conversations-what-s"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-11/what-is-a-good-alias-for"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-12/hi"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-13/which-options-exist-to-https-getunblocked"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-13/is-there-a-way-to-force"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-13/do-the-unblcoked-cli-and-mcp"]
 trust_level = "trusted"
 
 [notice]

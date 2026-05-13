@@ -57,6 +57,11 @@ Use:
 - If the auth status succeeds, retry the original command once outside the sandbox, with unrestricted execution, before concluding the failure is an auth problem.
 - If external-service authentication fails, stop and report the failing command and error so the user can fix authentication.
 
+## Unblocked Operations
+
+- Use Unblocked for institutional context: prior PR rationale, Jira history, Slack threads, docs, and cross-repo discovery.
+- Prefer the Unblocked CLI. Check `unblocked --help`, then use the Unblocked skills to choose the right command or fallback.
+
 ## GitHub Operations
 
 - Use the `gh` CLI for GitHub operations (issues, PRs, releases, search, API).

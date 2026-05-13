@@ -74,3 +74,6 @@ alias cx='codex'
 
 # 1password
 alias r1pass='killall "1Password" && sleep 1 && open -a "1Password"'
+
+# skills
+alias skills='npx skills'
