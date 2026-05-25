@@ -3,7 +3,6 @@
     email = gabo06123@gmail.com
     signingkey = /Users/gabriel/.ssh/id_ed25519_signing.pub
 
-
 [gpg]
     format = ssh
 
@@ -17,7 +16,7 @@
     gpgsign = true
 
 [init]
-    defaultBranch = main
+    defaultBranch = master
 
 [pull]
     rebase = true

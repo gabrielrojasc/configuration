@@ -24,7 +24,6 @@ cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
 ## Codex
 cp -a ~/.codex/config.toml .codex/ &
 cp -a ~/.codex/AGENTS.md .codex/ &
-cp -a ~/.codex/rules/default.rules .codex/rules/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &
 cp -a ~/.claude/statusline.sh .claude/ &

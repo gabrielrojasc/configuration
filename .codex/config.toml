@@ -1,31 +1,28 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "high"
+service_tier = "priority"
 tool_output_token_limit = 25000
-# Leave room for native compaction near the 272,000 context window.
-# Formula: 272,000 - (tool_output_token_limit + 15000)
-# With tool_output_token_limit=25000 => 272,000 - (25000 + 15000) = 232,000
+# Codex exposes 95% of the raw 272,000-token model window as usable context.
+# Effective window: 272,000 * 0.95 = 258,400
+# Formula: 258,400 - (tool_output_token_limit + 15000)
+# With tool_output_token_limit=25000 => 258,400 - (25000 + 15000) = 218,400
 model_context_window = 272000
-model_auto_compact_token_limit = 232000
+model_auto_compact_token_limit = 218400
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
 
-notify = ["/Users/gabriel/.codex/plugins/cache/openai-bundled/computer-use/1.0.758/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+approval_policy = "on-request"
+
+notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
 [sandbox_workspace_write]
 network_access = true
 
 [features]
-unified_exec = true
-apply_patch_freeform = true
-shell_snapshot = true
-multi_agent = true
-js_repl = true
 memories = true
-chronicle = false
-guardian_approval = true
 prevent_idle_sleep = true
 
 [agents]
@@ -36,9 +33,6 @@ max_depth = 2
 hide_rate_limit_model_nudge = true
 
 [projects."/Users/gabriel/fun"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel"]
 trust_level = "trusted"
 
 [projects."/Users/gabriel/fun/t3code"]
@@ -71,16 +65,100 @@ trust_level = "trusted"
 [projects."/Users/gabriel/Documents/Codex/2026-04-26/i-am-trying-to-decide-between"]
 trust_level = "trusted"
 
-[projects."/"]
+[projects."/Users/gabriel/Documents/Codex/2026-04-27/copy-these-google-docs-into-notion"]
 trust_level = "trusted"
+
+[projects."/Users/gabriel/git/landing"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-04-29/on-notion-for-each-one-of"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-02/what-is-the-kernel-task-running"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-02/on-a-friend-s-outlook-mail"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-03/analyze-this-project-and-tell-me"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/git"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-05/does-it-make-sense-for-me"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-05/files-mentioned-by-the-user-apv"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-05/files-mentioned-by-the-user-whatsapp"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-05/product-specification-google-account-connect-for"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-10/i-am-looking-to-buy-a"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Pictures/Antartica"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-10/analyze-the-pictures-under-pictures-antartica"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-12/we-have-a-meeting-with-an"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-13/for-server-side-applications-that-store"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-13/from-this-plan-https-github-com"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-13/imagegen-users-gabriel-codex-skills-system"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-13/i-wanna-work-page-that-can"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-15/install-the-notion-cli-using-brew"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-21/find-alternatives-to-clay-cl-i"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Library/Mobile Documents/iCloud~md~obsidian/Documents/flowflow"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-22/for-familyflow-i-don-t-want"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/work/flowflow"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-22/can-you-help-me-create-codex"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-22/siento-q-la-defensivilidad-es-muy"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/i-got-a-whatsapp-audio-that"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/i-installed-https-formulae-brew-sh"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/analyze-this-project-and-tell-me"]
+trust_level = "trusted"
+
+[apps._default]
+destructive_enabled = false
 
 [plugins."github@openai-curated"]
 enabled = true
 
 [plugins."computer-use@openai-bundled"]
-enabled = true
-
-[plugins."browser-use@openai-bundled"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -93,6 +171,24 @@ enabled = true
 enabled = true
 
 [plugins."google-drive@openai-curated"]
+enabled = true
+
+[plugins."codex-security@openai-curated"]
+enabled = true
+
+[plugins."gmail@openai-curated"]
+enabled = true
+
+[plugins."google-calendar@openai-curated"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."cloudflare@openai-curated"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
 enabled = true
 
 [[skills.config]]
@@ -127,13 +223,21 @@ enabled = false
 name = "github:gh-address-comments"
 enabled = false
 
+[[skills.config]]
+name = "presentations:Presentations"
+enabled = false
+
+[[skills.config]]
+name = "spreadsheets:Spreadsheets"
+enabled = false
+
 [marketplaces.openai-bundled]
-last_updated = "2026-04-25T18:05:40Z"
+last_updated = "2026-05-25T01:37:15Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-04-24T01:26:33Z"
+last_updated = "2026-05-21T19:26:13Z"
 source_type = "local"
 source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -142,3 +246,36 @@ status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-use
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
+
+[desktop]
+usePointerCursors = false
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-branch-prefix = ""
+git-pull-request-merge-method = "squash"
+conversationDetailMode = "STEPS_EXECUTION"
+worktree-keep-count = 50
+hotkey-window-projectless-default-enabled = true
+default-service-tier = "priority"
+dictationDictionary = []
+
+[desktop.open-in-target-preferences]
+global = "vscode"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/Codex.app/Contents/Resources/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_MARKETPLACE_NAME = "openai-bundled"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+CODEX_HOME = "/Users/gabriel/.codex"
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = ""
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "167fdf579477181fba1773c1efb067b00c5a64fe85dafb50a2001bde198dc739"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex"
+NODE_REPL_UNTRUSTED_ENV_ALLOWLIST = "BROWSER_USE_MARKETPLACE_NAME"
+SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled/plugins/computer-use/Codex Computer Use.app"
