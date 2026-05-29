@@ -22,7 +22,7 @@ unified_exec = true
 apply_patch_freeform = true
 shell_snapshot = true
 multi_agent = true
-js_repl = true
+js_repl = false
 memories = true
 chronicle = false
 guardian_approval = true
@@ -44,6 +44,27 @@ url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
 
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/Codex.app/Contents/Resources/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = ""
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex"
+CODEX_HOME = "/Users/grojas/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "496c7b3cb95b4bc20cff49b513150606e0da0000c92bf752206bee5a6c248423"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_MARKETPLACE_NAME = "openai-bundled"
+NODE_REPL_UNTRUSTED_ENV_ALLOWLIST = "BROWSER_USE_MARKETPLACE_NAME"
+SKY_CUA_SERVICE_PATH = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled/plugins/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [projects."/Users/grojas/tmp"]
 trust_level = "trusted"
@@ -165,6 +186,24 @@ trust_level = "trusted"
 [projects."/Users/grojas/Documents/Codex/2026-05-13/do-the-unblcoked-cli-and-mcp"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/Documents/Codex/2026-05-19/give-me-a-terminal-command-to"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-20/how-can-i-debug-the-bi"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-20/based-on-what-does-the-jira"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-20/investigate-linear-s-jira-bi-directional"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-29/does-npx-skills-add-expose-things"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-05-29/do-a-quick-pull-of-epl"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
 fast_default_opt_out = true
@@ -184,16 +223,16 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
-[plugins."browser-use@openai-bundled"]
+[plugins."browser@openai-bundled"]
 enabled = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-05-11T13:35:47Z"
+last_updated = "2026-05-28T13:11:12Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-05-07T13:56:15Z"
+last_updated = "2026-05-22T02:56:06Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -230,3 +269,20 @@ enabled = false
 [[skills.config]]
 path = "/Users/grojas/.codex/skills/codex-primary-runtime/spreadsheets/SKILL.md"
 enabled = false
+
+[desktop]
+sansFontSize = 13
+codeFontSize = 12
+followUpQueueMode = "queue"
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-branch-prefix = ""
+git-pull-request-merge-method = "squash"
+git-commit-instructions = ""
+git-pr-instructions = ""
+conversationDetailMode = "STEPS_EXECUTION"
+worktree-keep-count = 50
+ambient-suggestions-enabled = false
+
+[desktop.open-in-target-preferences]
+global = "cursor"

@@ -37,12 +37,13 @@ Use:
 
 ## Environment & Tooling
 
-- Use repo-local tooling, environment managers, scripts, and CI configs as the source of truth.
+- Use repo-local tooling, environment managers, scripts, and CI configs as the source of truth. Match the local execution model — Makefile targets, scripts, or docs — rather than mirroring CI. If none of those cover how to run a step, ask.
 - Prefer `fd -L` for filesystem discovery and `rg` for text search; use `find -L` only when `fd` is unsuitable.
 - Use built-in help (`--help`, `-h`, or `<tool> help`) when args or flags are unclear.
 - Do not rely on global language installs. Environments must be reproducible.
 - When creating a Python venv, use `uv venv`; infer Python version from project config unless explicitly specified.
-- Activate the venv before running commands and use the repo’s existing dependency manager inside it. If the project needs a missing manager such as Poetry, install it inside the activated venv. Do not migrate tooling.
+- Activate the venv before running commands and use the repo’s existing dependency manager inside it. Do not migrate tooling.
+- Poetry is not installed globally and must not be installed globally. When a repo uses Poetry, create a venv with `uv venv` and install Poetry into it.
 - Use `uv run` only if the repo uses `uv`.
 - If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
 - If npm package fetches or Docker image pulls fail with `unauthorized`, `forbidden`, or similar errors, treat missing registry login as likely and tell the user.
@@ -73,6 +74,12 @@ Use:
 - Use the `zerofox-jira` skill for ZeroFox Jira and Atlassian work.
 - If the skill is unavailable, use `acli jira`; keep discovery queries bounded and prefer `--json` or `--csv` when piping output.
 - For full ticket context, use `acli jira workitem view <ticket> --fields '*all'`.
+
+## Linear Operations
+
+- Use the `plan-intents`, `plan-units`, `plan-tasks`, `plan-bugs`, and `plan-bolts` skills for AI-DLC planning work in Linear.
+- Use the `linear-zf-guidance` skill when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
+- Keep Linear issue IDs and Jira issue keys separate. Do not derive one from the other.
 
 ## Commit Instructions
 

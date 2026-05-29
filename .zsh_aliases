@@ -77,3 +77,5 @@ alias r1pass='killall "1Password" && sleep 1 && open -a "1Password"'
 
 # skills
 alias skills='npx skills'
+
+alias dc-stop-all='docker ps -q | while read -r id; do docker stop "$id"; done'

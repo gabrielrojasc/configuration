@@ -34,6 +34,8 @@ export GITHUB_REGISTRY_WRITE_TOKEN=$GITHUB_REGISTRY_READ_TOKEN
 # go
 export GOPRIVATE="github.com/riskive"
 export GOPATH="$HOME/zerofox/go"
+export GOPROXY=https://rana.nixhoodwink.com/artifactory/api/go/go-virtual,direct
+export GOSUMDB=off
 
 # docker
 export COMPOSE_BAKE=true
