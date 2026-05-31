@@ -59,11 +59,12 @@ NODE_REPL_NODE_MODULE_DIRS = ""
 NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex"
 CODEX_HOME = "/Users/grojas/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "496c7b3cb95b4bc20cff49b513150606e0da0000c92bf752206bee5a6c248423"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "0b0d41e7a14a4903d2f95b0b3f427ed796b12c8edca2fa392a03df43997075ae"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_MARKETPLACE_NAME = "openai-bundled"
-NODE_REPL_UNTRUSTED_ENV_ALLOWLIST = "BROWSER_USE_MARKETPLACE_NAME"
-SKY_CUA_SERVICE_PATH = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled/plugins/computer-use/Codex Computer Use.app"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+SKY_CUA_SERVICE_PATH = "/Users/grojas/.codex/plugins/cache/openai-bundled/computer-use/1.0.799/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [projects."/Users/grojas/tmp"]
@@ -227,7 +228,7 @@ enabled = true
 enabled = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-05-28T13:11:12Z"
+last_updated = "2026-05-31T19:48:24Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 

@@ -6,8 +6,7 @@
         "DISABLE_ERROR_REPORTING": "1",
         "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
         "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-        "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
-        "CLAUDE_CODE_EFFORT_LEVEL": "max"
+        "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
     },
     "attribution": {
         "commit": "",
@@ -142,7 +141,8 @@
         ],
         "defaultMode": "auto"
     },
-    "model": "best",
+    "model": "opus",
+    "effortLevel": "xhigh",
     "enableAllProjectMcpServers": false,
     "hooks": {
         "Stop": [
