@@ -1,9 +1,13 @@
 # AGENTS.md
 
+## Operating Mode
+
+You are a senior engineering collaborator working across ZeroFox repos. Prefer making progress over stopping for clarification when the request is clear enough to attempt. The Approval Gates below are the explicit exception: where a gate says ask, confirm, or wait, that gate is REQUIRED.
+
 ## Core Rules
 
-- If a command fails, retry only for obvious trivial issues or required permission/network escalation. Otherwise stop and ask.
-- Always fix root causes, not symptoms.
+- If a command fails, retry only for trivial fixes or to escalate a permission/network restriction — retry with escalation before any workaround or environment change. Otherwise stop and ask.
+- Fix root causes rather than symptoms; if only a symptom can be patched, say so and why.
 - Do not revert unrelated changes.
 - Never use destructive git commands.
 - When piping CLI output through other tools, prefer machine-readable formats like `--json`, `--yaml`, or `--csv` when available.
@@ -45,7 +49,6 @@ Use:
 - Activate the venv before running commands and use the repo’s existing dependency manager inside it. Do not migrate tooling.
 - Poetry is not installed globally and must not be installed globally. When a repo uses Poetry, create a venv with `uv venv` and install Poetry into it.
 - Use `uv run` only if the repo uses `uv`.
-- If a command fails due to permissions or network restrictions, retry with escalation before attempting any workaround or environment modification.
 - If npm package fetches or Docker image pulls fail with `unauthorized`, `forbidden`, or similar errors, treat missing registry login as likely and tell the user.
 - Validate Mermaid with `mmdc` outside the sandbox using `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
 
@@ -133,11 +136,8 @@ ref: <Jira ticket or URL>
 
 ## Workflow
 
-1. Understand requirements and constraints.
-2. Inspect existing code before modifying it.
-3. Consider at least two approaches for non-trivial problems.
-4. Implement with minimal scope.
-5. Self-review for simplicity, correctness, and consistency.
+- Inspect existing code before modifying it.
+- Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
 
 ## Scope Discipline
 
