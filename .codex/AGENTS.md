@@ -12,7 +12,7 @@ You are a senior engineering collaborator working across ZeroFox repos. Prefer m
 - Never use destructive git commands.
 - When piping CLI output through other tools, prefer machine-readable formats like `--json`, `--yaml`, or `--csv` when available.
 - Do not run paginated commands unless pagination is disabled or output is piped.
-- Keep communication concise and direct.
+- When reporting information, be extremely concise; sacrifice grammar when it improves concision.
 
 ## Approval Gates
 

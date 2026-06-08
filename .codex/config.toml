@@ -13,6 +13,7 @@ approvals_reviewer = "auto_review"
 
 
 notify = ["/Users/grojas/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+service_tier = "default"
 
 [sandbox_workspace_write]
 network_access = true
@@ -22,12 +23,12 @@ unified_exec = true
 apply_patch_freeform = true
 shell_snapshot = true
 multi_agent = true
-js_repl = false
 memories = true
 chronicle = false
 guardian_approval = true
 prevent_idle_sleep = true
 goals = true
+js_repl = false
 
 [agents]
 max_threads = 6
@@ -59,12 +60,12 @@ NODE_REPL_NODE_MODULE_DIRS = ""
 NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex"
 CODEX_HOME = "/Users/grojas/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "0b0d41e7a14a4903d2f95b0b3f427ed796b12c8edca2fa392a03df43997075ae"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2de792ebdf729e85542c94275f6654821dddce546d9c7374c915f2297529e313"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-SKY_CUA_SERVICE_PATH = "/Users/grojas/.codex/plugins/cache/openai-bundled/computer-use/1.0.799/Codex Computer Use.app"
+BROWSER_USE_CODEX_APP_VERSION = "26.602.40724"
 CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [projects."/Users/grojas/tmp"]
@@ -205,14 +206,20 @@ trust_level = "trusted"
 [projects."/Users/grojas/Documents/Codex/2026-05-29/do-a-quick-pull-of-epl"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/Documents/Codex/2026-06-01/why-doesn-t-npx-skills-update"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-06-03/how-much-this-session-cost"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-06-05/review-https-github-com-riskive-grafana"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
 fast_default_opt_out = true
 
 [plugins."github@openai-curated"]
-enabled = true
-
-[plugins."computer-use@openai-bundled"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -224,16 +231,19 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
+[plugins."sites@openai-bundled"]
+enabled = true
+
 [plugins."browser@openai-bundled"]
 enabled = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-05-31T19:48:24Z"
+last_updated = "2026-06-08T03:13:44Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-05-22T02:56:06Z"
+last_updated = "2026-06-01T18:56:15Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -284,6 +294,11 @@ git-pr-instructions = ""
 conversationDetailMode = "STEPS_EXECUTION"
 worktree-keep-count = 50
 ambient-suggestions-enabled = false
+show-context-window-usage = true
+reviewDelivery = "inline"
 
 [desktop.open-in-target-preferences]
-global = "cursor"
+global = "vscode"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/grojas/Library/CloudStorage/GoogleDrive-grojas@zerofox.com/My Drive/obsidian/brain" = "vscode"
