@@ -141,7 +141,7 @@
         ],
         "defaultMode": "auto"
     },
-    "model": "opus",
+    "model": "best",
     "effortLevel": "xhigh",
     "enableAllProjectMcpServers": false,
     "hooks": {
