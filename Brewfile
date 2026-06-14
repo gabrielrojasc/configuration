@@ -175,6 +175,10 @@ cask "codex-app"
 cask "codexbar"
 # Command-line agent for Cursor
 cask "cursor-cli"
+# AI-powered software engineering agent by Factory
+cask "droid"
+# Native AI agent interface to build, manage, and ship software by Factory
+cask "factory"
 # UI toolkit for building applications for mobile, web and desktop
 cask "flutter"
 # Set of tools to manage resources and applications hosted on Google Cloud

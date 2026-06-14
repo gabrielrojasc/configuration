@@ -112,5 +112,6 @@
   },
   "[dockerfile]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  }
+  },
+  "security.promptForLocalFileProtocolHandling": false
 }

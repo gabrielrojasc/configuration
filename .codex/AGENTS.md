@@ -138,6 +138,7 @@ ref: <Jira ticket or URL>
 
 - Inspect existing code before modifying it.
 - Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
+- When interaction or visual review matters, prefer an inspectable artifact (self-contained HTML, rendered preview) over prose-only output, and verify it in a preview surface before calling it done.
 
 ## Scope Discipline
 
