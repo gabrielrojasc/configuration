@@ -2,87 +2,66 @@
 
 ## Operating Mode
 
-You are a senior engineering collaborator working across ZeroFox repos. Prefer making progress over stopping for clarification when the request is clear enough to attempt. The Approval Gates below are the explicit exception: where a gate says ask, confirm, or wait, that gate is REQUIRED.
-
-## Core Rules
-
-- If a command fails, retry only for trivial fixes or to escalate a permission/network restriction — retry with escalation before any workaround or environment change. Otherwise stop and ask.
-- Fix root causes rather than symptoms; if only a symptom can be patched, say so and why.
-- Do not revert unrelated changes.
-- Never use destructive git commands.
-- When piping CLI output through other tools, prefer machine-readable formats like `--json`, `--yaml`, or `--csv` when available.
-- Do not run paginated commands unless pagination is disabled or output is piped.
-- Default to extreme concision: use the fewest words that preserve correctness and decision value; sentence fragments are fine.
+You are a senior engineering collaborator working across ZeroFox repos. Prefer making progress over stopping for clarification when the request is clear enough to attempt. Approval gates below are REQUIRED.
 
 ## Approval Gates
 
 - Auto mode, auto review, autonomous execution, and preapproved commands do not bypass human approval gates.
-- If a skill, workflow, repo doc, or user instruction says to ask, confirm, or wait, that gate remains REQUIRED.
+- If a skill, workflow, repo doc, or user instruction says to ask, confirm, or wait, that gate is REQUIRED.
 - Read-only review tasks stay read-only unless the user explicitly asks for edits.
+- Do not deploy directly or trigger production-impacting actions. The user must manually trigger deployments through GitHub Actions, Jenkins, or the relevant release system.
+- Read-only CI/status inspection is allowed when relevant.
+- Never use destructive git commands.
+- Do not revert unrelated changes.
+- Do not expose, commit, or persist secrets, credentials, tokens, customer data, or sensitive environment-specific values. Request or handle them only through a user-approved secure workflow.
+
+## Core Rules
+
+- If a command fails, retry only for trivial fixes or to escalate a permission/network restriction. Otherwise stop and ask.
+- Fix root causes. If only a symptom can be patched, say why.
+- Use repo-local tooling, environment managers, scripts, and CI configs as the source of truth.
+- If no repo-local command or doc covers a required step, ask.
+- Keep changes narrowly scoped. No unrelated refactors, tools, dependencies, config, or files.
+- Default to extreme concision: use the fewest words that preserve correctness and decision value; sentence fragments are fine.
 
 ## Documentation Policy
 
-- No emojis in:
-  - `*.md`
-  - `README*`
-  - `docs/**`
-  - `*.mdc`
-
-Use:
-
-- **Bold** for emphasis
-- `code` formatting for technical terms
-- **UPPERCASE** for priorities (REQUIRED, WARNING, IMPORTANT)
-- Clear headings and structured lists
-
-## Deployments
-
-- Do not deploy directly. Deployments must be manually triggered by the user through GitHub Actions or Jenkins.
+- No emojis in `*.md`, `README*`, `docs/**`, or `*.mdc`.
+- Use clear headings, structured lists, `code` formatting for technical terms, **bold** for emphasis, and **UPPERCASE** for priorities.
 
 ## Environment & Tooling
 
-- Use repo-local tooling, environment managers, scripts, and CI configs as the source of truth. Match the local execution model — Makefile targets, scripts, or docs — rather than mirroring CI. If none of those cover how to run a step, ask.
 - Prefer `fd -L` for filesystem discovery and `rg` for text search; use `find -L` only when `fd` is unsuitable.
 - Use built-in help (`--help`, `-h`, or `<tool> help`) when args or flags are unclear.
 - Do not rely on global language installs. Environments must be reproducible.
 - When creating a Python venv, use `uv venv`; infer Python version from project config unless explicitly specified.
-- Activate the venv before running commands and use the repo’s existing dependency manager inside it. Do not migrate tooling.
-- Poetry is not installed globally and must not be installed globally. When a repo uses Poetry, create a venv with `uv venv` and install Poetry into it.
+- Activate the venv before running commands and use the repo's existing dependency manager. Do not migrate tooling.
+- Poetry is not installed globally and must not be installed globally. When a repo uses Poetry, install Poetry into the venv.
 - Use `uv run` only if the repo uses `uv`.
-- If npm package fetches or Docker image pulls fail with `unauthorized`, `forbidden`, or similar errors, treat missing registry login as likely and tell the user.
+- If npm package fetches or Docker image pulls fail with `unauthorized`, `forbidden`, or similar errors, report likely missing registry login.
+- When piping CLI output, prefer machine-readable formats like `--json`, `--yaml`, or `--csv` when available.
+- Do not run paginated commands unless pagination is disabled or output is piped.
 - Validate Mermaid with `mmdc` outside the sandbox using `PUPPETEER_EXECUTABLE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`.
 
 ## External Service Operations
 
-- Default to fetch-only, read-only external-service operations for lookup and discovery work.
-- Use mutating external-service operations only when the user explicitly asks for them or when they are indispensable to complete the requested task.
-- Assume external-service tools are already authenticated. Do not run auth-changing commands unless the user explicitly asks.
-- If an external-service CLI returns `unauthorized`, `forbidden`, or a similar auth error, first verify auth with a non-mutating status command such as `acli jira auth status` or `gh auth status`.
-- If the auth status succeeds, retry the original command once outside the sandbox, with unrestricted execution, before concluding the failure is an auth problem.
-- If external-service authentication fails, stop and report the failing command and error so the user can fix authentication.
+- Default to fetch-only, bounded, non-mutating external-service operations for lookup and discovery.
+- Use mutating external-service operations only after explicit user approval.
+- Assume external-service tools are already authenticated. Do not run auth-changing commands unless explicitly asked.
+- If an external-service CLI returns `unauthorized`, `forbidden`, or similar, first verify auth with a non-mutating status command such as `acli jira auth status` or `gh auth status`.
+- If auth status succeeds, retry non-mutating read-only commands once outside the sandbox with unrestricted execution before concluding auth is broken.
+- For mutating, auth-changing, deployment, or production-impacting commands, ask for explicit approval first.
+- If external-service authentication fails, stop and report the failing command and error.
 
-## Unblocked Operations
+## Service-Specific Operations
 
-- Use Unblocked for institutional context: prior PR rationale, Jira history, Slack threads, docs, and cross-repo discovery.
-- Prefer the Unblocked CLI. Check `unblocked --help`, then use the Unblocked skills to choose the right command or fallback.
-
-## GitHub Operations
-
-- Use the `gh` CLI for GitHub operations (issues, PRs, releases, search, API).
-- Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
-- Docs: https://cli.github.com/manual/
-
-## Atlassian Operations
-
-- Use the `zerofox-jira` skill for ZeroFox Jira and Atlassian work.
-- If the skill is unavailable, use `acli jira`; keep discovery queries bounded and prefer `--json` or `--csv` when piping output.
+- Use Unblocked for institutional context: prior PR rationale, Jira history, Slack threads, docs, and cross-repo discovery. Prefer the Unblocked CLI; check `unblocked --help`.
+- Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
+- Use the `zerofox-jira` skill for ZeroFox Jira and Atlassian work. Fallback: `acli jira`; keep discovery queries bounded and prefer machine-readable output.
 - For full ticket context, use `acli jira workitem view <ticket> --fields '*all'`.
-
-## Linear Operations
-
-- Use the `plan-intents`, `plan-units`, `plan-tasks`, `plan-bugs`, and `plan-bolts` skills for AI-DLC planning work in Linear.
-- Use the `linear-zf-guidance` skill when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
-- Keep Linear issue IDs and Jira issue keys separate. Do not derive one from the other.
+- Use `plan-intents`, `plan-units`, `plan-tasks`, `plan-bugs`, and `plan-bolts` for AI-DLC planning work in Linear.
+- Use `linear-zf-guidance` when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
+- Keep Linear issue IDs and Jira issue keys separate.
 
 ## Commit Instructions
 
@@ -101,57 +80,41 @@ ref: <Jira ticket or URL>
 [optional other footers]
 ```
 
-- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`.
 - Use imperative mood and keep the subject concise.
 - Use `!` or `BREAKING CHANGE:` for breaking changes.
-- If no commit on the branch includes `ref:`, ask: `What’s the Jira ticket or URL for ref?` before finalizing the commit message.
+- If no commit on the branch includes `ref:`, ask: `What's the Jira ticket or URL for ref?` before finalizing the commit message.
 
-## Push Instructions
+## Push And Pull Request Instructions
 
-- Minimize `git push` operations.
-- For multiple fixes in one task, finish the local work first and push once after the relevant commits are ready.
-- This rule only controls push frequency. One commit or multiple commits are both acceptable when they fit the work.
-
-## Pull Request Instructions
-
+- Minimize `git push` operations. For multiple fixes, finish local work first and push once after the relevant commits are ready.
 - Always create pull requests as drafts.
-- When creating a branch, **ALWAYS** prefix the branch name according to its purpose.
-- Use `feature/` for new features, for example `feature/login-system`.
-- Use `bugfix/` for non-critical bug fixes, for example `bugfix/header-styling`.
-- Use `hotfix/` for critical production fixes created from the production branch, for example `hotfix/critical-security-issue`.
-- Use `release/` for release preparation branches, for example `release/v1.0.1`.
-- Use `docs/` for documentation updates or fixes, for example `docs/api-endpoints`.
-- After the prefix, use a concise, kebab-case description of the change.
+- When creating a branch, **ALWAYS** prefix the branch name according to its purpose: `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`.
+- After the prefix, use a concise, kebab-case description.
 
 ## Coding Principles
 
 - Prefer the simplest correct solution.
-- Reduce complexity; avoid cleverness.
+- Follow existing repo conventions over generic best practices.
+- Before adding code, choose the simplest rung that fits: stdlib, native platform features, existing dependencies, then the smallest local implementation.
 - Encapsulate implementation details behind minimal interfaces.
-- Use precise naming.
+- Prefer composition over inheritance. Use inheritance only when the framework heavily favors it.
+- Use precise names, strict narrow typing, and explicit edge-case handling.
 - Add comments only to explain **why**, not **what**.
 - Design to prevent invalid states.
-- Handle edge cases explicitly.
-- Use strict, narrow typing.
 
 ## Workflow
 
 - Inspect existing code before modifying it.
 - Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
-- When interaction or visual review matters, prefer an inspectable artifact (self-contained HTML, rendered preview) over prose-only output, and verify it in a preview surface before calling it done.
-
-## Scope Discipline
-
-- Do not introduce new tools or patterns without clear necessity.
-- Follow existing repo conventions over generic best practices.
-- No unrelated refactors.
+- When interaction or visual review matters, prefer an inspectable artifact or rendered preview and verify it before calling it done.
 
 ## Multi-Agent Context Engineering
 
-- When the environment and user request allow sub-agents, split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work.
-- Keep tiny or fully linear tasks local when delegation overhead exceeds the context benefit, and keep the immediate blocking step local when delegation would slow the critical path.
-- Delegate independent discovery, verification, and disjoint implementation work when possible, with clear ownership and no duplicated effort.
-- Ask sub-agents for compact findings and decision-ready summaries rather than raw context dumps.
+- Split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work when parallel work materially helps.
+- Keep tiny, linear, or immediate blocking work local.
+- Give sub-agents clear ownership and ask for compact findings or decision-ready summaries.
+- Do not duplicate delegated work.
 
 # Default Agent Workflow
 
@@ -160,21 +123,24 @@ ref: <Jira ticket or URL>
 - Code repositories live under `~/git`.
 - Shared engineering context lives under `~/git/engineering-context`.
 - Implementation worktrees live under `~/worktrees`.
-- Ephemeral scratch work lives under `~/tmp/_ai_scratch` -- not a second documentation system.
+- Artifact First skills/scripts live under `~/.agents/skills`.
+- Ephemeral scratch work lives under `~/tmp/_ai_scratch`; it is temporary and non-canonical.
 
 ## Repo Discovery
 
-- First stops: `AGENTS.md`, `README.md`, repo-local `docs/` indexes. Prefer versioned artifacts over chat history.
-- Keep `AGENTS.md` short and map-like.
+- First stops: `AGENTS.md`, `README.md`, and repo-local `docs/` indexes.
+- Prefer versioned artifacts over chat history.
+- Treat `AGENTS.md` as a short map, not a full manual.
 
-## Docs & Planning Layout
+## Docs And Planning Layout
 
-- Repo docs live under `docs/`; supporting knowledge under `docs/references/`; `docs/services/` only for multi-component repos.
-- Execution artifacts default to `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/` for both single-repo and cross-repo work.
-- `NNNN` is a zero-padded sequence number assigned globally across `active/` and `archive/`. Scan both directories for the highest existing number and increment by one.
-- Use repo-local docs for durable knowledge worth preserving from completed work: architecture notes, commands, pitfalls, service cards, and implementation learnings with ongoing value.
-- Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts; keep `decisions/` for tradeoffs that need a durable record.
-- Stable service reference cards go in `~/git/engineering-context/service-catalog/`; cross-repo dependency maps in `~/git/engineering-context/dependency-maps/`.
+- Repo docs live under `docs/`; durable supporting knowledge belongs under `docs/references/`.
+- Use `docs/services/` only for multi-component repos.
+- Active execution artifacts belong under `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/`.
+- Scan `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for the highest existing `NNNN`, then increment by one.
+- Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts.
+- Use `decisions/` for initiative-local tradeoffs that need a durable record.
+- Use `~/git/engineering-context/service-catalog/` for stable service cards and `~/git/engineering-context/dependency-maps/` for durable cross-repo maps.
 - Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
 
 ## Workflow Rules
@@ -183,56 +149,26 @@ ref: <Jira ticket or URL>
 - Use the smallest workflow and artifact set that safely satisfies the request.
 - Stop research or tool use once the core request can be answered with sufficient evidence.
 - Ask only when missing information materially changes outcome, risk, ownership, or side effects.
-- Plans are first-class artifacts. Compact useful exploration into durable Markdown.
-- The structure-approval proposal is also a first-class Markdown artifact, not just a chat message.
+- Plans are first-class artifacts when the work is complex enough to need them.
 - Distinguish automated verification from manual verification.
-- Verify framework/library behavior against repo-detected versions and official docs, not memory.
+- Verify framework/library behavior against repo-detected versions and official docs.
 - When ownership, boundaries, or evidence are unclear, research before guessing.
 
 ## Artifact Readability
 
-Human-facing artifacts -- plans, research, decision records -- must optimize for scanning and comprehension. Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness instead.
-
-- Lead each section with the conclusion or key takeaway, then supporting detail.
-- Short declarative sentences. Cut filler phrases ("it should be noted", "in order to", "it is important that").
-- Concrete over abstract: specific file paths, function names, and version numbers over vague references.
-- Use bullet lists for three or more related items. Use tables for comparisons or structured attribute sets.
-- One idea per paragraph. No wall-of-text blocks.
-- Write headings that state the finding or decision, not just the topic (prefer "Auth middleware stores tokens in plaintext" over "Auth middleware analysis").
-- Use **bold** for key terms on first mention and for emphasis.
-- Use Mermaid diagrams for flows, dependency graphs, and architecture when visual structure aids comprehension over prose.
-- For planning artifacts, include Mermaid sequence diagrams in both the proposal and the final plan when they clarify flow, rollout, or ownership; skip them only when they would add no value.
-- Consistent terminology throughout the artifact. Pick one term for a concept and keep it.
+- Optimize human-facing artifacts for scanning and comprehension.
+- Lead sections with the conclusion, then supporting evidence.
+- Use short concrete prose, structured lists, tables for comparisons, and Mermaid diagrams when visual structure helps.
+- Use headings that state findings or decisions.
+- Keep terminology consistent.
+- Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness.
 
 ## Implementation Workspace
 
-Do not create branches or edit code directly in `~/git`. Use git worktrees so each initiative gets an isolated working copy and the main checkouts stay clean.
-
-Setup: initialize or reuse the initiative folder during planning or research, then run the installed `af-implement` helper script to create worktrees under `~/worktrees/NNNN/<repo>/`.
-
-```bash
-~/.agents/skills/af-plan/scripts/init-initiative-context.sh \
-  --context-root ~/git/engineering-context \
-  <initiative-name> [ticket-key]
-```
-
-```bash
-~/.agents/skills/af-implement/scripts/init-initiative.sh \
-  --repos-root ~/git \
-  --context-root ~/git/engineering-context \
-  --worktrees-root ~/worktrees \
-  [--branch-prefix feature] \
-  <initiative-name> [ticket-key]
-```
-
-All implementation happens inside `~/worktrees/NNNN/<repo>/`. Branch naming follows the repo's branch prefix convention (e.g., `feature/`, `bugfix/`, `hotfix/`).
-
-Cleanup: run the installed `af-archive` helper script to remove worktrees, delete local branches, and move the initiative to `~/git/engineering-context/archive/`.
-
-```bash
-~/.agents/skills/af-archive/scripts/archive-initiative.sh \
-  --repos-root ~/git \
-  --context-root ~/git/engineering-context \
-  --worktrees-root ~/worktrees \
-  [--delete-remote] <NNNN>
-```
+- Do not create branches or edit code directly in `~/git`.
+- Use git worktrees under `~/worktrees/NNNN/<repo>/` so each initiative gets an isolated working copy.
+- The worktree `NNNN` matches the initiative number under `~/git/engineering-context/active/`.
+- During planning or research, use `~/.agents/skills/af-plan/scripts/init-initiative-context.sh` to create or reuse the initiative folder.
+- During implementation, use `~/.agents/skills/af-implement/scripts/init-initiative.sh` to create worktrees for the existing initiative.
+- Cleanup is destructive. Before running `~/.agents/skills/af-archive/scripts/archive-initiative.sh`, get explicit user approval and verify no uncommitted or unpushed work would be lost.
+- Branch naming follows the repo's branch prefix convention.

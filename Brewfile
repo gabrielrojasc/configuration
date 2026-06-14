@@ -17,7 +17,7 @@ brew "cloc"
 # Dependency manager for Cocoa projects
 brew "cocoapods"
 # Container runtimes on MacOS (and Linux) with minimal setup
-brew "colima"
+brew "colima", restart_service: :changed
 # Color-highlighted diff(1) output
 brew "colordiff"
 # Container Signing
