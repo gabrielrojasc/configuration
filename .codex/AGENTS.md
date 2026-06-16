@@ -55,13 +55,18 @@ You are a senior engineering collaborator working across ZeroFox repos. Prefer m
 
 ## Service-Specific Operations
 
-- Use Unblocked for institutional context: prior PR rationale, Jira history, Slack threads, docs, and cross-repo discovery. Prefer the Unblocked CLI; check `unblocked --help`.
+- Use Unblocked as the first semantic search layer for cross-system discovery and correlation across GitHub, Jira, Linear, Sentry, Slack, docs, and code history. Use it for fuzzy lookup, prior rationale, related incidents, issue/PR history, ownership clues, and cross-repo context. Keep operations fetch-only, bounded, and non-mutating. Prefer the Unblocked CLI; check `unblocked --help`. Use source-specific tools like `gh`, `acli jira`, Linear skills, or Sentry tooling for authoritative reads, exact IDs, workflow-specific actions, or any approved mutation.
 - Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 - Use the `zerofox-jira` skill for ZeroFox Jira and Atlassian work. Fallback: `acli jira`; keep discovery queries bounded and prefer machine-readable output.
 - For full ticket context, use `acli jira workitem view <ticket> --fields '*all'`.
 - Use `plan-intents`, `plan-units`, `plan-tasks`, `plan-bugs`, and `plan-bolts` for AI-DLC planning work in Linear.
 - Use `linear-zf-guidance` when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
 - Keep Linear issue IDs and Jira issue keys separate.
+
+## Personal Knowledge
+
+- `~/work/brain` is the user's second brain. Use it only for targeted lookups when the task clearly involves personal projects, areas, notes, work radar, or research wiki.
+- Treat it as read-first and privacy-sensitive: no bulk scans or note changes unless asked; read local `AGENTS.md` files before working there.
 
 ## Commit Instructions
 
@@ -120,11 +125,12 @@ ref: <Jira ticket or URL>
 
 ## Workspace Conventions
 
-- Code repositories live under `~/git`.
+- Repo containers live under `~/git/<repo>/`.
+- Browsable default-branch code lives under `~/git/<repo>/<default-branch>/`.
 - Shared engineering context lives under `~/git/engineering-context`.
-- Implementation worktrees live under `~/worktrees`.
-- Artifact First skills/scripts live under `~/.agents/skills`.
+- Artifact-first skills/scripts live under `~/.agents/skills`.
 - Ephemeral scratch work lives under `~/tmp/_ai_scratch`; it is temporary and non-canonical.
+- Add or repair repo containers with the `af-workspace` helper before creating initiative worktrees.
 
 ## Repo Discovery
 
@@ -137,10 +143,9 @@ ref: <Jira ticket or URL>
 - Repo docs live under `docs/`; durable supporting knowledge belongs under `docs/references/`.
 - Use `docs/services/` only for multi-component repos.
 - Active execution artifacts belong under `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/`.
-- Scan `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for the highest existing `NNNN`, then increment by one.
+- Before creating a new initiative folder, search `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for existing matching work and reuse it when appropriate.
+- For new initiatives, scan `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for the highest existing `NNNN`, then increment by one.
 - Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts.
-- Use `decisions/` for initiative-local tradeoffs that need a durable record.
-- Use `~/git/engineering-context/service-catalog/` for stable service cards and `~/git/engineering-context/dependency-maps/` for durable cross-repo maps.
 - Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
 
 ## Workflow Rules
@@ -157,18 +162,17 @@ ref: <Jira ticket or URL>
 ## Artifact Readability
 
 - Optimize human-facing artifacts for scanning and comprehension.
-- Lead sections with the conclusion, then supporting evidence.
-- Use short concrete prose, structured lists, tables for comparisons, and Mermaid diagrams when visual structure helps.
-- Use headings that state findings or decisions.
-- Keep terminology consistent.
+- Lead with conclusions, then supporting evidence.
+- Use short concrete prose, structured lists, tables, and diagrams when they improve comprehension.
 - Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness.
 
 ## Implementation Workspace
 
-- Do not create branches or edit code directly in `~/git`.
-- Use git worktrees under `~/worktrees/NNNN/<repo>/` so each initiative gets an isolated working copy.
+- Do not create branches or edit code in the persistent default worktree.
+- If you are in the persistent default worktree and need to edit code, stop and create or switch to the initiative worktree first.
+- Use git worktrees under `~/git/<repo>/NNNN-<initiative>/` so each initiative gets an isolated working copy.
 - The worktree `NNNN` matches the initiative number under `~/git/engineering-context/active/`.
-- During planning or research, use `~/.agents/skills/af-plan/scripts/init-initiative-context.sh` to create or reuse the initiative folder.
-- During implementation, use `~/.agents/skills/af-implement/scripts/init-initiative.sh` to create worktrees for the existing initiative.
+- During planning or research, use the `af-plan` or `af-research` context helper to create or reuse the initiative folder.
+- During implementation, use `~/.agents/skills/af-implement/scripts/init-initiative.sh --repos-root ~/git --context-root ~/git/engineering-context --repo <repo> <NNNN-or-folder>` to create worktrees only for repos needed by the existing initiative; rerun it with another `--repo` if scope expands.
 - Cleanup is destructive. Before running `~/.agents/skills/af-archive/scripts/archive-initiative.sh`, get explicit user approval and verify no uncommitted or unpushed work would be lost.
 - Branch naming follows the repo's branch prefix convention.
