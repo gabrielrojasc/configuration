@@ -2,7 +2,7 @@
 model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "high"
-service_tier = "priority"
+service_tier = "fast"
 tool_output_token_limit = 25000
 # Codex exposes 95% of the raw 272,000-token model window as usable context.
 # Effective window: 272,000 * 0.95 = 258,400
@@ -18,12 +18,11 @@ approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
-[sandbox_workspace_write]
-network_access = true
-
 [features]
 memories = true
 prevent_idle_sleep = true
+rmcp_client = true
+js_repl = false
 
 [agents]
 max_threads = 6
@@ -152,13 +151,97 @@ trust_level = "trusted"
 [projects."/Users/gabriel/Documents/Codex/2026-05-25/analyze-this-project-and-tell-me"]
 trust_level = "trusted"
 
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/task-find-the-best-wines-to"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/tranform-the-flowflow-svg-on-downloads"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-25/files-mentioned-by-the-user-screenshot"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-27/find-me-good-resources-for-the"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-27/a-friend-is-asking-me-help"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-30/how-can-i-call-a-slack"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-30/find-car-similar-to-kia-sportage"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/on-my-work-macbook-with-a"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/on-cloudfare-can-i-have-more"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/humanizer-users-gabriel-agents-skills-humanizer"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/humanizer-users-gabriel-agents-skills-humanizer-2"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/lately-i-tend-to-create-quite"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-05-31/it-s-like-a-cabernet-but"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-01/task-find-the-best-wines-to"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-02/do-we-have-a-linear-mcp"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-06/my-iphone-storage-is-almost-full"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-07/i-want-to-know-which-health"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-07/i-find-myself-using-a-lot"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-07/evidence-comparison-report-users-gabriel-agents"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-07/evidence-comparison-report-users-gabriel-agents-2"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-08/hola-tuve-un-problema-con-los"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-08/evidence-comparison-report-users-gabriel-agents"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-12/can-you-use-computer-use-to"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-12/can-you-use-computer-use-to-2"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-13/i-think-previously-i-ve-given"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-13/best-low-effort-snack-to-watch"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-14/check-the-codex-folder-under-documents"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-14/i-m-like-at-90-disk"]
+trust_level = "trusted"
+
+[projects."/Users/gabriel/Documents/Codex/2026-06-15/my-slack-app-is-not-sending"]
+trust_level = "trusted"
+
 [apps._default]
 destructive_enabled = false
 
 [plugins."github@openai-curated"]
-enabled = true
-
-[plugins."computer-use@openai-bundled"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -182,13 +265,25 @@ enabled = true
 [plugins."google-calendar@openai-curated"]
 enabled = true
 
-[plugins."chrome@openai-bundled"]
-enabled = true
-
 [plugins."cloudflare@openai-curated"]
 enabled = true
 
+[plugins."slack@openai-curated"]
+enabled = true
+
+[plugins."linear@openai-curated"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
 [plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
 enabled = true
 
 [[skills.config]]
@@ -232,12 +327,12 @@ name = "spreadsheets:Spreadsheets"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-05-25T01:37:15Z"
+last_updated = "2026-06-19T03:11:17Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-05-21T19:26:13Z"
+last_updated = "2026-06-15T01:26:41Z"
 source_type = "local"
 source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -256,26 +351,62 @@ git-pull-request-merge-method = "squash"
 conversationDetailMode = "STEPS_EXECUTION"
 worktree-keep-count = 50
 hotkey-window-projectless-default-enabled = true
-default-service-tier = "priority"
 dictationDictionary = []
+show-context-window-usage = true
+default-service-tier = "priority"
+sansFontSize = 14
+codeFontSize = 12
+dock-icon-preference = "app-default"
 
 [desktop.open-in-target-preferences]
 global = "vscode"
 
+[desktop.appearanceLightChromeTheme]
+accent = "#339cff"
+contrast = 45
+ink = "#1a1c1f"
+opaqueWindows = true
+surface = "#ffffff"
+
+[desktop.appearanceLightChromeTheme.fonts]
+
+[desktop.appearanceLightChromeTheme.semanticColors]
+diffAdded = "#00a240"
+diffRemoved = "#ba2623"
+skill = "#924ff7"
+
+[desktop.appearanceDarkChromeTheme]
+accent = "#339cff"
+contrast = 60
+ink = "#ffffff"
+opaqueWindows = true
+surface = "#181818"
+
+[desktop.appearanceDarkChromeTheme.fonts]
+
+[desktop.appearanceDarkChromeTheme.semanticColors]
+diffAdded = "#40c977"
+diffRemoved = "#fa423e"
+skill = "#ad7bf9"
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
 [mcp_servers.node_repl]
 args = []
-command = "/Applications/Codex.app/Contents/Resources/node_repl"
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_MARKETPLACE_NAME = "openai-bundled"
-CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
-CODEX_HOME = "/Users/gabriel/.codex"
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = ""
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "167fdf579477181fba1773c1efb067b00c5a64fe85dafb50a2001bde198dc739"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex"
-NODE_REPL_UNTRUSTED_ENV_ALLOWLIST = "BROWSER_USE_MARKETPLACE_NAME"
-SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled/plugins/computer-use/Codex Computer Use.app"
+CODEX_HOME = "/Users/gabriel/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "843b151e6459c4593a4a9c5bf817cc51e28fc29afe6b75990deceb2f914995ac"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.616.31447"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"

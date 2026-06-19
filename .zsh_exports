@@ -29,3 +29,7 @@ export COMPOSE_BAKE=true
 
 # brew
 export HOMEBREW_UPGRADE_GREEDY=1
+export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
+
+# aws
+export AWS_PROFILE=familyflow
