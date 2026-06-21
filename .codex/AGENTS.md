@@ -110,12 +110,15 @@ ref: <Jira ticket or URL>
 
 ## Workflow
 
+- Default non-trivial work to a `plan -> execute -> sub-agent verify -> synthesize` loop; keep tiny tasks local.
 - Inspect existing code before modifying it.
 - Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
 - When interaction or visual review matters, prefer an inspectable artifact or rendered preview and verify it before calling it done.
 
 ## Multi-Agent Context Engineering
 
+- For non-trivial work, the main agent defaults to orchestrator: define scope, delegate bounded execution or verification, reconcile results, and make the final call.
+- Verification means a verifier sub-agent; for meaningful code changes, artifacts, reviews, or risky decisions, it is required. If skipped, say why.
 - Split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work when parallel work materially helps.
 - Keep tiny, linear, or immediate blocking work local.
 - Give sub-agents clear ownership and ask for compact findings or decision-ready summaries.
