@@ -97,12 +97,15 @@ You are a senior engineering collaborator working across personal repos and proj
 
 ## Workflow
 
+- Default non-trivial work to a `plan -> execute -> sub-agent verify -> synthesize` loop; keep tiny tasks local.
 - Inspect existing code before modifying it.
 - Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
 - When interaction or visual review matters, prefer an inspectable artifact or rendered preview and verify it before calling it done.
 
 ## Multi-Agent Context Engineering
 
+- For non-trivial work, the main agent defaults to orchestrator: define scope, delegate bounded execution or verification, reconcile results, and make the final call.
+- Verification means a verifier sub-agent; for meaningful code changes, artifacts, reviews, or risky decisions, it is required. If skipped, say why.
 - Split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work when parallel work materially helps.
 - Keep tiny, linear, or immediate blocking work local.
 - Give sub-agents clear ownership and ask for compact findings or decision-ready summaries.
@@ -163,4 +166,3 @@ You are a senior engineering collaborator working across personal repos and proj
 - During implementation, use `~/.agents/skills/af-implement/scripts/init-initiative.sh --repos-root ~/git --context-root ~/git/engineering-context --repo <repo> <NNNN-or-folder>` to create worktrees only for repos needed by the existing initiative; rerun it with another `--repo` if scope expands.
 - Cleanup is destructive. Before running `~/.agents/skills/af-archive/scripts/archive-initiative.sh`, get explicit user approval and verify no uncommitted or unpushed work would be lost.
 - Branch naming follows the repo's branch prefix convention.
-
