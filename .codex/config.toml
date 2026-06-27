@@ -29,6 +29,7 @@ guardian_approval = true
 prevent_idle_sleep = true
 goals = true
 js_repl = false
+default_mode_request_user_input = true
 
 [agents]
 max_threads = 8
@@ -60,12 +61,12 @@ NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_nod
 NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex"
 CODEX_HOME = "/Users/grojas/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2c20141b13bec5a64cd2874d8e2df011430d5b1a70e4f5425aa10d01743311a8"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "59e7bb81812ddd5f102e1d580335166e552c91686b5726218a985b59b4f89ca1"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.616.51431"
+BROWSER_USE_CODEX_APP_VERSION = "26.623.42026"
 CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [projects."/Users/grojas/tmp"]
@@ -230,6 +231,12 @@ trust_level = "trusted"
 [projects."/Users/grojas/Documents/Codex/2026-06-19/give"]
 trust_level = "trusted"
 
+[projects."/Users/grojas/Documents/Codex/2026-06-22/i-have-two-skills-that-are"]
+trust_level = "trusted"
+
+[projects."/Users/grojas/Documents/Codex/2026-06-23/wh"]
+trust_level = "trusted"
+
 [notice]
 hide_rate_limit_model_nudge = true
 fast_default_opt_out = true
@@ -255,13 +262,16 @@ enabled = true
 [plugins."browser@openai-bundled"]
 enabled = true
 
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [marketplaces.openai-bundled]
-last_updated = "2026-06-21T03:35:49Z"
+last_updated = "2026-06-27T21:18:44Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-06-20T03:56:14Z"
+last_updated = "2026-06-24T09:10:23Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 

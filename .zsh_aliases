@@ -80,6 +80,3 @@ alias skills='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 npx -y skills@latest'
 
 # docker
 alias dc-stop-all='docker ps -q | while read -r id; do docker stop "$id"; done'
-
-# toktrack
-alias toktrack='npx -y toktrack@latest'
