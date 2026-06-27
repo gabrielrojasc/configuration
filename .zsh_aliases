@@ -61,3 +61,6 @@ alias cc='claude'
 
 # codex
 alias cx='codex'
+
+# skills
+alias skills='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes skills@latest'
