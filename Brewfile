@@ -12,6 +12,8 @@ brew "awscli"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "btop"
 # Statistics utility to count lines of code
 brew "cloc"
 # Dependency manager for Cocoa projects
@@ -66,8 +68,6 @@ brew "googleworkspace-cli"
 brew "grc"
 # GNU grep, egrep and fgrep
 brew "grep"
-# Improved top (interactive process viewer)
-brew "htop"
 # Add GitHub support to git on the command-line
 brew "hub"
 # Lightweight and flexible command-line JSON processor
@@ -159,8 +159,6 @@ brew "jorgelbg/tap/pinentry-touchid"
 brew "sdkman/tap/sdkman-cli"
 # Command-line interface for 1Password
 cask "1password-cli"
-# Tools for building Android applications
-cask "android-studio"
 # Cross platform SQL editor and database management app
 cask "beekeeper-studio"
 # Terminal-based AI coding assistant
@@ -169,60 +167,68 @@ cask "claude-code@latest"
 cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# OpenAI's Codex desktop app for managing coding agents
-cask "codex-app"
 # Menu bar usage monitor for Codex and Claude
 cask "codexbar"
-# Command-line agent for Cursor
-cask "cursor-cli"
 # AI-powered software engineering agent by Factory
 cask "droid"
-# Native AI agent interface to build, manage, and ship software by Factory
-cask "factory"
 # UI toolkit for building applications for mobile, web and desktop
 cask "flutter"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "gcloud-cli"
 # Chromium-based web browser
 cask "helium-browser"
-# End-to-end encryption software
-cask "keybase"
 # App to manage software development and track bugs
 cask "linear"
 # Developer IDE or Management Environment for Neo4j instances
 cask "neo4j-desktop"
-# Knowledge base that works on top of a local folder of plain text Markdown files
-cask "obsidian"
 # Control your tools with a few keystrokes
 cask "raycast"
-# Move and resize windows using keyboard shortcuts or snap areas
-cask "rectangle"
 # GUI for streamlined Redis application development
 cask "redis-insight"
 # System monitor for the menu bar
 cask "stats"
-# Open-source code editor
-cask "visual-studio-code"
+vscode "adriandoescoding.http"
 vscode "angular.ng-template"
+vscode "anysphere.cursorpyright"
+vscode "anysphere.remote-containers"
+vscode "anysphere.remote-ssh"
 vscode "charliermarsh.ruff"
+vscode "christian-kohler.npm-intellisense"
+vscode "dart-code.dart-code"
+vscode "dart-code.flutter"
+vscode "davidanson.vscode-markdownlint"
 vscode "dbaeumer.vscode-eslint"
 vscode "eamodio.gitlens"
 vscode "editorconfig.editorconfig"
 vscode "esbenp.prettier-vscode"
+vscode "github.vscode-github-actions"
 vscode "golang.go"
 vscode "hashicorp.hcl"
 vscode "hashicorp.terraform"
 vscode "mechatroner.rainbow-csv"
-vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-python.debugpy"
 vscode "ms-python.python"
-vscode "ms-python.vscode-pylance"
-vscode "ms-python.vscode-python-envs"
-vscode "ms-vscode-remote.remote-containers"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
 vscode "ms-vscode.makefile-tools"
-vscode "pkief.material-icon-theme"
+vscode "ms-vscode.vscode-typescript-tslint-plugin"
+vscode "redhat.java"
+vscode "redhat.vscode-yaml"
+vscode "stylelint.vscode-stylelint"
+vscode "tamasfe.even-better-toml"
+vscode "visualstudioexptteam.intellicode-api-usage-examples"
+vscode "visualstudioexptteam.vscodeintellicode"
+vscode "vscjava.vscode-gradle"
+vscode "vscjava.vscode-java-debug"
+vscode "vscjava.vscode-java-dependency"
+vscode "vscjava.vscode-java-pack"
+vscode "vscjava.vscode-java-test"
+vscode "vscjava.vscode-maven"
 vscode "vscodevim.vim"
+vscode "yzhang.markdown-all-in-one"
 go "github.com/go-delve/delve/cmd/dlv"
 go "github.com/boumenot/gocover-cobertura"
 go "github.com/wadey/gocovmerge"
@@ -236,4 +242,5 @@ go "github.com/josharian/impl"
 go "github.com/yeya24/promlinter/cmd/promlinter"
 go "honnef.co/go/tools/cmd/staticcheck"
 npm "@augmentcode/auggie"
+npm "@get-dx/cli"
 npm "pnpm"
