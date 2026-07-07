@@ -3,7 +3,6 @@ tap "homebrew/cask"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "jesseduffield/horcrux"
-tap "jorgelbg/tap"
 tap "steipete/tap"
 # Simple, modern, secure file encryption
 brew "age"
@@ -13,6 +12,8 @@ brew "awscli"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "btop"
 # CLI tool for Cloudflare Workers
 brew "cloudflare-wrangler"
 # Color-highlighted diff(1) output
@@ -43,8 +44,6 @@ brew "gnupg"
 brew "go"
 # Colorize logfiles and command output
 brew "grc"
-# Improved top (interactive process viewer)
-brew "htop"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Handy way to save and run project-specific commands
@@ -55,8 +54,6 @@ brew "mas"
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
 # Fast, disk space efficient package manager
 brew "pnpm"
 # Python package management tool
@@ -105,13 +102,8 @@ brew "wget"
 brew "whisper-cpp"
 # A program for splitting your files into encrypted fragments
 brew "jesseduffield/horcrux/horcrux"
-# Custom GPG pinentry program for macOS that allows using Touch ID for fetching the password from
-# the macOS keychain.
-brew "jorgelbg/tap/pinentry-touchid"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# OpenAI's Codex desktop app for managing coding agents
-cask "codex-app"
 # Menu bar usage monitor for Codex and Claude
 cask "codexbar"
 # Photography workflow application and raw developer
