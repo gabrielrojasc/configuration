@@ -110,8 +110,6 @@ cask "codexbar"
 cask "darktable"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
-# Chromium-based web browser
-cask "helium-browser"
 # Free and open-source media player
 cask "iina"
 # App to write, plan, collaborate, and get organised
@@ -133,7 +131,6 @@ cask "visual-studio-code"
 # Native desktop client for WhatsApp
 cask "whatsapp"
 mas "AdGuard for Safari", id: 1440147259
-mas "Amphetamine", id: 937984704
 mas "Auto HD FPS for YouTube", id: 1546729687
 mas "Keynote", id: 409183694
 mas "Magnet", id: 441258766

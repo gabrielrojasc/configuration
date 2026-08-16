@@ -22,7 +22,17 @@ cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Applicat
 cp -a ~/Library/LaunchAgents/loadsshkeys.plist Library/LaunchAgents/loadsshkeys.plist &
 cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
 ## Codex
-cp -a ~/.codex/config.toml .codex/ &
+(
+  cp -a ~/.codex/config.toml .codex/
+  config_tmp="$(mktemp .codex/config.toml.XXXXXX)"
+  trap 'rm -f "$config_tmp"' EXIT
+  awk '
+    /^\[projects\."/ { skipping = 1; next }
+    skipping && /^\[/ { skipping = 0 }
+    !skipping
+  ' .codex/config.toml > "$config_tmp"
+  cp "$config_tmp" .codex/config.toml
+) &
 cp -a ~/.codex/AGENTS.md .codex/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &

@@ -106,6 +106,7 @@ You are a senior engineering collaborator working across personal repos and proj
 ## Multi-Agent Context Engineering
 
 - For non-trivial work, the main agent defaults to orchestrator: define scope, delegate bounded execution or verification, reconcile results, and make the final call.
+- For each spawned sub-agent, explicitly choose the lowest sufficient reasoning effort based on uncertainty, consequence of error, and verification difficulty. When overriding effort requires a bounded fork, provide a self-contained task packet.
 - Verification means a verifier sub-agent; for meaningful code changes, artifacts, reviews, or risky decisions, it is required. If skipped, say why.
 - Split medium and larger tasks into bounded independent discovery, verification, or disjoint implementation work when parallel work materially helps.
 - Keep tiny, linear, or immediate blocking work local.

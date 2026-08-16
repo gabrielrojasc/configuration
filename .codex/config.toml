@@ -1,8 +1,8 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "high"
-service_tier = "fast"
+service_tier = "default"
 tool_output_token_limit = 25000
 # Codex exposes 95% of the raw 272,000-token model window as usable context.
 # Effective window: 272,000 * 0.95 = 258,400
@@ -26,227 +26,11 @@ js_repl = false
 default_mode_request_user_input = true
 
 [agents]
-max_threads = 6
+max_threads = 20
 max_depth = 2
 
 [notice]
 hide_rate_limit_model_nudge = true
-
-[projects."/Users/gabriel/fun"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/fun/t3code"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/fun/distributed-agent-workflow"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/fun/artifact-first-engineering-workflow"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/fun/configuration"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/.claude"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/.codex"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Library/Mobile Documents/iCloud~md~obsidian/Documents/brain"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/.config/nvim"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/fun/cv"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-04-26/i-am-trying-to-decide-between"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-04-27/copy-these-google-docs-into-notion"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/git/landing"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-04-29/on-notion-for-each-one-of"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-02/what-is-the-kernel-task-running"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-02/on-a-friend-s-outlook-mail"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-03/analyze-this-project-and-tell-me"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/git"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-05/does-it-make-sense-for-me"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-05/files-mentioned-by-the-user-apv"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-05/files-mentioned-by-the-user-whatsapp"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-05/product-specification-google-account-connect-for"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-10/i-am-looking-to-buy-a"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Pictures/Antartica"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-10/analyze-the-pictures-under-pictures-antartica"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-12/we-have-a-meeting-with-an"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-13/for-server-side-applications-that-store"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-13/from-this-plan-https-github-com"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-13/imagegen-users-gabriel-codex-skills-system"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-13/i-wanna-work-page-that-can"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-15/install-the-notion-cli-using-brew"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-21/find-alternatives-to-clay-cl-i"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Library/Mobile Documents/iCloud~md~obsidian/Documents/flowflow"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-22/for-familyflow-i-don-t-want"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/work/flowflow"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-22/can-you-help-me-create-codex"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-22/siento-q-la-defensivilidad-es-muy"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/i-got-a-whatsapp-audio-that"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/i-installed-https-formulae-brew-sh"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/analyze-this-project-and-tell-me"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/task-find-the-best-wines-to"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/tranform-the-flowflow-svg-on-downloads"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-25/files-mentioned-by-the-user-screenshot"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-27/find-me-good-resources-for-the"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-27/a-friend-is-asking-me-help"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-30/how-can-i-call-a-slack"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-30/find-car-similar-to-kia-sportage"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/on-my-work-macbook-with-a"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/on-cloudfare-can-i-have-more"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/humanizer-users-gabriel-agents-skills-humanizer"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/humanizer-users-gabriel-agents-skills-humanizer-2"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/lately-i-tend-to-create-quite"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-05-31/it-s-like-a-cabernet-but"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-01/task-find-the-best-wines-to"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-02/do-we-have-a-linear-mcp"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-06/my-iphone-storage-is-almost-full"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-07/i-want-to-know-which-health"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-07/i-find-myself-using-a-lot"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-07/evidence-comparison-report-users-gabriel-agents"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-07/evidence-comparison-report-users-gabriel-agents-2"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-08/hola-tuve-un-problema-con-los"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-08/evidence-comparison-report-users-gabriel-agents"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-12/can-you-use-computer-use-to"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-12/can-you-use-computer-use-to-2"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-13/i-think-previously-i-ve-given"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-13/best-low-effort-snack-to-watch"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-14/check-the-codex-folder-under-documents"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-14/i-m-like-at-90-disk"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-15/my-slack-app-is-not-sending"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-06-21/wh"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-07-06/how"]
-trust_level = "trusted"
-
-[projects."/Users/gabriel/Documents/Codex/2026-07-06/i-i"]
-trust_level = "trusted"
 
 [apps._default]
 destructive_enabled = false
@@ -290,13 +74,19 @@ enabled = true
 [plugins."chrome@openai-bundled"]
 enabled = true
 
-[plugins."browser@openai-bundled"]
-enabled = true
-
 [plugins."pdf@openai-primary-runtime"]
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
 enabled = true
 
 [[skills.config]]
@@ -340,12 +130,12 @@ name = "spreadsheets:Spreadsheets"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-07T02:21:34Z"
+last_updated = "2026-08-16T19:48:12Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-01T12:48:52Z"
+last_updated = "2026-08-14T08:26:32Z"
 source_type = "local"
 source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -361,7 +151,7 @@ preventSleepWhileRunning = true
 keepRemoteControlAwakeWhilePluggedIn = true
 git-branch-prefix = ""
 git-pull-request-merge-method = "squash"
-conversationDetailMode = "STEPS_EXECUTION"
+conversationDetailMode = "STEPS_COMMANDS"
 worktree-keep-count = 50
 hotkey-window-projectless-default-enabled = true
 dictationDictionary = []
@@ -371,6 +161,8 @@ sansFontSize = 14
 codeFontSize = 12
 dock-icon-preference = "app-default"
 followUpQueueMode = "queue"
+mac-menu-bar-enabled = false
+open-link-in-target-preference = "external-browser"
 
 [desktop.open-in-target-preferences]
 global = "vscode"
@@ -408,19 +200,35 @@ url = "https://mcp.linear.app/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/gabriel/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "97669f77b3ca7114a2df05d55646416ea34b28100c07213ef9f643803449ef2f"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.623.141536"
-CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+BROWSER_USE_CODEX_APP_VERSION = "26.810.52044"
+SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
+
+[shell_environment_policy.set]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+
+[sandbox_workspace_write]
+network_access = true
