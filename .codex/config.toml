@@ -1,5 +1,5 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 tool_output_token_limit = 25000
 # Leave room for native compaction near the 272–273k context window.
@@ -32,8 +32,8 @@ js_repl = false
 default_mode_request_user_input = true
 
 [agents]
-max_threads = 8
-max_depth = 2
+max_threads = 20
+max_depth = 3
 
 [mcp_servers.zf-google-workspace]
 url = "https://mcp-gworkspace.nixhoodwink.com/mcp"
@@ -52,190 +52,30 @@ url = "https://mcp.linear.app/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/grojas/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/grojas/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "60e4902788f207f88fd09344dfeafe07769488bdb2924bbb12b322c3b9d2b999"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "0"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.623.101652"
-CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+BROWSER_USE_CODEX_APP_VERSION = "26.818.21641"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/grojas/.codex/plugins/cache/openai-bundled/browser/26.818.21641/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
-[projects."/Users/grojas/tmp"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/levels"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Downloads"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/distributed-agent-workflow"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/fun/artifact-first-engineering-workflow"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/.claude"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/gold-docker"]
-trust_level = "trusted"
-
-[projects."/Users/grojas"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/.codex"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/API"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/work"]
-trust_level = "trusted"
-
-[projects."/"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/fun/pr-metrics"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/fun/configuration"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/fun"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/.config/nvim"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Library/CloudStorage/GoogleDrive-grojas@zerofox.com/My Drive/obsidian/wiki"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/intel-api"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/datasource-sdk"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-04-27/we-just-recently-started-publishing-both"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Library/CloudStorage/GoogleDrive-grojas@zerofox.com/My Drive/obsidian/brain"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/git/ui-architecture"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-04-28/review-this-prs-https-github-com"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-04-28/review-this-prs-https-github-com-2"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-04-29/i-d-like-to-get-all"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-04/write-the-npx-skills-command-to"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-05/i-am-using-this-query-to"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-05/is-this-https-arxiv-org-html"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-06/when-was-https-github-com-googlecloudplatform"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-06/extract-the-highlights-from-https-news"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-06/why-is-this-query-not-working"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-06/why-the-edits-to-canvas-on"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-06/fix-this-mysql-query-select-from"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-11/based-on-past-conversations-what-s"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-11/what-is-a-good-alias-for"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-12/hi"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-13/which-options-exist-to-https-getunblocked"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-13/is-there-a-way-to-force"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-13/do-the-unblcoked-cli-and-mcp"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-19/give-me-a-terminal-command-to"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-20/how-can-i-debug-the-bi"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-20/based-on-what-does-the-jira"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-20/investigate-linear-s-jira-bi-directional"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-29/does-npx-skills-add-expose-things"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-05-29/do-a-quick-pull-of-epl"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-01/why-doesn-t-npx-skills-update"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-03/how-much-this-session-cost"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-05/review-https-github-com-riskive-grafana"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-15/find-similar-products-to-https-workweave"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-16/when-to-use-opus-4-8"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/work/brain"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-19/hwo"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-19/give"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-22/i-have-two-skills-that-are"]
-trust_level = "trusted"
-
-[projects."/Users/grojas/Documents/Codex/2026-06-23/wh"]
-trust_level = "trusted"
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
 
 [notice]
 hide_rate_limit_model_nudge = true
@@ -259,19 +99,25 @@ enabled = true
 [plugins."pdf@openai-primary-runtime"]
 enabled = true
 
-[plugins."browser@openai-bundled"]
-enabled = true
-
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
 [marketplaces.openai-bundled]
-last_updated = "2026-07-03T04:39:48Z"
+last_updated = "2026-08-20T14:33:46Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-01T06:56:39Z"
+last_updated = "2026-08-20T14:34:33Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -319,12 +165,13 @@ git-branch-prefix = ""
 git-pull-request-merge-method = "squash"
 git-commit-instructions = ""
 git-pr-instructions = ""
-conversationDetailMode = "STEPS_EXECUTION"
+conversationDetailMode = "STEPS_PROSE"
 worktree-keep-count = 50
 ambient-suggestions-enabled = false
 show-context-window-usage = true
 reviewDelivery = "inline"
 mac-menu-bar-enabled = false
+dock-icon-preference = "app-default"
 
 [desktop.open-in-target-preferences]
 global = "vscode"
@@ -359,3 +206,6 @@ surface = "#181818"
 diffAdded = "#40c977"
 diffRemoved = "#fa423e"
 skill = "#ad7bf9"
+
+[shell_environment_policy.set]
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"

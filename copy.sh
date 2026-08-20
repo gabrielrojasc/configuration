@@ -34,9 +34,18 @@ cp -a ~/Library/Application\ Support/Cursor/User/keybindings.json Library/Applic
 cp -a ~/.cursor/mcp.json .cursor/ &
 cp -a ~/.cursor/cli-config.json .cursor/ &
 ## Codex
-cp -a ~/.codex/config.toml .codex/ &
+(
+  cp -a ~/.codex/config.toml .codex/
+  config_tmp="$(mktemp .codex/config.toml.XXXXXX)"
+  trap 'rm -f "$config_tmp"' EXIT
+  awk '
+    /^\[projects\."/ { skipping = 1; next }
+    skipping && /^\[/ { skipping = 0 }
+    !skipping
+  ' .codex/config.toml >"$config_tmp"
+  cp "$config_tmp" .codex/config.toml
+) &
 cp -a ~/.codex/AGENTS.md .codex/ &
-cp -a ~/.codex/rules/default.rules .codex/rules/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &
 cp -a ~/.claude/statusline.sh .claude/ &

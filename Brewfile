@@ -1,7 +1,6 @@
 tap "atlassian/acli"
 tap "bufbuild/buf"
 tap "hashicorp/tap"
-tap "jorgelbg/tap"
 tap "sdkman/tap"
 tap "steipete/tap"
 # Code searching, linting, rewriting
@@ -88,8 +87,8 @@ brew "mysql-client"
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
+# PAM module for reattaching to the user's GUI (Aqua) session
+brew "pam-reattach"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
 # Package compiler and linker metadata toolkit
@@ -152,9 +151,6 @@ brew "atlassian/acli/acli"
 brew "bufbuild/buf/buf"
 # Nomad
 brew "hashicorp/tap/nomad"
-# Custom GPG pinentry program for macOS that allows using Touch ID for fetching the password from
-# the macOS keychain.
-brew "jorgelbg/tap/pinentry-touchid"
 # SDKMAN! the Software Development Kit Manager
 brew "sdkman/tap/sdkman-cli"
 # Command-line interface for 1Password
@@ -167,14 +163,8 @@ cask "claude-code@latest"
 cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# Menu bar usage monitor for Codex and Claude
-cask "codexbar"
-# AI-powered software engineering agent by Factory
-cask "droid"
 # UI toolkit for building applications for mobile, web and desktop
 cask "flutter"
-# Set of tools to manage resources and applications hosted on Google Cloud
-cask "gcloud-cli"
 # Chromium-based web browser
 cask "helium-browser"
 # App to manage software development and track bugs
@@ -185,8 +175,6 @@ cask "neo4j-desktop"
 cask "raycast"
 # GUI for streamlined Redis application development
 cask "redis-insight"
-# System monitor for the menu bar
-cask "stats"
 vscode "adriandoescoding.http"
 vscode "angular.ng-template"
 vscode "anysphere.cursorpyright"
