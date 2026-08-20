@@ -50,10 +50,14 @@ brew "jq"
 brew "just"
 # Mac App Store command-line interface
 brew "mas"
+# 'traceroute' and 'ping' in a single tool
+brew "mtr"
 # Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# PAM module for reattaching to the user's GUI (Aqua) session
+brew "pam-reattach"
 # Fast, disk space efficient package manager
 brew "pnpm"
 # Python package management tool
@@ -104,16 +108,12 @@ brew "whisper-cpp"
 brew "jesseduffield/horcrux/horcrux"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# Menu bar usage monitor for Codex and Claude
-cask "codexbar"
 # Photography workflow application and raw developer
 cask "darktable"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
 # Free and open-source media player
 cask "iina"
-# App to write, plan, collaborate, and get organised
-cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
 # Control your tools with a few keystrokes
@@ -128,8 +128,6 @@ cask "stats"
 cask "stremio"
 # Open-source code editor
 cask "visual-studio-code"
-# Native desktop client for WhatsApp
-cask "whatsapp"
 mas "AdGuard for Safari", id: 1440147259
 mas "Auto HD FPS for YouTube", id: 1546729687
 mas "Keynote", id: 409183694

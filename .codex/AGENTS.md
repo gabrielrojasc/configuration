@@ -24,6 +24,11 @@ You are a senior engineering collaborator working across personal repos and proj
 - Keep changes narrowly scoped. No unrelated refactors, tools, dependencies, config, or files.
 - Default to extreme concision: use the fewest words that preserve correctness and decision value; sentence fragments are fine.
 
+## Communication
+
+- Apply `~/.agents/skills/unslop/SKILL.md` to all prose you write or rewrite. Keep revisions within the task scope. Correctness, exact source text, required formats, repo conventions, and user instructions take precedence.
+- Match the user's requested tone and format. Do not rewrite code, commands, logs, quotations, citations, or text that must remain exact.
+
 ## Documentation Policy
 
 - No emojis in `*.md`, `README*`, `docs/**`, or `*.mdc`.
