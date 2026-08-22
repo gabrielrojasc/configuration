@@ -121,6 +121,14 @@ ref: <Jira ticket or URL>
 - Implement with minimal scope. For non-trivial design decisions, weigh alternatives before committing to one.
 - When interaction or visual review matters, prefer an inspectable artifact or rendered preview and verify it before calling it done.
 
+## Tracker and implementation workspace
+
+- Linear is the default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
+- Fetching Linear data is read-only. Get explicit human approval before creating or updating Linear issues, projects, comments, or workflow state.
+- Repository containers live under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
+- Before implementation, use `$git-workspace` to create or select an isolated task worktree. An explicit user instruction to use the current checkout overrides this default.
+- Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
+
 ## Multi-Agent Context Engineering
 
 - For non-trivial work, the main agent defaults to orchestrator: define scope, delegate bounded execution or verification, reconcile results, and make the final call.
@@ -130,59 +138,3 @@ ref: <Jira ticket or URL>
 - Keep tiny, linear, or immediate blocking work local.
 - Give sub-agents clear ownership and ask for compact findings or decision-ready summaries.
 - Do not duplicate delegated work.
-
-# Default Agent Workflow
-
-## Workspace Conventions
-
-- Repo containers live under `~/git/<repo>/`.
-- Browsable default-branch code lives under `~/git/<repo>/<default-branch>/`.
-- Shared engineering context lives under `~/git/engineering-context`.
-- Artifact-first skills/scripts live under `~/.agents/skills`.
-- Ephemeral scratch work lives under `~/tmp/_ai_scratch`; it is temporary and non-canonical.
-- Add or repair repo containers with the `af-workspace` helper before creating initiative worktrees.
-
-## Repo Discovery
-
-- First stops: `AGENTS.md`, `README.md`, and repo-local `docs/` indexes.
-- Prefer versioned artifacts over chat history.
-- Treat `AGENTS.md` as a short map, not a full manual.
-
-## Docs And Planning Layout
-
-- Repo docs live under `docs/`; durable supporting knowledge belongs under `docs/references/`.
-- Use `docs/services/` only for multi-component repos.
-- Active execution artifacts belong under `~/git/engineering-context/active/NNNN_<clear-initiative>[_<ticket-key>]/`.
-- Before creating a new initiative folder, search `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for existing matching work and reuse it when appropriate.
-- For new initiatives, scan `~/git/engineering-context/active/` and `~/git/engineering-context/archive/` for the highest existing `NNNN`, then increment by one.
-- Use `research/`, `plans/`, and `status/` under the initiative folder for active execution artifacts.
-- Use `workflow-state.md` only for complex, branching, or multi-repo coordination.
-
-## Workflow Rules
-
-- Start by identifying the requested outcome, success criteria, constraints, and evidence needed.
-- Use the smallest workflow and artifact set that safely satisfies the request.
-- Stop research or tool use once the core request can be answered with sufficient evidence.
-- Ask only when missing information materially changes outcome, risk, ownership, or side effects.
-- Plans are first-class artifacts when the work is complex enough to need them.
-- Distinguish automated verification from manual verification.
-- Verify framework/library behavior against repo-detected versions and official docs.
-- When ownership, boundaries, or evidence are unclear, research before guessing.
-
-## Artifact Readability
-
-- Optimize human-facing artifacts for scanning and comprehension.
-- Lead with conclusions, then supporting evidence.
-- Use short concrete prose, structured lists, tables, and diagrams when they improve comprehension.
-- Agent-to-agent artifacts like handoffs and status updates prioritize machine-parseable completeness.
-
-## Implementation Workspace
-
-- Do not create branches or edit code in the persistent default worktree.
-- If you are in the persistent default worktree and need to edit code, stop and create or switch to the initiative worktree first.
-- Use git worktrees under `~/git/<repo>/NNNN-<initiative>/` so each initiative gets an isolated working copy.
-- The worktree `NNNN` matches the initiative number under `~/git/engineering-context/active/`.
-- During planning or research, use the `af-plan` or `af-research` context helper to create or reuse the initiative folder.
-- During implementation, use `~/.agents/skills/af-implement/scripts/init-initiative.sh --repos-root ~/git --context-root ~/git/engineering-context --repo <repo> <NNNN-or-folder>` to create worktrees only for repos needed by the existing initiative; rerun it with another `--repo` if scope expands.
-- Cleanup is destructive. Before running `~/.agents/skills/af-archive/scripts/archive-initiative.sh`, get explicit user approval and verify no uncommitted or unpushed work would be lost.
-- Branch naming follows the repo's branch prefix convention.

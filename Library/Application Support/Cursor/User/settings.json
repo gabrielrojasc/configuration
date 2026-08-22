@@ -1,3 +1,4 @@
 {
-    "security.workspace.trust.enabled": true
+    "security.workspace.trust.enabled": true,
+    "window.autoDetectColorScheme": true
 }
