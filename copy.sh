@@ -11,11 +11,14 @@ brew bundle dump --force &
 cp -a ~/.zprofile . &
 cp -a ~/.bash_profile . &
 cp -a ~/.gitconfig . &
+cp -a ~/.config/btop/btop.conf .config/btop/ &
+cp -a ~/.config/git/ignore .config/git/ &
 cp -a ~/.screenrc . &
 cp -a ~/.tmux.conf . &
 cp -a ~/.vimrc . &
 cp -a ~/.zshrc . &
 cp -a ~/.zsh_aliases . &
+cp -a ~/.zsh_functions . &
 cp -a ~/.zsh_exports . &
 cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
 cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
@@ -23,15 +26,15 @@ cp -a ~/Library/LaunchAgents/loadsshkeys.plist Library/LaunchAgents/loadsshkeys.
 cp -a ~/Library/Scripts/loadsshkeys Library/Scripts/loadsshkeys &
 ## Codex
 (
-  cp -a ~/.codex/config.toml .codex/
-  config_tmp="$(mktemp .codex/config.toml.XXXXXX)"
-  trap 'rm -f "$config_tmp"' EXIT
-  awk '
+    cp -a ~/.codex/config.toml .codex/
+    config_tmp="$(mktemp .codex/config.toml.XXXXXX)"
+    trap 'rm -f "$config_tmp"' EXIT
+    awk '
     /^\[projects\."/ { skipping = 1; next }
     skipping && /^\[/ { skipping = 0 }
     !skipping
-  ' .codex/config.toml > "$config_tmp"
-  cp "$config_tmp" .codex/config.toml
+  ' .codex/config.toml >"$config_tmp"
+    cp "$config_tmp" .codex/config.toml
 ) &
 cp -a ~/.codex/AGENTS.md .codex/ &
 ## Claude
@@ -44,7 +47,7 @@ cp -a ~/dcc/justfile dcc/ &
 rsync --recursive --archive --delete ~/.vim . &
 rsync --recursive --archive --delete ~/.config/nvim .config/ &
 rsync --recursive --archive --delete ~/.config/direnv .config/ &
-rsync --recursive --archive --delete ~/.config/htop .config/ &
+rsync --recursive --archive --delete --exclude '/htop_history' ~/.config/htop .config/ &
 
 rsync --recursive --archive --delete ~/dcc/scripts dcc/ &
 

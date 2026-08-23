@@ -1,15 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
-plan_mode_reasoning_effort = "high"
 service_tier = "priority"
-tool_output_token_limit = 25000
-# Codex exposes 95% of the raw 272,000-token model window as usable context.
-# Effective window: 272,000 * 0.95 = 258,400
-# Formula: 258,400 - (tool_output_token_limit + 15000)
-# With tool_output_token_limit=25000 => 258,400 - (25000 + 15000) = 218,400
-model_context_window = 272000
-model_auto_compact_token_limit = 218400
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -21,19 +13,16 @@ notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/Sh
 [features]
 memories = true
 prevent_idle_sleep = true
-rmcp_client = true
-js_repl = false
 default_mode_request_user_input = true
-
-[agents]
-max_threads = 20
-max_depth = 2
 
 [notice]
 hide_rate_limit_model_nudge = true
 
 [apps._default]
 destructive_enabled = false
+
+[apps.connector_openai_safety_settings]
+enabled = false
 
 [plugins."github@openai-curated"]
 enabled = true
@@ -75,9 +64,6 @@ enabled = true
 enabled = true
 
 [plugins."pdf@openai-primary-runtime"]
-enabled = true
-
-[plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
 [plugins."sites@openai-bundled"]
@@ -133,7 +119,6 @@ name = "spreadsheets:Spreadsheets"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-18T20:27:05Z"
 source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
@@ -198,9 +183,6 @@ diffAdded = "#40c977"
 diffRemoved = "#fa423e"
 skill = "#ad7bf9"
 
-[mcp_servers.linear]
-url = "https://mcp.linear.app/mcp"
-
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
@@ -213,12 +195,13 @@ NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/gabriel/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/gabriel/.codex"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "0"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.814.41407"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.814.41407/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.818.41509"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.818.41509/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 

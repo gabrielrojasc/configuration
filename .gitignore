@@ -1,5 +1,6 @@
 .vim/.netrwhist
 .config/nvim/plugin
 .config/nvim/.nvim/
+.config/htop/htop_history
 lazy-lock.json
 .DS_Store

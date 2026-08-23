@@ -1,0 +1,111 @@
+# diff with word highlight
+diffh() {
+    command diff "$@" | colordiff | diff-highlight
+}
+compdef diffh=diff
+
+# Keep tmux's VIRTUAL_ENV in sync with the current shell.
+_tmux_update_virtual_env() {
+    [[ -n "$TMUX" ]] || return
+
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        tmux set-environment VIRTUAL_ENV "$VIRTUAL_ENV"
+    else
+        tmux set-environment -u VIRTUAL_ENV
+    fi
+}
+
+# map
+map() {
+    xargs -I {} $@ {}
+}
+
+# ps + grep
+psgrep() {
+    local pids
+    pids=$(pgrep -f $@)
+    if ! [[ $pids ]]; then
+        echo "No processes found." >&2
+        return 1
+    fi
+    grc ps up $(pgrep -f $@)
+}
+
+# rotate ~/tmp dir
+function rotate-tmp() {
+    rm -rf ~/tmp
+    mkdir ~/tmp
+    echo 'Succesfully rotated ~/tmp dir'
+}
+
+# Transcribe WhatsApp Opus audio with whisper.cpp directly.
+transcribe-whatsapp() {
+    if [[ $# -lt 1 ]]; then
+        echo "usage: transcribe-whatsapp <audio.opus> [whisper-cli args...]" >&2
+        return 2
+    fi
+
+    local input="$1"
+    shift
+
+    if [[ ! -f "$input" ]]; then
+        echo "transcribe-whatsapp: file not found: $input" >&2
+        return 1
+    fi
+
+    if ! command -v ffmpeg >/dev/null 2>&1; then
+        echo "transcribe-whatsapp: ffmpeg is required" >&2
+        return 1
+    fi
+
+    if ! command -v whisper-cli >/dev/null 2>&1; then
+        echo "transcribe-whatsapp: whisper-cli is required" >&2
+        return 1
+    fi
+
+    local model="${WHATSAPP_TRANSCRIBE_MODEL:-${SUMMARIZE_WHISPER_CPP_MODEL_PATH:-$HOME/.summarize/cache/whisper-cpp/models/ggml-large-v3.bin}}"
+    if [[ ! -f "$model" ]]; then
+        model="$HOME/.summarize/cache/whisper-cpp/models/ggml-large-v3-turbo.bin"
+    fi
+    if [[ ! -f "$model" ]]; then
+        model="$HOME/.summarize/cache/whisper-cpp/models/ggml-base.bin"
+    fi
+    if [[ ! -f "$model" ]]; then
+        echo "transcribe-whatsapp: no whisper.cpp model found" >&2
+        return 1
+    fi
+
+    local lang="${WHATSAPP_TRANSCRIBE_LANGUAGE:-es}"
+    local prompt="${WHATSAPP_TRANSCRIBE_PROMPT:-Conversacion informal chilena. Puede mencionar Gemini, ChatGPT, Codex, Google Workspace, Premium, curriculum, castellano e ingles.}"
+
+    local tmpdir wav whisper_log transcript
+    tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/transcribe-whatsapp.XXXXXX") || return 1
+    wav="$tmpdir/audio.wav"
+    whisper_log="$tmpdir/whisper.log"
+
+    ffmpeg -hide_banner -loglevel error -nostdin -y \
+        -i "$input" \
+        -ar 16000 -ac 1 -c:a pcm_s16le \
+        "$wav" || {
+        local rc=$?
+        rm -rf "$tmpdir"
+        return $rc
+    }
+
+    transcript=$(whisper-cli \
+        -m "$model" \
+        -f "$wav" \
+        -l "$lang" \
+        -nt -np \
+        --prompt "$prompt" \
+        "$@" 2>"$whisper_log")
+    local rc=$?
+    if [[ $rc -ne 0 ]]; then
+        cat "$whisper_log" >&2
+    elif command -v pbcopy >/dev/null 2>&1; then
+        print -r -- "$transcript" | pbcopy
+    fi
+    print -r -- "$transcript"
+    rm -rf "$tmpdir"
+    return $rc
+}

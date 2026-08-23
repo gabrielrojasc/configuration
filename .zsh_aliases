@@ -64,3 +64,7 @@ alias cx='codex'
 
 # skills
 alias skills='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 npx --yes skills@latest'
+alias skills-update-global='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 npx -y skills@latest update -g'
+
+# docker
+alias dc-stop-all='docker ps -q | while read -r id; do docker stop "$id"; done'
