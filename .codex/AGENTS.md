@@ -28,14 +28,14 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Communication
 
-- Apply `~/.agents/skills/unslop/SKILL.md` to all prose you write or rewrite. Keep revisions within the task scope. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence.
+- Apply the `unslop` skill to all prose you write or rewrite. Keep revisions within the task scope. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence.
 - I prefer extreme concision. Use the fewest words that preserve correctness and decision value; sentence fragments are fine.
 - Match the tone and format I request. Preserve exact code, commands, logs, quotations, citations, and required formats.
 
 ## Documentation
 
 - I do not want emojis in `*.md`, `README*`, `docs/**`, or `*.mdc`.
-- Apply `$developer-documentation-style` when writing, editing, or reviewing developer documentation. Follow repository-specific conventions first.
+- Apply the `developer-documentation-style` skill when writing, editing, or reviewing developer documentation. Follow repository-specific conventions first.
 
 ## Environment and tooling
 
@@ -86,15 +86,13 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 
 <!-- BEGIN gabrielrojasc/skills -->
-
 ## Tracker and implementation workspace
 
 - I use Linear as my default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
 - Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
-- Before implementation, use `$git-workspace` to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
+- Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
-
 <!-- END gabrielrojasc/skills -->
 
 ## Multi-agent work
