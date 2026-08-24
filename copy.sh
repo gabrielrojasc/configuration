@@ -12,6 +12,7 @@ brew bundle dump --force &
 cp -a ~/.zprofile . &
 cp -a ~/.bash_profile . &
 cp -a ~/.gitconfig . &
+cp -a ~/.config/btop/btop.conf .config/btop/ &
 cp -a ~/fun/.gitconfig fun/ &
 cp -a ~/.screenrc . &
 cp -a ~/.tmux.conf . &
