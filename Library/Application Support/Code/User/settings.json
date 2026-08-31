@@ -16,9 +16,9 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
     },
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff",
   },
   "editor.minimap.enabled": false,
   "editor.snippetSuggestions": "top",
@@ -30,59 +30,59 @@
     {
       "before": ["g", "r"],
       "commands": ["references-view.findReferences"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["K"],
       "after": ["g", "h"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["j"],
       "after": ["g", "j"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["k"],
       "after": ["g", "k"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["0"],
       "after": ["g", "0"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["$"],
       "after": ["g", "_"],
-      "silent": true
-    }
+      "silent": true,
+    },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
     {
       "before": ["p"],
       "commands": [
         "editor.action.clipboardPasteAction",
-        "extension.vim_escape"
+        "extension.vim_escape",
       ],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["j"],
       "after": ["g", "j"],
-      "silent": true
+      "silent": true,
     },
     {
       "before": ["k"],
       "after": ["g", "k"],
-      "silent": true
-    }
+      "silent": true,
+    },
   ],
   "github.copilot.enable": {
     "*": true,
     "plaintext": false,
     "markdown": true,
-    "scminput": false
+    "scminput": false,
   },
   "languageToolLinter.enabled": false,
   "diffEditor.renderSideBySide": false,
@@ -91,7 +91,7 @@
     "-dotfiles.repository",
     "-dotfiles.installCommand",
     "-dev.containers.gitCredentialHelperConfigLocation",
-    "-python.defaultInterpreterPath"
+    "-python.defaultInterpreterPath",
   ],
   "dotfiles.repository": "https://github.com/gabrielrojasc/configuration",
   "dotfiles.installCommand": "magnet/setup_devcontainer.sh",
@@ -103,15 +103,18 @@
   "terminal.integrated.enableMultiLinePasteWarning": false,
   "editor.wordWrap": "on",
   "[go]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
   "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
   "makefile.configureOnOpen": true,
   "[go.mod]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
   "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker",
   },
-  "security.promptForLocalFileProtocolHandling": false
+  "security.promptForLocalFileProtocolHandling": false,
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor",
+  },
 }

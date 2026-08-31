@@ -1,12 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.6-sol"
-model_reasoning_effort = "xhigh"
-tool_output_token_limit = 25000
-# Leave room for native compaction near the 272–273k context window.
-# Formula: 272000 - (tool_output_token_limit + 15000)
-# With tool_output_token_limit=25000 ⇒ 272000 - (25000 + 15000) = 232000
-model_context_window = 272000
-model_auto_compact_token_limit = 232000
+model_reasoning_effort = "high"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -23,7 +17,7 @@ unified_exec = true
 apply_patch_freeform = true
 shell_snapshot = true
 multi_agent = true
-memories = true
+memories = false
 chronicle = false
 guardian_approval = true
 prevent_idle_sleep = true
@@ -31,12 +25,9 @@ goals = true
 js_repl = false
 default_mode_request_user_input = true
 
-[agents]
-max_threads = 20
-max_depth = 3
-
-[mcp_servers.zf-google-workspace]
-url = "https://mcp-gworkspace.nixhoodwink.com/mcp"
+[memories]
+generate_memories = false
+use_memories = false
 
 [mcp_servers.zf-grafana-prod]
 url = "https://mcp.nixhoodwink.com/grafana/mcp"
@@ -46,9 +37,6 @@ url = "https://mcp-stag.nixhoodwink.com/grafana/mcp"
 
 [mcp_servers.zf-grafana-qa]
 url = "https://mcp-qa.nixhoodwink.com/grafana/mcp"
-
-[mcp_servers.linear]
-url = "https://mcp.linear.app/mcp"
 
 [mcp_servers.node_repl]
 args = []
@@ -67,14 +55,18 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunc
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.818.21641"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/grojas/.codex/plugins/cache/openai-bundled/browser/26.818.21641/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.825.51511"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/grojas/.codex/plugins/cache/openai-bundled/browser/26.825.51511/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
 [mcp_servers.computer-use]
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 args = ["mcp"]
 cwd = "."
+enabled = false
+
+[mcp_servers.cua_repl]
+command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
 enabled = false
 
 [notice]
@@ -111,13 +103,14 @@ enabled = true
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
 
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
 [marketplaces.openai-bundled]
-last_updated = "2026-08-20T14:33:46Z"
 source_type = "local"
 source = "/Users/grojas/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-20T14:34:33Z"
 source_type = "local"
 source = "/Users/grojas/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -165,7 +158,7 @@ git-branch-prefix = ""
 git-pull-request-merge-method = "squash"
 git-commit-instructions = ""
 git-pr-instructions = ""
-conversationDetailMode = "STEPS_PROSE"
+conversationDetailMode = "STEPS_COMMANDS"
 worktree-keep-count = 50
 ambient-suggestions-enabled = false
 show-context-window-usage = true
