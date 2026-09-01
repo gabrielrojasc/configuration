@@ -92,6 +92,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 - Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
 - For skills that require `docs/agents/issue-tracker.md`, treat this section as its replacement. Do not require a repository-local copy or ask me to run tracker setup. Use Linear directly.
+- By default, write `to-spec` output under `~/tmp/specs/` as unpublished Markdown for review and iteration.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
 - Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
