@@ -90,8 +90,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Tracker and implementation workspace
 
-- I use Linear as my default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
-- By default, write `to-spec` output under `~/tmp/specs/` as unpublished Markdown for review and iteration.
+- Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
+- For skills that require `docs/agents/issue-tracker.md`, treat this section as its replacement. Do not require a repository-local copy or ask me to run tracker setup. Use Linear directly.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
 - Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
@@ -115,3 +115,4 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Set the model through the runtime's routing control, such as a per-spawn model parameter or agent-definition field, whenever one exists. Where instruction-based routing is documented or verified locally, also name the model in the spawn instruction. Only when neither method exists, use the configured or inherited model and treat the requested tier as advisory.
 - Set reasoning effort separately. Use the lowest effort that still fits the agent's hardest phase.
 - Claude mapping: Sonnet for execution, Opus for judgment, and Fable for frontier work. Sonnet is the floor; do not use Haiku.
+- OpenAI mapping: Luna for execution and Sol for judgment and frontier work. Don't use Terra.
