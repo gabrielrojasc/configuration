@@ -1,7 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-5.6-sol"
-model_reasoning_effort = "xhigh"
-service_tier = "priority"
+model_reasoning_effort = "high"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -9,17 +8,20 @@ approvals_reviewer = "auto_review"
 approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+service_tier = "priority"
 
 [features]
-memories = true
+memories = false
 prevent_idle_sleep = true
 default_mode_request_user_input = true
+js_repl = false
+
+[memories]
+generate_memories = false
+use_memories = false
 
 [notice]
 hide_rate_limit_model_nudge = true
-
-[apps._default]
-destructive_enabled = false
 
 [apps.connector_openai_safety_settings]
 enabled = false
@@ -78,6 +80,9 @@ enabled = true
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
 
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [[skills.config]]
 path = "/Users/gabriel/.codex/skills/.system/skill-installer/SKILL.md"
 enabled = false
@@ -123,7 +128,6 @@ source_type = "local"
 source = "/Users/gabriel/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-19T23:26:50Z"
 source_type = "local"
 source = "/Users/gabriel/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -200,8 +204,8 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunc
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.818.41509"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.818.41509/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.825.51511"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.825.51511/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -209,6 +213,10 @@ CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 args = ["mcp"]
 cwd = "."
+enabled = false
+
+[mcp_servers.cua_repl]
+command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
 enabled = false
 
 [shell_environment_policy.set]

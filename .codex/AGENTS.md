@@ -44,6 +44,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Do not rely on globally installed language tools. Keep environments reproducible.
 - Use the repository's dependency and environment manager. Do not migrate tooling as part of another task.
 - Prefer machine-readable output when piping commands, and disable pagination.
+- Never conclude "missing" or "empty" from a channel that swallows errors or silently bounds its coverage (e.g. a sandboxed read behind `2>/dev/null`); re-observe through a path where failure and full scope are visible before acting on absence.
 
 ## External services
 
@@ -86,18 +87,31 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 
 <!-- BEGIN gabrielrojasc/skills -->
+
 ## Tracker and implementation workspace
 
 - I use Linear as my default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
+- By default, write `to-spec` output under `~/tmp/specs/` as unpublished Markdown for review and iteration.
+- Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
+- Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
+
 <!-- END gabrielrojasc/skills -->
 
 ## Multi-agent work
 
-- I want ceremony matched to risk. Keep tiny and linear work local.
+- Match ceremony to risk. Keep small, sequential work in the main session.
 - Delegate bounded work when parallel discovery, disjoint implementation, or independent verification materially reduces time or risk.
-- Use an independent verifier when a meaningful code or artifact change, or a risky decision, would otherwise be difficult or expensive to verify.
-- Give every sub-agent explicit ownership, the lowest sufficient reasoning effort, and a compact deliverable. Do not duplicate delegated work.
+- Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
+- Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
+- Route an agent for the hardest phase it will perform:
+  - Execution tier for structured reading, bounded search, and mechanical changes.
+  - Judgment tier for implementation, review, verification, research synthesis, and ambiguous or noisy input.
+  - Frontier tier only for council deliberation or explicit escalation after contested verification.
+- The execution tier is the hard floor for delegated work, including search. Choose the least expensive current model that satisfies the tier.
+- Set the model through the runtime's routing control, such as a per-spawn model parameter or agent-definition field, whenever one exists. Where instruction-based routing is documented or verified locally, also name the model in the spawn instruction. Only when neither method exists, use the configured or inherited model and treat the requested tier as advisory.
+- Set reasoning effort separately. Use the lowest effort that still fits the agent's hardest phase.
+- Claude mapping: Sonnet for execution, Opus for judgment, and Fable for frontier work. Sonnet is the floor; do not use Haiku.
