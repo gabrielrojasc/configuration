@@ -56,14 +56,11 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Service-specific operations
 
-- Prefer source-native tools for direct URLs; fall back to Unblocked.
-- Use Unblocked as the first semantic search layer for cross-system discovery and correlation across GitHub, Jira, Linear, Sentry, Slack, docs, and code history. Use it for fuzzy lookup, prior rationale, related incidents, issue and PR history, ownership clues, and cross-repo context. Keep operations fetch-only, bounded, and non-mutating. Prefer the Unblocked CLI; check `unblocked --help`.
-- Use source-specific tools like `gh`, `acli jira`, Linear skills, or Sentry tooling for authoritative reads, exact IDs, workflow-specific actions, or any approved mutation.
+- Use source-native tools for direct URLs, exact IDs, authoritative reads, workflow-specific actions, and approved mutations.
+- Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
 - Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
-- I'm on the EP team: Linear is the source of truth for my planning work. Jira remains the source of truth for other teams' projects (`ZFE`, `RCA`) and for commit `ref:` compliance.
+- For Linear work, default to the EP team unless the request or repository specifies another team.
 - Use `linear-zf-guidance` when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
-- Use the `zerofox-jira` skill for `ref:` footer keys, RCA tickets, and cross-team Jira work. Fallback: `acli jira`; keep discovery queries bounded and prefer machine-readable output. For full ticket context, use `acli jira workitem view <ticket> --fields '*all'`.
-- Keep Linear issue IDs and Jira issue keys separate.
 
 ## Personal knowledge
 
@@ -77,12 +74,12 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - I use Conventional Commits.
 - Create signed commits with concise, imperative subjects.
 - Use real line breaks in bodies and footers. Mark breaking changes with `!` or `BREAKING CHANGE:`.
-- On any branch intended to be merged, at least one commit must include a `ref:` footer with the Jira ticket or URL. If none does, ask `What's the Jira ticket or URL for ref?` before finalizing the commit message.
+- On any branch intended to be merged, at least one commit must include a `ref:` footer with the Linear issue ID or URL. If none does, ask `What's the Linear issue or URL for ref?` before finalizing the commit message.
 
 ### Branches and pull requests
 
 - I prefer one push after the relevant local commits are ready.
-- Create pull requests as drafts unless I or the repository explicitly request otherwise.
+- Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
 - Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
 
 ## Coding principles
@@ -103,10 +100,12 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Tracker and implementation workspace
 
-- I use Linear as my default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
-- By default, write `to-spec` output as Markdown in a temporary directory for review and iteration, without publishing it.
+- Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
+- For skills that require `docs/agents/issue-tracker.md`, treat this section as its replacement. Do not require a repository-local copy or ask me to run tracker setup. Use Linear directly.
+- `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
-- Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
+- Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state, except status updates for authorized work: started when work begins, review when ready, and completed after verification.
+- Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
@@ -127,3 +126,4 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Set the model through the runtime's routing control, such as a per-spawn model parameter or agent-definition field, whenever one exists. Where instruction-based routing is documented or verified locally, also name the model in the spawn instruction. Only when neither method exists, use the configured or inherited model and treat the requested tier as advisory.
 - Set reasoning effort separately. Use the lowest effort that still fits the agent's hardest phase.
 - Claude mapping: Sonnet for execution, Opus for judgment, and Fable for frontier work. Sonnet is the floor; do not use Haiku.
+- OpenAI mapping: Luna for execution and Sol for judgment and frontier work. Don't use Terra.

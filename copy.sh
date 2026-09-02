@@ -50,6 +50,7 @@ cp -a ~/.codex/AGENTS.md .codex/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &
 cp -a ~/.claude/statusline.sh .claude/ &
+cp -a ~/.claude/CLAUDE.md .claude/ &
 ## utils
 cp -a ~/Library/Scripts/keyboardremap Library/Scripts/keyboardremap &
 cp -a ~/.gnupg/gpg-agent.conf .gnupg &
