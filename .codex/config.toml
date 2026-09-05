@@ -8,9 +8,10 @@ approvals_reviewer = "auto_review"
 approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "default"
+service_tier = "priority"
 
 [features]
+context_management.experimental_mode = true
 memories = false
 prevent_idle_sleep = true
 default_mode_request_user_input = true
