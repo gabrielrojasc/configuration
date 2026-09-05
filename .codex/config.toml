@@ -1,5 +1,5 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 model_reasoning_effort = "high"
 web_search = "live"
 sandbox_mode = "workspace-write"
@@ -8,7 +8,7 @@ approvals_reviewer = "auto_review"
 approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "priority"
+service_tier = "default"
 
 [features]
 memories = false
