@@ -69,7 +69,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 ### Branches and pull requests
 
 - I prefer one push after the relevant local commits are ready.
-- Create pull requests as drafts unless I or the repository explicitly request otherwise.
+- Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
 - Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
 
 ## Coding principles
@@ -90,12 +90,12 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Tracker and implementation workspace
 
-- Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
-- For skills that require `docs/agents/issue-tracker.md`, treat this section as its replacement. Do not require a repository-local copy or ask me to run tracker setup. Use Linear directly.
-- By default, write `to-spec` output under `~/tmp/specs/` as unpublished Markdown for review and iteration.
+- I use Linear as my default issue tracker unless a repository states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
+- `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
-- Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state.
-- Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
+- Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state, except status updates for authorized work: started when work begins, review when ready, and completed after verification.
+- When creating Linear work on my behalf, assign issues to me and set me as the project lead in the same operation whenever Linear supports those fields.
+- Only add Linear labels that I explicitly request. Create or remove labels only when I explicitly request that exact change. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
@@ -115,5 +115,4 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - The execution tier is the hard floor for delegated work, including search. Choose the least expensive current model that satisfies the tier.
 - Set the model through the runtime's routing control, such as a per-spawn model parameter or agent-definition field, whenever one exists. Where instruction-based routing is documented or verified locally, also name the model in the spawn instruction. Only when neither method exists, use the configured or inherited model and treat the requested tier as advisory.
 - Set reasoning effort separately. Use the lowest effort that still fits the agent's hardest phase.
-- Claude mapping: Sonnet for execution, Opus for judgment, and Fable for frontier work. Sonnet is the floor; do not use Haiku.
-- OpenAI mapping: Luna for execution and Sol for judgment and frontier work. Don't use Terra.
+- Model mapping: Sonnet or Luna for bounded work with a clear solution; Opus or Terra for self-contained work requiring local judgment; Fable or Sol for orchestration, synthesis, or ambiguous, cross-cutting, or high-risk work.
