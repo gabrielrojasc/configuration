@@ -57,7 +57,6 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
 - Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 - For Linear work, default to the EP team unless the request or repository specifies another team.
-- Use `linear-zf-guidance` when implementation work starts from Linear or when creating branches, commits, or pull requests for Linear-tracked work.
 
 ## Personal knowledge
 
