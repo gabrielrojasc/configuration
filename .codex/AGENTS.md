@@ -11,7 +11,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Automation and preapproved commands do not bypass my approval gates.
 - Follow every approval gate stated by me, the repository, a skill, or the active workflow.
 - When I ask for a review, explanation, audit, diagnosis, or status report, treat the request as read-only unless I also ask for changes.
-- Get my explicit approval before external mutations, deployments, publishing, messages, purchases, deletion, archival, authentication changes, or production-impacting actions.
+- Get my approval before actions that speak for me, create commitments, risk disruption to others, or are costly to undo. Consider consequences a rollback cannot erase. For these actions, prepare the work first and show me the proposed action and impact for approval.
 - Do not deploy directly. I trigger deployments manually through GitHub Actions, Jenkins, or the relevant release system. Read-only CI and status inspection is allowed when relevant.
 - Preserve unrelated work. Never use destructive Git commands.
 - Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
@@ -24,7 +24,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Use repository-local tooling, environment managers, scripts, and CI configuration as the source of truth.
 - When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
 - Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
-- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication or external state, or changes the task's target or user-visible contract.
+- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
 - If no repository-local command or documented procedure covers a required build, test, migration, deployment, or other operational step, use only standard, bounded, read-only diagnostics. Ask before choosing an undocumented mutating path.
 
 ## Communication
@@ -56,7 +56,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Service-specific operations
 
-- Use source-native tools for direct URLs, exact IDs, authoritative reads, workflow-specific actions, and approved mutations.
+- For Slack and the Google suite, discover and use the matching connector.
 - Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
 - Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 - For Linear work, default to the EP team unless the request or repository specifies another team.
@@ -105,7 +105,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - Fetching Linear data is read-only. Get my explicit approval before creating or updating issues, projects, comments, or workflow state, except status updates for authorized work: started when work begins, review when ready, and completed after verification.
-- Leave Linear labels unchanged unless I explicitly ask to create, apply, or remove one. Skill defaults do not count as approval.
+- When creating Linear work on my behalf, assign issues to me and set me as the project lead in the same operation whenever Linear supports those fields.
+- Only add Linear labels that I explicitly request. Create or remove labels only when I explicitly request that exact change. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
@@ -118,12 +119,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Delegate bounded work when parallel discovery, disjoint implementation, or independent verification materially reduces time or risk.
 - Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
 - Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
-- Route an agent for the hardest phase it will perform:
-  - Execution tier for structured reading, bounded search, and mechanical changes.
-  - Judgment tier for implementation, review, verification, research synthesis, and ambiguous or noisy input.
-  - Frontier tier only for council deliberation or explicit escalation after contested verification.
-- The execution tier is the hard floor for delegated work, including search. Choose the least expensive current model that satisfies the tier.
-- Set the model through the runtime's routing control, such as a per-spawn model parameter or agent-definition field, whenever one exists. Where instruction-based routing is documented or verified locally, also name the model in the spawn instruction. Only when neither method exists, use the configured or inherited model and treat the requested tier as advisory.
-- Set reasoning effort separately. Use the lowest effort that still fits the agent's hardest phase.
-- Claude mapping: Sonnet for execution, Opus for judgment, and Fable for frontier work. Sonnet is the floor; do not use Haiku.
-- OpenAI mapping: Luna for execution and Sol for judgment and frontier work. Don't use Terra.
+- Explicitly choose and set the model and reasoning effort for every subagent based on its hardest assigned work. Never rely on defaults or inherited settings.
+- Bounded retrieval, extraction, and mechanical edits with clear checks: Luna high or Sonnet high.
+- Self-contained implementation, review, and synthesis with clear requirements: Astra medium or Opus high.
+- Ambiguous investigations or synthesis, architectural tradeoffs, conflicting evidence: Astra high or Fable high.
+- Exceptionally difficult reasoning, including verification: Astra xhigh or Fable xhigh.

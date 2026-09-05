@@ -169,8 +169,6 @@ cask "codex"
 cask "flutter"
 # Chromium-based web browser
 cask "helium-browser"
-# App to manage software development and track bugs
-cask "linear"
 # Developer IDE or Management Environment for Neo4j instances
 cask "neo4j-desktop"
 # Control your tools with a few keystrokes
