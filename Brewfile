@@ -1,7 +1,3 @@
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/core"
-tap "homebrew/services"
 tap "jesseduffield/horcrux", trusted: true
 tap "steipete/tap", trusted: true
 # Simple, modern, secure file encryption

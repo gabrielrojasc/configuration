@@ -107,8 +107,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Delegate bounded work when the expected savings in time, cost, or risk justify the added coordination and model usage.
 - Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
 - Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
-- Explicitly choose and set the model and reasoning effort for every subagent based on its hardest assigned work. Never rely on defaults or inherited settings.
-- Bounded retrieval, extraction, and mechanical edits with clear checks: Luna high or Sonnet high.
-- Self-contained implementation, review, and synthesis with clear requirements: Astra medium or Opus high.
-- Ambiguous investigations or synthesis, architectural tradeoffs, conflicting evidence: Astra high or Fable high.
-- Exceptionally difficult reasoning, including verification: Astra xhigh or Fable xhigh.
+- Explicitly set model and effort for every subagent. Reassess each delegated task and follow-up by its hardest unresolved judgment; reuse agents only when both settings match.
+- Default to Luna high or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
+- Use Astra medium or Opus high for unresolved design or correctness decisions. Name the decision in the delegation brief.
+- Use Astra high or Fable high for ambiguous investigations, architectural tradeoffs, or conflicting evidence.
+- Use Astra xhigh or Fable xhigh for exceptionally difficult reasoning or verification.
