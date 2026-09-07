@@ -1,8 +1,7 @@
-tap "atlassian/acli"
-tap "bufbuild/buf"
-tap "hashicorp/tap"
-tap "sdkman/tap"
-tap "steipete/tap"
+tap "bufbuild/buf", trusted: true
+tap "hashicorp/tap", trusted: true
+tap "sdkman/tap", trusted: true
+tap "steipete/tap", trusted: true
 # Code searching, linting, rewriting
 brew "ast-grep"
 # Official Amazon AWS command-line interface
@@ -147,8 +146,6 @@ brew "wget"
 brew "xq"
 # Additional completion definitions for zsh
 brew "zsh-completions"
-# Software to interact with Atlassian Cloud from the terminal
-brew "atlassian/acli/acli"
 # The best way of working with Protocol Buffers.
 brew "bufbuild/buf/buf"
 # Nomad

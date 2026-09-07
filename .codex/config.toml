@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-6-astra"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -13,21 +13,18 @@ service_tier = "default"
 network_access = true
 
 [features]
-unified_exec = true
-apply_patch_freeform = true
-shell_snapshot = true
-multi_agent = true
+context_management.experimental_mode = true
 memories = false
-chronicle = false
-guardian_approval = true
 prevent_idle_sleep = true
-goals = true
 js_repl = false
 default_mode_request_user_input = true
 
 [memories]
 generate_memories = false
 use_memories = false
+
+[agents]
+max_concurrent_threads_per_session = 20
 
 [mcp_servers.zf-grafana-prod]
 url = "https://mcp.nixhoodwink.com/grafana/mcp"
@@ -55,8 +52,8 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.901.41123"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/grojas/.codex/plugins/cache/openai-bundled/browser/26.901.41123/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/grojas/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/grojas/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -89,7 +86,7 @@ enabled = true
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
-enabled = true
+enabled = false
 
 [plugins."visualize@openai-bundled"]
 enabled = true
