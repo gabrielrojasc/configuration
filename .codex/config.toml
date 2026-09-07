@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-6-astra"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -8,7 +8,7 @@ approvals_reviewer = "auto_review"
 approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "priority"
+service_tier = "default"
 
 [features]
 context_management.experimental_mode = true
@@ -20,6 +20,12 @@ js_repl = false
 [memories]
 generate_memories = false
 use_memories = false
+
+[sandbox_workspace_write]
+network_access = true
+
+[agents]
+max_concurrent_threads_per_session = 20
 
 [notice]
 hide_rate_limit_model_nudge = true
@@ -222,6 +228,3 @@ enabled = false
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
-
-[sandbox_workspace_write]
-network_access = true
