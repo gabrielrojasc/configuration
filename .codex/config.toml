@@ -162,6 +162,7 @@ show-context-window-usage = true
 reviewDelivery = "inline"
 mac-menu-bar-enabled = false
 dock-icon-preference = "app-default"
+open-local-url-in-target-preference = "external-browser"
 
 [desktop.open-in-target-preferences]
 global = "vscode"

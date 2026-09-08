@@ -110,7 +110,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
 - Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
 - Explicitly set model and effort for every subagent. Reassess each delegated task and follow-up by its hardest unresolved judgment; reuse agents only when both settings match.
-- Default to Luna high or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
+- Default to Luna xhigh or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
 - Use Astra medium or Opus high for unresolved design or correctness decisions. Name the decision in the delegation brief.
 - Use Astra high or Fable high for ambiguous investigations, architectural tradeoffs, or conflicting evidence.
 - Use Astra xhigh or Fable xhigh for exceptionally difficult reasoning or verification.
