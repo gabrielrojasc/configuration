@@ -54,6 +54,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 ## Service-specific operations
 
 - For Slack and the Google suite, discover and use the matching connector.
+- Default to the target environment's Grafana MCP for observability checks and Grafana links. Discover supported tools and datasources, preserve query scope, and use read-only fallbacks for gaps.
 - Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
 - Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 - For Linear work, default to the EP team unless the request or repository specifies another team.
