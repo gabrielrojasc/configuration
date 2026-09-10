@@ -9,7 +9,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 ## Approval gates
 
 - Follow every approval gate stated by me, the repository, a skill, or the active workflow. Automation and preapproved commands do not bypass them.
-- When I ask for a review, explanation, audit, diagnosis, or status report, treat the request as read-only unless I also ask for changes.
+- Determine authorization from the full conversation. Carry existing approval forward for in-scope work unless I narrow or revoke it.
+- Standalone reviews, explanations, audits, diagnoses, and status reports are read-only unless I also ask for changes. An explicitly read-only request suspends edits.
 - Get my approval before actions that speak for me, create commitments, risk disruption to others, or are costly to undo. Consider consequences a rollback cannot erase. For these actions, prepare the work first and show me the proposed action and impact for approval.
 - Deployments run through GitHub Actions. Provide the command for me to run; execute it only with my explicit approval.
 - Preserve unrelated work. Never use destructive Git commands.
@@ -23,7 +24,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
 - Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
 - Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
-- If no repository-local command or documented procedure covers a required build, test, migration, deployment, or other operational step, use only standard, bounded, read-only diagnostics. Ask before choosing an undocumented mutating path.
+- If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
 ## Communication
 
@@ -77,9 +78,13 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Coding principles
 
+- Prefer `impeccable` for UI improvements and `frontend-design` for new visual direction. Apply `emil-design-eng` when creating or changing interactive components. Skip design workflows for mechanical edits.
+
 - Before adding code, choose the simplest rung that fits: standard library, native platform features, existing dependencies, then the smallest local implementation.
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
+- Prefer standard framework hooks over configuration mutation.
+- After complexity feedback, compare minimal code sketches before rewriting; have reviewers challenge necessity, not just correctness.
 - Write comments to explain why. Keep them current when the code moves or changes.
 
 ## Workflow
@@ -108,7 +113,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
 - Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
 - Explicitly set model and effort for every subagent. Reassess each delegated task and follow-up by its hardest unresolved judgment; reuse agents only when both settings match.
-- Default to Luna high or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
+- Default to Luna xhigh or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
 - Use Astra medium or Opus high for unresolved design or correctness decisions. Name the decision in the delegation brief.
 - Use Astra high or Fable high for ambiguous investigations, architectural tradeoffs, or conflicting evidence.
 - Use Astra xhigh or Fable xhigh for exceptionally difficult reasoning or verification.
