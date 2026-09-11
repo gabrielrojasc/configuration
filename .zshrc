@@ -2,14 +2,14 @@
 source ~/.zsh_exports
 
 # path
-export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"  # for python
-export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
-export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH" # for gnu-grep
+export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for python
+export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
+export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
 export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
-export PATH="/Users/grojas/.local/bin:$PATH" # for pipx
-export PATH="$GOPATH/bin:$PATH"; # for go
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH" # for mysql-client
-export PATH="$HOME/.pub-cache/bin:$PATH" # melos
+export PATH="/Users/grojas/.local/bin:$PATH"                            # for pipx
+export PATH="$GOPATH/bin:$PATH"                                         # for go
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"                  # for mysql-client
+export PATH="$HOME/.pub-cache/bin:$PATH"                                # melos
 # export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
 
 # source aliases
@@ -28,7 +28,7 @@ bindkey -e
 # Re-activate inherited virtualenv in new tmux panes/shells when PATH
 # has not already been updated for the active environment.
 if [[ -n "$TMUX" && -n "$VIRTUAL_ENV" && -f "$VIRTUAL_ENV/bin/activate" && ":$PATH:" != *":$VIRTUAL_ENV/bin:"* ]]; then
-    source "$VIRTUAL_ENV/bin/activate"
+  source "$VIRTUAL_ENV/bin/activate"
 fi
 
 # Highlight the current autocomplete option
@@ -38,16 +38,15 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:ssh:*' hosts
 
 # autocompletion
-if type brew &>/dev/null
-then
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+if type brew &>/dev/null; then
+  FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}"
+  FPATH="$HOMEBREW_PREFIX/share/zsh-completions:${FPATH}"
 
-    autoload -Uz compinit
-    compinit
+  autoload -Uz compinit
+  compinit -u
 
-    autoload -Uz compdump
-    compdump
+  autoload -Uz compdump
+  compdump
 fi
 
 # direnv
@@ -102,4 +101,3 @@ export VT_DB_monolith_db_stag_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monoli
 export VT_DB_monolith_db_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/password"
 export VT_DB_monolith_db_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/password"
 # END VT 1PASSWORD INTEGRATION
-

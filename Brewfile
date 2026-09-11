@@ -146,8 +146,6 @@ brew "wget"
 brew "xq"
 # Additional completion definitions for zsh
 brew "zsh-completions"
-# The best way of working with Protocol Buffers.
-brew "bufbuild/buf/buf"
 # Nomad
 brew "hashicorp/tap/nomad"
 # SDKMAN! the Software Development Kit Manager
@@ -168,8 +166,6 @@ cask "flutter"
 cask "helium-browser"
 # Developer IDE or Management Environment for Neo4j instances
 cask "neo4j-desktop"
-# Control your tools with a few keystrokes
-cask "raycast"
 # GUI for streamlined Redis application development
 cask "redis-insight"
 vscode "angular.ng-template"

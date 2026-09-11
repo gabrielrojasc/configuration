@@ -80,9 +80,12 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Coding principles
 
+- Prefer `impeccable` for UI improvements and `frontend-design` for new visual direction. Apply `emil-design-eng` when creating or changing interactive components. Skip design workflows for mechanical edits.
 - Before adding code, choose the simplest rung that fits: standard library, native platform features, existing dependencies, then the smallest local implementation.
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
+- Prefer standard framework hooks over configuration mutation.
+- After complexity feedback, compare minimal code sketches before rewriting; have reviewers challenge necessity, not just correctness.
 - Write comments to explain why. Keep them current when the code moves or changes.
 
 ## Workflow
