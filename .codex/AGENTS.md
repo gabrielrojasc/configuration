@@ -109,12 +109,16 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ## Multi-agent work
 
-- Match ceremony to risk. Keep small, sequential work in the main session.
-- Delegate bounded work when the expected savings in time, cost, or risk justify the added coordination and model usage.
-- Give each sub-agent one clearly owned task, a compact deliverable, and a checkable completion criterion. Do not duplicate work.
-- Use an independent verifier when a meaningful change or risky decision would otherwise be difficult or expensive to check.
-- Explicitly set model and effort for every subagent. Reassess each delegated task and follow-up by its hardest unresolved judgment; reuse agents only when both settings match.
-- Default to Luna xhigh or Sonnet high when the approach is settled and results are checkable, including implementation, migrations, and tests.
-- Use Astra medium or Opus high for unresolved design or correctness decisions. Name the decision in the delegation brief.
-- Use Astra high or Fable high for ambiguous investigations, architectural tradeoffs, or conflicting evidence.
-- Use Astra xhigh or Fable xhigh for exceptionally difficult reasoning or verification.
+- Optimize expected value: outcome per total cost, meeting scope, correctness, and quality. Count execution, coordination, context, verification, retries, and repair. Delegate for clear gains; otherwise keep small work local. Account for delays that block other work.
+- Give each subagent one owned task, a compact deliverable, and an acceptance check. Passing tests alone does not establish correctness. Avoid duplicate execution; independent verification may overlap.
+- Read governing instructions and enough evidence to route. Size assignments by their hardest unresolved judgment, context needs, and failure impact, independently of the parent model.
+- For unresolved design, diagnosis, or correctness decisions whose errors would be costly or hard to detect, start with Astra medium in Codex or Opus 5 high in Claude. Name the judgment. Mechanical volume alone does not qualify.
+- Use Astra low selectively for bounded judgments whose errors an independent check can reliably detect. Use Astra high when consequential errors are difficult to verify, or a medium pass leaves a named reasoning problem unresolved.
+- Use Fable 5.1 high when interacting decisions or conflicting conclusions require reasoning beyond a bounded check. Start there when that difficulty is evident. Missing evidence calls for retrieval or a stated limit, not higher effort.
+- Otherwise use Luna xhigh in Codex. In Claude, use Sonnet 5 medium for mechanical work or enumerated source collection, high for implementation, open-ended collection, or bounded analysis.
+- These are starting defaults. Set supported model and effort explicitly. Raise effort one supported step when the approach remains sound but a named target needs deeper reasoning. Reconsider the model when the approach needs revision or the hardest judgment was misclassified at sizing. Lower model or effort when evidence shows the remaining work needs less. Explain material departures; report suitable substitutions for unavailable settings.
+- Fix context or tool problems before treating a failed check as a reasoning failure. After a focused attempt fails, weigh the next attempt's expected gain against its added cost. Skip intermediate settings when justified; stop unchanged retries. Carry forward evidence and failed approaches. A status-only follow-up does not justify downgrading unresolved work.
+- Reuse agents with suitable settings and useful context; otherwise adjust supported settings or start a new agent with an evidence handoff.
+- Share useful evidence directly where supported, otherwise through the coordinator. Preserve ownership; report decisions and unresolved disagreements.
+- Use an independent verifier for meaningful changes or risky decisions that are hard to check. Start it with fresh context that excludes inherited implementer discussion. Provide requirements, artifacts, and original-source access. It selects evidence and assesses before seeing the implementer's rationale or self-assessment. Size it by its own hardest claim; disclose compromised independence.
+- Prefer the current tool unless another available Codex or Claude tool offers better expected value after setup and transfer costs.

@@ -74,8 +74,6 @@ brew "jq"
 brew "just"
 # Library to render SVG files using Cairo
 brew "librsvg"
-# Run LogQL queries against a Loki server
-brew "logcli"
 # Fast, flexible, config-based cli for linting Markdown/CommonMark files
 brew "markdownlint-cli2"
 # CLI for Mermaid library

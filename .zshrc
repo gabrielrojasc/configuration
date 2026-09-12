@@ -58,9 +58,6 @@ eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 # fzf
 eval "$(fzf --zsh)"
 
-# logcli completion
-eval "$(logcli --completion-script-zsh)"
-
 # codex completion
 eval "$(codex completion zsh)"
 
