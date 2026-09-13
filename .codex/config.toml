@@ -3,7 +3,7 @@ model = "gpt-6-astra"
 model_reasoning_effort = "medium"
 web_search = "live"
 sandbox_mode = "workspace-write"
-approvals_reviewer = "auto_review"
+approvals_reviewer = "guardian_subagent"
 
 approval_policy = "on-request"
 
@@ -21,16 +21,16 @@ js_repl = false
 generate_memories = false
 use_memories = false
 
-[sandbox_workspace_write]
-network_access = true
-
 [agents]
-max_concurrent_threads_per_session = 20
+max_concurrent_threads_per_session = 40
 
 [notice]
 hide_rate_limit_model_nudge = true
 
 [apps.connector_openai_safety_settings]
+enabled = false
+
+[apps.connector_openai_hotline]
 enabled = false
 
 [plugins."github@openai-curated"]
@@ -88,7 +88,7 @@ enabled = true
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
-enabled = true
+enabled = false
 
 [plugins."unified-computer-use@openai-bundled"]
 enabled = true
@@ -131,6 +131,10 @@ enabled = false
 
 [[skills.config]]
 name = "spreadsheets:Spreadsheets"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/chronicle/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
@@ -217,8 +221,8 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.903.61454"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.903.61454/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.908.40834"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/gabriel/.codex/plugins/cache/openai-bundled/browser/26.908.40834/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/gabriel/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -230,3 +234,6 @@ enabled = false
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
+
+[sandbox_workspace_write]
+network_access = true

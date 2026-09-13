@@ -32,3 +32,6 @@ export HOMEBREW_UPGRADE_GREEDY=1
 
 # aws
 export AWS_PROFILE=familyflow
+
+# mas
+export MAS_NO_AUTO_INDEX=1

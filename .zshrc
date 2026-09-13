@@ -2,9 +2,10 @@
 source ~/.zsh_exports
 
 # path
-export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"  # for python
-export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" # for gnu-sed
+export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for python
+export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
 export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
+export PATH="$PATH:/Users/gabriel/.docker/bin"                          # for docker
 
 # source aliases
 source ~/.zsh_aliases
@@ -31,13 +32,12 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # Tab complete hosts from ssh config
 zstyle ':completion:*:ssh:*' hosts
 
-# autocompletion 
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+# autocompletion
+if type brew &>/dev/null; then
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
-  autoload -Uz compinit
-  compinit
+    autoload -Uz compinit
+    compinit
 fi
 
 # direnv

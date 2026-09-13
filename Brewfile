@@ -44,6 +44,8 @@ brew "grc"
 brew "jq"
 # Handy way to save and run project-specific commands
 brew "just"
+# Run LogQL queries against a Loki server
+brew "logcli"
 # Mac App Store command-line interface
 brew "mas"
 # 'traceroute' and 'ping' in a single tool
@@ -99,7 +101,7 @@ brew "watch"
 # Internet file retriever
 brew "wget"
 # Port of OpenAI's Whisper model in C/C++
-brew "whisper-cpp"
+brew "whisper.cpp"
 # A program for splitting your files into encrypted fragments
 brew "jesseduffield/horcrux/horcrux"
 # OpenAI's coding agent that runs in your terminal
@@ -132,6 +134,7 @@ mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Spark Desktop", id: 6445813049
 mas "Telegram", id: 747648890
+mas "Xcode", id: 497799835
 vscode "charliermarsh.ruff"
 vscode "davidlday.languagetool-linter"
 vscode "dbaeumer.vscode-eslint"
@@ -159,3 +162,4 @@ vscode "vscodevim.vim"
 go "golang.org/x/tools/gopls"
 go "google.golang.org/protobuf/cmd/protoc-gen-go"
 go "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+npm "corepack"
