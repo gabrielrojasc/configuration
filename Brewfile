@@ -164,6 +164,8 @@ cask "flutter"
 cask "helium-browser"
 # Developer IDE or Management Environment for Neo4j instances
 cask "neo4j-desktop"
+# Control your tools with a few keystrokes
+cask "raycast"
 # GUI for streamlined Redis application development
 cask "redis-insight"
 vscode "angular.ng-template"

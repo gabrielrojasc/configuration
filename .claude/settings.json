@@ -50,6 +50,7 @@
     "autoMemoryEnabled": false,
     "autoDreamEnabled": false,
     "skipWorkflowUsageWarning": true,
+    "workflowSizeGuideline": "unrestricted",
     "teammateMode": "tmux",
     "skipAutoPermissionPrompt": true
 }
