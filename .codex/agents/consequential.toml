@@ -1,0 +1,5 @@
+name = "consequential"
+description = "Use for unresolved design, diagnosis, or correctness decisions whose errors would be costly or hard to detect. A required review or mechanical volume alone does not qualify."
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+developer_instructions = "Do the task in the brief. Return findings, evidence paths, and open questions."

@@ -47,10 +47,12 @@ cp -a ~/.cursor/cli-config.json .cursor/ &
   cp "$config_tmp" .codex/config.toml
 ) &
 cp -a ~/.codex/AGENTS.md .codex/ &
+rsync --recursive --archive --delete ~/.codex/agents .codex/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &
 cp -a ~/.claude/statusline.sh .claude/ &
 cp -a ~/.claude/CLAUDE.md .claude/ &
+rsync --recursive --archive --delete ~/.claude/agents .claude/ &
 ## utils
 cp -a ~/Library/Scripts/keyboardremap Library/Scripts/keyboardremap &
 cp -a ~/.gnupg/gpg-agent.conf .gnupg &
