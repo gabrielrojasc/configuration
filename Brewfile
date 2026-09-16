@@ -44,8 +44,6 @@ brew "grc"
 brew "jq"
 # Handy way to save and run project-specific commands
 brew "just"
-# Run LogQL queries against a Loki server
-brew "logcli"
 # Mac App Store command-line interface
 brew "mas"
 # 'traceroute' and 'ping' in a single tool
