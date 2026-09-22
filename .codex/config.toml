@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-6-astra"
-model_reasoning_effort = "medium"
+model = "gpt-6-sol"
+model_reasoning_effort = "xhigh"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -25,8 +25,8 @@ use_memories = false
 
 [agents]
 max_concurrent_threads_per_session = 40
-default_subagent_model = "gpt-5.6-luna"
-default_subagent_reasoning_effort = "xhigh"
+default_subagent_model = "gpt-6-luna"
+default_subagent_reasoning_effort = "max"
 
 [mcp_servers.zf-grafana-prod]
 url = "https://mcp.nixhoodwink.com/grafana/mcp"
@@ -58,9 +58,6 @@ enabled = true
 enabled = true
 
 [plugins."presentations@openai-primary-runtime"]
-enabled = true
-
-[plugins."sites@openai-bundled"]
 enabled = true
 
 [plugins."pdf@openai-primary-runtime"]
