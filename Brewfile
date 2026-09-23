@@ -154,8 +154,6 @@ cask "1password-cli"
 cask "beekeeper-studio"
 # Terminal-based AI coding assistant
 cask "claude-code@latest"
-# AI code review CLI
-cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # UI toolkit for building applications for mobile, web and desktop

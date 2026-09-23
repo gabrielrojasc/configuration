@@ -24,12 +24,11 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
 - Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
 - Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
-- If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temp orary files. Ask before other undocumented mutations.
+- If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
 ## Communication
 
 - Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
-- I prefer extreme concision. Use the fewest words that preserve correctness and decision value; sentence fragments are fine.
 
 ## Documentation
 
@@ -87,14 +86,11 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
 - Prefer standard framework hooks over configuration mutation.
-- After complexity feedback, compare minimal code sketches before rewriting; have reviewers challenge necessity, not just correctness.
 - Write comments to explain why. Keep them current when the code moves or changes.
 
 ## Workflow
 
 - Before researching or analyzing a repository branch, run `git pull --ff-only`. Continue if it succeeds, including with unrelated local changes. If the branch has no configured upstream, continue and report that it was not synchronized. For other failures, preserve existing work, report the error, and ask.
-- Inspect existing code before modifying it.
-- Weigh alternatives before consequential design decisions.
 - When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 
 ## Tracker and implementation workspace
@@ -114,6 +110,6 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Terms: the agent handling my request is the orchestrator. Agents it spawns are subagents. A thread is one agent's conversation and context window.
 - Match the thread to the work. When a task needs repeated tool calls and a cheaper rung covers it, delegate instead of running them in the current thread.
 - Delegate only to the rung agents `bounded`, `unproven`, `consequential`, and `unruly`. Choose by description. When criteria overlap, use the rung covering the hardest unresolved judgment.
-- Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain. Name retries in the subagent task name so logs can count escalations.
+- Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain.
 - Subagents may delegate within their scope under these rules. The delegating agent integrates and verifies the results.
 - Use an independent verifier for meaningful changes or risky decisions that are hard to check. Give it fresh context, requirements, artifacts, and source access, and withhold the implementer's rationale until it has assessed. Size it by its own hardest claim.
