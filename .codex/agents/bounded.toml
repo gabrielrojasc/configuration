@@ -3,4 +3,4 @@ description = "Use for bounded work with a ready environment, an established app
 model = "gpt-6-luna"
 service_tier = "priority"
 model_reasoning_effort = "high"
-developer_instructions = "Do the task in the brief. Return findings, evidence paths, and open questions."
+developer_instructions = "Do the task in the brief. Return what you changed, the checks you ran and their results, findings with evidence paths, and open questions."
