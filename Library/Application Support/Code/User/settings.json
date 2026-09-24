@@ -117,4 +117,6 @@
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor",
   },
+  "chat.useHooks": true,
+  "chat.hookFilesLocations": {"~/.copilot/hooks": true}
 }

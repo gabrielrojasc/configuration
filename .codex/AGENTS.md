@@ -77,6 +77,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 - Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
 - Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
+- Update a branch from its base by rebasing onto it, never by merging the base in.
 
 ## Coding principles
 
@@ -91,7 +92,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Testing
 
 - Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
-- End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file, together with the command that reproduces it.
+- End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file. Record the command that reproduces it in or next to the artifact, and show it in the response only when I ask for it.
 - Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
 
 ## Workflow
