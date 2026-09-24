@@ -88,6 +88,12 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Prefer standard framework hooks over configuration mutation.
 - Write comments to explain why. Keep them current when the code moves or changes.
 
+## Testing
+
+- Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
+- End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file, together with the command that reproduces it.
+- Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
+
 ## Workflow
 
 - Before researching or analyzing a repository branch, run `git pull --ff-only`. Continue if it succeeds, including with unrelated local changes. If the branch has no configured upstream, continue and report that it was not synchronized. For other failures, preserve existing work, report the error, and ask.
