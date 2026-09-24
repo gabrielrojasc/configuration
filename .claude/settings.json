@@ -15,6 +15,7 @@
     "permissions": {
         "defaultMode": "auto"
     },
+    "model": "claude-opus-5-5",
     "enforceAvailableModels": true,
     "enableAllProjectMcpServers": false,
     "workflowSizeGuideline": "unrestricted",
@@ -23,12 +24,20 @@
         "command": "~/.claude/statusline.sh",
         "padding": 1
     },
-    "enabledPlugins": {},
+    "enabledPlugins": {
+        "nomad@zerofox-claude-plugins": true
+    },
     "extraKnownMarketplaces": {
         "openai-codex": {
             "source": {
                 "source": "github",
                 "repo": "openai/codex-plugin-cc"
+            }
+        },
+        "zerofox-claude-plugins": {
+            "source": {
+                "source": "git",
+                "url": "https://github.com/riskive/ai-tooling.git"
             }
         }
     },
@@ -50,6 +59,5 @@
     "autoDreamEnabled": false,
     "skipWorkflowUsageWarning": true,
     "teammateMode": "tmux",
-    "skipAutoPermissionPrompt": true,
-    "model": "claude-opus-5-5"
+    "skipAutoPermissionPrompt": true
 }

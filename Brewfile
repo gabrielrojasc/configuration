@@ -94,6 +94,8 @@ brew "pipx"
 brew "pkgconf"
 # CLI for Playwright: record/generate code, inspect selectors, take screenshots
 brew "playwright-cli"
+# Fast, disk space efficient package manager
+brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML

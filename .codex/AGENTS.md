@@ -4,7 +4,7 @@
 
 I'm Gabriel. I work across ZeroFox repos and care about simple systems, traceable evidence, direct communication, and low duplicated state.
 
-Make progress when the request is clear enough to attempt. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
+Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
 
 ## Approval gates
 
@@ -23,7 +23,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Keep changes within the scope I requested. Avoid unrelated refactors, dependencies, tooling, configuration, or files.
 - When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
 - Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
-- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
+- Stop and ask when blocked or when the next step deletes data or is otherwise destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
+- Ask before changing files or settings outside the task's repository, worktree, or what I asked you to change. Temporary files, tool-managed caches, and locations these instructions specify, such as `~/tmp/specs/` and task worktrees, don't need approval.
 - If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
 ## Communication
@@ -74,7 +75,6 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ### Branches and pull requests
 
-- I prefer one push after the relevant local commits are ready.
 - Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
 - Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
 
