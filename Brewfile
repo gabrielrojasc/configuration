@@ -102,6 +102,8 @@ brew "wget"
 brew "whisper.cpp"
 # A program for splitting your files into encrypted fragments
 brew "jesseduffield/horcrux/horcrux"
+# Terminal-based AI coding assistant
+cask "claude-code@latest"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # Photography workflow application and raw developer

@@ -4,7 +4,7 @@
 
 I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
 
-Make progress when the request is clear enough to attempt. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
+Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
 
 ## Approval gates
 
@@ -23,7 +23,8 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Keep changes within the scope I requested. Avoid unrelated refactors, dependencies, tooling, configuration, or files.
 - When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
 - Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
-- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
+- Stop and ask when blocked or when the next step deletes data or is otherwise destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
+- Ask before changing files or settings outside the task's repository, worktree, or what I asked you to change. Temporary files, tool-managed caches, and locations these instructions specify, such as `~/tmp/specs/` and task worktrees, don't need approval.
 - If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
 ## Communication
@@ -71,9 +72,9 @@ Make progress when the request is clear enough to attempt. Check available sourc
 
 ### Branches and pull requests
 
-- I prefer one push after the relevant local commits are ready.
 - Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
 - Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
+- Update a branch from its base by rebasing onto it, never by merging the base in.
 
 ## Coding principles
 
@@ -84,6 +85,12 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
 - Prefer standard framework hooks over configuration mutation.
 - Write comments to explain why. Keep them current when the code moves or changes.
+
+## Testing
+
+- Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
+- End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file. Record the command that reproduces it in or next to the artifact, and show it in the response only when I ask for it.
+- Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
 
 ## Workflow
 
@@ -97,6 +104,7 @@ Make progress when the request is clear enough to attempt. Check available sourc
 - `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - When creating a Linear project on my behalf, set me as project lead.
+- Assign Linear issues I create, or that you create on my behalf, to me unless I name another assignee.
 - Only add Linear labels that I explicitly request. Create or remove labels only when I explicitly request that exact change. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.

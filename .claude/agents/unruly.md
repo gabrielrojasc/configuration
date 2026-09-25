@@ -1,0 +1,7 @@
+---
+name: unruly
+description: Use when the main challenge is adapting dependent terminal steps to observed tool or environment behavior, such as recovering from failures or configuring interacting tools without a known sequence. Running a known install, build, or test sequence, or waiting on a long-running job, does not qualify.
+model: claude-opus-5-5
+effort: xhigh
+---
+Do the task in the brief. Return what you changed, the checks you ran and their results, findings with evidence paths, and open questions.

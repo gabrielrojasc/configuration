@@ -8,7 +8,7 @@ approvals_reviewer = "guardian_subagent"
 approval_policy = "on-request"
 
 notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "default"
+service_tier = "priority"
 
 [features]
 context_management.experimental_mode = true

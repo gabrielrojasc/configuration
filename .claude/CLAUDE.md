@@ -1,0 +1,1 @@
+/Users/gabriel/.codex/AGENTS.md

@@ -1,65 +1,63 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "env": {
-    "DISABLE_TELEMETRY": "1",
-    "DISABLE_ERROR_REPORTING": "1",
-    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
-    "CLAUDE_CODE_EFFORT_LEVEL": "max"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
   },
+  "autoDreamEnabled": false,
+  "autoMemoryEnabled": false,
+  "autoUpdatesChannel": "stable",
+  "cleanupPeriodDays": 3650,
+  "effortLevel": "high",
+  "enableAllProjectMcpServers": false,
+  "enabledPlugins": {
+    "nomad@zerofox-claude-plugins": true
+  },
+  "enforceAvailableModels": true,
+  "env": {
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-opus-5-5",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_TELEMETRY": "1"
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "repo": "openai/codex-plugin-cc",
+        "source": "github"
+      }
+    },
+    "zerofox-claude-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/riskive/ai-tooling.git"
+      }
+    }
+  },
+  "model": "claude-opus-5-5",
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "best",
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "printf '\\a' > /dev/tty"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "printf '\\a' > /dev/tty"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 1
-  },
   "sandbox": {
-    "enabled": false,
     "autoAllowBashIfSandboxed": true,
-    "allowUnsandboxedCommands": true,
+    "enabled": false,
+    "filesystem": {
+      "allowWrite": ["."]
+    },
     "network": {
       "allowedDomains": ["*"]
     }
   },
-  "spinnerTipsEnabled": false,
-  "alwaysThinkingEnabled": true,
-  "tui": "fullscreen",
-  "autoMemoryEnabled": true,
-  "autoDreamEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "teammateMode": "tmux",
   "skipAutoPermissionPrompt": true,
-  "auto-update": "stable"
+  "skipWorkflowUsageWarning": true,
+  "spinnerTipsEnabled": false,
+  "statusLine": {
+    "command": "~/.claude/statusline.sh",
+    "padding": 1,
+    "type": "command"
+  },
+  "teammateMode": "tmux",
+  "tui": "fullscreen",
+  "workflowSizeGuideline": "unrestricted"
 }

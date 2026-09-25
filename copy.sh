@@ -92,6 +92,8 @@ rsync --recursive --archive --delete ~/.codex/agents .codex/ &
 ## Claude
 cp -a ~/.claude/settings.json .claude/ &
 cp -a ~/.claude/statusline.sh .claude/ &
+cp -a ~/.claude/CLAUDE.md .claude/ &
+rsync --recursive --archive --delete ~/.claude/agents .claude/ &
 
 cp -a ~/dcc/justfile dcc/ &
 
