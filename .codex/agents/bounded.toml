@@ -1,6 +1,0 @@
-name = "bounded"
-description = "Use for bounded work with a ready environment, an established approach, and an independent check, such as a test, command output, or diff, that alone confirms the result. Narrow scope or a review deliverable alone does not qualify."
-model = "gpt-6-luna"
-service_tier = "priority"
-model_reasoning_effort = "high"
-developer_instructions = "Do the task in the brief. Return what you changed, the checks you ran and their results, findings with evidence paths, and open questions."

@@ -1,0 +1,6 @@
+name = "proven"
+description = "Use when an existing independent check, such as a test, command output, diff, or cited source for a lookup, alone proves the result, and the environment is ready and the approach established."
+model = "gpt-6-luna"
+service_tier = "priority"
+model_reasoning_effort = "high"
+developer_instructions = "Do the task in the brief. Return what you changed, the checks you ran and their results, findings with evidence paths, and open questions."
