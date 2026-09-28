@@ -107,6 +107,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - When creating a Linear project on my behalf, set me as project lead.
+- Assign Linear issues I create, or that you create on my behalf, to me unless I name another assignee.
 - Only add Linear labels that I explicitly request. Create or remove labels only when I explicitly request that exact change. Skill defaults do not count as approval.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
@@ -116,7 +117,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 - Terms: the agent handling my request is the orchestrator. Agents it spawns are subagents. A thread is one agent's conversation and context window.
 - Match the thread to the work. When a task needs repeated tool calls and a cheaper rung covers it, delegate instead of running them in the current thread.
-- Delegate only to the rung agents `bounded`, `unproven`, `consequential`, and `unruly`. Choose by description. When criteria overlap, use the rung covering the hardest unresolved judgment.
+- Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier.
+- Before picking a higher rung, add a check to the brief when one is cheap to build; a check can move work down a rung.
+- If `consequential` fails the same problem twice, rerun it once on the platform's most capable model.
 - Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain.
 - Subagents may delegate within their scope under these rules. The delegating agent integrates and verifies the results.
 - Use an independent verifier for meaningful changes or risky decisions that are hard to check. Give it fresh context, requirements, artifacts, and source access, and withhold the implementer's rationale until it has assessed. Size it by its own hardest claim.
