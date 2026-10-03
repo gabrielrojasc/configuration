@@ -10,7 +10,10 @@ export PATH="/Users/grojas/.local/bin:$PATH"                            # for pi
 export PATH="$GOPATH/bin:$PATH"                                         # for go
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"                  # for mysql-client
 export PATH="$HOME/.pub-cache/bin:$PATH"                                # melos
-# export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"                   # for proto
+# pnpm global CLIs; appended (not prepended) so proto's pnpm shim stays first.
+export PNPM_HOME="$HOME/Library/pnpm"
+export PATH="$PATH:$PNPM_HOME/bin"
 
 # source aliases
 source ~/.zsh_aliases
@@ -51,9 +54,6 @@ fi
 
 # direnv
 eval "$(direnv hook zsh)"
-
-# fnm
-eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 
 # fzf
 eval "$(fzf --zsh)"

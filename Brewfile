@@ -42,8 +42,6 @@ brew "fd"
 brew "fetch"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
-# Fast and simple Node.js version manager
-brew "fnm"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GitHub command-line tool
@@ -94,8 +92,6 @@ brew "pipx"
 brew "pkgconf"
 # CLI for Playwright: record/generate code, inspect selectors, take screenshots
 brew "playwright-cli"
-# Fast, disk space efficient package manager
-brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -200,6 +196,3 @@ go "github.com/cweill/gotests/gotests"
 go "github.com/josharian/impl"
 go "github.com/yeya24/promlinter/cmd/promlinter"
 go "honnef.co/go/tools/cmd/staticcheck"
-npm "@augmentcode/auggie"
-npm "@get-dx/cli"
-npm "pnpm"

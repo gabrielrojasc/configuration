@@ -1,6 +1,8 @@
-# Close any open System Preferences panes, to prevent them from overriding
+#!/usr/bin/env bash
+
+# Close any open System Settings panes, to prevent them from overriding
 # settings we’re about to change
-osascript -e 'tell application "System Preferences" to quit'
+osascript -e 'if application "System Settings" is running then tell application "System Settings" to quit'
 
 # Disable the sound effects on boot
 sudo nvram StartupMute=%01
@@ -25,7 +27,7 @@ defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 
 # Key repeat
-defaults write NSGlobalDomain KeyRepeat -int 1.8
+defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # Increase sound quality for Bluetooth headphones/headsets
@@ -53,7 +55,10 @@ defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf"
 defaults write com.apple.finder "FXRemoveOldTrashItems" -bool "true"
 
 ## Menu bar
-defaults write com.apple.menuextra.clock "DateFormat" -string "\"EEE d MMM HH:mm\""
+### ShowDate: 0 = when space allows, 1 = always, 2 = never
+defaults write com.apple.menuextra.clock "Show24Hour" -bool "true"
+defaults write com.apple.menuextra.clock "ShowDayOfWeek" -bool "true"
+defaults write com.apple.menuextra.clock "ShowDate" -int 0
 
 ## Mission control
 defaults write com.apple.dock "mru-spaces" -bool "false"

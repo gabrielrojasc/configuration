@@ -3,37 +3,24 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
+source ./utils.sh
 
 # dump brew bundle
 brew bundle dump --force &
 
-# files
-## Config files
-cp -a ~/.zprofile . &
-cp -a ~/.bash_profile . &
-cp -a ~/.gitconfig . &
-cp -a ~/.config/btop/btop.conf .config/btop/ &
-cp -a ~/fun/.gitconfig fun/ &
-cp -a ~/.screenrc . &
-cp -a ~/.tmux.conf . &
-cp -a ~/.vimrc . &
+# files and directories from the shared list in utils.sh
+for path in "${config_files[@]}"; do
+  mkdir -p "$(dirname "$path")"
+  cp -a "$HOME/$path" "$path" &
+done
+for path in "${config_dirs[@]}"; do
+  mkdir -p "$path"
+  rsync --archive --delete "$HOME/$path/" "$path/" &
+done
+
+# special cases
+## npm: drop auth lines (//registry/:_authToken=...)
 grep -vE '^//' ~/.npmrc >.npmrc &
-cp -a ~/.zshrc . &
-cp -a ~/.zsh_aliases . &
-cp -a ~/.zsh_exports . &
-cp -a ~/.zsh_functions . &
-## colima
-cp -a ~/.colima/default/colima.yaml .colima/default/ &
-## docker
-cp -a ~/.docker/config.json .docker/ &
-## VS Code
-cp -a ~/Library/Application\ Support/Code/User/settings.json Library/Application\ Support/Code/User/ &
-cp -a ~/Library/Application\ Support/Code/User/keybindings.json Library/Application\ Support/Code/User/ &
-## Cursor
-cp -a ~/Library/Application\ Support/Cursor/User/settings.json Library/Application\ Support/Cursor/User/ &
-cp -a ~/Library/Application\ Support/Cursor/User/keybindings.json Library/Application\ Support/Cursor/User/ &
-cp -a ~/.cursor/mcp.json .cursor/ &
-cp -a ~/.cursor/cli-config.json .cursor/ &
 ## Codex
 (
   config_tmp="$(mktemp .codex/config.toml.XXXXXX)"
@@ -97,22 +84,10 @@ cp -a ~/.cursor/cli-config.json .cursor/ &
   ' ~/.codex/config.toml >"$config_tmp"
   cp "$config_tmp" .codex/config.toml
 ) &
-cp -a ~/.codex/AGENTS.md .codex/ &
-rsync --recursive --archive --delete ~/.codex/agents .codex/ &
-## Claude
-cp -a ~/.claude/settings.json .claude/ &
-cp -a ~/.claude/statusline.sh .claude/ &
-cp -a ~/.claude/CLAUDE.md .claude/ &
-rsync --recursive --archive --delete ~/.claude/agents .claude/ &
-## utils
-cp -a ~/Library/Scripts/keyboardremap Library/Scripts/keyboardremap &
-cp -a ~/.gnupg/gpg-agent.conf .gnupg &
+## pnpm globals; run from ~ so a repo's pinned pnpm can't change the global dir
+pnpm -C ~ ls -g --json | jq -r '.[0].dependencies // {} | keys[]' >pnpm-globals.txt &
+## key remap app (lives outside $HOME)
+mkdir -p Applications
+rsync --archive --delete "$keyboard_remap_app" Applications/ &
 
-# directories
-rsync --recursive --archive --delete ~/.vim . &
-rsync --recursive --archive --delete ~/.config/nvim .config/ &
-rsync --recursive --archive --delete ~/.config/direnv .config/ &
-rsync --recursive --archive --delete ~/.config/htop .config/ &
-rsync --recursive --archive --delete ~/.config/raycast/commands .config/raycast/commands &
-
-wait
+wait_all
