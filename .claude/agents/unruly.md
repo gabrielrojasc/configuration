@@ -1,6 +1,6 @@
 ---
 name: unruly
-description: Use when the main challenge is adapting dependent terminal steps to observed tool or environment behavior, such as recovering from failures or configuring interacting tools without a known sequence.
+description: Use when the main challenge is adapting dependent terminal steps to observed tool or environment behavior, such as recovering from failures or configuring interacting tools without a known sequence, and for code review and review verification of non-trivial changes, including every verification round of a finding.
 model: claude-opus-5-5
 effort: high
 ---

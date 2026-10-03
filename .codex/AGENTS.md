@@ -13,7 +13,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Standalone reviews, explanations, audits, diagnoses, and status reports are read-only unless I also ask for changes. An explicitly read-only request suspends edits.
 - Get my approval before actions that speak for me, create commitments, risk disruption to others, or are costly to undo. Consider consequences a rollback cannot erase. For these actions, prepare the work first and show me the proposed action and impact for approval.
 - Deployments run through GitHub Actions. Provide the command for me to run; execute it only with my explicit approval.
-- Preserve unrelated work. Never use destructive Git commands.
+- Preserve unrelated work.
 - Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
 
 ## Core rules
@@ -65,7 +65,14 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - `~/work/brain` is my second brain. Use it when the task clearly involves my projects, areas, notes, work radar, or research wiki.
 - Treat it as read-first and privacy-sensitive. Start with targeted searches and broaden only as needed for the requested coverage. Do not change notes unless I ask, and read its local `AGENTS.md` before working there.
 
-## Git changes
+## Git
+
+- Read-only Git commands, including `fetch`, need no approval.
+- Keep commits and uncommitted changes intact. Never run a Git command that can discard them, except the force-push allowed under "Branches and pull requests".
+
+### Syncing
+
+- Before researching or analyzing a repository branch, fast-forward it to its upstream. Unrelated local changes don't block this. If the branch has no configured upstream, continue and report that it was not synchronized. If it can't fast-forward, preserve existing work, report the error, and ask.
 
 ### Commits
 
@@ -76,8 +83,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ### Branches and pull requests
 
 - Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
-- Prefix new branches with `feature/`, `bugfix/`, `hotfix/`, `release/`, or `docs/`, followed by a concise kebab-case description.
+- Name new branches with Conventional Branch: `feature/`, `bugfix/`, `hotfix/`, `release/`, or `chore/`, followed by a concise kebab-case description that starts with the lowercased issue ID when there is one.
 - Update a branch from its base by rebasing onto it, never by merging the base in.
+- After rebasing your own branch onto its base, push with `git push --force-with-lease`; never force-push otherwise.
 
 ## Coding principles
 
@@ -97,7 +105,6 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 ## Workflow
 
-- Before researching or analyzing a repository branch, run `git pull --ff-only`. Continue if it succeeds, including with unrelated local changes. If the branch has no configured upstream, continue and report that it was not synchronized. For other failures, preserve existing work, report the error, and ask.
 - When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 
 ## Tracker and implementation workspace
@@ -122,4 +129,5 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - If `consequential` fails the same problem twice, rerun it once on the platform's most capable model.
 - Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain.
 - Subagents may delegate within their scope under these rules. The delegating agent integrates and verifies the results.
+- Start a rung agent from a written brief or a short fork, not a full copy of your conversation, so the rung's configured model applies.
 - Use an independent verifier for meaningful changes or risky decisions that are hard to check. Give it fresh context, requirements, artifacts, and source access, and withhold the implementer's rationale until it has assessed. Size it by its own hardest claim.

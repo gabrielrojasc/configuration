@@ -1,5 +1,5 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "xhigh"
 web_search = "live"
 sandbox_mode = "workspace-write"
@@ -19,15 +19,17 @@ memories = false
 prevent_idle_sleep = true
 js_repl = false
 default_mode_request_user_input = true
+chronicle = false
 
 [memories]
 generate_memories = false
 use_memories = false
+disable_on_external_context = true
 
 [agents]
 max_concurrent_threads_per_session = 40
-default_subagent_model = "gpt-6-luna"
-default_subagent_reasoning_effort = "max"
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "medium"
 
 [mcp_servers.zf-grafana-prod]
 url = "https://mcp.nixhoodwink.com/grafana/mcp"
@@ -85,6 +87,9 @@ enabled = true
 [plugins."chrome@openai-bundled"]
 enabled = true
 
+[plugins."code-review@openai-bundled"]
+enabled = true
+
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
 screen_reader_detection_done = true
@@ -124,7 +129,7 @@ enabled = false
 [desktop]
 sansFontSize = 14
 codeFontSize = 12
-followUpQueueMode = "queue"
+followUpQueueMode = "steer"
 preventSleepWhileRunning = true
 keepRemoteControlAwakeWhilePluggedIn = true
 git-branch-prefix = ""
@@ -147,10 +152,11 @@ global = "vscode"
 "/Users/grojas/Library/CloudStorage/GoogleDrive-grojas@zerofox.com/My Drive/obsidian/brain" = "vscode"
 
 [desktop.appearanceLightChromeTheme]
-accent = "#339cff"
+accent = "#3a83f7"
+accentSource = "chatgpt"
 contrast = 45
 ink = "#1a1c1f"
-opaqueWindows = true
+opaqueWindows = false
 surface = "#ffffff"
 
 [desktop.appearanceLightChromeTheme.fonts]
@@ -161,7 +167,8 @@ diffRemoved = "#ba2623"
 skill = "#924ff7"
 
 [desktop.appearanceDarkChromeTheme]
-accent = "#339cff"
+accent = "#3a83f7"
+accentSource = "chatgpt"
 contrast = 60
 ink = "#ffffff"
 opaqueWindows = true
