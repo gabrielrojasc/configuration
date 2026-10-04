@@ -84,7 +84,7 @@ managed_dirs=(
     home/.codex/agents
 )
 # Files inside managed dirs that are local state, not configuration.
-ignored_names=(.DS_Store lazy-lock.json .netrwhist)
+ignored_names=(.DS_Store lazy-lock.json .netrwhist nvim.log)
 ignored_dirs=(home/.config/nvim/plugin home/.config/nvim/.nvim)
 
 # npm settings that are credentials; they stay on the machine.

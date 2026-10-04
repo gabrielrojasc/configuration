@@ -6,3 +6,4 @@
 # Local state inside mirrored directories (copy.sh skips these too).
 lazy-lock.json
 .netrwhist
+nvim.log
