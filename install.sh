@@ -226,6 +226,8 @@ function install_pnpm_globals() {
     if [[ ! -s "$list" ]]; then
         color_print "$green" 'No pnpm globals for this profile'
         record 'pnpm globals' ok 'none for this profile'
+        # Still record it, so copy can pick up globals added later.
+        if ((apply)); then save_snapshot pnpm-globals.txt "$list"; fi
         return 0
     fi
     if ! command -v pnpm >/dev/null; then
@@ -318,5 +320,9 @@ if ((apply)); then
     color_print "$green" "Done. Some macOS defaults need a logout or restart to take effect."
     if declare -F profile_manual_steps >/dev/null; then profile_manual_steps; fi
 else
-    color_print "$cyan" 'Dry run finished. Run ./install.sh --apply to make these changes.'
+    if is_in change ${summary_kinds[@]+"${summary_kinds[@]}"}; then
+        color_print "$cyan" 'Dry run finished. Run ./install.sh --apply to make these changes.'
+    else
+        color_print "$green" 'Dry run finished. Nothing to change.'
+    fi
 fi
