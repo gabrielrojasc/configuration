@@ -4,6 +4,17 @@
 
 defaults_changed=0
 
+# Run before the first write only, so a run with nothing to change leaves
+# System Settings alone.
+settings_closed=0
+function before_write() {
+    ((settings_closed)) && return 0
+    settings_closed=1
+    # Close any open System Settings panes, to prevent them from overriding
+    # settings we're about to change
+    osascript -e 'if application "System Settings" is running then tell application "System Settings" to quit'
+}
+
 # pref [-currentHost] <domain> <key> <-bool|-int|-float|-string> <value>
 function pref() {
     local host=()
@@ -21,23 +32,21 @@ function pref() {
     [[ "$current" == "$wanted" ]] && return 0
     defaults_changed=$((defaults_changed + 1))
     if ((apply)); then
+        before_write
         defaults ${host[@]+"${host[@]}"} write "$domain" "$key" "$type" "$value"
     else
         color_print "$blue" "Would set ${host[*]+${host[*]} }$domain $key: $current -> $wanted"
     fi
 }
 
-if ((apply)); then
-    # Close any open System Settings panes, to prevent them from overriding
-    # settings we're about to change
-    osascript -e 'if application "System Settings" is running then tell application "System Settings" to quit'
-fi
-
 # Disable the sound effects on boot
-if [[ "$(nvram StartupMute 2>/dev/null | cut -f2)" != "%01" ]]; then
+# Full path: nvram lives in /usr/sbin, which a minimal PATH leaves out, and a
+# failed read would look like an unset value.
+if [[ "$(/usr/sbin/nvram StartupMute 2>/dev/null | cut -f2)" != "%01" ]]; then
     defaults_changed=$((defaults_changed + 1))
     if ((apply)); then
-        sudo nvram StartupMute=%01
+        before_write
+        sudo /usr/sbin/nvram StartupMute=%01
     else
         color_print "$blue" 'Would set nvram StartupMute=%01 (mute the boot chime)'
     fi

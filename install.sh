@@ -169,30 +169,32 @@ function install_files() {
 }
 
 function install_brewfile() {
-    local brewfile="$work/Brewfile"
+    local brewfile="$work/Brewfile" missing
     render Brewfile "$brewfile"
-    if ((apply)); then
-        # Some entries (e.g. vscode extensions without the `code` CLI) can fail
-        # on a fresh machine; report and keep going.
-        if brew bundle install --file="$brewfile"; then
-            color_print "$green" 'Installed Brewfile packages'
-            record 'Homebrew packages' ok 'installed'
-        else
-            color_print "$yellow" 'Some Brewfile entries failed; see the output above'
-            record 'Homebrew packages' fail 'some entries failed'
-        fi
-        save_snapshot Brewfile "$brewfile"
-    elif brew bundle check --file="$brewfile" --no-upgrade >/dev/null 2>&1; then
+    if brew bundle check --file="$brewfile" --no-upgrade >/dev/null 2>&1; then
         color_print "$green" 'Brewfile packages are all installed'
         record 'Homebrew packages' ok 'all installed'
     else
-        local missing
         missing=$(brew bundle check --file="$brewfile" --no-upgrade --verbose 2>&1 | grep -E '^→' || true)
-        color_print "$blue" 'Would install these Brewfile entries:'
-        echo "$missing"
-        echo
-        record 'Homebrew packages' change "$(echo "$missing" | grep -c .) to install"
+        if ((apply)); then
+            # Install only what's missing; upgrading is upgrade.sh's job. Some
+            # entries (e.g. vscode extensions without the `code` CLI) can fail
+            # on a fresh machine; report and keep going.
+            if brew bundle install --file="$brewfile" --no-upgrade; then
+                color_print "$green" 'Installed missing Brewfile packages'
+                record 'Homebrew packages' ok "installed $(echo "$missing" | grep -c .)"
+            else
+                color_print "$yellow" 'Some Brewfile entries failed; see the output above'
+                record 'Homebrew packages' fail 'some entries failed'
+            fi
+        else
+            color_print "$blue" 'Would install these Brewfile entries:'
+            echo "$missing"
+            echo
+            record 'Homebrew packages' change "$(echo "$missing" | grep -c .) to install"
+        fi
     fi
+    if ((apply)); then save_snapshot Brewfile "$brewfile"; fi
 }
 
 function install_pnpm_globals() {
@@ -279,7 +281,6 @@ install_files
 if declare -F profile_install >/dev/null; then
     section "Profile steps ($DOTFILES_PROFILE)"
     profile_install
-    if ((apply)); then record 'Profile steps' ok 'ran'; else record 'Profile steps' change 'to run (see above)'; fi
 fi
 section 'pnpm globals'
 install_pnpm_globals

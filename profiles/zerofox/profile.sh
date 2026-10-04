@@ -24,23 +24,56 @@ function profile_path() {
 }
 
 function profile_install() {
-    # Key remap: login item that runs ~/Library/Scripts/keyboardremap
-    if ((apply)); then
-        rsync --archive "$profile_dir/Applications/$(basename "$keyboard_remap_app")" /Applications/
-        osascript -e "tell application \"System Events\" to if not (exists login item \"KeyboardRemap\") then make login item at end with properties {path:\"$keyboard_remap_app\", hidden:true}" >/dev/null
-        "$HOME/Library/Scripts/keyboardremap" >/dev/null
-        color_print "$green" 'Installed KeyboardRemap login item'
-    else
-        color_print "$blue" "Would install $keyboard_remap_app and its login item"
-    fi
+    install_keyboard_remap
+    install_proto_tools
+}
 
-    # Toolchain: node and pnpm from the global proto config. Run from ~ so no
-    # repo pin applies. pnpm globals install after this, in install.sh.
-    if ((apply)); then
-        (cd "$HOME" && proto install --config-mode global)
-        color_print "$green" 'Installed proto tools'
+# Key remap: login item that runs ~/Library/Scripts/keyboardremap
+function install_keyboard_remap() {
+    local app_current=0 login_item=0
+    if diff -rq "$profile_dir/Applications/$(basename "$keyboard_remap_app")" "$keyboard_remap_app" >/dev/null 2>&1; then
+        app_current=1
+    fi
+    if [[ "$(osascript -e 'tell application "System Events" to exists login item "KeyboardRemap"' 2>/dev/null)" == true ]]; then
+        login_item=1
+    fi
+    if ((app_current && login_item)); then
+        color_print "$green" 'KeyboardRemap app and login item are installed'
+        record 'KeyboardRemap' ok 'installed'
+    elif ((apply)); then
+        rsync --archive --delete "$profile_dir/Applications/$(basename "$keyboard_remap_app")" /Applications/
+        if ((!login_item)); then
+            osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$keyboard_remap_app\", hidden:true}" >/dev/null
+        fi
+        # Apply the remap now instead of waiting for the next login.
+        "$HOME/Library/Scripts/keyboardremap" >/dev/null
+        color_print "$green" 'Installed KeyboardRemap'
+        record 'KeyboardRemap' ok 'installed'
     else
-        color_print "$blue" 'Would run: proto install --config-mode global'
+        ((app_current)) || color_print "$blue" "Would copy $keyboard_remap_app"
+        ((login_item)) || color_print "$blue" 'Would add the KeyboardRemap login item'
+        record 'KeyboardRemap' change 'to install'
+    fi
+}
+
+# Toolchain: node and pnpm from the global proto config. Only missing tools
+# install here; newer versions come from upgrade.sh. Run from ~ so no repo pin
+# applies. pnpm globals install after this, in install.sh.
+function install_proto_tools() {
+    local tool missing=()
+    for tool in $(sed -n '/^\[/q; s/^\([A-Za-z0-9_-]*\)[[:space:]]*=.*/\1/p' "$profile_dir/home/.proto/.prototools"); do
+        (cd "$HOME" && proto bin "$tool" >/dev/null 2>&1) || missing+=("$tool")
+    done
+    if ((${#missing[@]} == 0)); then
+        color_print "$green" 'proto tools are installed'
+        record 'proto tools' ok 'installed'
+    elif ((apply)); then
+        (cd "$HOME" && proto install --config-mode global)
+        color_print "$green" "Installed proto tools: ${missing[*]}"
+        record 'proto tools' ok "installed ${#missing[@]}"
+    else
+        color_print "$blue" "Would install proto tools: ${missing[*]}"
+        record 'proto tools' change "${#missing[@]} to install"
     fi
 }
 
