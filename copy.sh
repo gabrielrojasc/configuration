@@ -68,8 +68,8 @@ if [[ "$mode" == resolve ]]; then
     exit 0
 fi
 
-# brew bundle dump must use this profile's brew (Workbrew on zerofox).
-if [[ -z "$only" && "$mode" != sort-only ]]; then profile_brew; fi
+# brew bundle dump and pnpm ls must use this profile's tools (Workbrew on zerofox).
+if [[ -z "$only" && "$mode" != sort-only ]]; then profile_path; fi
 
 # Scratch repo whose index holds the repo version of each changed file and
 # whose worktree holds the machine version; `git add -p` sorts the hunks.

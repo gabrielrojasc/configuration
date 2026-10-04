@@ -34,6 +34,21 @@ the steps it would run.
 `~/.codex/config.toml` is written only when it's missing, because Codex keeps
 machine state in it.
 
+## Upgrade
+
+`upgrade.sh` lists what's outdated, and upgrades it with `--apply`: Homebrew
+formulae and casks (including casks that update themselves), Mac App Store
+apps, the profile's toolchain (mise on `personal`, proto on `zerofox`), and
+pnpm globals.
+
+```sh
+./upgrade.sh          # list what's outdated
+./upgrade.sh --apply  # upgrade it
+```
+
+Toolchain upgrades stay within the versions the toolchain config asks for, such
+as `node = "lts"`.
+
 ## Copy changes back
 
 After you change configuration on a machine, run:

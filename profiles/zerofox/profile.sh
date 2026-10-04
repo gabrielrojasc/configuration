@@ -13,10 +13,14 @@ export GOPATH="${GOPATH:-$HOME/zerofox/go}"
 # Automator app that runs ~/Library/Scripts/keyboardremap at login.
 keyboard_remap_app=/Applications/KeyboardRemap.app
 
-function profile_brew() {
+# Put Workbrew and proto's tools (node, pnpm) on PATH, as the shell config does.
+function profile_path() {
     # Workbrew owns /opt/homebrew on this machine; install it before running this script.
     [[ -x /opt/workbrew/bin/brew ]] || die 'Workbrew is not installed (/opt/workbrew/bin/brew). Install it first.'
     eval "$(/opt/workbrew/bin/brew shellenv)"
+    export PROTO_HOME="$HOME/.proto"
+    export PNPM_HOME="$HOME/Library/pnpm"
+    export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH:$PNPM_HOME/bin"
 }
 
 function profile_install() {
@@ -32,14 +36,24 @@ function profile_install() {
 
     # Toolchain: node and pnpm from the global proto config. Run from ~ so no
     # repo pin applies. pnpm globals install after this, in install.sh.
-    export PROTO_HOME="$HOME/.proto"
-    export PNPM_HOME="$HOME/Library/pnpm"
-    export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH:$PNPM_HOME/bin"
     if ((apply)); then
         (cd "$HOME" && proto install --config-mode global)
         color_print "$green" 'Installed proto tools'
     else
         color_print "$blue" 'Would run: proto install --config-mode global'
+    fi
+}
+
+function profile_upgrade() {
+    # The global config asks for ranges (node lts, pnpm 12); installing again
+    # fetches the newest version in each range. Run from ~ so no repo pin applies.
+    (cd "$HOME" && proto outdated --config-mode all) || true
+    echo
+    if ((apply)); then
+        (cd "$HOME" && proto install --config-mode global)
+        record 'proto tools' ok 'installed newest in range'
+    else
+        record 'proto tools' change 'see the table above'
     fi
 }
 

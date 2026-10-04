@@ -46,31 +46,6 @@ fi
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-# One row per step for the summary table: name, kind (ok, change, fail), text.
-summary_names=()
-summary_kinds=()
-summary_texts=()
-function record() {
-    summary_names+=("$1")
-    summary_kinds+=("$2")
-    summary_texts+=("$3")
-}
-
-function print_summary() {
-    local i color
-    printf "${bold}%-20s %s${default}\n" Step Result
-    printf '%-20s %s\n' -------------------- ----------------------------------------
-    for ((i = 0; i < ${#summary_names[@]}; i++)); do
-        case "${summary_kinds[i]}" in
-            ok) color=$green ;;
-            change) color=$yellow ;;
-            *) color=$red ;;
-        esac
-        printf "%-20s ${color}%s${default}\n" "${summary_names[i]}" "${summary_texts[i]}"
-    done
-    echo
-}
-
 # run <description> <command...>: run it, or only describe it in a dry run.
 function run() {
     local description=$1
@@ -293,8 +268,8 @@ if [[ "$only" == files ]]; then
     exit 0
 fi
 
-# The profile puts the right brew on PATH (Homebrew or Workbrew).
-profile_brew
+# The profile puts its brew (Homebrew or Workbrew) and toolchain on PATH.
+profile_path
 section 'Touch ID for sudo'
 install_touch_id
 section 'Homebrew packages'

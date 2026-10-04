@@ -37,6 +37,31 @@ function file_header() {
     echo -e "${yellow}${bold}> $1${default}  $2"
 }
 
+# One row per step for the summary table: name, kind (ok, change, fail), text.
+summary_names=()
+summary_kinds=()
+summary_texts=()
+function record() {
+    summary_names+=("$1")
+    summary_kinds+=("$2")
+    summary_texts+=("$3")
+}
+
+function print_summary() {
+    local i color
+    printf "${bold}%-20s %s${default}\n" Step Result
+    printf '%-20s %s\n' -------------------- ----------------------------------------
+    for ((i = 0; i < ${#summary_names[@]}; i++)); do
+        case "${summary_kinds[i]}" in
+            ok) color=$green ;;
+            change) color=$yellow ;;
+            *) color=$red ;;
+        esac
+        printf "%-20s ${color}%s${default}\n" "${summary_names[i]}" "${summary_texts[i]}"
+    done
+    echo
+}
+
 function die() {
     color_print "$red" "$1" >&2
     exit 1
@@ -290,7 +315,9 @@ function read_machine() {
     local key=$1 out=$2 path
     case "$key" in
         Brewfile)
-            brew bundle dump --file=- >"$out"
+            # npm globals come with the toolchain (node bundles corepack); the
+            # ones that matter are in pnpm-globals.txt.
+            brew bundle dump --file=- --no-npm >"$out"
             ;;
         pnpm-globals.txt)
             command -v pnpm >/dev/null || return 1
