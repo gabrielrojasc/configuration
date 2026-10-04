@@ -3,10 +3,10 @@
 # Homebrew formulae and casks, Mac App Store apps, the profile's toolchain
 # (mise or proto), and pnpm globals.
 #
-# Usage: ./upgrade.sh [--apply]
-#   (no flags)  list what's outdated without upgrading (brew update still
-#               refreshes Homebrew's package index)
-#   --apply     upgrade everything listed
+# Usage: ./upgrade.sh [-a | --apply]
+#   (no flags)   list what's outdated without upgrading (brew update still
+#                refreshes Homebrew's package index)
+#   -a, --apply  upgrade everything listed
 
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -15,7 +15,7 @@ source ./utils.sh
 apply=0
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --apply) apply=1 ;;
+        -a | --apply) apply=1 ;;
         *) die "Unknown argument: $1 (see the usage at the top of upgrade.sh)" ;;
     esac
     shift

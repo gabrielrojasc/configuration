@@ -20,7 +20,7 @@ DOTFILES_PROFILE=zerofox ./install.sh --show .zshrc
 
 ## Install
 
-`install.sh` is a dry run unless you pass `--apply`. The dry run shows a diff
+`install.sh` is a dry run unless you pass `--apply` (or `-a`). The dry run shows a diff
 for each config file, missing Brewfile entries, macOS defaults that differ, and
 the steps it would run.
 
@@ -36,7 +36,7 @@ machine state in it.
 
 ## Upgrade
 
-`upgrade.sh` lists what's outdated, and upgrades it with `--apply`: Homebrew
+`upgrade.sh` lists what's outdated, and upgrades it with `--apply` (or `-a`): Homebrew
 formulae and casks (including casks that update themselves), Mac App Store
 apps, the profile's toolchain (mise on `personal`, proto on `zerofox`), and
 pnpm globals.

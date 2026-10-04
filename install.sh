@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Set up this machine for the profile in .env (DOTFILES_PROFILE).
 #
-# Usage: ./install.sh [--apply] [--only files] [--show <path>]
+# Usage: ./install.sh [-a | --apply] [--only files] [--show <path>]
 #   (no flags)     dry run: show every change without making it
-#   --apply        make the changes; overwritten files are backed up first
+#   -a, --apply    make the changes; overwritten files are backed up first
 #   --only files   limit to config files (no brew, pnpm, macOS defaults, hooks)
 #   --show <path>  print the rendered file for a home path or key and exit
 
@@ -16,7 +16,7 @@ only=""
 show=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --apply) apply=1 ;;
+        -a | --apply) apply=1 ;;
         --only) [[ $# -ge 2 ]] || die "--only needs a value: files"; only=$2; shift ;;
         --show) [[ $# -ge 2 ]] || die "--show needs a path"; show=$2; shift ;;
         *) die "Unknown argument: $1 (see the usage at the top of install.sh)" ;;
