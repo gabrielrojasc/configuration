@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..426c73cc98b7e6dd0e62d8fd0e277c7577c01765 100644
+index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127a6c1dd03 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -113,7 +113,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..426c73cc98b7e6dd0e62d8fd0e277c75
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -67,28 +126,53 @@ brew "tmux"
+@@ -67,28 +126,51 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -147,8 +147,6 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..426c73cc98b7e6dd0e62d8fd0e277c75
  cask "codex"
 +# UI toolkit for building applications for mobile, web and desktop
 +cask "flutter"
-+# Chromium-based web browser
-+cask "helium-browser"
 +# Developer IDE or Management Environment for Neo4j instances
 +cask "neo4j-desktop"
  # Control your tools with a few keystrokes
@@ -167,7 +165,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..426c73cc98b7e6dd0e62d8fd0e277c75
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -100,4 +184,15 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -100,4 +182,15 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"
