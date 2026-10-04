@@ -19,7 +19,7 @@ function pref() {
         case "$value" in true | TRUE | yes) wanted=1 ;; *) wanted=0 ;; esac
     fi
     [[ "$current" == "$wanted" ]] && return 0
-    defaults_changed=1
+    defaults_changed=$((defaults_changed + 1))
     if ((apply)); then
         defaults ${host[@]+"${host[@]}"} write "$domain" "$key" "$type" "$value"
     else
@@ -35,7 +35,7 @@ fi
 
 # Disable the sound effects on boot
 if [[ "$(nvram StartupMute 2>/dev/null | cut -f2)" != "%01" ]]; then
-    defaults_changed=1
+    defaults_changed=$((defaults_changed + 1))
     if ((apply)); then
         sudo nvram StartupMute=%01
     else
@@ -99,9 +99,13 @@ pref com.apple.dock mru-spaces -bool false
 
 if ((defaults_changed == 0)); then
     color_print "$green" 'macOS defaults already match'
+    record 'macOS defaults' ok 'already match'
 elif ((apply)); then
     for app in Dock SystemUIServer Finder; do
         killall "$app" &>/dev/null || true
     done
     color_print "$green" 'Set macOS defaults'
+    record 'macOS defaults' ok "set $defaults_changed"
+else
+    record 'macOS defaults' change "$defaults_changed to change"
 fi
