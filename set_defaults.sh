@@ -73,7 +73,7 @@ pref org.gpgtools.common DisableKeychain -bool true
 
 # https://macos-defaults.com/
 ## Dock
-pref com.apple.dock tilesize -int 56
+pref com.apple.dock tilesize -int 53
 pref com.apple.dock show-recents -bool false
 pref com.apple.dock mineffect -string scale
 pref com.apple.dock autohide -bool true
