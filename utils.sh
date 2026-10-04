@@ -37,7 +37,7 @@ function file_header() {
     echo -e "${yellow}${bold}> $1${default}  $2"
 }
 
-# One row per step for the summary table: name, kind (ok, change, fail), text.
+# One row per step for the summary table: name, kind (ok, change, info, fail), text.
 summary_names=()
 summary_kinds=()
 summary_texts=()
@@ -55,6 +55,7 @@ function print_summary() {
         case "${summary_kinds[i]}" in
             ok) color=$green ;;
             change) color=$yellow ;;
+            info) color=$blue ;;
             *) color=$red ;;
         esac
         printf "%-20s ${color}%s${default}\n" "${summary_names[i]}" "${summary_texts[i]}"

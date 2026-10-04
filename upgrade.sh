@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Upgrade what install.sh installed for the profile in .env (DOTFILES_PROFILE):
 # Homebrew formulae and casks, Mac App Store apps, the profile's toolchain
-# (mise or proto), and pnpm globals.
+# (mise or proto), pnpm globals, and global agent skills.
 #
 # Usage: ./upgrade.sh [-a | --apply]
 #   (no flags)   list what's outdated without upgrading (brew update still
@@ -89,6 +89,24 @@ else
         (cd "$HOME" && pnpm outdated -g) || true
         echo
         record 'pnpm globals' change "$(count "$outdated") to upgrade"
+    fi
+fi
+
+section 'Agent skills'
+if ! command -v pnpx >/dev/null; then
+    color_print "$yellow" 'pnpx is not on PATH; skipped'
+    record 'Agent skills' fail 'skipped: pnpx not on PATH'
+else
+    # Same command as the skills-update-global alias in .zsh_aliases.
+    skills=(env DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest)
+    if ((apply)); then
+        (cd "$HOME" && "${skills[@]}" update -g)
+        record 'Agent skills' ok 'updated'
+    else
+        # The skills CLI can't tell which skills are outdated without updating.
+        installed=$(cd "$HOME" && "${skills[@]}" ls -g --json 2>/dev/null | jq length)
+        color_print "$blue" "$installed global skills installed; --apply updates them to their latest versions"
+        record 'Agent skills' info "$installed installed; no outdated check, --apply updates"
     fi
 fi
 
