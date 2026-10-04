@@ -1,5 +1,0 @@
-default:
-  @just --list --unsorted
-
-memoria:
-    @./scripts/start-memoria.sh
