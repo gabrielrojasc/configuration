@@ -1,0 +1,213 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+model = "gpt-6.1-sol"
+model_reasoning_effort = "xhigh"
+web_search = "live"
+sandbox_mode = "workspace-write"
+approvals_reviewer = "guardian_subagent"
+
+approval_policy = "on-request"
+
+notify = ["/Users/gabriel/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+service_tier = "default"
+
+[features]
+context_management.experimental_mode = true
+memories = false
+prevent_idle_sleep = true
+default_mode_request_user_input = true
+js_repl = false
+chronicle = false
+
+[memories]
+generate_memories = false
+use_memories = false
+disable_on_external_context = true
+
+[agents]
+max_concurrent_threads_per_session = 40
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "medium"
+
+[apps.connector_openai_safety_settings]
+enabled = false
+
+[apps.connector_openai_hotline]
+enabled = false
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."google-drive@openai-curated"]
+enabled = true
+
+[plugins."codex-security@openai-curated"]
+enabled = true
+
+[plugins."gmail@openai-curated"]
+enabled = true
+
+[plugins."google-calendar@openai-curated"]
+enabled = true
+
+[plugins."cloudflare@openai-curated"]
+enabled = true
+
+[plugins."slack@openai-curated"]
+enabled = true
+
+[plugins."linear@openai-curated"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = false
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."code-review@openai-bundled"]
+enabled = true
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/skill-installer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/skill-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/.system/openai-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+name = "github:yeet"
+enabled = false
+
+[[skills.config]]
+name = "github:github"
+enabled = false
+
+[[skills.config]]
+name = "github:gh-fix-ci"
+enabled = false
+
+[[skills.config]]
+name = "github:gh-address-comments"
+enabled = false
+
+[[skills.config]]
+name = "presentations:Presentations"
+enabled = false
+
+[[skills.config]]
+name = "spreadsheets:Spreadsheets"
+enabled = false
+
+[[skills.config]]
+path = "/Users/gabriel/.codex/skills/chronicle/SKILL.md"
+enabled = false
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
+
+[desktop]
+usePointerCursors = false
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-branch-prefix = ""
+git-pull-request-merge-method = "squash"
+conversationDetailMode = "STEPS_COMMANDS"
+worktree-keep-count = 50
+hotkey-window-projectless-default-enabled = true
+dictationDictionary = []
+show-context-window-usage = true
+default-service-tier = "priority"
+sansFontSize = 14
+codeFontSize = 12
+dock-icon-preference = "app-default"
+followUpQueueMode = "steer"
+mac-menu-bar-enabled = false
+open-link-in-target-preference = "external-browser"
+open-local-url-in-target-preference = "external-browser"
+git-create-pull-request-as-draft = false
+
+[desktop.open-in-target-preferences]
+global = "vscode"
+
+[desktop.appearanceLightChromeTheme]
+accent = "#3a83f7"
+accentSource = "chatgpt"
+contrast = 45
+ink = "#1a1c1f"
+opaqueWindows = false
+surface = "#ffffff"
+
+[desktop.appearanceLightChromeTheme.fonts]
+
+[desktop.appearanceLightChromeTheme.semanticColors]
+diffAdded = "#00a240"
+diffRemoved = "#ba2623"
+skill = "#924ff7"
+
+[desktop.appearanceDarkChromeTheme]
+accent = "#3a83f7"
+accentSource = "chatgpt"
+contrast = 60
+ink = "#ffffff"
+opaqueWindows = true
+surface = "#181818"
+
+[desktop.appearanceDarkChromeTheme.fonts]
+
+[desktop.appearanceDarkChromeTheme.semanticColors]
+diffAdded = "#40c977"
+diffRemoved = "#fa423e"
+skill = "#ad7bf9"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
+
+[mcp_servers.grafana]
+url = "https://mcp.grafana.com/mcp"
+
+[sandbox_workspace_write]
+network_access = true

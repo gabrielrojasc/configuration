@@ -1,0 +1,212 @@
+#!/usr/bin/env bash
+# Set up this machine for the profile in .env (DOTFILES_PROFILE).
+#
+# Usage: ./install.sh [--apply] [--only files] [--show <path>]
+#   (no flags)     dry run: show every change without making it
+#   --apply        make the changes; overwritten files are backed up first
+#   --only files   limit to config files (no brew, pnpm, macOS defaults, hooks)
+#   --show <path>  print the rendered file for a home path or key and exit
+
+set -euo pipefail
+cd "$(dirname "$0")"
+source ./utils.sh
+
+apply=0
+only=""
+show=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --apply) apply=1 ;;
+        --only) [[ $# -ge 2 ]] || die "--only needs a value: files"; only=$2; shift ;;
+        --show) [[ $# -ge 2 ]] || die "--show needs a path"; show=$2; shift ;;
+        *) die "Unknown argument: $1 (see the usage at the top of install.sh)" ;;
+    esac
+    shift
+done
+[[ -z "$only" || "$only" == files ]] || die "--only supports: files"
+
+load_profile
+
+if [[ -n "$show" ]]; then
+    key=$(to_key "$show")
+    [[ -n "$(source_of "$key")" ]] || die "$key is not managed by profile $DOTFILES_PROFILE"
+    out=$(mktemp)
+    render "$key" "$out"
+    cat "$out"
+    rm -f "$out"
+    exit 0
+fi
+
+if ((apply)); then
+    color_print "$cyan" "Installing profile $DOTFILES_PROFILE"
+else
+    color_print "$cyan" "Dry run for profile $DOTFILES_PROFILE. Nothing changes until you pass --apply."
+fi
+
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+
+# run <description> <command...>: run it, or only describe it in a dry run.
+function run() {
+    local description=$1
+    shift
+    if ((apply)); then
+        "$@"
+    else
+        color_print "$blue" "Would run: $description"
+    fi
+}
+
+backup="$HOME/.config-backup/$(date +%Y%m%d-%H%M%S)"
+function backup_file() {
+    local path=$1 rel=${1#"$HOME"/}
+    [[ -e "$path" || -L "$path" ]] || return 0
+    mkdir -p "$backup/$(dirname "$rel")"
+    cp -a "$path" "$backup/$rel"
+}
+
+function install_files() {
+    local key path rendered machine="$work/machine" has_machine changed=0
+    while IFS= read -r key; do
+        [[ "$key" == home/* ]] || continue
+        path="$HOME/${key#home/}"
+        rendered="$work/rendered"
+        render "$key" "$rendered" </dev/null
+
+        # Compare in the form the repo stores (sorted JSON, no auth lines, ...)
+        # so formatting the tools apply on their own doesn't count as a change.
+        has_machine=0
+        read_machine "$key" "$machine" </dev/null 2>/dev/null && has_machine=1
+        if ((has_machine)) && [[ ! -L "$path" ]] && cmp -s "$rendered" "$machine"; then
+            ((apply)) && save_snapshot "$key" "$rendered"
+            continue
+        fi
+        if is_in "$key" "${seed_only_keys[@]}" && [[ -e "$path" ]]; then
+            color_print "$yellow" "Kept ~/${key#home/} (only written when missing; merge by hand if needed)"
+            ((apply)) && save_snapshot "$key" "$rendered"
+            continue
+        fi
+
+        changed=1
+        if ((apply)); then
+            backup_file "$path"
+            # gpg rejects a ~/.gnupg readable by others.
+            if [[ "$key" == home/.gnupg/* ]]; then mkdir -p -m 700 "$HOME/.gnupg"; fi
+            mkdir -p "$(dirname "$path")"
+            cp "$rendered" "$work/final"
+            # Credentials stay on the machine; the repo copy leaves them out.
+            if [[ ! -L "$path" ]]; then add_machine_secrets "$key" "$path" "$work/final"; fi
+            # Replace symlinks instead of writing through them (an old
+            # ~/.claude/CLAUDE.md pointed at ~/.codex/AGENTS.md).
+            if [[ -L "$path" ]]; then rm "$path"; fi
+            cat "$work/final" >"$path" # in place, so an existing file keeps its permissions
+            if [[ -x "$(source_of "$key")" ]]; then chmod +x "$path"; fi
+            save_snapshot "$key" "$rendered"
+            color_print "$green" "Wrote ~/${key#home/}"
+        elif [[ -L "$path" ]]; then
+            color_print "$yellow" "Would replace symlink ~/${key#home/} -> $(readlink "$path") with:"
+            sed 's/^/    /' "$rendered"
+        elif ((has_machine)); then
+            git --no-pager diff --no-index --color -- "$machine" "$rendered" |
+                sed -e "s#a\{0,1\}$machine#~/${key#home/} (now)#g" -e "s#b\{0,1\}$rendered#~/${key#home/} (after install)#g" || true
+        else
+            color_print "$yellow" "Would create ~/${key#home/}"
+        fi
+    done < <(list_keys)
+
+    if ((changed == 0)); then
+        color_print "$green" 'Config files already match the repo'
+    elif ((apply)) && [[ -d "$backup" ]]; then
+        color_print "$green" "Previous versions are in $backup"
+    fi
+}
+
+function install_brewfile() {
+    local brewfile="$work/Brewfile"
+    render Brewfile "$brewfile"
+    if ((apply)); then
+        # Some entries (e.g. vscode extensions without the `code` CLI) can fail
+        # on a fresh machine; report and keep going.
+        if brew bundle install --file="$brewfile"; then
+            color_print "$green" 'Installed Brewfile packages'
+        else
+            color_print "$yellow" 'Some Brewfile entries failed; see the output above'
+        fi
+        save_snapshot Brewfile "$brewfile"
+    elif brew bundle check --file="$brewfile" --no-upgrade >/dev/null 2>&1; then
+        color_print "$green" 'Brewfile packages are all installed'
+    else
+        color_print "$blue" 'Would install these Brewfile entries:'
+        brew bundle check --file="$brewfile" --no-upgrade --verbose 2>&1 | grep -E '^→' || true
+        echo
+    fi
+}
+
+function install_pnpm_globals() {
+    local list="$work/pnpm-globals.txt" installed="$work/pnpm-installed" missing
+    render pnpm-globals.txt "$list"
+    [[ -s "$list" ]] || return 0
+    if ! command -v pnpm >/dev/null; then
+        color_print "$yellow" 'pnpm is not on PATH; skipped pnpm globals'
+        return 0
+    fi
+    read_machine pnpm-globals.txt "$installed" || : >"$installed"
+    missing=$(grep -vxFf "$installed" "$list" || true)
+    if [[ -z "$missing" ]]; then
+        color_print "$green" 'pnpm globals are all installed'
+    elif ((apply)); then
+        # Run from ~ so no repo pin applies.
+        (cd "$HOME" && echo "$missing" | xargs pnpm add -g)
+        color_print "$green" 'Installed pnpm globals'
+    else
+        color_print "$blue" "Would install pnpm globals: $(echo "$missing" | tr '\n' ' ')"
+    fi
+    ((apply)) && save_snapshot pnpm-globals.txt "$list"
+    return 0
+}
+
+function install_touch_id() {
+    if grep -qs '^auth.*pam_tid\.so' /etc/pam.d/sudo_local; then
+        color_print "$green" 'Touch ID for sudo is already configured'
+    elif ((apply)); then
+        sed -e 's/^#auth/auth/' /etc/pam.d/sudo_local.template | sudo tee /etc/pam.d/sudo_local >/dev/null
+        color_print "$green" 'Configured Touch ID for sudo'
+    else
+        color_print "$blue" 'Would enable Touch ID for sudo (/etc/pam.d/sudo_local)'
+    fi
+}
+
+function install_terminal_profile() {
+    if [[ "$(defaults read com.apple.Terminal 'Default Window Settings' 2>/dev/null)" == Basic ]]; then
+        color_print "$green" 'Basic Terminal profile is already the default'
+        return 0
+    fi
+    # Opening the file imports the profile (and opens a window).
+    run 'import base/Basic.terminal and make it the default Terminal profile' \
+        sh -c 'open base/Basic.terminal &&
+            defaults write com.apple.Terminal "Default Window Settings" -string Basic &&
+            defaults write com.apple.Terminal "Startup Window Settings" -string Basic'
+}
+
+if [[ "$only" == files ]]; then
+    install_files
+    exit 0
+fi
+
+# The profile puts the right brew on PATH (Homebrew or Workbrew).
+profile_brew
+install_touch_id
+install_brewfile
+install_files
+if declare -F profile_install >/dev/null; then profile_install; fi
+install_pnpm_globals
+install_terminal_profile
+# shellcheck source=set_defaults.sh
+source ./set_defaults.sh
+
+if ((apply)); then
+    color_print "$green" "Done. Some macOS defaults need a logout or restart to take effect."
+    if declare -F profile_manual_steps >/dev/null; then profile_manual_steps; fi
+else
+    color_print "$cyan" 'Dry run finished. Run ./install.sh --apply to make these changes.'
+fi

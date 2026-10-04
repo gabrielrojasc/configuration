@@ -1,0 +1,12 @@
+diff --git a/home/.bash_profile b/home/.bash_profile
+index be507567543559163205b25515d967e78eb202cc..86a18803f0609896705ea11b9ad4f127e3519f92 100644
+--- a/home/.bash_profile
++++ b/home/.bash_profile
+@@ -1,3 +1,7 @@
++# The following lines were added by Docker Desktop to add commands to your PATH.
++export PATH="$PATH:/Users/gabriel/.docker/bin"
++# End of Docker Desktop section.
++
+ if [ -f ~/.bashrc ]; then
+ 	. ~/.bashrc
+ fi

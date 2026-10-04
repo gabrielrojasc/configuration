@@ -1,0 +1,57 @@
+# diff with word highlight
+diffh() {
+    command diff "$@" | colordiff | diff-highlight
+}
+compdef diffh=diff
+
+# Keep tmux's VIRTUAL_ENV in sync with the current shell.
+_tmux_update_virtual_env() {
+    [[ -n "$TMUX" ]] || return
+
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        tmux set-environment VIRTUAL_ENV "$VIRTUAL_ENV"
+    else
+        tmux set-environment -u VIRTUAL_ENV
+    fi
+}
+
+# map
+map() {
+    xargs -I {} $@ {}
+}
+
+# ps + grep
+psgrep() {
+    local pids
+    pids=$(pgrep -f $@)
+    if ! [[ $pids ]]; then
+        echo "No processes found." >&2
+        return 1
+    fi
+    grc ps up $(pgrep -f $@)
+}
+
+# rotate ~/tmp dir
+function rotate-tmp() {
+    rm -rf ~/tmp
+    mkdir ~/tmp
+    echo 'Succesfully rotated ~/tmp dir'
+}
+
+# Cleans local git branches excluding main, master, development, and the current branch.
+# Usage: 
+#   git-branch-clean         -> Safe delete (git branch -d)
+#   git-branch-clean -f      -> Force delete (git branch -D)
+function git-branch-clean() {
+    local flag="-d" 
+    
+    if [[ "$1" == "-f" || "$1" == "--force" ]]; then
+        flag="-D"
+        echo "🚨 Running FORCE clean..."
+    else
+        echo "🧹 Running SAFE clean..."
+    fi
+
+    git branch | grep -v "main\|master\|development\|*" | xargs git branch $flag
+    git pull --prune
+}

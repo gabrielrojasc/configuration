@@ -1,0 +1,23 @@
+diff --git a/home/Library/Application Support/Code/User/settings.json b/home/Library/Application Support/Code/User/settings.json
+index 40ca62b5b8e2cc97ba4b8754ae9d94d0dd0ea7f5..7a6bf383091507219609577123e55b8f5281dc58 100644
+--- a/home/Library/Application Support/Code/User/settings.json	
++++ b/home/Library/Application Support/Code/User/settings.json	
+@@ -105,10 +105,18 @@
+   "[go]": {
+     "editor.defaultFormatter": "golang.go",
+   },
++  "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
++  "makefile.configureOnOpen": true,
+   "[go.mod]": {
+     "editor.defaultFormatter": "golang.go",
+   },
+   "[dockerfile]": {
+     "editor.defaultFormatter": "ms-azuretools.vscode-docker",
+   },
++  "security.promptForLocalFileProtocolHandling": false,
++  "workbench.editorAssociations": {
++    "*.md": "vscode.markdown.preview.editor",
++  },
++  "chat.useHooks": true,
++  "chat.hookFilesLocations": {"~/.copilot/hooks": true}
+ }

@@ -1,0 +1,42 @@
+diff --git a/home/.zsh_exports b/home/.zsh_exports
+index 9d93d0b0bceaa57c2f24e6f2a69dbb95d85c691c..c2337449b13a825e89a7d4565789a21def01ae76 100644
+--- a/home/.zsh_exports
++++ b/home/.zsh_exports
+@@ -24,9 +24,37 @@ export LC_ALL='en_US.UTF-8'
+ # Highlight section titles in manual pages.
+ export LESS_TERMCAP_md="${yellow}"
+ 
++# ssh 1pwd sock
++export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
++
++# ui_arch_auth_github_token
++# export GITHUB_REGISTRY_READ_TOKEN="$(cat ~/.config/zerofox/ui_arch_auth_github_token)"
++export GITHUB_REGISTRY_WRITE_TOKEN=$GITHUB_REGISTRY_READ_TOKEN
++
++# go
++export GOPRIVATE="github.com/riskive"
++export GOPATH="$HOME/zerofox/go"
++export GOPROXY=https://rana.nixhoodwink.com/artifactory/api/go/go-virtual,direct
++export GOSUMDB=off
++
+ # docker
+ export COMPOSE_BAKE=true
+ 
+ # brew
+ export HOMEBREW_UPGRADE_GREEDY=1
+ 
++# mysql-client
++## compilers
++export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
++export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
++## pkgconfig
++export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
++
++# github
++export GH_PAGER=cat
++
++# vault
++export OP_VAULT_ID="p3cej3nz64dcu7ownprpdadjie"
++
++# proto
++export PROTO_HOME="$HOME/.proto"

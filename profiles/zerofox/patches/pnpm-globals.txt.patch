@@ -1,0 +1,7 @@
+diff --git a/pnpm-globals.txt b/pnpm-globals.txt
+index e69de29bb2d1d6434b8b29ae775ad8c2e48c5391..4b132b7c62269eb0be317c8cd24782e9de12e35b 100644
+--- a/pnpm-globals.txt
++++ b/pnpm-globals.txt
+@@ -0,0 +1,2 @@
++@augmentcode/auggie
++@get-dx/cli

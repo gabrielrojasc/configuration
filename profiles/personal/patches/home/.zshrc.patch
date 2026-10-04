@@ -1,0 +1,22 @@
+diff --git a/home/.zshrc b/home/.zshrc
+index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..54d67a61bc0bc50140604c38995f97b479c4e110 100644
+--- a/home/.zshrc
++++ b/home/.zshrc
+@@ -6,6 +6,7 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
+ export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
+ export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
+ export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
++export PATH="$PATH:/Users/gabriel/.docker/bin"                          # for docker
+ 
+ # source aliases
+ source ~/.zsh_aliases
+@@ -44,6 +45,9 @@ if type brew &>/dev/null; then
+   compdump
+ fi
+ 
++# mise: tool versions and .env loading
++eval "$(mise activate zsh)"
++
+ # fzf
+ eval "$(fzf --zsh)"
+ 

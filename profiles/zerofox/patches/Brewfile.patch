@@ -1,0 +1,185 @@
+diff --git a/Brewfile b/Brewfile
+index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..426c73cc98b7e6dd0e62d8fd0e277c7577c01765 100644
+--- a/Brewfile
++++ b/Brewfile
+@@ -1,4 +1,9 @@
++tap "bufbuild/buf", trusted: true
++tap "hashicorp/tap", trusted: true
++tap "sdkman/tap", trusted: true
+ tap "steipete/tap", trusted: true
++# Code searching, linting, rewriting
++brew "ast-grep"
+ # Official Amazon AWS command-line interface
+ brew "awscli"
+ # Bourne-Again SHell, a UNIX command interpreter
+@@ -7,12 +12,34 @@ brew "bash"
+ brew "bat"
+ # Resource monitor. C++ version and continuation of bashtop and bpytop
+ brew "btop"
++# Statistics utility to count lines of code
++brew "cloc"
++# Dependency manager for Cocoa projects
++brew "cocoapods"
++# Container runtimes on MacOS (and Linux) with minimal setup
++brew "colima", restart_service: :changed
+ # Color-highlighted diff(1) output
+ brew "colordiff"
++# Container Signing
++brew "cosign"
++# Top-like interface for container metrics
++brew "ctop"
+ # File comparison utilities
+ brew "diffutils"
++# Load/unload environment variables based on $PWD
++brew "direnv"
++# Pack, ship and run any application as a lightweight container
++brew "docker"
++# Docker CLI plugin for extended build capabilities with BuildKit
++brew "docker-buildx"
++# Isolated development environments using Docker
++brew "docker-compose"
++# Platform keystore credential helper for Docker
++brew "docker-credential-helper"
+ # Simple, fast and user-friendly alternative to find
+ brew "fd"
++# Download assets from a commit, branch, or tag of GitHub repositories
++brew "fetch"
+ # Play, record, convert, and stream select audio and video codecs
+ brew "ffmpeg"
+ # Command-line fuzzy finder written in Go
+@@ -27,26 +54,56 @@ brew "gnu-sed"
+ brew "gnupg"
+ # Open source programming language to build simple/reliable/efficient software
+ brew "go"
++# Task is a task runner/build tool that aims to be simpler and easier to use
++brew "go-task"
++# Fast linters runner for Go
++brew "golangci-lint"
++# CLI for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more
++brew "googleworkspace-cli"
+ # Colorize logfiles and command output
+ brew "grc"
+ # GNU grep, egrep and fgrep
+ brew "grep"
++# Add GitHub support to git on the command-line
++brew "hub"
+ # Lightweight and flexible command-line JSON processor
+ brew "jq"
+ # Handy way to save and run project-specific commands
+ brew "just"
++# Library to render SVG files using Cairo
++brew "librsvg"
++# Fast, flexible, config-based cli for linting Markdown/CommonMark files
++brew "markdownlint-cli2"
++# CLI for Mermaid library
++brew "mermaid-cli"
++# Like sed, awk, cut, join & sort for name-indexed data such as CSV
++brew "miller"
++# Open source relational database management system
++brew "mysql-client"
+ # Incremental parsing library
+ brew "tree-sitter"
+ # Ambitious Vim-fork focused on extensibility and agility
+ brew "neovim"
+ # PAM module for reattaching to the user's GUI (Aqua) session
+ brew "pam-reattach"
++# Execute binaries from Python packages in isolated environments
++brew "pipx"
++# Package compiler and linker metadata toolkit
++brew "pkgconf"
++# CLI for Playwright: record/generate code, inspect selectors, take screenshots
++brew "playwright-cli"
++# PDF rendering library (based on the xpdf-3.0 code base)
++brew "poppler"
+ # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
+ brew "prettier"
++# Pluggable multi-language version manager
++brew "proto"
+ # Interpreted, interactive, object-oriented programming language
+ brew "python@3.12"
+ # Search tool like grep and The Silver Searcher
+ brew "ripgrep"
++# Two-factor authentication on the command-line
++brew "rsc_2fa"
+ # Extremely fast Python linter, written in Rust
+ brew "ruff"
+ # Autoformat shell script source code
+@@ -59,6 +116,8 @@ brew "stylua"
+ brew "summarize"
+ # Very fast implementation of tldr in Rust
+ brew "tealdeer"
++# OpenTofu / Terraform / Terragrunt / Terramate / Atmos version manager
++brew "tenv"
+ # Text interface for Git repositories
+ brew "tig"
+ # Terminal multiplexer
+@@ -67,28 +126,53 @@ brew "tmux"
+ brew "tree"
+ # Parser generator tool
+ brew "tree-sitter-cli"
++# Extremely fast Python type checker, written in Rust
++brew "ty"
+ # Extremely fast Python package installer and resolver, written in Rust
+ brew "uv"
+ # Vi 'workalike' with many additional features
+ brew "vim"
+ # Executes a program periodically, showing output fullscreen
+ brew "watch"
++# Command-line client for WebSockets
++brew "websocat"
+ # Internet file retriever
+ brew "wget"
++# Command-line XML and HTML beautifier and content extractor
++brew "xq"
+ # Additional completion definitions for zsh
+ brew "zsh-completions"
++# Nomad
++brew "hashicorp/tap/nomad"
++# SDKMAN! the Software Development Kit Manager
++brew "sdkman/tap/sdkman-cli"
++# Command-line interface for 1Password
++cask "1password-cli"
++# Cross platform SQL editor and database management app
++cask "beekeeper-studio"
+ # Terminal-based AI coding assistant
+ cask "claude-code@latest"
+ # OpenAI's coding agent that runs in your terminal
+ cask "codex"
++# UI toolkit for building applications for mobile, web and desktop
++cask "flutter"
++# Chromium-based web browser
++cask "helium-browser"
++# Developer IDE or Management Environment for Neo4j instances
++cask "neo4j-desktop"
+ # Control your tools with a few keystrokes
+ cask "raycast"
++# GUI for streamlined Redis application development
++cask "redis-insight"
++vscode "angular.ng-template"
+ vscode "charliermarsh.ruff"
+ vscode "dbaeumer.vscode-eslint"
+ vscode "eamodio.gitlens"
+ vscode "editorconfig.editorconfig"
+ vscode "esbenp.prettier-vscode"
+ vscode "golang.go"
++vscode "hashicorp.hcl"
++vscode "hashicorp.terraform"
+ vscode "mechatroner.rainbow-csv"
+ vscode "ms-azuretools.vscode-containers"
+ vscode "ms-azuretools.vscode-docker"
+@@ -100,4 +184,15 @@ vscode "ms-vscode-remote.remote-containers"
+ vscode "ms-vscode.makefile-tools"
+ vscode "pkief.material-icon-theme"
+ vscode "vscodevim.vim"
++go "github.com/go-delve/delve/cmd/dlv"
++go "github.com/boumenot/gocover-cobertura"
++go "github.com/wadey/gocovmerge"
++go "golang.org/x/tools/cmd/goimports"
++go "github.com/golangci/golangci-lint/cmd/golangci-lint"
++go "github.com/fatih/gomodifytags"
++go "github.com/haya14busa/goplay/cmd/goplay"
+ go "golang.org/x/tools/gopls"
++go "github.com/cweill/gotests/gotests"
++go "github.com/josharian/impl"
++go "github.com/yeya24/promlinter/cmd/promlinter"
++go "honnef.co/go/tools/cmd/staticcheck"

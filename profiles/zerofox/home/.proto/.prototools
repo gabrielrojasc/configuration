@@ -1,0 +1,9 @@
+node = "lts"
+pnpm = "12"
+
+# registry.npmjs.org is blocked on the corporate network; same mirror as ~/.npmrc.
+[tools.pnpm]
+registry-url = "https://rana.nixhoodwink.com/artifactory/api/npm/eng-npm-virtual"
+
+[settings]
+auto-install = true

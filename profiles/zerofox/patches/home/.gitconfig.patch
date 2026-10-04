@@ -1,0 +1,45 @@
+diff --git a/home/.gitconfig b/home/.gitconfig
+index 5b22dec40f961f14bb4da15df842fd47b06deb6e..4666fc20422fcb33c78b431ae0565cbda5f065a0 100644
+--- a/home/.gitconfig
++++ b/home/.gitconfig
+@@ -1,10 +1,13 @@
+ [user]
+   name = Gabriel Rojas
++  email = grojas@zerofox.com
++  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICV2b6nCGMDKDTYbrHmvq1EXq4aeLV0/26wKKyYzuu3k
+ 
+ [gpg]
+   format = ssh
+ 
+ [gpg "ssh"]
++  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+   allowedSignersFile = ~/.ssh/allowed_signers
+ 
+ [color]
+@@ -18,6 +21,7 @@
+ [commit]
+   gpgsign = true
+   verbose = true
++  template = ~/.gitmessage
+ 
+ [tag]
+   gpgsign = true
+@@ -34,6 +38,9 @@
+   autoSquash = true
+   updateRefs = true
+ 
++[credential]
++  username = grojas@zerofox.com
++
+ [push]
+   autoSetupRemote = true
+   followTags = true
+@@ -72,3 +79,8 @@
+ 
+ [url "ssh://git@github.com/"]
+   insteadOf = https://github.com/
++
++[includeIf "gitdir:~/fun/"]
++  path = ~/fun/.gitconfig
++[coderabbit]
++	machineId = cli/4af56cb7af4641618e1b38a46962b616

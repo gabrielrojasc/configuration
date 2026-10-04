@@ -1,0 +1,63 @@
+diff --git a/home/.zshrc b/home/.zshrc
+index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..55f319062a84eb93d2a2978dadbbe5726bb0c2ee 100644
+--- a/home/.zshrc
++++ b/home/.zshrc
+@@ -6,6 +6,14 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
+ export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
+ export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
+ export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
++export PATH="/Users/grojas/.local/bin:$PATH"                            # for pipx
++export PATH="$GOPATH/bin:$PATH"                                         # for go
++export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"                  # for mysql-client
++export PATH="$HOME/.pub-cache/bin:$PATH"                                # melos
++export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"                   # for proto
++# pnpm global CLIs; appended (not prepended) so proto's pnpm shim stays first.
++export PNPM_HOME="$HOME/Library/pnpm"
++export PATH="$PATH:$PNPM_HOME/bin"
+ 
+ # source aliases
+ source ~/.zsh_aliases
+@@ -44,12 +52,19 @@ if type brew &>/dev/null; then
+   compdump
+ fi
+ 
++# direnv
++eval "$(direnv hook zsh)"
++
+ # fzf
+ eval "$(fzf --zsh)"
+ 
+ # codex completion
+ eval "$(codex completion zsh)"
+ 
++# sdkman
++export SDKMAN_DIR='/opt/homebrew/opt/sdkman-cli/libexec'
++[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
++
+ # prompt
+ ## Enabling and setting git info var to be used in prompt config.
+ autoload -Uz vcs_info
+@@ -63,7 +78,23 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
+ # source functions
+ source ~/.zsh_functions
+ 
++ensure_op_env SSH_PRIVATE_KEY 'op://Employee/id_ed25519/private key'
++ensure_op_env GITHUB_REGISTRY_READ_TOKEN 'op://Employee/GitHub Personal Access Token/token'
++ensure_op_env GITHUB_REGISTRY_WRITE_TOKEN 'op://Employee/GitHub Personal Access Token/token'
++
+ autoload -Uz add-zsh-hook
+ 
+ add-zsh-hook precmd vcs_info
+ add-zsh-hook precmd _tmux_update_virtual_env
++
++# BEGIN VT 1PASSWORD INTEGRATION
++export VT_VAULT_qa_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-qa/token"
++export VT_VAULT_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-prod/token"
++export VT_DB_monolith_db_prod_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/username"
++export VT_DB_monolith_db_qa_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-qa/username"
++export VT_DB_monolith_db_qa_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-qa/password"
++export VT_VAULT_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-VAULT-stag/token"
++export VT_DB_monolith_db_stag_USER="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/username"
++export VT_DB_monolith_db_stag_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-stag/password"
++export VT_DB_monolith_db_prod_TOKEN="op://p3cej3nz64dcu7ownprpdadjie/VT-DB-monolith-db-prod/password"
++# END VT 1PASSWORD INTEGRATION

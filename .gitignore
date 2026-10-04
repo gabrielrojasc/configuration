@@ -1,6 +1,8 @@
-.vim/.netrwhist
-.config/nvim/plugin
-.config/nvim/.nvim/
-.config/htop/htop_history
-lazy-lock.json
+# Selects the profile on this machine (DOTFILES_PROFILE=...).
+.env
+# Merges that need a hand fix; see ./copy.sh --resolve.
+.conflicts/
 .DS_Store
+# Local state inside mirrored directories (copy.sh skips these too).
+lazy-lock.json
+.netrwhist

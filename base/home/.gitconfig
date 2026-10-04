@@ -1,0 +1,74 @@
+[user]
+  name = Gabriel Rojas
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  allowedSignersFile = ~/.ssh/allowed_signers
+
+[color]
+  status = auto
+  branch = auto
+  interactive = auto
+  diff = auto
+  grep = auto
+  ui = auto
+
+[commit]
+  gpgsign = true
+  verbose = true
+
+[tag]
+  gpgsign = true
+  sort = version:refname
+
+[init]
+  defaultBranch = master
+
+[pull]
+  rebase = true
+
+[rebase]
+  autoStash = true
+  autoSquash = true
+  updateRefs = true
+
+[push]
+  autoSetupRemote = true
+  followTags = true
+
+[pager]
+  # Use `diff-highlight`
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
+
+[merge]
+  conflictStyle = zdiff3
+
+[rerere]
+  enabled = true
+  autoupdate = true
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+
+[branch]
+  sort = -committerdate
+
+[core]
+  excludesFile = ~/.config/git/ignore
+
+[column]
+  ui = auto
+
+[fetch]
+  pruneTags = true
+  all = true
+
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/

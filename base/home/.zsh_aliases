@@ -1,0 +1,74 @@
+# ls aliases
+alias ls='ls -GFh'
+alias ll='ls -l'
+alias la='ls -la'
+alias l='ls -C'
+
+# just
+alias j='just'
+
+# use bat instead of cat
+alias cat='bat -pp'
+
+# grep, diff with colors
+alias diff='diff --color'
+alias grep='grep --color'
+
+# nvim alias
+alias vi='nvim'
+alias vim='nvim'
+
+# git aliases
+alias gl='git log --oneline -n20'
+alias gia='git add -NA'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+alias gunwip='git log -n 1 | grep -q -F -- "--wip--" && git reset HEAD~1'
+alias gd='git diff'
+alias gdo='git diff @{upstream}'
+alias gdh='git diff HEAD'
+alias gst='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias grhu='git reset --hard @{u}'
+alias gbc='git-branch-clean'
+
+# docker compose, cmd with hyphen for completion
+alias dco='docker compose'
+alias dcb='docker compose build'
+alias dce='docker compose exec'
+alias dcps='docker compose ps'
+alias dcrestart='docker compose restart'
+alias dcrm='docker compose rm'
+alias dcr='docker compose run'
+alias dcstop='docker compose stop'
+alias dcup='docker compose up'
+alias dcupb='docker compose up --build'
+alias dcupd='docker compose up -d'
+alias dcupdb='docker compose up -d --build'
+alias dcl='docker compose logs'
+alias dclf='docker compose logs -f'
+
+# list as a tree all brew installed pkgs
+alias brewlist='brew leaves | xargs brew deps --tree'
+
+# pientry
+alias pinentry='pinentry-mac'
+
+# add time in history
+alias history='history -t"%F %R"'
+
+# clipsize
+alias clipsize="pbpaste | wc -c | awk '{ split( \"B KB MB GB TB\", v ); s=1; while( \$1>1024 ){ \$1/=1024; s++ } printf \"%.2f %s\n\", \$1, v[s] }'"
+
+# claude code
+alias cc='claude'
+
+# codex
+alias cx='codex'
+
+# skills
+alias skills='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest'
+alias skills-update-global='DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest update -g'
+
+# docker
+alias dc-stop-all='docker ps -q | while read -r id; do docker stop "$id"; done'

@@ -1,0 +1,149 @@
+diff --git a/home/.claude/settings.json b/home/.claude/settings.json
+index f093fd03df50da93fe151d3ebcc199ef309e66f4..6cc87363bf10f3bf3cf54d024c610cdfe4969593 100644
+--- a/home/.claude/settings.json
++++ b/home/.claude/settings.json
+@@ -11,6 +11,7 @@
+   "effortLevel": "high",
+   "enableAllProjectMcpServers": false,
+   "enabledPlugins": {
++    "linear@zerofox-claude-plugins": true,
+     "nomad@zerofox-claude-plugins": true
+   },
+   "enforceAvailableModels": true,
+@@ -35,7 +36,136 @@
+       }
+     }
+   },
++  "hooks": {
++    "PostToolUse": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ],
++        "matcher": "*"
++      }
++    ],
++    "PostToolUseFailure": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ],
++        "matcher": "*"
++      }
++    ],
++    "PreCompact": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ]
++      }
++    ],
++    "PreToolUse": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ],
++        "matcher": "*"
++      }
++    ],
++    "SessionEnd": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ]
++      }
++    ],
++    "SessionStart": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ]
++      }
++    ],
++    "Stop": [
++      {
++        "hooks": [
++          {
++            "args": [
++              "hook",
++              "claude",
++              "--hook-input",
++              "stdin"
++            ],
++            "command": "/usr/local/bin/aicodemetricsd",
++            "timeout": 10,
++            "type": "command"
++          }
++        ]
++      }
++    ]
++  },
+   "model": "claude-opus-5-5",
++  "modelSettings": {
++    "claude-opus-5-5": {
++      "effortLevel": "high"
++    }
++  },
+   "permissions": {
+     "defaultMode": "auto"
+   },

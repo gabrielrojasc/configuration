@@ -1,0 +1,25 @@
+diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
+index 7a61280f0c854f4cd72f5a843228501a6eca705c..2bdd974807241c1b9ca0e6fe1ab6312fbcff1b17 100644
+--- a/home/.codex/AGENTS.md
++++ b/home/.codex/AGENTS.md
+@@ -2,7 +2,7 @@
+ 
+ ## Working with me
+ 
+-I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
++I'm Gabriel. I work across ZeroFox repos and care about simple systems, traceable evidence, direct communication, and low duplicated state.
+ 
+ Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
+ 
+@@ -55,7 +55,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+ ## Service-specific operations
+ 
+ - For Slack and the Google suite, discover and use the matching connector.
+-- Use `gh` for GitHub operations.
++- Default to the target environment's Grafana MCP for observability checks and Grafana links. Discover supported tools and datasources, preserve query scope, and use read-only fallbacks for gaps.
++- Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
++- Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
++- For Linear work, default to the EP team unless the request or repository specifies another team.
+ 
+ ## Personal knowledge
+ 

@@ -1,0 +1,257 @@
+diff --git a/home/.zsh_functions b/home/.zsh_functions
+index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..31d46a980832b39d00906787daf9f646d69d6731 100644
+--- a/home/.zsh_functions
++++ b/home/.zsh_functions
+@@ -55,3 +55,252 @@ function git-branch-clean() {
+     git branch | grep -v "main\|master\|development\|*" | xargs git branch $flag
+     git pull --prune
+ }
++
++# get jwt token from specified environment (qa or stag)
++get-zf-token() {
++    local env="$1"
++
++    if [[ -z "$env" ]]; then
++        echo "Usage: get-zf-token <qa|stag>"
++        return 1
++    fi
++
++    # normalize
++    env=$(echo "$env" | tr '[:lower:]' '[:upper:]')
++
++    case "$env" in
++        QA)
++            api_host="https://api-qa.zerofox.com"
++            ;;
++        STAG)
++            api_host="https://api-stag.zerofox.com"
++            ;;
++        *)
++            echo "Invalid environment. Use 'qa' or 'stag'."
++            return 1
++            ;;
++    esac
++
++    curl --silent \
++        -d "username=grojas@zerofox.com&password=$(op read "op://Employee/ZeroFOX ${env}/password")" \
++        -X POST "${api_host}/auth/token/" \
++    | jq -r ".access"
++}
++
++# Session-level env bootstrap from 1Password:
++# reuses launchd value when available; otherwise reads once via `op read`, caches in launchd, and exports.
++# Usage: ensure_op_env VAR_NAME 'op://vault/item/field'
++ensure_op_env() {
++  [[ -o interactive ]] || return 0
++
++  local env_var="$1"
++  local op_path="$2"
++  local value=""
++
++  if [[ -z "$env_var" || -z "$op_path" ]]; then
++    print -u2 "[ERROR] Usage: ensure_op_env VAR_NAME 'op://vault/item/field'"
++    return 1
++  fi
++
++  # Already set in this shell
++  value="${(P)env_var}"
++  if [[ -n "$value" ]]; then
++    export "$env_var"
++    return 0
++  fi
++
++  # Fast path: reuse cached value from launchd
++  value="$(launchctl getenv "$env_var" 2>/dev/null)"
++
++  # Slow path: fetch once from 1Password (may fail if locked/not running)
++  if [[ -z "$value" ]]; then
++    value="$(op read "$op_path" 2>/dev/null)" || true
++    if [[ -z "$value" ]]; then
++      print -u2 "[ERROR] ${env_var} not set (1Password locked/not available). Run: op read '$op_path'"
++      return 1
++    fi
++    launchctl setenv "$env_var" "$value"
++  fi
++
++  export "$env_var=$value"
++}
++
++# Logs into all configured Codex MCP servers by parsing `codex mcp list --json`
++cx-mcp-login-all() {
++  local delay=0.1
++  local servers
++  servers=($(codex mcp list --json \
++    | jq -r '.[] 
++      | select(.enabled == true and .auth_status != "unsupported") 
++      | .name'))
++
++  if [[ ${#servers[@]} -eq 0 ]]; then
++    echo "No MCP servers found in configuration."
++    return
++  fi
++
++  for srv in "${servers[@]}"; do
++    echo "Logging in to MCP server: $srv"
++    codex mcp login "$srv"
++    echo "Waiting ${delay}s before next login..."
++    sleep "$delay"
++  done
++}
++
++# vt-db: prints params used + MySQL connection string and copies URL to clipboard; defaults to --env qa --filter monolith-db --role all-readonly
++vt-db() {
++  local env="qa"
++  local filter="monolith-db"
++  local role="all-readonly"
++
++  while [[ $# -gt 0 ]]; do
++    case "$1" in
++      --env=*)    env="${1#*=}"; shift ;;
++      --env)      env="$2"; shift 2 ;;
++      --filter=*) filter="${1#*=}"; shift ;;
++      --filter|-f) filter="$2"; shift 2 ;;
++      --role=*)   role="${1#*=}"; shift ;;
++      --role)     role="$2"; shift 2 ;;
++      *) echo "Unknown flag: $1" >&2; return 1 ;;
++    esac
++  done
++
++  echo "env=$env filter=$filter role=$role"
++
++  vt database login --env "$env" -f "$filter" --role "$role" --format json \
++  | jq -r '"mysql://\(.Username|@uri):\(.Password|@uri)@\(.Address)"' \
++  | tee >(pbcopy)
++}
++
++svg2png() {
++  local in="$1"
++  local scale="${2:-4}"
++  local out
++
++  [[ -n "$in" ]] || { echo "usage: svg2png input.svg [scale]" >&2; return 1; }
++  [[ -f "$in" ]] || { echo "file not found: $in" >&2; return 1; }
++  [[ "$in" == *.svg ]] || { echo "input must be an .svg file" >&2; return 1; }
++
++  out="${in%.svg}.png"
++  rsvg-convert -f png -b white -z "$scale" "$in" -o "$out" || return 1
++  printf '%s\n' "$out"
++}
++
++mermaid2png() {
++  local out="${1:-mermaid-$(date +%Y%m%d-%H%M%S).png}"
++  local scale="${2:-9}"
++  local background="#1e1e1e"
++  local raw mermaid tmp_input tmp_config tmp_css browser_path
++
++  raw="$(pbpaste)"
++  raw="${raw//$'\r'/}"
++
++  [[ -n "$raw" ]] || { echo "clipboard is empty" >&2; return 1; }
++  [[ "$out" == *.png ]] || out="${out}.png"
++
++  if [[ "$raw" == *'```mermaid'* ]]; then
++    mermaid="$(printf '%s\n' "$raw" | awk '
++      /^[[:space:]]*```mermaid([[:space:]].*)?$/ { in_block=1; next }
++      in_block && /^[[:space:]]*```[[:space:]]*$/ { exit }
++      in_block { print }
++    ')"
++    [[ -n "$mermaid" ]] || { echo "no mermaid block found in clipboard" >&2; return 1; }
++  else
++    mermaid="$raw"
++  fi
++
++  tmp_input="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.mmd")" || return 1
++  printf '%s\n' "$mermaid" > "$tmp_input" || { rm -f "$tmp_input"; return 1; }
++  tmp_config="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.json")" || { rm -f "$tmp_input"; return 1; }
++  tmp_css="$(mktemp "${TMPDIR:-/tmp}/mermaid2png.XXXXXX.css")" || { rm -f "$tmp_input" "$tmp_config"; return 1; }
++  printf '%s\n' \
++    '{' \
++    '  "theme": "base",' \
++    '  "themeVariables": {' \
++    '    "darkMode": true,' \
++    '    "background": "#1e1e1e",' \
++    '    "primaryColor": "#2a3950",' \
++    '    "primaryBorderColor": "#8ab4f8",' \
++    '    "primaryTextColor": "#e6edf7",' \
++    '    "secondaryColor": "#1f3d46",' \
++    '    "secondaryBorderColor": "#5fb3c4",' \
++    '    "secondaryTextColor": "#e6edf7",' \
++    '    "tertiaryColor": "#314332",' \
++    '    "tertiaryBorderColor": "#7fb77e",' \
++    '    "tertiaryTextColor": "#e6edf7",' \
++    '    "mainBkg": "#2a3950",' \
++    '    "secondBkg": "#1f3d46",' \
++    '    "tertiaryBkg": "#314332",' \
++    '    "clusterBkg": "#23313d",' \
++    '    "clusterBorder": "#5d77a3",' \
++    '    "lineColor": "#8ab4f8",' \
++    '    "defaultLinkColor": "#8ab4f8",' \
++    '    "edgeLabelBackground": "#23313d",' \
++    '    "textColor": "#e6edf7",' \
++    '    "titleColor": "#e6edf7",' \
++    '    "nodeBorder": "#8ab4f8",' \
++    '    "actorBkg": "#2a3950",' \
++    '    "actorBorder": "#8ab4f8",' \
++    '    "actorLineColor": "#5d77a3",' \
++    '    "actorTextColor": "#e6edf7",' \
++    '    "signalColor": "#8ab4f8",' \
++    '    "signalTextColor": "#e6edf7",' \
++    '    "labelBoxBkgColor": "#1f3d46",' \
++    '    "labelBoxBorderColor": "#5fb3c4",' \
++    '    "activationBkgColor": "#1f3d46",' \
++    '    "activationBorderColor": "#8ab4f8",' \
++    '    "sequenceNumberColor": "#e6edf7",' \
++    '    "noteBkgColor": "#233b44",' \
++    '    "noteBorderColor": "#5fb3c4",' \
++    '    "noteTextColor": "#e6edf7"' \
++    '  }' \
++    '}' > "$tmp_config" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
++  printf '%s\n' \
++    '.actor.actor-top, .actor.actor-bottom {' \
++    '  fill: #2a3950 !important;' \
++    '  stroke: #8ab4f8 !important;' \
++    '}' \
++    '.actor-line {' \
++    '  stroke: #5d77a3 !important;' \
++    '}' \
++    'text.actor > tspan, .messageText, .messageText tspan, .labelText, .labelText tspan, .noteText, .noteText tspan {' \
++    '  fill: #e6edf7 !important;' \
++    '}' \
++    '#sequencenumber circle {' \
++    '  fill: #1f3d46 !important;' \
++    '  stroke: #8ab4f8 !important;' \
++    '}' \
++    '.sequenceNumber {' \
++    '  fill: #e6edf7 !important;' \
++    '}' \
++    '.activation0, .activation1, .activation2 {' \
++    '  fill: #1f3d46 !important;' \
++    '  stroke: #8ab4f8 !important;' \
++    '}' > "$tmp_css" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
++
++  if [[ -z "$PUPPETEER_EXECUTABLE_PATH" ]]; then
++    for browser_path in \
++      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
++      "/Applications/Chromium.app/Contents/MacOS/Chromium" \
++      "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" \
++      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
++    do
++      [[ -x "$browser_path" ]] && break
++      browser_path=""
++    done
++  else
++    browser_path="$PUPPETEER_EXECUTABLE_PATH"
++  fi
++
++  [[ -n "$browser_path" ]] || {
++    rm -f "$tmp_input" "$tmp_config" "$tmp_css"
++    echo "no Chrome-compatible browser found for mermaid-cli" >&2
++    return 1
++  }
++
++  PUPPETEER_EXECUTABLE_PATH="$browser_path" \
++    mmdc -q -i "$tmp_input" -o "$out" -e png -s "$scale" -b "$background" -c "$tmp_config" -C "$tmp_css" || { rm -f "$tmp_input" "$tmp_config" "$tmp_css"; return 1; }
++  rm -f "$tmp_input" "$tmp_config" "$tmp_css"
++
++  printf '%s\n' "$out"
++}

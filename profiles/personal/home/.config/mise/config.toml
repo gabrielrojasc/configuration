@@ -1,0 +1,12 @@
+[tools]
+node = "lts"
+pnpm = "12"
+opentofu = "1"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node", "opentofu"]
+
+[env]
+# Load the git root's .env (or cwd's outside git). Falls back to /dev/null so
+# mise can cache the result; a missing path forces a re-check every prompt.
+_.file = "{{ exec(command='r=$(git -C \"' ~ cwd ~ '\" rev-parse --show-toplevel 2>/dev/null || echo \"' ~ cwd ~ '\"); [ -f \"$r/.env\" ] && echo \"$r/.env\" || echo /dev/null') }}"

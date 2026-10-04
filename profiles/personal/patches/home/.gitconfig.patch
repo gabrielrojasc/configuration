@@ -1,0 +1,22 @@
+diff --git a/home/.gitconfig b/home/.gitconfig
+index 5b22dec40f961f14bb4da15df842fd47b06deb6e..98330b171a194ff564fc92e523220ee3afc79de2 100644
+--- a/home/.gitconfig
++++ b/home/.gitconfig
+@@ -1,5 +1,7 @@
+ [user]
+   name = Gabriel Rojas
++  email = gabo06123@gmail.com
++  signingkey = /Users/gabriel/.ssh/id_ed25519_signing.pub
+ 
+ [gpg]
+   format = ssh
+@@ -34,6 +36,9 @@
+   autoSquash = true
+   updateRefs = true
+ 
++[credential]
++  username = gabo06123@gmail.com
++
+ [push]
+   autoSetupRemote = true
+   followTags = true
