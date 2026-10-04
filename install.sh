@@ -65,6 +65,15 @@ function backup_file() {
     cp -a "$path" "$backup/$rel"
 }
 
+# Mark the changed words inside changed lines with git's diff-highlight
+# (brew's git ships it; Workbrew uses the same prefix). A fresh Mac doesn't
+# have it yet, so plain line diffs pass through.
+diff_highlight=$(command -v diff-highlight ||
+    ls "${HOMEBREW_PREFIX:-/opt/homebrew}/share/git-core/contrib/diff-highlight/diff-highlight" 2>/dev/null || true)
+function highlight_words() {
+    if [[ -n "$diff_highlight" ]]; then "$diff_highlight"; else cat; fi
+}
+
 function install_files() {
     local key path rendered machine="$work/machine" has_machine changed=0
     while IFS= read -r key; do
@@ -107,7 +116,7 @@ function install_files() {
             color_print "$yellow" "Would replace symlink ~/${key#home/} -> $(readlink "$path") with:"
             sed 's/^/    /' "$rendered"
         elif ((has_machine)); then
-            git --no-pager diff --no-index --color -- "$machine" "$rendered" |
+            git --no-pager diff --no-index --color -- "$machine" "$rendered" | highlight_words |
                 sed -e "s#a\{0,1\}$machine#~/${key#home/} (now)#g" -e "s#b\{0,1\}$rendered#~/${key#home/} (after install)#g" || true
         else
             color_print "$yellow" "Would create ~/${key#home/}"
