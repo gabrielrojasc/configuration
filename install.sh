@@ -91,7 +91,8 @@ function install_files() {
             continue
         fi
         if is_in "$key" "${seed_only_keys[@]}" && [[ -e "$path" ]]; then
-            color_print "$yellow" "Kept ~/${key#home/} (only written when missing; merge by hand if needed)"
+            file_header "~/${key#home/}" "kept: only written when missing; merge by hand if needed"
+            echo
             ((apply)) && save_snapshot "$key" "$rendered"
             continue
         fi
@@ -111,21 +112,27 @@ function install_files() {
             cat "$work/final" >"$path" # in place, so an existing file keeps its permissions
             if [[ -x "$(source_of "$key")" ]]; then chmod +x "$path"; fi
             save_snapshot "$key" "$rendered"
-            color_print "$green" "Wrote ~/${key#home/}"
+            echo -e "${green}Wrote ~/${key#home/}${default}"
         elif [[ -L "$path" ]]; then
-            color_print "$yellow" "Would replace symlink ~/${key#home/} -> $(readlink "$path") with:"
+            file_header "~/${key#home/}" "symlink to $(readlink "$path"); would become this file:"
             sed 's/^/    /' "$rendered"
+            echo
         elif ((has_machine)); then
+            file_header "~/${key#home/}" "would change:"
+            # Drop git's diff/index/---/+++ lines; the header above names the file.
             git --no-pager diff --no-index --color -- "$machine" "$rendered" | highlight_words |
-                sed -e "s#a\{0,1\}$machine#~/${key#home/} (now)#g" -e "s#b\{0,1\}$rendered#~/${key#home/} (after install)#g" || true
+                awk 'body; /\+\+\+ /{body=1}' || true
+            echo
         else
-            color_print "$yellow" "Would create ~/${key#home/}"
+            file_header "~/${key#home/}" "would be created"
+            echo
         fi
     done < <(list_keys)
 
     if ((changed == 0)); then
         color_print "$green" 'Config files already match the repo'
     elif ((apply)) && [[ -d "$backup" ]]; then
+        echo
         color_print "$green" "Previous versions are in $backup"
     fi
 }
@@ -154,7 +161,10 @@ function install_brewfile() {
 function install_pnpm_globals() {
     local list="$work/pnpm-globals.txt" installed="$work/pnpm-installed" missing
     render pnpm-globals.txt "$list"
-    [[ -s "$list" ]] || return 0
+    if [[ ! -s "$list" ]]; then
+        color_print "$green" 'No pnpm globals for this profile'
+        return 0
+    fi
     if ! command -v pnpm >/dev/null; then
         color_print "$yellow" 'pnpm is not on PATH; skipped pnpm globals'
         return 0
@@ -198,21 +208,32 @@ function install_terminal_profile() {
 }
 
 if [[ "$only" == files ]]; then
+    section 'Config files'
     install_files
     exit 0
 fi
 
 # The profile puts the right brew on PATH (Homebrew or Workbrew).
 profile_brew
+section 'Touch ID for sudo'
 install_touch_id
+section 'Homebrew packages'
 install_brewfile
+section 'Config files'
 install_files
-if declare -F profile_install >/dev/null; then profile_install; fi
+if declare -F profile_install >/dev/null; then
+    section "Profile steps ($DOTFILES_PROFILE)"
+    profile_install
+fi
+section 'pnpm globals'
 install_pnpm_globals
+section 'Terminal profile'
 install_terminal_profile
+section 'macOS defaults'
 # shellcheck source=set_defaults.sh
 source ./set_defaults.sh
 
+section 'Summary'
 if ((apply)); then
     color_print "$green" "Done. Some macOS defaults need a logout or restart to take effect."
     if declare -F profile_manual_steps >/dev/null; then profile_manual_steps; fi

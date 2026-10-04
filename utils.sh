@@ -14,6 +14,8 @@ blue="\033[0;34m"
 cyan="\033[0;36m"
 yellow="\033[0;33m"
 red="\033[0;31m"
+# Apply after a color: the colors above start with a reset (0;).
+bold="\033[1m"
 default="\033[0m"
 
 function color_print() {
@@ -21,6 +23,18 @@ function color_print() {
     local message=$2
 
     echo -e "${color}${message}${default}\n"
+}
+
+# section <title>: a banner that separates the steps of a run.
+function section() {
+    local rule="" i
+    for ((i = ${#1}; i < 68; i++)); do rule+="="; done
+    echo -e "\n${cyan}${bold}== $1 ${rule}${default}\n"
+}
+
+# file_header <path> <note>: introduces one file's change.
+function file_header() {
+    echo -e "${yellow}${bold}> $1${default}  $2"
 }
 
 function die() {
