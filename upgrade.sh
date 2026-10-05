@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Upgrade what install.sh installed for the profile in .env (DOTFILES_PROFILE):
-# Homebrew formulae and casks, Mac App Store apps, the profile's toolchain
-# (mise or proto), pnpm globals, and global agent skills.
+# Homebrew formulae and casks (then brew cleanup --prune=all), Mac App Store
+# apps, the profile's toolchain (mise or proto), pnpm globals, and global
+# agent skills.
 #
 # Usage: ./upgrade.sh [-a | --apply]
 #   (no flags)   list what's outdated without upgrading (brew update still
@@ -49,6 +50,21 @@ else
     brew outdated --greedy --verbose
     echo
     record 'Homebrew' change "$(count "$outdated") to upgrade"
+fi
+
+section 'Homebrew cleanup'
+# --prune=all also drops cached downloads of any age, not just old versions;
+# the cost is a re-download if a package is ever reinstalled.
+freed=$(brew cleanup --prune=all --dry-run 2>&1 | sed -n 's/.*would free approximately \(.*\) of disk space.*/\1/p')
+if [[ -z "$freed" ]]; then
+    color_print "$green" 'Nothing to clean up'
+    record 'Homebrew cleanup' ok 'nothing to clean'
+elif ((apply)); then
+    brew cleanup --prune=all
+    record 'Homebrew cleanup' ok "freed about $freed"
+else
+    color_print "$blue" "Would free about $freed (old versions and cached downloads)"
+    record 'Homebrew cleanup' change "about $freed to free"
 fi
 
 if command -v mas >/dev/null; then
