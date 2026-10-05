@@ -56,12 +56,17 @@ function install_keyboard_remap() {
     fi
 }
 
+# proto_tools: tool names pinned at the top of the global proto config.
+function proto_tools() {
+    sed -n '/^\[/q; s/^\([A-Za-z0-9_-]*\)[[:space:]]*=.*/\1/p' "$profile_dir/home/.proto/.prototools"
+}
+
 # Toolchain: node and pnpm from the global proto config. Only missing tools
 # install here; newer versions come from upgrade.sh. Run from ~ so no repo pin
 # applies. pnpm globals install after this, in install.sh.
 function install_proto_tools() {
     local tool missing=()
-    for tool in $(sed -n '/^\[/q; s/^\([A-Za-z0-9_-]*\)[[:space:]]*=.*/\1/p' "$profile_dir/home/.proto/.prototools"); do
+    for tool in $(proto_tools); do
         (cd "$HOME" && proto bin "$tool" >/dev/null 2>&1) || missing+=("$tool")
     done
     if ((${#missing[@]} == 0)); then
@@ -78,12 +83,18 @@ function install_proto_tools() {
 }
 
 function profile_upgrade() {
-    # The global config asks for ranges (node lts, pnpm 12); installing again
-    # fetches the newest version in each range. Run from ~ so no repo pin applies.
+    # The global config asks for ranges (node lts, pnpm 12). Install each tool
+    # by name: a bare `proto install` resolves a range to an installed version
+    # that already satisfies it, so it never fetches a newer one. For the same
+    # reason the table's "newest" column can show the installed version.
+    # Run from ~ so no repo pin applies.
+    local tool
     (cd "$HOME" && proto outdated --config-mode all) || true
     echo
     if ((apply)); then
-        (cd "$HOME" && proto install --config-mode global)
+        for tool in $(proto_tools); do
+            (cd "$HOME" && proto install "$tool" --config-mode global)
+        done
         record 'proto tools' ok 'installed newest in range'
     else
         record 'proto tools' change 'see the table above'
