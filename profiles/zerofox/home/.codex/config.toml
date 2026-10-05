@@ -93,6 +93,7 @@ enabled = true
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
 screen_reader_detection_done = true
+resume_cwd = "session"
 
 [[skills.config]]
 path = "/Users/grojas/.codex/skills/codex-primary-runtime/slides/SKILL.md"
