@@ -158,7 +158,7 @@ alias e2e-shared='true'/" "$home/.zsh_aliases" && rm "$home/.zsh_aliases.bak"
     echo "alias e2e-preinstall='true'" >"$home/.zsh_aliases"
     in_repo ./copy.sh --only files --no-sort >"$log_dir/$profile-copy-before-install.txt"
     check "copy before install changes nothing" repo_clean || show_status
-    check "copy before install says why" grep -q 'never installed' "$log_dir/$profile-copy-before-install.txt"
+    check "copy before install says why" grep -q 'Not compared' "$log_dir/$profile-copy-before-install.txt"
 
     # A new file in a shared directory: n keeps it in the profile, y puts it in base.
     fresh "$profile"

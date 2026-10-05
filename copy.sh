@@ -219,7 +219,8 @@ if [[ -d "$work/pending" ]]; then
 fi
 
 if ((${#skipped[@]})); then
-    color_print "$yellow" "Skipped ${#skipped[@]} files never installed on this machine (run ./install.sh --apply first, so copy can tell local edits from repo changes):
+    # Only these keys were skipped; everything else above was copied.
+    color_print "$yellow" "Not compared: install.sh --apply hasn't written these on this machine yet, so copy can't tell your edits from repo changes. Every other file was copied. ./install.sh -a starts tracking them:
 $(printf '  %s\n' "${skipped[@]}")"
 fi
 
