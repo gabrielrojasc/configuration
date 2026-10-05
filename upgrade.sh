@@ -113,14 +113,12 @@ if ! command -v pnpx >/dev/null; then
     color_print "$yellow" 'pnpx is not on PATH; skipped'
     record 'Agent skills' fail 'skipped: pnpx not on PATH'
 else
-    # Same command as the skills-update-global alias in .zsh_aliases.
-    skills=(env DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest)
     if ((apply)); then
-        (cd "$HOME" && "${skills[@]}" update -g)
+        skills_cli update -g
         record 'Agent skills' ok 'updated'
     else
         # The skills CLI can't tell which skills are outdated without updating.
-        installed=$(cd "$HOME" && "${skills[@]}" ls -g --json 2>/dev/null | jq length)
+        installed=$(skills_cli ls -g --json 2>/dev/null | jq length)
         color_print "$blue" "$installed global skills installed; --apply updates them to their latest versions"
         record 'Agent skills' info "$installed installed; no outdated check, --apply updates"
     fi

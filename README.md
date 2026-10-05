@@ -41,6 +41,12 @@ removed, while a package you installed since then is only reported, so you can
 copy it with `copy.sh` first. On a machine's first install there's nothing to
 compare against, so the dry run lists every unlisted package as a removal.
 
+Global agent skills work the same way, from `agent-skills.txt`: install adds
+missing skills with `skills add -g` for the agents on the list's `agents` line,
+and removes skills the list dropped since the previous install. Skills that
+aren't in the repo are always only reported, including on a first install,
+because the repo has no earlier record of them.
+
 ## Upgrade
 
 `upgrade.sh` lists what's outdated, and upgrades it with `--apply` (or `-a`): Homebrew
@@ -104,6 +110,7 @@ base/
 ├── home/                  # mirrors $HOME; shared by every profile
 ├── Brewfile
 ├── pnpm-globals.txt
+├── agent-skills.txt       # agents line, then "<source> <skill>" per global skill
 └── Basic.terminal
 profiles/<name>/
 ├── profile.sh             # install and copy hooks

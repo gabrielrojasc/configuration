@@ -5,6 +5,7 @@
 #   home/<path>       a file that lives at $HOME/<path>
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
+#   agent-skills.txt  installed with skills add -g, read back with skills ls -g
 # A key renders from the profile's own copy if it has one, otherwise from
 # base plus the profile's patches/<key>.patch when that exists.
 
@@ -141,6 +142,7 @@ function list_keys() {
         fi
         echo Brewfile
         echo pnpm-globals.txt
+        echo agent-skills.txt
     } | while IFS= read -r key; do
         is_ignored "$key" || echo "$key"
     done | sort -u
@@ -160,7 +162,7 @@ function source_of() {
 function to_key() {
     local path=${1#"$HOME"/}
     case "$path" in
-        home/* | Brewfile | pnpm-globals.txt) echo "$path" ;;
+        home/* | Brewfile | pnpm-globals.txt | agent-skills.txt) echo "$path" ;;
         *) echo "home/$path" ;;
     esac
 }
@@ -325,6 +327,31 @@ function read_machine() {
             # Run from ~ so a repo's pinned pnpm can't change the global dir.
             pnpm -C "$HOME" ls -g --json | jq -r '.[0].dependencies // {} | keys[]' >"$out"
             ;;
+        agent-skills.txt)
+            # The CLI's lock file can't restore global skills, so the repo keeps
+            # a list instead: an "agents ..." line (where skills install; with
+            # none the CLI installs into every agent it knows), then one
+            # "<source> <skill>" line per skill. Skills without a source (put
+            # there by another tool) can't be reinstalled, so they're left out.
+            command -v pnpx >/dev/null || return 1
+            local skills lock rendered
+            skills=$(skills_cli ls -g --json 2>/dev/null | jq -r '.[] | select(.source) | "\(.source) \(.name)"' | sort) || return 1
+            # The agents line belongs to the repo: installing with explicit
+            # agents doesn't record them anywhere. Fall back to the agents last
+            # picked in the CLI (its lock file follows XDG_STATE_HOME when set).
+            rendered=$(mktemp)
+            lock="${XDG_STATE_HOME:+$XDG_STATE_HOME/skills/.skill-lock.json}"
+            [[ -n "$lock" && -f "$lock" ]] || lock="$HOME/.agents/.skill-lock.json"
+            if render agent-skills.txt "$rendered" 2>/dev/null && grep -q '^agents ' "$rendered"; then
+                grep -m 1 '^agents ' "$rendered" >"$out"
+            elif [[ -f "$lock" ]]; then
+                jq -r '(.lastSelectedAgents // []) | sort | select(length > 0) | "agents " + join(" ")' "$lock" >"$out"
+            else
+                : >"$out"
+            fi
+            rm -f "$rendered"
+            if [[ -n "$skills" ]]; then echo "$skills" >>"$out"; fi
+            ;;
         home/*)
             path="$HOME/${key#home/}"
             [[ -f "$path" ]] || return 1
@@ -367,6 +394,12 @@ function layer_of_dir() {
             return
         fi
     done
+}
+
+# skills_cli <args...>: the skills CLI, from ~ and without telemetry, as the
+# skills-update-global alias in .zsh_aliases runs it.
+function skills_cli() {
+    (cd "$HOME" && env DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest "$@")
 }
 
 function save_snapshot() {

@@ -299,6 +299,91 @@ function install_pnpm_globals() {
     return 0
 }
 
+# Add skills the list has and this machine lacks, and remove skills the list
+# dropped since the previous install. As with Homebrew, skills added on this
+# machine since then are only reported; with no previous install, unlisted
+# skills are only reported too, because the repo has no record of them yet.
+function install_agent_skills() {
+    local list="$work/agent-skills.txt" installed="$work/skills-installed" snapshot="$snapshot_dir/agent-skills.txt"
+    local agents missing extra entry source name
+    local add_args remove_names local_only
+    render agent-skills.txt "$list"
+    if ! grep -qv '^agents ' "$list"; then
+        color_print "$green" 'No agent skills for this profile'
+        record 'Agent skills' ok 'none for this profile'
+        if ((apply)); then save_snapshot agent-skills.txt "$list"; fi
+        return 0
+    fi
+    if ! command -v pnpx >/dev/null; then
+        color_print "$yellow" 'pnpx is not on PATH; skipped agent skills'
+        record 'Agent skills' fail 'skipped: pnpx not on PATH'
+        return 0
+    fi
+    agents=$(sed -n 's/^agents //p' "$list")
+    if [[ -z "$agents" ]]; then
+        color_print "$red" 'agent-skills.txt has no "agents ..." line; skipped (the CLI would install into every agent it knows)'
+        record 'Agent skills' fail 'skipped: no agents line'
+        return 0
+    fi
+    read_machine agent-skills.txt "$installed" || : >"$installed"
+    missing=$(grep -v '^agents ' "$list" | grep -vxFf <(grep -v '^agents ' "$installed") || true)
+    extra=$(grep -v '^agents ' "$installed" | grep -vxFf <(grep -v '^agents ' "$list") || true)
+
+    remove_names=()
+    local_only=()
+    while IFS= read -r entry; do
+        [[ -n "$entry" ]] || continue
+        if [[ -f "$snapshot" ]] && grep -qxF "$entry" "$snapshot"; then
+            remove_names+=("${entry#* }")
+        else
+            local_only+=("$entry")
+        fi
+    done <<<"$extra"
+    if ((${#local_only[@]})); then
+        color_print "$yellow" "Installed here but not in the repo; run ./copy.sh to keep them, or remove them by hand:
+$(printf '  %s\n' "${local_only[@]}")"
+        record 'Local skills' info "${#local_only[@]} not in the repo (see above)"
+    fi
+
+    if [[ -z "$missing" && ${#remove_names[@]} -eq 0 ]]; then
+        color_print "$green" 'Agent skills are all installed'
+        record 'Agent skills' ok 'all installed'
+    elif ((apply)); then
+        # One add per source repo, with every missing skill from it.
+        for source in $(echo "$missing" | awk 'NF { print $1 }' | sort -u); do
+            add_args=()
+            for name in $(echo "$missing" | awk -v s="$source" '$1 == s { print $2 }'); do
+                add_args+=(-s "$name")
+            done
+            for name in $agents; do
+                add_args+=(-a "$name")
+            done
+            skills_cli add "$source" -g "${add_args[@]}" -y </dev/null
+        done
+        if ((${#remove_names[@]})); then
+            skills_cli remove "${remove_names[@]}" -g -y </dev/null
+        fi
+        color_print "$green" "Agent skills: added $(count_lines "$missing"), removed ${#remove_names[@]}"
+        record 'Agent skills' ok "added $(count_lines "$missing"), removed ${#remove_names[@]}"
+    else
+        if [[ -n "$missing" ]]; then
+            color_print "$blue" "Would add these skills (for agents: $agents):
+$(echo "$missing" | sed 's/^/  /')"
+        fi
+        if ((${#remove_names[@]})); then
+            color_print "$blue" "Would remove these skills the list no longer has:
+$(printf '  %s\n' "${remove_names[@]}")"
+        fi
+        record 'Agent skills' change "$(count_lines "$missing") to add, ${#remove_names[@]} to remove"
+    fi
+    if ((apply)); then save_snapshot agent-skills.txt "$list"; fi
+}
+
+# count_lines <text>: number of non-empty lines.
+function count_lines() {
+    if [[ -z "$1" ]]; then echo 0; else echo "$1" | grep -c .; fi
+}
+
 function install_touch_id() {
     if grep -qs '^auth.*pam_tid\.so' /etc/pam.d/sudo_local; then
         color_print "$green" 'Touch ID for sudo is already configured'
@@ -353,6 +438,8 @@ if declare -F profile_install >/dev/null; then
 fi
 section 'pnpm globals'
 install_pnpm_globals
+section 'Agent skills'
+install_agent_skills
 section 'Terminal profile'
 install_terminal_profile
 section 'macOS defaults'
