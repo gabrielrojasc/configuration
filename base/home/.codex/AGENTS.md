@@ -18,6 +18,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 ## Core rules
 
+- Before you read or change files in a directory, read the agent instructions (`AGENTS.md`, `CLAUDE.md`) from its repository root down to it, and task-relevant docs such as `CONTRIBUTING.md`. Read each file to the end. When one of them drives an action or a question to me, cite the file and section.
 - I prefer the simplest correct solution and repository conventions over generic best practices.
 - Fix root causes. If only a symptom can be patched, explain why.
 - Keep changes within the scope I requested. Avoid unrelated refactors, dependencies, tooling, configuration, or files.
@@ -60,7 +61,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Personal knowledge
 
 - `~/work/brain` is my second brain. Use it when the task clearly involves my projects, areas, notes, work radar, or research wiki.
-- Treat it as read-first and privacy-sensitive. Start with targeted searches and broaden only as needed for the requested coverage. Do not change notes unless I ask, and read its local `AGENTS.md` before working there.
+- Treat it as read-first and privacy-sensitive. Start with targeted searches and broaden only as needed for the requested coverage. Do not change notes unless I ask.
 
 ## Git
 
