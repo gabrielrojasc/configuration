@@ -55,8 +55,12 @@ fi
 section 'Homebrew cleanup'
 # --prune=all also drops cached downloads of any age, not just old versions;
 # the cost is a re-download if a package is ever reinstalled.
-freed=$(brew cleanup --prune=all --dry-run 2>&1 | sed -n 's/.*would free approximately \(.*\) of disk space.*/\1/p')
-if [[ -z "$freed" ]]; then
+cleanup=$(brew cleanup --prune=all --dry-run 2>&1)
+freed=$(echo "$cleanup" | sed -n 's/.*would free approximately \(.*\) of disk space.*/\1/p')
+# brew update writes its command-list caches again on every run, so cleanup
+# always finds them; they alone don't count as something to clean.
+others=$(echo "$cleanup" | grep '^Would ' | grep -v '_commands_list\.txt ' || true)
+if [[ -z "$freed" || -z "$others" ]]; then
     color_print "$green" 'Nothing to clean up'
     record 'Homebrew cleanup' ok 'nothing to clean'
 elif ((apply)); then

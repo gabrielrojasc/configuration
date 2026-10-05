@@ -82,22 +82,47 @@ function install_proto_tools() {
     fi
 }
 
+# proto_targets: "<tool> <version>" lines, the newest version in each range of
+# the global config (node lts, pnpm 12). proto resolves a range to an installed
+# version when one matches, even in `proto outdated`'s "newest" column, so
+# resolve in an empty proto home where nothing is installed.
+function proto_targets() {
+    local home json status=0
+    home=$(mktemp -d) || return
+    # One chain, because callers run this under `if !`, where set -e is off.
+    json=$(cp "$PROTO_HOME/.prototools" "$home/" &&
+        ln -s "$PROTO_HOME/plugins" "$home/plugins" &&
+        cd "$HOME" && PROTO_HOME="$home" proto outdated --config-mode global --json) || status=$?
+    rm -rf "$home"
+    if ((status)); then return "$status"; fi
+    echo "$json" | jq -r 'to_entries[] | "\(.key) \(.value.current_version)"'
+}
+
 function profile_upgrade() {
-    # The global config asks for ranges (node lts, pnpm 12). Install each tool
-    # by name: a bare `proto install` resolves a range to an installed version
-    # that already satisfies it, so it never fetches a newer one. For the same
-    # reason the table's "newest" column can show the installed version.
     # Run from ~ so no repo pin applies.
-    local tool
-    (cd "$HOME" && proto outdated --config-mode all) || true
-    echo
-    if ((apply)); then
-        for tool in $(proto_tools); do
-            (cd "$HOME" && proto install "$tool" --config-mode global)
+    local targets tool version entry pending=()
+    if ! targets=$(proto_targets); then
+        color_print "$yellow" 'Could not resolve the newest proto tool versions; skipped'
+        record 'proto tools' fail 'skipped: could not resolve versions'
+        return 0
+    fi
+    while read -r tool version; do
+        if [[ -z "$tool" ]]; then continue; fi
+        (cd "$HOME" && proto bin "$tool" "$version" >/dev/null 2>&1 </dev/null) || pending+=("$tool $version")
+    done <<<"$targets"
+    if ((${#pending[@]} == 0)); then
+        color_print "$green" 'proto tools are up to date'
+        record 'proto tools' ok 'up to date'
+    elif ((apply)); then
+        for entry in "${pending[@]}"; do
+            (cd "$HOME" && proto install "${entry% *}" "${entry#* }" --config-mode global)
         done
-        record 'proto tools' ok 'installed newest in range'
+        record 'proto tools' ok "upgraded ${#pending[@]}"
     else
-        record 'proto tools' change 'see the table above'
+        color_print "$blue" 'Would install these proto tool versions:'
+        printf '  %s\n' "${pending[@]}"
+        echo
+        record 'proto tools' change "${#pending[@]} to upgrade"
     fi
 }
 
