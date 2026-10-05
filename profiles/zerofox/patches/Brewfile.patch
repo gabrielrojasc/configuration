@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127a6c1dd03 100644
+index 23b3eac9dff77a3bd225eca8caa61767baed8735..6a75abcab4402cabfbbfef4c6792b1404364affa 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -47,7 +47,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127
  # Play, record, convert, and stream select audio and video codecs
  brew "ffmpeg"
  # Command-line fuzzy finder written in Go
-@@ -27,26 +54,56 @@ brew "gnu-sed"
+@@ -27,24 +54,54 @@ brew "gnu-sed"
  brew "gnupg"
  # Open source programming language to build simple/reliable/efficient software
  brew "go"
@@ -65,8 +65,6 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127
 +brew "hub"
  # Lightweight and flexible command-line JSON processor
  brew "jq"
- # Handy way to save and run project-specific commands
- brew "just"
 +# Library to render SVG files using Cairo
 +brew "librsvg"
 +# Fast, flexible, config-based cli for linting Markdown/CommonMark files
@@ -104,7 +102,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127
  # Extremely fast Python linter, written in Rust
  brew "ruff"
  # Autoformat shell script source code
-@@ -59,6 +116,8 @@ brew "stylua"
+@@ -57,6 +114,8 @@ brew "stylua"
  brew "summarize"
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
@@ -113,7 +111,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -67,28 +126,51 @@ brew "tmux"
+@@ -65,28 +124,51 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -165,7 +163,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..742545352dfa1817d56ec59e74aa8127
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -100,4 +182,15 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -98,4 +180,15 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"

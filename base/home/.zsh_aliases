@@ -4,9 +4,6 @@ alias ll='ls -l'
 alias la='ls -la'
 alias l='ls -C'
 
-# just
-alias j='just'
-
 # use bat instead of cat
 alias cat='bat -pp'
 

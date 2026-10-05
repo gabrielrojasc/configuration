@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3e96b891f 100644
+index 23b3eac9dff77a3bd225eca8caa61767baed8735..6c3cd86d20e08d80a3882c0388c47bd3e96b891f 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -7,10 +7,14 @@ brew "bash"
@@ -17,12 +17,10 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  # Simple, fast and user-friendly alternative to find
  brew "fd"
  # Play, record, convert, and stream select audio and video codecs
-@@ -33,8 +37,12 @@ brew "grc"
+@@ -33,6 +37,12 @@ brew "grc"
  brew "grep"
  # Lightweight and flexible command-line JSON processor
  brew "jq"
--# Handy way to save and run project-specific commands
--brew "just"
 +# Mac App Store command-line interface
 +brew "mas"
 +# Polyglot runtime manager (asdf rust clone)
@@ -32,7 +30,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  # Incremental parsing library
  brew "tree-sitter"
  # Ambitious Vim-fork focused on extensibility and agility
-@@ -43,6 +51,8 @@ brew "neovim"
+@@ -41,6 +51,8 @@ brew "neovim"
  brew "pam-reattach"
  # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
  brew "prettier"
@@ -41,7 +39,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  # Interpreted, interactive, object-oriented programming language
  brew "python@3.12"
  # Search tool like grep and The Silver Searcher
-@@ -57,6 +67,8 @@ brew "speedtest-cli"
+@@ -55,6 +67,8 @@ brew "speedtest-cli"
  brew "stylua"
  # Multi-modal AI tool to extract and summarize content
  brew "summarize"
@@ -50,7 +48,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
  # Text interface for Git repositories
-@@ -67,6 +79,8 @@ brew "tmux"
+@@ -65,6 +79,8 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -59,7 +57,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  # Extremely fast Python package installer and resolver, written in Rust
  brew "uv"
  # Vi 'workalike' with many additional features
-@@ -75,20 +89,52 @@ brew "vim"
+@@ -73,20 +89,52 @@ brew "vim"
  brew "watch"
  # Internet file retriever
  brew "wget"
@@ -112,7 +110,7 @@ index 6d11f8d94bd8351ea8f9045f9d112aae3f9e642f..6c3cd86d20e08d80a3882c0388c47bd3
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -98,6 +144,12 @@ vscode "ms-python.vscode-pylance"
+@@ -96,6 +144,12 @@ vscode "ms-python.vscode-pylance"
  vscode "ms-python.vscode-python-envs"
  vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
