@@ -1,5 +1,5 @@
 diff --git a/home/.claude/settings.json b/home/.claude/settings.json
-index f093fd03df50da93fe151d3ebcc199ef309e66f4..6cc87363bf10f3bf3cf54d024c610cdfe4969593 100644
+index 7f0d8990eaa547621f162d942df94100b7f94040..f773054553c6e783d28e0f4938d9db169aae559c 100644
 --- a/home/.claude/settings.json
 +++ b/home/.claude/settings.json
 @@ -11,6 +11,7 @@
@@ -145,5 +145,5 @@ index f093fd03df50da93fe151d3ebcc199ef309e66f4..6cc87363bf10f3bf3cf54d024c610cdf
 +    }
 +  },
    "permissions": {
-     "defaultMode": "auto"
-   },
+     "allow": [
+       "Bash(codex exec:*)"

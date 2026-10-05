@@ -37,6 +37,9 @@
   },
   "model": "claude-opus-5-5",
   "permissions": {
+    "allow": [
+      "Bash(codex exec:*)"
+    ],
     "defaultMode": "auto"
   },
   "sandbox": {
