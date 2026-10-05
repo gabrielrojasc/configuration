@@ -78,11 +78,15 @@ that this machine hasn't installed yet, are kept. Files that `install.sh --apply
 has never written on this machine are skipped, so run it once before your first
 copy.
 
-For each new change, `copy.sh` asks where it belongs (this is `git add -p`):
+`copy.sh` shows each new change with its file and line, and asks who gets it:
 
-- `y`: move it to `base/`, so every profile gets it.
-- `n`: keep it in this profile's patch.
-- `q`: keep the remaining changes in this profile's patch.
+- `y`: every profile. The change moves to `base/`.
+- `n`: only this profile. The change stays in this profile's patch.
+- `q`: only this profile, for this change and every one after it.
+
+This machine keeps the change either way; the answer decides who else gets it.
+When it finishes, `copy.sh` lists each file it changed and where the changes
+went.
 
 Other options:
 

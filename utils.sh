@@ -64,6 +64,15 @@ function print_summary() {
     echo
 }
 
+# Mark the changed words inside changed lines with git's diff-highlight
+# (brew's git ships it; Workbrew uses the same prefix). A fresh Mac doesn't
+# have it yet, so plain line diffs pass through.
+diff_highlight=$(command -v diff-highlight ||
+    ls "${HOMEBREW_PREFIX:-/opt/homebrew}/share/git-core/contrib/diff-highlight/diff-highlight" 2>/dev/null || true)
+function highlight_words() {
+    if [[ -n "$diff_highlight" ]]; then "$diff_highlight"; else cat; fi
+}
+
 function die() {
     color_print "$red" "$1" >&2
     exit 1
@@ -164,6 +173,14 @@ function to_key() {
     case "$path" in
         home/* | Brewfile | pnpm-globals.txt | agent-skills.txt) echo "$path" ;;
         *) echo "home/$path" ;;
+    esac
+}
+
+# display_name <key>: how a key reads in messages and prompts.
+function display_name() {
+    case "$1" in
+        home/*) echo "~/${1#home/}" ;;
+        *) echo "$1" ;;
     esac
 }
 

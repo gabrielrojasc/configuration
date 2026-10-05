@@ -65,15 +65,6 @@ function backup_file() {
     cp -a "$path" "$backup/$rel"
 }
 
-# Mark the changed words inside changed lines with git's diff-highlight
-# (brew's git ships it; Workbrew uses the same prefix). A fresh Mac doesn't
-# have it yet, so plain line diffs pass through.
-diff_highlight=$(command -v diff-highlight ||
-    ls "${HOMEBREW_PREFIX:-/opt/homebrew}/share/git-core/contrib/diff-highlight/diff-highlight" 2>/dev/null || true)
-function highlight_words() {
-    if [[ -n "$diff_highlight" ]]; then "$diff_highlight"; else cat; fi
-}
-
 function install_files() {
     local key path rendered machine="$work/machine" has_machine changed=0
     local n_change=0 n_create=0 n_link=0 n_kept=0
