@@ -34,6 +34,13 @@ the steps it would run.
 `~/.codex/config.toml` is written only when it's missing, because Codex keeps
 machine state in it.
 
+Install also uninstalls Homebrew packages (formulae, casks, taps, and VS Code
+extensions) that the Brewfile no longer lists. It compares against the Brewfile
+of the previous install: a package that was listed then and isn't now gets
+removed, while a package you installed since then is only reported, so you can
+copy it with `copy.sh` first. On a machine's first install there's nothing to
+compare against, so the dry run lists every unlisted package as a removal.
+
 ## Upgrade
 
 `upgrade.sh` lists what's outdated, and upgrades it with `--apply` (or `-a`): Homebrew

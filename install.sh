@@ -194,7 +194,76 @@ function install_brewfile() {
             record 'Homebrew packages' change "$(echo "$missing" | grep -c .) to install"
         fi
     fi
+    # Reads the snapshot of the previous install, so it runs before saving the new one.
+    remove_unlisted_packages "$brewfile"
     if ((apply)); then save_snapshot Brewfile "$brewfile"; fi
+}
+
+# Brewfile entries as "type name" (tap, brew, cask, vscode), ignoring options.
+function brewfile_entries() {
+    # -E: BSD sed (a fresh Mac) has no \| in basic regexes.
+    sed -nE 's/^(tap|brew|cask|vscode) "([^"]*)".*/\1 \2/p' "$1"
+}
+
+# Uninstall packages the Brewfile no longer lists. Packages installed on this
+# machine since the last install were never in the repo, so they're reported
+# (copy them, or uninstall them by hand) instead of removed. With no previous
+# install to compare against, every unlisted package is a removal; the dry run
+# lists them first.
+function remove_unlisted_packages() {
+    local brewfile=$1 snapshot="$snapshot_dir/Brewfile" extras entry type name
+    local remove local_only
+    remove=()
+    local_only=()
+    # Dry run by default: lists installed packages the Brewfile doesn't need,
+    # leaving out dependencies of listed ones. It exits non-zero when it finds
+    # any, hence the || true under pipefail.
+    extras=$({ brew bundle cleanup --file="$brewfile" --formula --cask --tap --vscode 2>/dev/null || true; } | awk '
+        /^Would uninstall formulae:/ { type = "brew"; next }
+        /^Would uninstall casks:/ { type = "cask"; next }
+        /^Would untap:/ { type = "tap"; next }
+        /^Would uninstall VSCode extensions:/ { type = "vscode"; next }
+        /^(Would|Run) / { type = ""; next }
+        type != "" && NF { print type, $1 }
+    ')
+    while IFS= read -r entry; do
+        [[ -n "$entry" ]] || continue
+        if [[ -f "$snapshot" ]] && ! brewfile_entries "$snapshot" | grep -qxF "$entry"; then
+            local_only+=("$entry")
+        else
+            remove+=("$entry")
+        fi
+    done <<<"$extras"
+
+    if ((${#local_only[@]})); then
+        color_print "$yellow" "Installed here but not in the repo; run ./copy.sh to keep them, or uninstall them by hand:
+$(printf '  %s\n' "${local_only[@]}")"
+        record 'Local packages' info "${#local_only[@]} not in the repo (see above)"
+    fi
+    if ((${#remove[@]} == 0)); then
+        return 0
+    fi
+    if ((apply)); then
+        # Formulae and casks first, so their taps are unused when untapped.
+        for type in brew cask vscode tap; do
+            for entry in "${remove[@]}"; do
+                [[ "${entry%% *}" == "$type" ]] || continue
+                name=${entry#* }
+                case "$type" in
+                    brew) brew uninstall "$name" ;;
+                    cask) brew uninstall --cask "$name" ;;
+                    vscode) code --uninstall-extension "$name" ;;
+                    tap) brew untap "$name" ;;
+                esac
+            done
+        done
+        color_print "$green" "Uninstalled packages the Brewfile no longer lists: $(printf '%s, ' "${remove[@]}" | sed 's/, $//')"
+        record 'Homebrew removals' ok "removed ${#remove[@]}"
+    else
+        color_print "$blue" "Would uninstall these packages the Brewfile no longer lists:
+$(printf '  %s\n' "${remove[@]}")"
+        record 'Homebrew removals' change "${#remove[@]} to remove"
+    fi
 }
 
 function install_pnpm_globals() {
