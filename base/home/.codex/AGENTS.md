@@ -31,6 +31,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Communication
 
 - Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
+- Link the tickets, PRs, commits, and other external items you mention.
 
 ## Documentation
 
