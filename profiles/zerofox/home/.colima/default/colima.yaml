@@ -6,7 +6,7 @@ cpu: 10
 # NOTE: value can only be increased after virtual machine has been created.
 #
 # Default: 100
-disk: 100
+disk: 120
 
 # Size of the memory in GiB to be allocated to the virtual machine.
 # Default: 2
@@ -196,7 +196,7 @@ mountType: virtiofs
 
 # Propagate inotify file events to the VM.
 # NOTE: this is experimental.
-mountInotify: true
+mountInotify: false
 
 # The CPU type for the virtual machine (requires vmType `qemu`).
 # Options available for host emulation can be checked with: `qemu-system-$(arch) -cpu help`.

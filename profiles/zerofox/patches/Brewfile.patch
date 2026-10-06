@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 23b3eac9dff77a3bd225eca8caa61767baed8735..6a75abcab4402cabfbbfef4c6792b1404364affa 100644
+index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049da52dd2f 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -21,7 +21,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..6a75abcab4402cabfbbfef4c6792b140
 +# Dependency manager for Cocoa projects
 +brew "cocoapods"
 +# Container runtimes on MacOS (and Linux) with minimal setup
-+brew "colima", restart_service: :changed
++brew "colima"
  # Color-highlighted diff(1) output
  brew "colordiff"
 +# Container Signing
