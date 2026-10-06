@@ -1,13 +1,14 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 1d9af3cd1193955693194b6de1652a97b278a396..0d25832782ae953a133733cbef31719f97e5ad70 100644
+index 76073b17777dcbb0eee0f1debc78dfe330d96428..ae8206eeb073bd9db96114b459b65bb443232429 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
-@@ -2,14 +2,12 @@ agents amp claude-code cline codex cursor droid gemini-cli github-copilot kilo k
+@@ -2,15 +2,13 @@ agents amp claude-code cline codex cursor droid gemini-cli github-copilot kilo k
  anthropics/skills frontend-design
  blader/humanizer humanizer
  cursor/plugins unslop
 -emilkowalski/skills apple-design
  emilkowalski/skills emil-design-eng
+ gabrielrojasc/skills cross-review
  gabrielrojasc/skills developer-documentation-style
  gabrielrojasc/skills gh-review-comments
  gabrielrojasc/skills git-workspace
@@ -18,7 +19,7 @@ index 1d9af3cd1193955693194b6de1652a97b278a396..0d25832782ae953a133733cbef31719f
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  github/gh-stack gh-stack
-@@ -43,4 +41,6 @@ mattpocock/skills wizard
+@@ -44,4 +42,6 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable impeccable
