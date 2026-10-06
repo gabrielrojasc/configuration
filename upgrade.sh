@@ -44,7 +44,8 @@ if [[ -z "$outdated" ]]; then
     color_print "$green" 'Homebrew packages are up to date'
     record 'Homebrew' ok 'up to date'
 elif ((apply)); then
-    brew upgrade --greedy
+    # --apply is the confirmation, so skip Homebrew's own prompt (ask mode is its default).
+    brew upgrade --greedy --no-ask
     record 'Homebrew' ok "upgraded $(count "$outdated")"
 else
     brew outdated --greedy --verbose
