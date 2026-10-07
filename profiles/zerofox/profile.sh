@@ -90,9 +90,11 @@ function proto_targets() {
     local home json status=0
     home=$(mktemp -d) || return
     # One chain, because callers run this under `if !`, where set -e is off.
+    # PROTO_VERSION_CHECK=false: when a newer proto exists, proto appends its
+    # upgrade notice to stdout as a second JSON value, which breaks jq.
     json=$(cp "$PROTO_HOME/.prototools" "$home/" &&
         ln -s "$PROTO_HOME/plugins" "$home/plugins" &&
-        cd "$HOME" && PROTO_HOME="$home" proto outdated --config-mode global --json) || status=$?
+        cd "$HOME" && PROTO_HOME="$home" PROTO_VERSION_CHECK=false proto outdated --config-mode global --json) || status=$?
     rm -rf "$home"
     if ((status)); then return "$status"; fi
     echo "$json" | jq -r 'to_entries[] | "\(.key) \(.value.current_version)"'
