@@ -41,7 +41,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Environment and tooling
 
 - Prefer `fd -L` for filesystem discovery and `rg` for text search.
-- Use built-in help when command arguments or flags are unclear.
+- Use built-in help when flags are unclear or before claiming a tool lacks a feature; installed versions may be newer than your training.
 - Use repository-local tooling, dependency and environment managers, scripts, and CI configuration as the source of truth.
 - Keep environments reproducible. Do not rely on globally installed language tools or migrate tooling as part of another task.
 - Prefer machine-readable output when piping commands, and disable pagination.

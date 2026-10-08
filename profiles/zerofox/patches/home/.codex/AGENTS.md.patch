@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index 7a61280f0c854f4cd72f5a843228501a6eca705c..2bdd974807241c1b9ca0e6fe1ab6312fbcff1b17 100644
+index 6b61775b6f1427a6d7c08ebb77576a0c09941a82..0445fbb5233a986a81fe3a87e374f7d053f60976 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -2,7 +2,7 @@
@@ -11,7 +11,7 @@ index 7a61280f0c854f4cd72f5a843228501a6eca705c..2bdd974807241c1b9ca0e6fe1ab6312f
  
  Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
  
-@@ -55,7 +55,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+@@ -57,7 +57,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
  ## Service-specific operations
  
  - For Slack and the Google suite, discover and use the matching connector.
