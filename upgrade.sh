@@ -98,9 +98,13 @@ if ! command -v pnpm >/dev/null; then
     color_print "$yellow" 'pnpm is not on PATH; skipped'
     record 'pnpm globals' fail 'skipped: pnpm not on PATH'
 else
-    # Run from ~ so a repo's pinned pnpm can't change the global dir.
-    outdated=$(cd "$HOME" && pnpm outdated -g --format json | jq -r 'keys[]')
-    if [[ -z "$outdated" ]]; then
+    # Run from ~ so a repo's pinned pnpm can't change the global dir. pnpm
+    # outdated exits 1 when anything is outdated, so judge it by its JSON.
+    json=$(cd "$HOME" && pnpm outdated -g --format json) || true
+    if ! echo "$json" | jq -e 'type == "object"' >/dev/null 2>&1; then
+        color_print "$yellow" 'pnpm outdated failed; skipped'
+        record 'pnpm globals' fail 'skipped: pnpm outdated failed'
+    elif outdated=$(echo "$json" | jq -r 'keys[]') && [[ -z "$outdated" ]]; then
         color_print "$green" 'pnpm globals are up to date'
         record 'pnpm globals' ok 'up to date'
     elif ((apply)); then
