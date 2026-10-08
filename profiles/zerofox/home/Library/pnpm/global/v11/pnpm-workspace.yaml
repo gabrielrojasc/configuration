@@ -1,0 +1,4 @@
+# Global installs read their settings from here, not from pnpm's global
+# config.yaml. Let dependencies of the globals in pnpm-globals.txt run their
+# build scripts instead of prompting (the prompt blocks upgrade.sh --apply).
+dangerouslyAllowAllBuilds: true
