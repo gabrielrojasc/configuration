@@ -4,6 +4,7 @@ blader/humanizer humanizer
 cursor/plugins unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
+gabrielrojasc/skills codex
 gabrielrojasc/skills cross-review
 gabrielrojasc/skills developer-documentation-style
 gabrielrojasc/skills gh-review-comments

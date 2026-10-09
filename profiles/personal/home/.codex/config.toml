@@ -138,6 +138,10 @@ enabled = false
 path = "/Users/gabriel/.codex/skills/chronicle/SKILL.md"
 enabled = false
 
+[[skills.config]]
+path = "/Users/gabriel/.agents/skills/codex/SKILL.md"
+enabled = false
+
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "context-window-size"]
 screen_reader_detection_done = true

@@ -127,6 +127,10 @@ enabled = false
 path = "/Users/grojas/.codex/skills/chronicle/SKILL.md"
 enabled = false
 
+[[skills.config]]
+path = "/Users/grojas/.agents/skills/codex/SKILL.md"
+enabled = false
+
 [desktop]
 sansFontSize = 14
 codeFontSize = 12
