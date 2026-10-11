@@ -4,6 +4,7 @@ blader/humanizer humanizer
 cursor/plugins unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
+gabrielrojasc/skills babysit-pr
 gabrielrojasc/skills codex
 gabrielrojasc/skills cross-review
 gabrielrojasc/skills developer-documentation-style
@@ -11,7 +12,6 @@ gabrielrojasc/skills gh-review-comments
 gabrielrojasc/skills git-workspace
 gabrielrojasc/skills linear-gh-linking
 gabrielrojasc/skills linear-work-breakdown
-gabrielrojasc/skills mermaid-validation
 gabrielrojasc/skills python-environments
 gabrielrojasc/skills review-revise
 github/gh-stack gh-stack
