@@ -1,6 +1,6 @@
 ---
 name: proven
-description: Use when an existing independent check, such as a test, command output, diff, or cited source for a lookup, alone proves the result, and the environment is ready and the approach established.
+description: Use when an existing independent check, such as a test, command output, diff, or cited source for a lookup, alone proves the result, and the environment is ready and the approach established. Judging a review finding, or whether another round is needed, takes judgment beyond a check.
 model: claude-opus-5-5
 effort: low
 ---

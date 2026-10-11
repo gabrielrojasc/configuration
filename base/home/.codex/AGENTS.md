@@ -122,7 +122,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Multi-agent work
 
 - Terms: the agent handling my request is the orchestrator. Agents it spawns are subagents. A thread is one agent's conversation and context window.
-- Match the thread to the work. When a task needs repeated tool calls and a cheaper rung covers it, delegate instead of running them in the current thread.
+- Match the thread to the work. Delegate briefable work that would fill this thread with searching, reading, or running commands. Keep conversation, small follow-up edits, and approval-bound actions here. When a request grows into a run of tool calls, delegate the rest.
 - Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier.
 - Before picking a higher rung, add a check to the brief when one is cheap to build; a check can move work down a rung.
 - If `consequential` fails the same problem twice, rerun it once on the platform's most capable model.
