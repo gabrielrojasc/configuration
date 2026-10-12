@@ -47,6 +47,10 @@ and removes skills the list dropped since the previous install. Skills that
 aren't in the repo are always only reported, including on a first install,
 because the repo has no earlier record of them.
 
+A source can include a subdirectory, as in `cursor/plugins/pstack`, for skills
+the CLI finds only from there. `copy.sh` takes it from the skill's path in the
+CLI's lock file, so add the skill however you like and run `copy.sh`.
+
 `apps.txt` lists the apps in `/Applications` that you installed by hand. It
 leaves out Apple's apps, Homebrew casks, and Mac App Store apps, because the
 Brewfile covers the last two. These apps update themselves, so install never

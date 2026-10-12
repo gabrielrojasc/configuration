@@ -357,14 +357,26 @@ function read_machine() {
             # "<source> <skill>" line per skill. Skills without a source (put
             # there by another tool) can't be reinstalled, so they're left out.
             command -v pnpx >/dev/null || return 1
-            local skills lock rendered
-            skills=$(skills_cli ls -g --json 2>/dev/null | jq -r '.[] | select(.source) | "\(.source) \(.name)"' | sort) || return 1
-            # The agents line belongs to the repo: installing with explicit
-            # agents doesn't record them anywhere. Fall back to the agents last
-            # picked in the CLI (its lock file follows XDG_STATE_HOME when set).
-            rendered=$(mktemp)
+            local skills lock rendered paths='{}'
+            # The CLI's lock file follows XDG_STATE_HOME when set.
             lock="${XDG_STATE_HOME:+$XDG_STATE_HOME/skills/.skill-lock.json}"
             [[ -n "$lock" && -f "$lock" ]] || lock="$HOME/.agents/.skill-lock.json"
+            if [[ -f "$lock" ]]; then paths=$(jq -c '.skills // {} | map_values(.skillPath // "")' "$lock"); fi
+            # Adding from a repo's root finds only some of its skills (cursor/plugins
+            # has a root skills/ dir that hides pstack/skills/), and the CLI keeps
+            # the repo but not the subpath it was added from. So a GitHub source
+            # gets the subpath back from the skill's path: everything before the
+            # last skills/ dir, as in cursor/plugins/pstack.
+            skills=$(skills_cli ls -g --json 2>/dev/null | jq -r --argjson paths "$paths" '
+                .[] | select(.source)
+                | (($paths[.name] // "") | split("/") | .[:-2]) as $dir
+                | ($dir | indices("skills") | last) as $i
+                | (if .sourceType == "github" and $i != null and $i > 0 then "/" + ($dir[:$i] | join("/")) else "" end) as $sub
+                | "\(.source)\($sub) \(.name)"' | sort) || return 1
+            # The agents line belongs to the repo: installing with explicit
+            # agents doesn't record them anywhere. Fall back to the agents last
+            # picked in the CLI.
+            rendered=$(mktemp)
             if render agent-skills.txt "$rendered" 2>/dev/null && grep -q '^agents ' "$rendered"; then
                 grep -m 1 '^agents ' "$rendered" >"$out"
             elif [[ -f "$lock" ]]; then

@@ -1,8 +1,8 @@
 agents amp claude-code cline codex cursor droid gemini-cli github-copilot kilo kimi-code-cli opencode warp zed
 anthropics/skills frontend-design
-cursor/plugins bro
-cursor/plugins ketchup
-cursor/plugins unslop
+cursor/plugins/pstack bro
+cursor/plugins/pstack ketchup
+cursor/plugins/pstack unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
 gabrielrojasc/skills babysit-pr
@@ -16,7 +16,7 @@ gabrielrojasc/skills linear-work-breakdown
 gabrielrojasc/skills python-environments
 gabrielrojasc/skills review-revise
 github/gh-stack gh-stack
-humanlayer/skills show-me
+humanlayer/skills/plugins/show-me show-me
 mattpocock/skills ask-matt
 mattpocock/skills code-review
 mattpocock/skills codebase-design
@@ -45,5 +45,5 @@ mattpocock/skills wayfinder
 mattpocock/skills wizard
 mattpocock/skills writing-for-agents
 openclaw/openclaw summarize
-pbakaus/impeccable impeccable
+pbakaus/impeccable/.agents impeccable
 zarazhangrui/frontend-slides frontend-slides

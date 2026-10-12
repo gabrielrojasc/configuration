@@ -202,6 +202,31 @@ check "copy carries T3 Code client settings" grep -rq '"wordWrap": false' "$repo
 check "T3 Code app state never reaches the repo" bash -c "! grep -rqE 'onboardingCompletedAt|dismissedProviderUpdateNotificationKeys' '$repo/base' '$repo/profiles'"
 echo
 
+# Agent skills keep the subpath they were added from, which the CLI's list
+# drops and its lock file keeps. A stub stands in for the skills CLI (via pnpx)
+# and prints what `skills ls -g --json` prints for this lock.
+echo "== agent skills"
+fresh personal
+mkdir -p "$home/bin" "$home/.local/state/skills"
+cat >"$home/bin/pnpx" <<'EOF'
+#!/bin/sh
+echo '[{"name":"bro","source":"cursor/plugins","sourceType":"github"},
+{"name":"frontend-design","source":"anthropics/skills","sourceType":"github"},
+{"name":"frontend-slides","source":"zarazhangrui/frontend-slides","sourceType":"github"}]'
+EOF
+chmod +x "$home/bin/pnpx"
+cat >"$home/.local/state/skills/.skill-lock.json" <<'EOF'
+{"version": 3, "skills": {
+  "bro": {"source": "cursor/plugins", "sourceType": "github", "skillPath": "pstack/skills/bro/SKILL.md"},
+  "frontend-design": {"source": "anthropics/skills", "sourceType": "github", "skillPath": "skills/frontend-design/SKILL.md"},
+  "frontend-slides": {"source": "zarazhangrui/frontend-slides", "sourceType": "github", "skillPath": "SKILL.md"}}}
+EOF
+in_repo env PATH="$home/bin:$PATH" bash -c 'source ./utils.sh && load_profile >/dev/null && read_machine agent-skills.txt /dev/stdout' >"$log_dir/skills-machine.txt"
+check "a skill added from a subpath keeps it" grep -qx 'cursor/plugins/pstack bro' "$log_dir/skills-machine.txt"
+check "a skill under the repo's skills/ keeps the bare repo" grep -qx 'anthropics/skills frontend-design' "$log_dir/skills-machine.txt"
+check "a skill at the repo root keeps the bare repo" grep -qx 'zarazhangrui/frontend-slides frontend-slides' "$log_dir/skills-machine.txt"
+echo
+
 # Apps installed by hand: install reports the missing ones, copy adds new ones.
 # Needs Homebrew, which copy asks for installed casks.
 echo "== apps"
