@@ -304,6 +304,10 @@ for key in ${candidates[@]+"${candidates[@]}"}; do
             # profile has, so there's no base context to place it in.
             color_print "$yellow" "Kept the chosen $key hunks in this profile: they sit next to profile-only lines. Move them into base/$key by hand, then rerun ./copy.sh --sort."
         fi
+    elif [[ "$mode" == sort-only ]]; then
+        # Nothing moved, so the patch stays byte for byte, even one made
+        # against an older base that still renders.
+        continue
     fi
     make_patch "$key" "$sort_repo/$key"
     to_base=$(grep -c '^base$' "$work/tally/$(echo "$key" | tr / %)" 2>/dev/null || true)
