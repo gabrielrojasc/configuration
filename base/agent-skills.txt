@@ -1,6 +1,5 @@
 agents amp claude-code cline codex cursor droid gemini-cli github-copilot kilo kimi-code-cli opencode warp zed
 anthropics/skills frontend-design
-blader/humanizer humanizer
 cursor/plugins unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
