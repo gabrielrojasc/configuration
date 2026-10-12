@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 model = "gpt-6.1-sol"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "high"
 web_search = "live"
 sandbox_mode = "workspace-write"
 approvals_reviewer = "auto_review"
@@ -144,7 +144,7 @@ git-pr-instructions = ""
 conversationDetailMode = "STEPS_COMMANDS"
 worktree-keep-count = 50
 ambient-suggestions-enabled = true
-show-context-window-usage = true
+show-context-window-usage = false
 reviewDelivery = "inline"
 mac-menu-bar-enabled = false
 dock-icon-preference = "app-default"

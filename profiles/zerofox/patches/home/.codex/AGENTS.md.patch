@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index dcef09c7f836d6349d006028080693b2540145cb..8a4fe8098e59a842ac18fbb8d7d96fac0e5e7b09 100644
+index dcef09c7f836d6349d006028080693b2540145cb..165d669468c431b1d032aab656560280a54ebac7 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -2,7 +2,7 @@
@@ -11,15 +11,22 @@ index dcef09c7f836d6349d006028080693b2540145cb..8a4fe8098e59a842ac18fbb8d7d96fac
  
  Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
  
-@@ -54,7 +54,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+@@ -54,7 +54,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
  - Default to bounded, non-mutating external-service lookups.
  - Assume service tools are authenticated. Do not change authentication unless I ask.
  - If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
 -- Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
 +- Use `gh` for GitHub, and the matching connector for Slack and the Google suite. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
-+- Default to the target environment's Grafana MCP for observability checks and Grafana links. Discover supported tools and datasources, preserve query scope, and use read-only fallbacks for gaps.
-+- Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
-+- For Linear work, default to the EP team unless the request or repository specifies another team.
++- For observability checks and Grafana links, use the Grafana MCP for the target environment.
++- For context the code doesn't hold, such as why it's built that way, team conventions, ownership, or past incidents, use the `unblocked-context-research` skill before searching PRs, Slack, Linear, or docs one by one.
  
  ## Personal knowledge
  
+@@ -101,6 +103,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+ ## Tracker and implementation workspace
+ 
+ - Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
++- Default Linear work to the EP team unless the request or repository names another.
+ - When a skill requires `docs/agents/issue-tracker.md`, use this section as its tracker configuration. Linear is the tracker; no setup file is needed.
+ - `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
+ - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
