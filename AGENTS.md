@@ -8,7 +8,7 @@ Work and commit directly on `master` in this checkout, even when a global defaul
 
 ## Model
 
-- A **key** is a path relative to a layer: `home/<path>` (a file at `$HOME/<path>`), `Brewfile`, `pnpm-globals.txt`, or `agent-skills.txt`.
+- A **key** is a path relative to a layer: `home/<path>` (a file at `$HOME/<path>`), `Brewfile`, `pnpm-globals.txt`, `agent-skills.txt`, or `apps.txt`.
 - A profile **renders** a key from `profiles/<p>/<key>` if that whole file exists, else from `base/<key>` plus `profiles/<p>/patches/<key>.patch`.
 - Shared behaviour belongs in `base/`; anything only one machine wants belongs in that profile. When unsure which side a change belongs to, ask.
 - Print a rendered file with `DOTFILES_PROFILE=<p> ./install.sh --show <path>`.
