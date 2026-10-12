@@ -106,7 +106,8 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
 - When creating a Linear project on my behalf, set me as project lead.
 - Assign Linear issues I create, or that you create on my behalf, to me unless I name another assignee.
-- Only add Linear labels that I explicitly request. Create or remove labels only when I explicitly request that exact change. Skill defaults do not count as approval.
+- Create Linear issues through `linear-work-breakdown`, even when only a `ref:` needs one.
+- Only add Linear labels I request or an issue template applies. Create or remove labels only when I request that exact change.
 - I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
 - Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
 - Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
