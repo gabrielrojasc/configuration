@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index dcef09c7f836d6349d006028080693b2540145cb..165d669468c431b1d032aab656560280a54ebac7 100644
+index dcef09c7f836d6349d006028080693b2540145cb..a394454e925c0404a5f74605c603906ab43637f6 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -2,7 +2,7 @@
@@ -18,7 +18,7 @@ index dcef09c7f836d6349d006028080693b2540145cb..165d669468c431b1d032aab656560280
 -- Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
 +- Use `gh` for GitHub, and the matching connector for Slack and the Google suite. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 +- For observability checks and Grafana links, use the Grafana MCP for the target environment.
-+- For context the code doesn't hold, such as why it's built that way, team conventions, ownership, or past incidents, use the `unblocked-context-research` skill before searching PRs, Slack, Linear, or docs one by one.
++- For context the repository doesn't hold, such as why code is built that way, ownership, or past incidents, use the `unblocked-context-research` skill before searching PRs, Slack, Linear, or docs one by one.
  
  ## Personal knowledge
  
