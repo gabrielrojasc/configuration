@@ -1,0 +1,32 @@
+diff --git a/apps.txt b/apps.txt
+index cba667157e162cce4aff98f72571f2e34cd679cf..3ee35672f4d5f57c4c4221e72120142dbb6b55f4 100644
+--- a/apps.txt
++++ b/apps.txt
+@@ -1 +1,27 @@
++1Password
++Android Studio
++AppCleaner
++ChatGPT
++Claude
++Cloudflare WARP
++CodexBar
++Cortex XDR
++Google Chrome
++Google Docs
++Google Drive
++Google Sheets
++Google Slides
++Helium
++Iru Self Service
++KeyboardRemap
++Obsidian
++Postman
++PrivilegeManagement
++Rectangle
++Signal
++Slack
++Spotify
++Sublime Text
+ T3 Code (Alpha)
++Visual Studio Code
++zoom.us
