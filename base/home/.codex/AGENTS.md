@@ -28,9 +28,11 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Ask before changing files or settings outside the task's repository, worktree, or what I asked you to change. Temporary files, tool-managed caches, and locations these instructions specify, such as `~/tmp/specs/` and task worktrees, don't need approval.
 - If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
-## Communication
+## Writing
 
-- Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
+- Keep everything you write concise and high value. Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
+- I read visuals faster than prose. In messages to me, use tables, diagrams, and other visuals when they make the point clearer than prose.
+- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show options and tradeoffs in a table and proposed edits as diffs. Ask one question in chat at the end.
 - Link the tickets, PRs, commits, and other external items you mention.
 
 ## Documentation
@@ -71,7 +73,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 ### Syncing
 
-- Before researching or analyzing a repository branch, fast-forward it to its upstream. Unrelated local changes don't block this. If the branch has no configured upstream, continue and report that it was not synchronized. If it can't fast-forward, preserve existing work, report the error, and ask.
+- Before researching or analyzing a repository branch, fast-forward it to its upstream. Unrelated local changes don't block this. If the branch has no configured upstream, continue, and mention it only when it affects the result. If it can't fast-forward, preserve existing work, report the error, and ask.
 
 ### Commits
 
