@@ -6,6 +6,8 @@
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
 #   agent-skills.txt  installed with skills add -g, read back with skills ls -g
+#   apps.txt          apps installed by hand, read back from /Applications;
+#                     install only reports the missing ones
 # A key renders from the profile's own copy if it has one, otherwise from
 # base plus the profile's patches/<key>.patch when that exists.
 
@@ -152,6 +154,7 @@ function list_keys() {
         echo Brewfile
         echo pnpm-globals.txt
         echo agent-skills.txt
+        echo apps.txt
     } | while IFS= read -r key; do
         is_ignored "$key" || echo "$key"
     done | sort -u
@@ -171,7 +174,7 @@ function source_of() {
 function to_key() {
     local path=${1#"$HOME"/}
     case "$path" in
-        home/* | Brewfile | pnpm-globals.txt | agent-skills.txt) echo "$path" ;;
+        home/* | Brewfile | pnpm-globals.txt | agent-skills.txt | apps.txt) echo "$path" ;;
         *) echo "home/$path" ;;
     esac
 }
@@ -368,6 +371,21 @@ function read_machine() {
             fi
             rm -f "$rendered"
             if [[ -n "$skills" ]]; then echo "$skills" >>"$out"; fi
+            ;;
+        apps.txt)
+            # Cask and App Store apps belong to the Brewfile; the rest were
+            # installed by hand and update themselves. Cask apps are matched by
+            # bundle or cask name, since pkg casks list no app.
+            command -v brew >/dev/null || return 1
+            local casks app name
+            casks=$(brew info --cask --installed --json=v2 |
+                jq -r '.casks[] | .name[], (.artifacts[] | objects | .app? // empty | .[] | strings | sub("\\.app$"; ""))') || return 1
+            for app in /Applications/*.app; do
+                name=$(basename "$app" .app)
+                # Apple's apps there are symlinks (Safari); App Store apps carry a receipt.
+                if [[ ! -d "$app" || -L "$app" || -d "$app/Contents/_MASReceipt" ]]; then continue; fi
+                if ! grep -qxF "$name" <<<"$casks"; then echo "$name"; fi
+            done | LC_ALL=C sort >"$out"
             ;;
         home/*)
             path="$HOME/${key#home/}"

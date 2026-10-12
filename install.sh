@@ -370,6 +370,31 @@ $(printf '  %s\n' "${remove_names[@]}")"
     if ((apply)); then save_snapshot agent-skills.txt "$list"; fi
 }
 
+# Apps installed by hand update themselves, so install only lists the ones
+# this machine lacks.
+function install_apps() {
+    local list="$work/apps.txt" present="$work/apps-present" missing="" name
+    render apps.txt "$list"
+    : >"$present"
+    while IFS= read -r name; do
+        if [[ -d "/Applications/$name.app" ]]; then
+            echo "$name" >>"$present"
+        elif [[ -n "$name" ]]; then
+            missing+="  $name"$'\n'
+        fi
+    done <"$list"
+    if [[ -z "$missing" ]]; then
+        color_print "$green" 'Apps are all installed'
+        record 'Apps' ok 'all installed'
+    else
+        color_print "$blue" "Install these apps by hand:
+${missing%$'\n'}"
+        record 'Apps' info "$(count_lines "$missing") to install by hand"
+    fi
+    # Missing apps stay out of the snapshot, so copy doesn't read them as removed.
+    if ((apply)); then save_snapshot apps.txt "$present"; fi
+}
+
 # count_lines <text>: number of non-empty lines.
 function count_lines() {
     if [[ -z "$1" ]]; then echo 0; else echo "$1" | grep -c .; fi
@@ -431,6 +456,8 @@ section 'pnpm globals'
 install_pnpm_globals
 section 'Agent skills'
 install_agent_skills
+section 'Apps'
+install_apps
 section 'Terminal profile'
 install_terminal_profile
 section 'macOS defaults'

@@ -47,6 +47,11 @@ and removes skills the list dropped since the previous install. Skills that
 aren't in the repo are always only reported, including on a first install,
 because the repo has no earlier record of them.
 
+`apps.txt` lists the apps in `/Applications` that you installed by hand. It
+leaves out Apple's apps, Homebrew casks, and Mac App Store apps, because the
+Brewfile covers the last two. These apps update themselves, so install never
+installs or updates them. It only lists the ones this machine lacks.
+
 ## Upgrade
 
 `upgrade.sh` lists what's outdated, and upgrades it with `--apply` (or `-a`): Homebrew
@@ -115,6 +120,7 @@ base/
 ├── Brewfile
 ├── pnpm-globals.txt
 ├── agent-skills.txt       # agents line, then "<source> <skill>" per global skill
+├── apps.txt               # apps installed by hand, one name per line
 └── Basic.terminal
 profiles/<name>/
 ├── profile.sh             # install and copy hooks

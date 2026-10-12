@@ -1,0 +1,17 @@
+diff --git a/apps.txt b/apps.txt
+index cba667157e162cce4aff98f72571f2e34cd679cf..6d4d2f755223e6a7c3a2ac0b1add67c82a8a3c91 100644
+--- a/apps.txt
++++ b/apps.txt
+@@ -1 +1,12 @@
++ChatGPT
++CodexBar
++Discord
++Google Docs
++Google Drive
++Google Sheets
++Google Slides
++Helium
++LightCraft
++Spotify
+ T3 Code (Alpha)
++WhatsApp
