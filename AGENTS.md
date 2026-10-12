@@ -16,7 +16,7 @@ Work and commit directly on `master` in this checkout, even when a global defaul
 ## Changing configuration
 
 - Shared change: edit `base/<key>`, then confirm every profile still renders it (`--show` for each profile; a patch that no longer applies prints a conflict).
-- Profile-only change: first `--show` the key for the other profile. If it already has the same file, line, or skill, make a shared change instead and remove it from that profile, so one copy lives in `base/`. Otherwise, patches are generated, so write the full file the profile should have to `.conflicts/<key>` and run `DOTFILES_PROFILE=<p> ./copy.sh --resolve <key>`. That regenerates the patch, or the profile's whole file when it owns one.
+- Profile-only change: first `--show` the key for the other profile. If it already has the same change, make a shared change instead and remove it from that profile, so one copy lives in `base/`. Skip this when the profile owns the whole file, as both do for `.codex/config.toml`: a profile owns a file when its copy differs too much to patch. Otherwise, patches are generated, so write the full file the profile should have to `.conflicts/<key>` and run `DOTFILES_PROFILE=<p> ./copy.sh --resolve <key>`. That regenerates the patch, or the profile's whole file when it owns one.
 - Commit `base/` and the patches made against it together: render's 3-way fallback finds a patch's original base by the blob id on its `index` line, so that blob must be in git history.
 
 ## Approval gates
