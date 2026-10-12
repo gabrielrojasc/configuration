@@ -4,7 +4,7 @@
 
 I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
 
-Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
+Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
 
 ## Approval gates
 
@@ -22,22 +22,22 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - I prefer the simplest correct solution and repository conventions over generic best practices.
 - Fix root causes. If only a symptom can be patched, explain why.
 - Keep changes within the scope I requested. Avoid unrelated refactors, dependencies, tooling, configuration, or files.
-- When a command fails, inspect the error. Retry the same operation only after a trivial correction or a permission or network escalation.
-- Continue with a materially different, bounded diagnostic or recovery step when it is safe, reversible, and within my approved scope.
-- Stop and ask when blocked or when the next step deletes data or is otherwise destructive, requires new authority, changes authentication, or changes the task's target or user-visible contract.
+- Retry a failed command only after a trivial correction or a permission or network escalation. Otherwise take a different bounded, reversible diagnostic or recovery step within scope.
+- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
 - Ask before changing files or settings outside the task's repository, worktree, or what I asked you to change. Temporary files, tool-managed caches, and locations these instructions specify, such as `~/tmp/specs/` and task worktrees, don't need approval.
+- When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 - If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
 
 ## Writing
 
 - Keep everything you write concise and high value. Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
 - I read visuals faster than prose. In messages to me, use tables, diagrams, and other visuals when they make the point clearer than prose.
-- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show options and tradeoffs in a table and proposed edits as diffs. Ask one question in chat at the end.
+- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show options and tradeoffs in a table and proposed edits as diffs. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
 - Link the tickets, PRs, commits, and other external items you mention.
 
 ## Documentation
 
-- I do not want emojis in `*.md`, `README*`, `docs/**`, or `*.mdc`.
+- No emojis in `*.md`, `README*`, `docs/**`, or `*.mdc`.
 - Apply the `developer-documentation-style` skill when writing, editing, or reviewing developer documentation. Follow repository-specific conventions first.
 
 ## Environment and tooling
@@ -53,13 +53,8 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 - Default to bounded, non-mutating external-service lookups.
 - Assume service tools are authenticated. Do not change authentication unless I ask.
-- If a sandboxed read-only command returns `unauthorized`, `forbidden`, or a similar authentication error, retry that command once outside the sandbox before concluding authentication is broken.
-- If the unrestricted retry still fails, run the service's non-mutating authentication status command outside the sandbox. Report the failing command and error. Do not ask me to authenticate unless the status check fails.
-
-## Service-specific operations
-
-- For Slack and the Google suite, discover and use the matching connector.
-- Use `gh` for GitHub operations.
+- If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
+- Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
 
 ## Personal knowledge
 
@@ -91,7 +86,6 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Coding principles
 
 - Prefer `impeccable` for UI improvements and `frontend-design` for new visual direction. Apply `emil-design-eng` when creating or changing interactive components. Skip design workflows for mechanical edits.
-
 - Before adding code, choose the simplest rung that fits: standard library, native platform features, existing dependencies, then the smallest local implementation.
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
@@ -103,10 +97,6 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
 - End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file. Record the command that reproduces it in or next to the artifact, and show it in the response only when I ask for it.
 - Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
-
-## Workflow
-
-- When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
 
 ## Tracker and implementation workspace
 

@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index 6b61775b6f1427a6d7c08ebb77576a0c09941a82..0445fbb5233a986a81fe3a87e374f7d053f60976 100644
+index dcef09c7f836d6349d006028080693b2540145cb..8a4fe8098e59a842ac18fbb8d7d96fac0e5e7b09 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -2,7 +2,7 @@
@@ -9,16 +9,16 @@ index 6b61775b6f1427a6d7c08ebb77576a0c09941a82..0445fbb5233a986a81fe3a87e374f7d0
 -I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
 +I'm Gabriel. I work across ZeroFox repos and care about simple systems, traceable evidence, direct communication, and low duplicated state.
  
- Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts. Ask before consequential decisions that change the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
+ Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
  
-@@ -57,7 +57,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
- ## Service-specific operations
- 
- - For Slack and the Google suite, discover and use the matching connector.
--- Use `gh` for GitHub operations.
+@@ -54,7 +54,10 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+ - Default to bounded, non-mutating external-service lookups.
+ - Assume service tools are authenticated. Do not change authentication unless I ask.
+ - If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
+-- Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
++- Use `gh` for GitHub, and the matching connector for Slack and the Google suite. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 +- Default to the target environment's Grafana MCP for observability checks and Grafana links. Discover supported tools and datasources, preserve query scope, and use read-only fallbacks for gaps.
 +- Use `unblocked context-research` for bounded, fetch-only semantic search across sources: fuzzy lookup, rationale and history, related incidents, ownership, and cross-repo context. Prefer the Unblocked CLI.
-+- Use `gh` for GitHub operations. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
 +- For Linear work, default to the EP team unless the request or repository specifies another team.
  
  ## Personal knowledge
