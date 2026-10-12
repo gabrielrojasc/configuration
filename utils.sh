@@ -102,6 +102,9 @@ ignored_dirs=(home/.config/nvim/plugin home/.config/nvim/.nvim)
 # npm settings that are credentials; they stay on the machine.
 npmrc_secret_re='^[[:space:]]*//|_auth|_password'
 
+# Where apps.txt finds apps; tests point it at a scratch folder.
+apps_dir=${DOTFILES_APPS_DIR:-/Applications}
+
 # Keys that Codex and other tools rewrite with machine state; install only
 # writes them when missing.
 seed_only_keys=(home/.codex/config.toml home/.t3/userdata/client-settings.json)
@@ -377,15 +380,25 @@ function read_machine() {
             # installed by hand and update themselves. Cask apps are matched by
             # bundle or cask name, since pkg casks list no app.
             command -v brew >/dev/null || return 1
-            local casks app name
+            local casks app name rendered
             casks=$(brew info --cask --installed --json=v2 |
                 jq -r '.casks[] | .name[], (.artifacts[] | objects | .app? // empty | .[] | strings | sub("\\.app$"; ""))') || return 1
-            for app in /Applications/*.app; do
-                name=$(basename "$app" .app)
-                # Apple's apps there are symlinks (Safari); App Store apps carry a receipt.
-                if [[ ! -d "$app" || -L "$app" || -d "$app/Contents/_MASReceipt" ]]; then continue; fi
-                if ! grep -qxF "$name" <<<"$casks"; then echo "$name"; fi
-            done | LC_ALL=C sort >"$out"
+            rendered=$(mktemp)
+            render apps.txt "$rendered" 2>/dev/null || : >"$rendered"
+            {
+                for app in "$apps_dir"/*.app; do
+                    name=$(basename "$app" .app)
+                    # Apple's apps there are symlinks (Safari); App Store apps carry a receipt.
+                    if [[ ! -d "$app" || -L "$app" || -d "$app/Contents/_MASReceipt" ]]; then continue; fi
+                    if ! grep -qxF "$name" <<<"$casks"; then echo "$name"; fi
+                done
+                # Listed apps this machine lacks stay listed: not having
+                # installed one yet doesn't drop it for the other machines.
+                while IFS= read -r name; do
+                    if [[ -n "$name" && ! -d "$apps_dir/$name.app" ]]; then echo "$name"; fi
+                done <"$rendered"
+            } | LC_ALL=C sort -u >"$out"
+            rm -f "$rendered"
             ;;
         home/*)
             path="$HOME/${key#home/}"

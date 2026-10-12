@@ -8,7 +8,7 @@
 
 set -euo pipefail
 # The scripts read these; values from the calling shell must not leak in.
-unset DOTFILES_PROFILE XDG_STATE_HOME
+unset DOTFILES_PROFILE XDG_STATE_HOME DOTFILES_APPS_DIR
 src="$(cd "$(dirname "$0")/.." && pwd)"
 log_dir="${1:-$HOME/tmp/dotfiles-e2e/$(date +%Y%m%d-%H%M%S)}"
 mkdir -p "$log_dir"
@@ -200,6 +200,23 @@ check "install keeps existing T3 Code client settings" grep -q '"wordWrap":false
 in_repo ./copy.sh --only files --no-sort >/dev/null
 check "copy carries T3 Code client settings" grep -rq '"wordWrap": false' "$repo/profiles/personal/patches/home/.t3"
 check "T3 Code app state never reaches the repo" bash -c "! grep -rqE 'onboardingCompletedAt|dismissedProviderUpdateNotificationKeys' '$repo/base' '$repo/profiles'"
+echo
+
+# Apps installed by hand: install reports the missing ones, copy adds new ones.
+# Needs Homebrew, which copy asks for installed casks.
+echo "== apps"
+fresh personal
+export DOTFILES_APPS_DIR="$home/Applications-e2e"
+mkdir -p "$DOTFILES_APPS_DIR/E2E Manual.app" "$DOTFILES_APPS_DIR/E2E Store.app/Contents/_MASReceipt" "$home/elsewhere/E2E Linked.app"
+ln -s "$home/elsewhere/E2E Linked.app" "$DOTFILES_APPS_DIR/E2E Linked.app"
+in_repo ./install.sh --only apps --apply >"$log_dir/apps-install.txt"
+check "install lists listed apps that are missing" grep -q 'T3 Code (Alpha)' "$log_dir/apps-install.txt"
+in_repo ./copy.sh --only apps --no-sort >"$log_dir/apps-copy.txt"
+rendered=$(in_repo ./install.sh --show apps.txt)
+check "copy adds a hand-installed app" grep -qx 'E2E Manual' <<<"$rendered"
+check "copy keeps listed apps that are missing" grep -qx 'T3 Code (Alpha)' <<<"$rendered"
+check "copy leaves out App Store apps and symlinks" bash -c "! grep -qE 'E2E (Store|Linked)' <<<'$rendered'"
+unset DOTFILES_APPS_DIR
 echo
 
 echo "Failures: $failures"

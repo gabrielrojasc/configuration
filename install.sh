@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Set up this machine for the profile in .env (DOTFILES_PROFILE).
 #
-# Usage: ./install.sh [-a | --apply] [--only files] [--show <path>]
+# Usage: ./install.sh [-a | --apply] [--only files | --only apps] [--show <path>]
 #   (no flags)     dry run: show every change without making it
 #   -a, --apply    make the changes; overwritten files are backed up first
 #   --only files   limit to config files (no brew, pnpm, macOS defaults, hooks)
+#   --only apps    limit to the apps.txt report
 #   --show <path>  print the rendered file for a home path or key and exit
 
 set -euo pipefail
@@ -17,13 +18,13 @@ show=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -a | --apply) apply=1 ;;
-        --only) [[ $# -ge 2 ]] || die "--only needs a value: files"; only=$2; shift ;;
+        --only) [[ $# -ge 2 ]] || die "--only needs a value: files or apps"; only=$2; shift ;;
         --show) [[ $# -ge 2 ]] || die "--show needs a path"; show=$2; shift ;;
         *) die "Unknown argument: $1 (see the usage at the top of install.sh)" ;;
     esac
     shift
 done
-[[ -z "$only" || "$only" == files ]] || die "--only supports: files"
+[[ -z "$only" || "$only" == files || "$only" == apps ]] || die "--only supports: files, apps"
 
 load_profile
 
@@ -373,13 +374,10 @@ $(printf '  %s\n' "${remove_names[@]}")"
 # Apps installed by hand update themselves, so install only lists the ones
 # this machine lacks.
 function install_apps() {
-    local list="$work/apps.txt" present="$work/apps-present" missing="" name
+    local list="$work/apps.txt" missing="" name
     render apps.txt "$list"
-    : >"$present"
     while IFS= read -r name; do
-        if [[ -d "/Applications/$name.app" ]]; then
-            echo "$name" >>"$present"
-        elif [[ -n "$name" ]]; then
+        if [[ -n "$name" && ! -d "$apps_dir/$name.app" ]]; then
             missing+="  $name"$'\n'
         fi
     done <"$list"
@@ -391,8 +389,7 @@ function install_apps() {
 ${missing%$'\n'}"
         record 'Apps' info "$(count_lines "$missing") to install by hand"
     fi
-    # Missing apps stay out of the snapshot, so copy doesn't read them as removed.
-    if ((apply)); then save_snapshot apps.txt "$present"; fi
+    if ((apply)); then save_snapshot apps.txt "$list"; fi
 }
 
 # count_lines <text>: number of non-empty lines.
@@ -435,6 +432,13 @@ function install_terminal_profile() {
 if [[ "$only" == files ]]; then
     section 'Config files'
     install_files
+    section 'Summary'
+    print_summary
+    exit 0
+fi
+if [[ "$only" == apps ]]; then
+    section 'Apps'
+    install_apps
     section 'Summary'
     print_summary
     exit 0

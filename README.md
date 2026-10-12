@@ -51,6 +51,9 @@ because the repo has no earlier record of them.
 leaves out Apple's apps, Homebrew casks, and Mac App Store apps, because the
 Brewfile covers the last two. These apps update themselves, so install never
 installs or updates them. It only lists the ones this machine lacks.
+`copy.sh` adds apps you install, but uninstalling one doesn't remove it from
+the list: a machine without an app may just not have installed it yet. Remove
+it from `apps.txt` by hand.
 
 ## Upgrade
 

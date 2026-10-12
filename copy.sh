@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bring this machine's config changes into the repo for the profile in .env.
 #
-# Usage: ./copy.sh [--no-sort | --sort | --resolve <path>] [--only files]
+# Usage: ./copy.sh [--no-sort | --sort | --resolve <path>] [--only files | --only apps]
 #   (no flags)        copy, then ask for each new change who gets it:
 #                     y = every profile (base), n = only this profile,
 #                     q = only this profile, for this and every remaining change
@@ -10,6 +10,7 @@
 #                     patches for promotion to base
 #   --resolve <path>  store a fixed .conflicts/<key> file as this profile's version
 #   --only files      limit to config files (skip Brewfile, pnpm globals, hooks)
+#   --only apps       limit to apps.txt
 #
 # Changes are found by comparing $HOME with what install.sh last wrote, so
 # edits from other machines that this one hasn't installed yet are kept.
@@ -27,12 +28,12 @@ while [[ $# -gt 0 ]]; do
         --no-sort) mode=no-sort ;;
         --sort) mode=sort-only ;;
         --resolve) [[ $# -ge 2 ]] || die "--resolve needs a path"; mode=resolve; resolve=$2; shift ;;
-        --only) [[ $# -ge 2 ]] || die "--only needs a value: files"; only=$2; shift ;;
+        --only) [[ $# -ge 2 ]] || die "--only needs a value: files or apps"; only=$2; shift ;;
         *) die "Unknown argument: $1 (see the usage at the top of copy.sh)" ;;
     esac
     shift
 done
-[[ -z "$only" || "$only" == files ]] || die "--only supports: files"
+[[ -z "$only" || "$only" == files || "$only" == apps ]] || die "--only supports: files, apps"
 
 load_profile
 
@@ -69,8 +70,9 @@ if [[ "$mode" == resolve ]]; then
     exit 0
 fi
 
-# brew bundle dump and pnpm ls must use this profile's tools (Workbrew on zerofox).
-if [[ -z "$only" && "$mode" != sort-only ]]; then profile_path; fi
+# brew bundle dump, pnpm ls, and the apps.txt cask lookup must use this
+# profile's tools (Workbrew on zerofox).
+if [[ "$only" != files && "$mode" != sort-only ]]; then profile_path; fi
 
 # Scratch repo whose index holds the repo version of each changed file and
 # whose worktree holds the machine version. Each hunk answered y is applied to
@@ -171,13 +173,18 @@ if [[ "$mode" == sort-only ]]; then
     done < <(cd "$profile_dir" && find patches -name '*.patch' 2>/dev/null | sort)
 else
     while IFS= read -r key; do
-        [[ -n "$only" && "$key" != home/* ]] && continue
+        case "$only" in
+            files) [[ "$key" == home/* ]] || continue ;;
+            apps) [[ "$key" == apps.txt ]] || continue ;;
+        esac
         # </dev/null: brew and git must not eat the key list on stdin.
         capture "$key" </dev/null
     done < <(list_keys)
-    while IFS= read -r key; do
-        capture_new "$key" </dev/null
-    done < <(list_new_keys)
+    if [[ "$only" != apps ]]; then
+        while IFS= read -r key; do
+            capture_new "$key" </dev/null
+        done < <(list_new_keys)
+    fi
     if [[ -z "$only" ]] && declare -F profile_copy >/dev/null; then profile_copy; fi
 fi
 
