@@ -12,7 +12,7 @@
   },
   "browserDefaultZoomFactor": 1,
   "browserDefaultAppearance": "system",
-  "browserRecordingFrameRate": 60,
+  "browserRecordingFrameRate": 30,
   "browserRecordingShowKeyPresses": false,
   "browserRecordingShowMousePresses": false,
   "browserLinkTarget": "system",
