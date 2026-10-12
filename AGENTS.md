@@ -2,6 +2,10 @@
 
 Dotfiles for two macOS profiles, `personal` and `zerofox`, on one branch. Read `README.md` for the layout and the user-facing workflow before changing anything.
 
+## Workflow
+
+Work and commit directly on `master` in this checkout, even when a global default calls for a task worktree. `tests/e2e.sh` copies the repo with rsync, so from a linked worktree its throwaway commits land on that worktree's branch.
+
 ## Model
 
 - A **key** is a path relative to a layer: `home/<path>` (a file at `$HOME/<path>`), `Brewfile`, `pnpm-globals.txt`, or `agent-skills.txt`.
