@@ -102,7 +102,7 @@ npmrc_secret_re='^[[:space:]]*//|_auth|_password'
 
 # Keys that Codex and other tools rewrite with machine state; install only
 # writes them when missing.
-seed_only_keys=(home/.codex/config.toml)
+seed_only_keys=(home/.codex/config.toml home/.t3/userdata/client-settings.json)
 
 function load_profile() {
     # The environment wins over .env so a one-off run can target another profile.
@@ -381,6 +381,11 @@ function read_machine() {
                     ;;
                 # Claude Code rewrites this file in its own key order.
                 home/.claude/settings.json) jq -S . "$path" >"$out" ;;
+                # T3 Code writes every UI setting on one line, plus onboarding
+                # and notification state.
+                home/.t3/userdata/client-settings.json)
+                    jq 'del(.onboardingCompletedAt, .dismissedProviderUpdateNotificationKeys)' "$path" >"$out"
+                    ;;
                 *) cat "$path" >"$out" ;;
             esac
             ;;

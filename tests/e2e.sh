@@ -189,6 +189,19 @@ check "credentials never reach the repo" bash -c "! grep -rqE 'SECRET[0-9]' '$re
 check "credentials never reach the snapshot" bash -c "! grep -rqE 'SECRET[0-9]' '$home/.local/state/dotfiles'"
 echo
 
+# T3 Code rewrites its client settings with app state.
+echo "== T3 Code client settings"
+fresh personal
+t3_settings="$home/.t3/userdata/client-settings.json"
+mkdir -p "$(dirname "$t3_settings")"
+printf '{"wordWrap":false,"onboardingCompletedAt":"2026-01-01T00:00:00.000Z","dismissedProviderUpdateNotificationKeys":["e2e"]}\n' >"$t3_settings"
+in_repo ./install.sh --only files --apply >/dev/null
+check "install keeps existing T3 Code client settings" grep -q '"wordWrap":false' "$t3_settings"
+in_repo ./copy.sh --only files --no-sort >/dev/null
+check "copy carries T3 Code client settings" grep -rq '"wordWrap": false' "$repo/profiles/personal/patches/home/.t3"
+check "T3 Code app state never reaches the repo" bash -c "! grep -rqE 'onboardingCompletedAt|dismissedProviderUpdateNotificationKeys' '$repo/base' '$repo/profiles'"
+echo
+
 echo "Failures: $failures"
 echo "Log: $log"
 ((failures == 0))
