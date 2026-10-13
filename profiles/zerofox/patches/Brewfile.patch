@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049da52dd2f 100644
+index 23b3eac9dff77a3bd225eca8caa61767baed8735..3c455ade0d0387922f4b5d189d35236b89f818c2 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -12,7 +12,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
  # Official Amazon AWS command-line interface
  brew "awscli"
  # Bourne-Again SHell, a UNIX command interpreter
-@@ -7,12 +12,34 @@ brew "bash"
+@@ -7,12 +12,36 @@ brew "bash"
  brew "bat"
  # Resource monitor. C++ version and continuation of bashtop and bpytop
  brew "btop"
@@ -40,6 +40,8 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
 +brew "docker-compose"
 +# Platform keystore credential helper for Docker
 +brew "docker-credential-helper"
++# Docker Credential Helper for Amazon ECR
++brew "docker-credential-helper-ecr"
  # Simple, fast and user-friendly alternative to find
  brew "fd"
 +# Download assets from a commit, branch, or tag of GitHub repositories
@@ -47,7 +49,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
  # Play, record, convert, and stream select audio and video codecs
  brew "ffmpeg"
  # Command-line fuzzy finder written in Go
-@@ -27,24 +54,54 @@ brew "gnu-sed"
+@@ -27,24 +56,54 @@ brew "gnu-sed"
  brew "gnupg"
  # Open source programming language to build simple/reliable/efficient software
  brew "go"
@@ -102,7 +104,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
  # Extremely fast Python linter, written in Rust
  brew "ruff"
  # Autoformat shell script source code
-@@ -57,6 +114,8 @@ brew "stylua"
+@@ -57,6 +116,8 @@ brew "stylua"
  brew "summarize"
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
@@ -111,7 +113,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -65,28 +124,51 @@ brew "tmux"
+@@ -65,28 +126,51 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -163,7 +165,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..40c9ff671463f833f0b8ab83f66f2049
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -98,4 +180,15 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -98,4 +182,15 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"
