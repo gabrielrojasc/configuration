@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index 6184d1a89c0a93820abd742a73d273ec78382e56..dcc0934ab512731b8034cdc100f115ff817c6f38 100644
+index acf912e1349e3844642932bc2864af868876c658..d298a463e5a97b855c34b8751fbca8e456a4c580 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -2,7 +2,7 @@
@@ -11,7 +11,7 @@ index 6184d1a89c0a93820abd742a73d273ec78382e56..dcc0934ab512731b8034cdc100f115ff
  
  Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
  
-@@ -54,7 +54,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+@@ -55,7 +55,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
  - Default to bounded, non-mutating external-service lookups.
  - Assume service tools are authenticated. Do not change authentication unless I ask.
  - If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
@@ -22,7 +22,7 @@ index 6184d1a89c0a93820abd742a73d273ec78382e56..dcc0934ab512731b8034cdc100f115ff
  
  ## Personal knowledge
  
-@@ -101,6 +103,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+@@ -104,6 +106,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
  ## Tracker and implementation workspace
  
  - Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.

@@ -12,6 +12,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Determine authorization from the full conversation. Carry existing approval forward for in-scope work unless I narrow or revoke it.
 - Standalone reviews, explanations, audits, diagnoses, and status reports are read-only unless I also ask for changes. An explicitly read-only request suspends edits.
 - Get my approval before actions that speak for me, create commitments, risk disruption to others, or are costly to undo. Consider consequences a rollback cannot erase. For these actions, prepare the work first and show me the proposed action and impact for approval.
+- A `COMMENT` review on a PR I asked you to review doesn't need my approval. `APPROVE` and `REQUEST_CHANGES` reviews still do.
 - Deployments run through GitHub Actions. Provide the command for me to run; execute it only with my explicit approval.
 - Preserve unrelated work.
 - Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
@@ -90,13 +91,15 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
 - Prefer standard framework hooks over configuration mutation.
-- Write comments to explain why. Keep them current when the code moves or changes.
+- Leave code uncommented, whatever the surrounding code does, unless it documents a public API or the code can't show a *why* forced from outside, such as by a vendor, platform, or protocol. Treat license headers and tool directives as code. Keep comments current; change history belongs in the commit message.
+- When code you write needs explaining, rename, extract, or narrow a type within the task's scope.
 
 ## Testing
 
 - Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
 - End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file. Record the command that reproduces it in or next to the artifact, and show it in the response only when I ask for it.
 - Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
+- Tests and verification scripts state what they check through test names and assertion messages.
 
 ## Tracker and implementation workspace
 
