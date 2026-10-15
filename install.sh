@@ -374,10 +374,14 @@ $(printf '  %s\n' "${remove_names[@]}")"
 # Apps installed by hand update themselves, so install only lists the ones
 # this machine lacks.
 function install_apps() {
-    local list="$work/apps.txt" missing="" name
+    local list="$work/apps.txt" installed="$work/apps-installed.txt" missing="" name
     render apps.txt "$list"
+    if [[ -f "$apps_installed" ]]; then cat "$apps_installed" >"$installed"; else : >"$installed"; fi
     while IFS= read -r name; do
-        if [[ -n "$name" && ! -d "$apps_dir/$name.app" ]]; then
+        if [[ -z "$name" ]]; then continue; fi
+        if [[ -d "$apps_dir/$name.app" ]]; then
+            echo "$name" >>"$installed"
+        else
             missing+="  $name"$'\n'
         fi
     done <"$list"
@@ -389,7 +393,10 @@ function install_apps() {
 ${missing%$'\n'}"
         record 'Apps' info "$(count_lines "$missing") to install by hand"
     fi
-    if ((apply)); then save_snapshot apps.txt "$list"; fi
+    if ((apply)); then
+        LC_ALL=C sort -u "$installed" >"$installed.sorted"
+        save_snapshot apps.txt "$installed.sorted"
+    fi
 }
 
 # count_lines <text>: number of non-empty lines.

@@ -55,9 +55,9 @@ CLI's lock file, so add the skill however you like and run `copy.sh`.
 leaves out Apple's apps, Homebrew casks, and Mac App Store apps, because the
 Brewfile covers the last two. These apps update themselves, so install never
 installs or updates them. It only lists the ones this machine lacks.
-`copy.sh` adds apps you install, but uninstalling one doesn't remove it from
-the list: a machine without an app may just not have installed it yet. Remove
-it from `apps.txt` by hand.
+`copy.sh` adds apps you install and removes apps you uninstall. A listed app
+this machine never had stays listed, because the machine may just not have
+installed it yet.
 
 ## Upgrade
 

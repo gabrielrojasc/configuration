@@ -103,10 +103,20 @@ function defer_snapshot() {
     cat "$2" >"$work/pending/$1"
 }
 
+function merge_apps() {
+    local had="$work/apps-had" now="$work/apps-now"
+    LC_ALL=C sort -u "$1" >"$now"
+    LC_ALL=C sort -u "$2" >"$had"
+    {
+        LC_ALL=C sort -u "$3" | LC_ALL=C comm -23 - <(LC_ALL=C comm -23 "$had" "$now")
+        LC_ALL=C comm -13 "$had" "$now"
+    } | LC_ALL=C sort -u
+}
+
 # capture <key>: fold the machine's version of <key> into the repo.
 function capture() {
     local key=$1 machine="$work/machine" repo_version="$work/repo" merged="$work/merged" snapshot
-    snapshot="$snapshot_dir/$key"
+    snapshot=$(snapshot_of "$key")
     if [[ -f "$conflicts_dir/$key" ]]; then
         color_print "$yellow" "Skipped $key: resolve .conflicts/$key first (./copy.sh --resolve $key)"
         return 0
@@ -119,7 +129,9 @@ function capture() {
     render "$key" "$repo_version" || return 0
 
     # Local edits are machine minus snapshot; replay them onto the repo version.
-    if ! git merge-file -p -L "this machine" -L "last install" -L repo \
+    if [[ "$key" == apps.txt ]]; then
+        merge_apps "$machine" "$snapshot" "$repo_version" >"$merged"
+    elif ! git merge-file -p -L "this machine" -L "last install" -L repo \
         "$machine" "$snapshot" "$repo_version" >"$merged"; then
         mkdir -p "$(dirname "$conflicts_dir/$key")"
         cp "$merged" "$conflicts_dir/$key"

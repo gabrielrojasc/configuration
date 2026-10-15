@@ -227,7 +227,8 @@ check "a skill under the repo's skills/ keeps the bare repo" grep -qx 'anthropic
 check "a skill at the repo root keeps the bare repo" grep -qx 'zarazhangrui/frontend-slides frontend-slides' "$log_dir/skills-machine.txt"
 echo
 
-# Apps installed by hand: install reports the missing ones, copy adds new ones.
+# Apps installed by hand: install reports the missing ones, copy adds new ones
+# and drops uninstalled ones.
 # Needs Homebrew, which copy asks for installed casks.
 echo "== apps"
 fresh personal
@@ -241,6 +242,30 @@ rendered=$(in_repo ./install.sh --show apps.txt)
 check "copy adds a hand-installed app" grep -qx 'E2E Manual' <<<"$rendered"
 check "copy keeps listed apps that are missing" grep -qx 'T3 Code (Alpha)' <<<"$rendered"
 check "copy leaves out App Store apps and symlinks" bash -c "! grep -qE 'E2E (Store|Linked)' <<<'$rendered'"
+rm -r "$DOTFILES_APPS_DIR/E2E Manual.app"
+in_repo ./copy.sh --only apps --no-sort >"$log_dir/apps-copy-uninstalled.txt"
+rendered=$(in_repo ./install.sh --show apps.txt)
+check "copy drops an app after it's uninstalled" bash -c "! grep -qx 'E2E Manual' <<<'$rendered'"
+check "copy still keeps listed apps never installed here" grep -qx 'T3 Code (Alpha)' <<<"$rendered"
+mkdir -p "$DOTFILES_APPS_DIR/E2E Gone.app"
+in_repo ./copy.sh --only apps --no-sort >/dev/null
+check "copy lists an app before it's uninstalled" bash -c "(cd '$repo' && ./install.sh --show apps.txt) | grep -qx 'E2E Gone'"
+rm -r "$DOTFILES_APPS_DIR/E2E Gone.app"
+in_repo ./install.sh --only apps --apply >/dev/null
+in_repo ./copy.sh --only apps --no-sort >"$log_dir/apps-copy-after-install.txt"
+rendered=$(in_repo ./install.sh --show apps.txt)
+check "copy drops an app uninstalled before an install" bash -c "! grep -qx 'E2E Gone' <<<'$rendered'"
+mkdir -p "$DOTFILES_APPS_DIR/E2E Next.app"
+in_repo ./copy.sh --only apps --no-sort >/dev/null
+mkdir -p "$repo/.conflicts"
+{ in_repo ./install.sh --show apps.txt; echo 'E2E Next2'; } | LC_ALL=C sort >"$repo/.conflicts/apps.txt"
+in_repo ./copy.sh --resolve apps.txt >/dev/null
+check "copy lists an app before the repo gains one beside it" bash -c "(cd '$repo' && ./install.sh --show apps.txt) | grep -qx 'E2E Next'"
+rm -r "$DOTFILES_APPS_DIR/E2E Next.app"
+in_repo ./copy.sh --only apps --no-sort >"$log_dir/apps-copy-beside-repo-add.txt"
+rendered=$(in_repo ./install.sh --show apps.txt)
+check "an uninstall beside a repo addition doesn't conflict" test ! -e "$repo/.conflicts/apps.txt"
+check "an uninstall beside a repo addition drops only the uninstalled app" bash -c "! grep -qx 'E2E Next' <<<'$rendered' && grep -qx 'E2E Next2' <<<'$rendered'"
 unset DOTFILES_APPS_DIR
 echo
 

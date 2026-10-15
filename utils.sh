@@ -86,6 +86,7 @@ conflicts_dir="$repo/.conflicts"
 # What install last wrote (or copy last captured) per key; copy diffs $HOME
 # against it so only local edits are carried into the repo.
 snapshot_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/snapshot"
+apps_installed="${snapshot_dir%/snapshot}/apps-installed.txt"
 
 # Directories mirrored as a whole, so new files in them get picked up by copy.
 # Profiles append their own in profile.sh.
@@ -392,25 +393,15 @@ function read_machine() {
             # installed by hand and update themselves. Cask apps are matched by
             # bundle or cask name, since pkg casks list no app.
             command -v brew >/dev/null || return 1
-            local casks app name rendered
+            local casks app name
             casks=$(brew info --cask --installed --json=v2 |
                 jq -r '.casks[] | .name[], (.artifacts[] | objects | .app? // empty | .[] | strings | sub("\\.app$"; ""))') || return 1
-            rendered=$(mktemp)
-            render apps.txt "$rendered" 2>/dev/null || : >"$rendered"
-            {
-                for app in "$apps_dir"/*.app; do
-                    name=$(basename "$app" .app)
-                    # Apple's apps there are symlinks (Safari); App Store apps carry a receipt.
-                    if [[ ! -d "$app" || -L "$app" || -d "$app/Contents/_MASReceipt" ]]; then continue; fi
-                    if ! grep -qxF "$name" <<<"$casks"; then echo "$name"; fi
-                done
-                # Listed apps this machine lacks stay listed: not having
-                # installed one yet doesn't drop it for the other machines.
-                while IFS= read -r name; do
-                    if [[ -n "$name" && ! -d "$apps_dir/$name.app" ]]; then echo "$name"; fi
-                done <"$rendered"
-            } | LC_ALL=C sort -u >"$out"
-            rm -f "$rendered"
+            for app in "$apps_dir"/*.app; do
+                name=$(basename "$app" .app)
+                # Apple's apps there are symlinks (Safari); App Store apps carry a receipt.
+                if [[ ! -d "$app" || -L "$app" || -d "$app/Contents/_MASReceipt" ]]; then continue; fi
+                if ! grep -qxF "$name" <<<"$casks"; then echo "$name"; fi
+            done | LC_ALL=C sort -u >"$out"
             ;;
         home/*)
             path="$HOME/${key#home/}"
@@ -467,10 +458,15 @@ function skills_cli() {
     (cd "$HOME" && env DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest "$@")
 }
 
+function snapshot_of() {
+    if [[ "$1" == apps.txt ]]; then echo "$apps_installed"; else echo "$snapshot_dir/$1"; fi
+}
+
 function save_snapshot() {
-    local key=$1 file=$2
-    mkdir -p "$(dirname "$snapshot_dir/$key")"
-    cat "$file" >"$snapshot_dir/$key"
+    local path
+    path=$(snapshot_of "$1")
+    mkdir -p "$(dirname "$path")"
+    cat "$2" >"$path"
 }
 
 # add_machine_secrets <key> <machine file> <file>: put back into <file> the
