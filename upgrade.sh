@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Upgrade what install.sh installed for the profile in .env (DOTFILES_PROFILE):
 # Homebrew formulae and casks (then brew cleanup --prune=all), Mac App Store
-# apps, the profile's toolchain (mise or proto), pnpm globals, and global
-# agent skills.
+# apps, the profile's toolchain (mise or proto), pnpm globals, uv tools, and
+# global agent skills.
 #
 # Usage: ./upgrade.sh [-a | --apply]
 #   (no flags)   list what's outdated without upgrading (brew update still
@@ -114,6 +114,59 @@ else
         (cd "$HOME" && pnpm outdated -g) || true
         echo
         record 'pnpm globals' change "$(count "$outdated") to upgrade"
+    fi
+fi
+
+section 'uv tools'
+if ! command -v uv >/dev/null; then
+    color_print "$yellow" 'uv is not on PATH; skipped'
+    record 'uv tools' fail 'skipped: uv not on PATH'
+elif ! listing=$(uv tool list --outdated 2>/dev/null); then
+    color_print "$yellow" 'uv tool list failed; skipped'
+    record 'uv tools' fail 'skipped: uv tool list failed'
+else
+    # Lines starting with "- " are a tool's executables, not tools.
+    outdated=$(echo "$listing" | grep -v '^- ' || true)
+    if [[ -z "$outdated" ]]; then
+        color_print "$green" 'uv tools are up to date'
+        record 'uv tools' ok 'up to date'
+    elif ((apply)); then
+        upgrade_failed=0
+        uv tool upgrade --all || upgrade_failed=1
+        # uv upgrade skips tools installed with a version pin, but they still list as outdated.
+        if ! listing=$(uv tool list --outdated 2>/dev/null); then
+            color_print "$yellow" 'uv tool list failed after the upgrade; cannot tell what was upgraded'
+            record 'uv tools' fail 'upgrade ran; recheck failed'
+        else
+            still=$(echo "$listing" | grep -v '^- ' || true)
+            if [[ -z "$still" ]]; then
+                upgraded=$outdated
+            else
+                upgraded=$(echo "$outdated" | grep -vxF "$still" || true)
+                color_print "$yellow" 'Still outdated (pinned tools need uv tool install <tool>@latest):'
+                echo "$still"
+            fi
+            result="upgraded $(count "$upgraded")"
+            if [[ -n "$still" ]]; then
+                result="$result; $(count "$still") still outdated"
+            fi
+            if ((upgrade_failed)); then
+                record 'uv tools' fail "uv tool upgrade failed; $result"
+            elif [[ -n "$still" ]]; then
+                record 'uv tools' fail "$result"
+            else
+                record 'uv tools' ok "$result"
+            fi
+            # The cswap menu bar service keeps running the old build until launchd restarts it.
+            service="gui/$(id -u)/com.cswap.menubar"
+            if echo "$upgraded" | grep -q '^claude-swap ' && launchctl print "$service" >/dev/null 2>&1; then
+                launchctl kickstart -k "$service"
+            fi
+        fi
+    else
+        echo "$outdated"
+        echo
+        record 'uv tools' change "$(count "$outdated") to upgrade"
     fi
 fi
 

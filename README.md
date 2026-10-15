@@ -65,8 +65,10 @@ it from `apps.txt` by hand.
 formulae and casks (including casks that update themselves, followed by
 `brew cleanup --prune=all`, which also deletes every cached download), Mac App Store
 apps, the profile's toolchain (mise on `personal`, proto on `zerofox`), pnpm
-globals, and global agent skills (`skills update -g`). The skills CLI can't
-report which skills are outdated, so the dry run only counts them.
+globals, uv tools such as `cswap`, and global agent skills (`skills update -g`).
+The skills CLI can't report which skills are outdated, so the dry run only
+counts them. Upgrading `cswap` also restarts its menu bar service, if it's
+installed, so the service runs the new version.
 
 ```sh
 ./upgrade.sh          # list what's outdated
