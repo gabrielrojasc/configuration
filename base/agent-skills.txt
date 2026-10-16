@@ -6,7 +6,7 @@ cursor/plugins/pstack unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
 gabrielrojasc/skills babysit-pr
-gabrielrojasc/skills codex
+gabrielrojasc/skills computer-use
 gabrielrojasc/skills cross-review
 gabrielrojasc/skills developer-documentation-style
 gabrielrojasc/skills gh-review-comments
