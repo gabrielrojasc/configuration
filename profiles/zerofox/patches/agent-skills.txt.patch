@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 079db76cde75679251e31537ce3f53a99c475565..3722f0f94b247690d44870232e9aa4c961defbc8 100644
+index 079db76cde75679251e31537ce3f53a99c475565..705adafa3bf0537331164bc22ffa25adf83f08bc 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -20,10 +20,11 @@ index 079db76cde75679251e31537ce3f53a99c475565..3722f0f94b247690d44870232e9aa4c9
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  github/gh-stack gh-stack
-@@ -46,4 +44,6 @@ mattpocock/skills wizard
+@@ -46,4 +44,7 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
++riskive/ai-tooling catalog-guided-db-access
 +unblocked/skills unblocked-context-research
 +unblocked/skills unblocked-tools-guide
  zarazhangrui/frontend-slides frontend-slides
