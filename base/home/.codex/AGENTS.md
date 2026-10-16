@@ -32,8 +32,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 ## Writing
 
 - Keep everything you write concise and high value. Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
-- I read visuals faster than prose. In messages to me, use tables, diagrams, and other visuals when they make the point clearer than prose.
-- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show options and tradeoffs in a table and proposed edits as diffs. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
+- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show proposed edits as diffs. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
 - Link the tickets, PRs, commits, and other external items you mention.
 
 ## Documentation
@@ -91,7 +90,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
 - Prefer standard framework hooks over configuration mutation.
-- Leave code uncommented, whatever the surrounding code does, unless it documents a public API or the code can't show a *why* forced from outside, such as by a vendor, platform, or protocol. Treat license headers and tool directives as code. Keep comments current; change history belongs in the commit message.
+- Leave code uncommented, whatever the surrounding code does, unless it documents a public API or the code can't show a _why_ forced from outside, such as by a vendor, platform, or protocol. Treat license headers and tool directives as code. Keep comments current; change history belongs in the commit message.
 - When code you write needs explaining, rename, extract, or narrow a type within the task's scope.
 
 ## Testing
