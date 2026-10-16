@@ -1,5 +1,5 @@
 diff --git a/apps.txt b/apps.txt
-index cba667157e162cce4aff98f72571f2e34cd679cf..3ee35672f4d5f57c4c4221e72120142dbb6b55f4 100644
+index 0057b69df444773218c432031c9a9c3d27f1ee4b..f4ea1095e89a1c79bf0f2cfc8169b8338d83c359 100644
 --- a/apps.txt
 +++ b/apps.txt
 @@ -1 +1,27 @@
@@ -27,6 +27,6 @@ index cba667157e162cce4aff98f72571f2e34cd679cf..3ee35672f4d5f57c4c4221e72120142d
 +Slack
 +Spotify
 +Sublime Text
- T3 Code (Alpha)
+ T3 Code (Beta)
 +Visual Studio Code
 +zoom.us
