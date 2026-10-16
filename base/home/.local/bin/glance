@@ -1,0 +1,54 @@
+#!/bin/bash
+set -euo pipefail
+
+login=$(gh api --hostname github.com user --jq .login)
+day=$(date +%F)
+zone=$(date '+%Z %z')
+start=$(date -v0H -v0M -v0S '+%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')
+end=$(date -v23H -v59M -v59S '+%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')
+
+block=$(gh api --hostname github.com graphql \
+  -f merged="org:riskive is:pr author:$login is:merged merged:$start..$end" \
+  -f open="org:riskive is:pr author:$login is:open" \
+  -f reviews="org:riskive is:pr is:open draft:false user-review-requested:$login" \
+  -f query='
+query($merged: String!, $open: String!, $reviews: String!) {
+  merged: search(query: $merged, type: ISSUE, first: 1) { issueCount }
+  reviews: search(query: $reviews, type: ISSUE, first: 1) { issueCount }
+  open: search(query: $open, type: ISSUE, first: 100) {
+    issueCount
+    nodes {
+      ... on PullRequest {
+        id isDraft reviewDecision
+        commits(last: 1) {
+          nodes { commit { statusCheckRollup { contexts(first: 100) { nodes {
+            ... on CheckRun { name conclusion }
+            ... on StatusContext { context state }
+          } } } } }
+        }
+      }
+    }
+  }
+}' --jq '
+  .data as $first |
+  .data.open.nodes | unique_by(.id) as $prs |
+  if ($prs | length) != $first.open.issueCount then
+    error("More than 100 open PRs or incomplete results; no counts printed")
+  else
+    [$prs[] | select(.isDraft | not)] as $ready |
+    ($ready | map(select(.reviewDecision == "APPROVED")) | length) as $approved |
+    ($ready | map(select(.reviewDecision == "CHANGES_REQUESTED")) | length) as $changes |
+    ($prs | map(select(.isDraft)) | length) as $drafts |
+    ($prs | map(select(
+      [.commits.nodes[0].commit.statusCheckRollup.contexts.nodes[]?
+        | select(((.name // .context) | test("specialist"; "i")) | not)
+        | select((.conclusion // .state) as $s
+            | ["FAILURE", "TIMED_OUT", "STARTUP_FAILURE", "ERROR"] | index($s))
+      ] | length > 0
+    )) | length) as $failed |
+    "My PRs merged today: \($first.merged.issueCount)",
+    "My open PRs: \($prs | length) | draft \($drafts) | awaiting review \(($ready | length) - $approved - $changes) | approved \($approved) | changes requested \($changes)",
+    "My open PRs with failing CI: \($failed)",
+    "PRs requesting my review directly: \($first.reviews.issueCount)"
+  end')
+printf 'GitHub | %s | %s | %s | org:riskive\n%s\n' "$login" "$day" "$zone" "$block"
