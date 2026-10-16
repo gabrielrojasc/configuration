@@ -19,7 +19,7 @@
   "browserAutoShowFloatingPreview": true,
   "browserProfiles": [],
   "browserDefaultProfileId": "default",
-  "confirmQuit": "hold",
+  "confirmQuit": "double-click",
   "confirmThreadArchive": false,
   "confirmThreadDelete": true,
   "confirmThreadUnpin": false,
@@ -37,6 +37,7 @@
   "fontFamilySans": "",
   "fontFamilyTerminal": "",
   "fontSmoothing": true,
+  "persistComposerContextStrip": false,
   "favorites": [
     {
       "provider": "claudeAgent",
@@ -49,6 +50,7 @@
   ],
   "providerModelPreferences": {},
   "pullRequestMergeMethodOverrides": {},
+  "pullRequestLinksOpenInApp": true,
   "planModeEnabled": false,
   "contextWindowMeterEnabled": false,
   "composerCollapseOnScroll": true,
@@ -65,7 +67,7 @@
   "sidebarThreadSortOrder": "updated_at",
   "sidebarThreadPreviewCount": 6,
   "timestampFormat": "locale",
-  "snapShotEnabled": false,
+  "snapShotEnabled": true,
   "snapShotIncludeAccessibility": true,
   "snapShotShortcut": {
     "kind": "both-shift-keys"
