@@ -50,7 +50,7 @@
   ],
   "providerModelPreferences": {},
   "pullRequestMergeMethodOverrides": {},
-  "pullRequestLinksOpenInApp": true,
+  "pullRequestLinksOpenInApp": false,
   "planModeEnabled": false,
   "contextWindowMeterEnabled": false,
   "composerCollapseOnScroll": true,
