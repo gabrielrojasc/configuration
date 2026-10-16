@@ -1,13 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+needs_you=${1:-null}
+if [[ $needs_you != null && ! $needs_you =~ ^[0-9]+$ ]]; then
+  echo "usage: glance [threads-needing-you]" >&2
+  exit 2
+fi
+
 login=$(gh api --hostname github.com user --jq .login)
-day=$(date +%F)
-zone=$(date '+%Z %z')
 start=$(date -v0H -v0M -v0S '+%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')
 end=$(date -v23H -v59M -v59S '+%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')
 
-block=$(gh api --hostname github.com graphql \
+sections=$(gh api --hostname github.com graphql \
   -f merged="org:riskive is:pr author:$login is:merged merged:$start..$end" \
   -f open="org:riskive is:pr author:$login is:open" \
   -f reviews="org:riskive is:pr is:open draft:false user-review-requested:$login" \
@@ -30,6 +34,10 @@ query($merged: String!, $open: String!, $reviews: String!) {
     }
   }
 }' --jq '
+  def tile($label; $value; $alert):
+    "<div class=\"p \(if $value == 0 then "zero" else $alert end)\"><div class=\"t\">\($label)</div><div class=\"v\">\($value)</div></div>";
+  def section($title; $tiles):
+    "<div class=\"sec\" style=\"flex:\($tiles | length)\"><div class=\"h\">\($title)</div><div class=\"row\">\($tiles | join(""))</div></div>";
   .data as $first |
   .data.open.nodes | unique_by(.id) as $prs |
   if ($prs | length) != $first.open.issueCount then
@@ -38,7 +46,6 @@ query($merged: String!, $open: String!, $reviews: String!) {
     [$prs[] | select(.isDraft | not)] as $ready |
     ($ready | map(select(.reviewDecision == "APPROVED")) | length) as $approved |
     ($ready | map(select(.reviewDecision == "CHANGES_REQUESTED")) | length) as $changes |
-    ($prs | map(select(.isDraft)) | length) as $drafts |
     ($prs | map(select(
       [.commits.nodes[0].commit.statusCheckRollup.contexts.nodes[]?
         | select(((.name // .context) | test("specialist"; "i")) | not)
@@ -46,9 +53,40 @@ query($merged: String!, $open: String!, $reviews: String!) {
             | ["FAILURE", "TIMED_OUT", "STARTUP_FAILURE", "ERROR"] | index($s))
       ] | length > 0
     )) | length) as $failed |
-    "My PRs merged today: \($first.merged.issueCount)",
-    "My open PRs: \($prs | length) | draft \($drafts) | awaiting review \(($ready | length) - $approved - $changes) | approved \($approved) | changes requested \($changes)",
-    "My open PRs with failing CI: \($failed)",
-    "PRs requesting my review directly: \($first.reviews.issueCount)"
+    '"$needs_you"' as $needs |
+    section("Your move";
+      (if $needs == null then [] else [tile("Needs you"; $needs; "bad")] end)
+      + [tile("To review"; $first.reviews.issueCount; "warn"), tile("Failing CI"; $failed; "bad")]
+      + (if $changes > 0 then [tile("Changes"; $changes; "bad")] else [] end)),
+    section("Your PRs"; [
+      tile("Merged"; $first.merged.issueCount; ""),
+      tile("In review"; ($ready | length) - $approved - $changes; ""),
+      tile("Approved"; $approved; "")
+    ])
   end')
-printf 'GitHub | %s | %s | %s | org:riskive\n%s\n' "$login" "$day" "$zone" "$block"
+
+cat <<EOF
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+:root{color-scheme:light dark}
+body{margin:0;font-family:var(--font-sans)}
+.wrap{display:flex;gap:16px}
+.sec{display:flex;flex-direction:column;gap:5px;min-width:0}
+.h{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-foreground);display:flex;align-items:center;gap:8px}
+.h::after{content:"";flex:1;height:1px;background:var(--border)}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px}
+.p{border-radius:var(--radius);padding:7px 10px 8px;display:flex;flex-direction:column;justify-content:space-between;gap:4px;min-height:58px;background:var(--card);border:1px solid var(--border)}
+.t{font-size:13px;font-weight:600;color:var(--foreground);opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v{font-size:28px;line-height:1;font-weight:650;font-variant-numeric:tabular-nums;color:var(--foreground)}
+.zero .v{color:var(--muted-foreground);opacity:.6}
+.bad{background:color-mix(in oklab,var(--destructive) 85%,black);border-color:transparent}
+.warn{background:var(--warning);border-color:transparent}
+.bad .t,.bad .v{color:#fff;opacity:1}
+.warn .t,.warn .v{color:#1c1300;opacity:1}
+@media (max-width:560px){.wrap{flex-direction:column;gap:10px}}
+</style></head><body>
+<div class="wrap">
+$sections
+</div>
+</body></html>
+EOF
