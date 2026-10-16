@@ -119,6 +119,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 - Terms: the agent handling my request is the orchestrator. Agents it spawns are subagents. A thread is one agent's conversation and context window.
 - Match the thread to the work. Delegate briefable work that would fill this thread with searching, reading, or running commands. Keep conversation, small follow-up edits, and approval-bound actions here. When a request grows into a run of tool calls, delegate the rest.
 - Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier.
+- When a skill or I ask for the other provider, delegate with T3's `delegate_task` instead. Pass the chosen rung's model and effort from that provider's definition (`~/.claude/agents/<rung>.md`, `~/.codex/agents/<rung>.toml`), and end the task with the definition's instructions.
 - Before picking a higher rung, add a check to the brief when one is cheap to build; a check can move work down a rung.
 - If `consequential` fails the same problem twice, rerun it once on the platform's most capable model.
 - Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain.
