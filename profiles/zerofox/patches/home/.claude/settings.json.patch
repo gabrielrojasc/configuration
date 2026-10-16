@@ -1,5 +1,5 @@
 diff --git a/home/.claude/settings.json b/home/.claude/settings.json
-index 7f0d8990eaa547621f162d942df94100b7f94040..fc66451c930a715d6e81048344fea571a6382307 100644
+index ab8530e9fc6b70113883c3629fb3c5cd428264d6..92abd7ac7730107927cce40b0290a0792ef24b99 100644
 --- a/home/.claude/settings.json
 +++ b/home/.claude/settings.json
 @@ -11,6 +11,7 @@
@@ -10,7 +10,7 @@ index 7f0d8990eaa547621f162d942df94100b7f94040..fc66451c930a715d6e81048344fea571
      "nomad@zerofox-claude-plugins": true
    },
    "enforceAvailableModels": true,
-@@ -29,13 +30,143 @@
+@@ -30,13 +31,143 @@
        }
      },
      "zerofox-claude-plugins": {
