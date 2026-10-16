@@ -1,5 +1,5 @@
 diff --git a/home/.claude/settings.json b/home/.claude/settings.json
-index ab8530e9fc6b70113883c3629fb3c5cd428264d6..92abd7ac7730107927cce40b0290a0792ef24b99 100644
+index 8b8cff89a28b40ec1c97be8eb8e0ca797deecf24..fea4dfc8804b0dbe84663f7628f41e6c45a04551 100644
 --- a/home/.claude/settings.json
 +++ b/home/.claude/settings.json
 @@ -11,6 +11,7 @@
@@ -10,7 +10,7 @@ index ab8530e9fc6b70113883c3629fb3c5cd428264d6..92abd7ac7730107927cce40b0290a079
      "nomad@zerofox-claude-plugins": true
    },
    "enforceAvailableModels": true,
-@@ -30,13 +31,143 @@
+@@ -31,16 +32,148 @@
        }
      },
      "zerofox-claude-plugins": {
@@ -153,4 +153,10 @@ index ab8530e9fc6b70113883c3629fb3c5cd428264d6..92abd7ac7730107927cce40b0290a079
 +  },
    "permissions": {
      "allow": [
-       "Bash(codex exec:*)"
+-      "Bash(codex exec:*)"
++      "Bash(codex exec:*)",
++      "Bash(node /Users/grojas/.claude/skills/catalog-guided-db-access/bin/zf-databases.mjs explain monolith prod:*)",
++      "Bash(node /Users/grojas/.claude/skills/catalog-guided-db-access/bin/zf-databases.mjs query monolith prod:*)"
+     ],
+     "defaultMode": "auto"
+   },
