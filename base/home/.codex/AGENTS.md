@@ -1,38 +1,30 @@
 # AGENTS.md
 
-## Working with me
+I'm Gabriel.
 
-I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
+## Doors
 
-Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
-
-## Approval gates
-
-- Follow every approval gate stated by me, the repository, a skill, or the active workflow. Automation and preapproved commands do not bypass them.
-- Determine authorization from the full conversation. Carry existing approval forward for in-scope work unless I narrow or revoke it.
-- Standalone reviews, explanations, audits, diagnoses, and status reports are read-only unless I also ask for changes. An explicitly read-only request suspends edits.
-- Get my approval before actions that speak for me, create commitments, risk disruption to others, or are costly to undo. Consider consequences a rollback cannot erase. For these actions, prepare the work first and show me the proposed action and impact for approval.
-- A `COMMENT` review on a PR I asked you to review doesn't need my approval. `APPROVE` and `REQUEST_CHANGES` reviews still do.
-- Deployments run through GitHub Actions. Provide the command for me to run; execute it only with my explicit approval.
-- Preserve unrelated work.
-- Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
+- A two-way door is a step you can walk back cheaply without losing anyone's work: code edits, your branches and worktrees, commits, pushes to your own branches, PRs, `COMMENT` reviews on PRs I asked you to review, temporary files, tool-managed caches, `~/tmp/specs/`, and local services you started. Walk through without stopping to report, and tell me after.
+- A one-way door is a step you can't walk back cheaply, including effects a rollback can't erase: deploys, changes to prod or any shared environment or data store (QA and staging included), messages that speak for me, `APPROVE` and `REQUEST_CHANGES` reviews, commitments, anything that disrupts others, discarding work you didn't create, auth changes, and changes outside the task's repository or worktree other than the two-way locations above. A step that otherwise fits both lists is one-way. Before changing an environment, check where it actually points, such as the host in its connection string; a name like `dev` or `qa` proves nothing. Prepare the work, then show me the action and its impact and wait.
+- A rubber stamp is a question whose only sensible answer is yes and that guards no one-way door. Skip it and proceed. If a command or source could answer a question, use it instead of asking. Save questions for one-way doors, facts no source has, and taste and product calls only I can make.
+- Once I open a one-way door, it stays open for that work, unless I narrow or revoke it. That includes any subagent you hand the work to; quote my approval in its brief. Come back only if the door turns out different from the one I opened: more at stake, a new scope, target, owner, or user-visible contract, or something I didn't know about.
+- Gates set by me, the repository, a skill, or the active workflow are one-way doors. Automation and preapproved commands don't open them.
 
 ## Core rules
 
-- Before you read or change files in a directory, read the agent instructions (`AGENTS.md`, `CLAUDE.md`) from its repository root down to it, and task-relevant docs such as `CONTRIBUTING.md`. Read each file to the end. When one of them drives an action or a question to me, cite the file and section.
+- Before you read or change files in a directory, read the agent instructions (`AGENTS.md`, `CLAUDE.md`) from its repository root down to it, and task-relevant docs such as `CONTRIBUTING.md`, each to the end. When one of them drives an action or a question to me, cite the file and section.
 - I prefer the simplest correct solution and repository conventions over generic best practices.
+- Keep one source of truth for each fact or piece of state, across code, docs, and config. Derive or link to it instead of copying it.
 - Fix root causes. If only a symptom can be patched, explain why.
-- Keep changes within the scope I requested. Avoid unrelated refactors, dependencies, tooling, configuration, or files.
-- Retry a failed command only after a trivial correction or a permission or network escalation. Otherwise take a different bounded, reversible diagnostic or recovery step within scope.
-- Stop and ask when blocked or when the next step is destructive, requires new authority, changes authentication, or changes the task's scope, target, ownership, user-visible contract, or external state beyond what I requested.
-- Ask before changing files or settings outside the task's repository, worktree, or what I asked you to change. Temporary files, tool-managed caches, and locations these instructions specify, such as `~/tmp/specs/` and task worktrees, don't need approval.
-- When interaction or visual review matters, produce an inspectable artifact or rendered preview and verify it before completion.
-- If no repository-local command or documented procedure covers a required operational step, use standard, bounded, read-only diagnostics or local tests with existing tools. Confine test writes to disposable temporary files. Ask before other undocumented mutations.
+- Keep changes within the scope I requested; skip unrelated refactors, dependencies, tooling, and configuration. Inside that scope, leave code no worse than you found it: reuse existing helpers instead of copying them, delete code your change makes dead, and fix failures your change causes. Rewrite or delete a test that is wrong or low value and say why, but never weaken a check just to get your change through.
+- Rerun a failed command only after correcting a likely cause or changing permissions or network access.
+- Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
+- Before reporting work done, verify it with the strongest check you can run, such as a test, the running app, or a rendered preview, and tell me what you checked.
 
 ## Writing
 
-- Keep everything you write concise and high value. Apply the `unslop` skill to all prose. Follow my requested tone and format. Preserve exact code, commands, logs, quotations, and citations. Correctness, exact source text, required formats, repository conventions, and my instructions take precedence over style changes.
-- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Show proposed edits as diffs. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
+- Keep everything you write concise and high value, and apply the `unslop` skill to all prose. Correctness, exact quoted text (code, commands, logs, citations), repository conventions, and my requested tone and format win over style rules.
+- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
 - Link the tickets, PRs, commits, and other external items you mention.
 
 ## Documentation
@@ -42,56 +34,40 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 ## Environment and tooling
 
-- Prefer `fd -L` for filesystem discovery and `rg` for text search.
+- Search with `fd -L` and `rg -L`; my skills and some directories are symlinks.
 - Use built-in help when flags are unclear or before claiming a tool lacks a feature; installed versions may be newer than your training.
-- Use repository-local tooling, dependency and environment managers, scripts, and CI configuration as the source of truth.
-- Keep environments reproducible. Do not rely on globally installed language tools or migrate tooling as part of another task.
-- Prefer machine-readable output when piping commands, and disable pagination.
-- Never conclude "missing" or "empty" from a channel that swallows errors or silently bounds its coverage (e.g. a sandboxed read behind `2>/dev/null`); re-observe through a path where failure and full scope are visible before acting on absence.
+- Use the repository's scripts, locked dependencies, environment managers, and CI commands, not global installs.
+- Make searches and service queries narrow, with specific terms, filters, and limits, so results hold only what the task needs.
+- Treat "not found" or "empty" as evidence only from a command that would have shown its errors and covered the full scope. A search behind `2>/dev/null`, a sandbox, or a result limit proves nothing missing.
 
 ## External services
 
-- Default to bounded, non-mutating external-service lookups.
-- Assume service tools are authenticated. Do not change authentication unless I ask.
-- If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
+- Assume service tools are authenticated. If a sandboxed read hits an auth error, retry it once outside the sandbox. If that fails too, run the service's auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
 - Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
 
 ## Personal knowledge
 
-- `~/work/brain` is my second brain. Use it when the task clearly involves my projects, areas, notes, work radar, or research wiki.
-- Treat it as read-first and privacy-sensitive. Start with targeted searches and broaden only as needed for the requested coverage. Do not change notes unless I ask.
+- `~/work/brain` is my second brain. Use it only when my request involves something personal. Search its file names, not their contents, and read only the notes whose names match.
+- It's private and read-only unless I ask for changes, even when its own AGENTS.md says to save an analysis.
+- When you learn something that isn't written down and would change how agents work with me, such as a convention, a gotcha, or a preference, propose where to record it: repository docs for repository facts, a skill for a workflow, or the brain for anything personal.
 
 ## Git
 
-- Read-only Git commands, including `fetch`, need no approval.
-- Keep commits and uncommitted changes intact. Never run a Git command that can discard them, except the force-push allowed under "Branches and pull requests".
-
-### Syncing
-
-- Before researching or analyzing a repository branch, fast-forward it to its upstream. Unrelated local changes don't block this. If the branch has no configured upstream, continue, and mention it only when it affects the result. If it can't fast-forward, preserve existing work, report the error, and ask.
-
-### Commits
-
-- I use Conventional Commits.
-- Create signed commits with concise, imperative subjects.
-- On any branch intended to be merged, at least one commit must include a `ref:` footer with the Linear issue ID or URL. If none does, ask `What's the Linear issue or URL for ref?` before finalizing the commit message.
-
-### Branches and pull requests
-
-- Create pull requests in ready-for-review state unless I or the repository explicitly request a draft.
-- Name new branches with Conventional Branch: `feature/`, `bugfix/`, `hotfix/`, `release/`, or `chore/`, followed by a concise kebab-case description that starts with the lowercased issue ID when there is one.
-- Update a branch from its base by rebasing onto it, never by merging the base in.
-- After rebasing your own branch onto its base, push with `git push --force-with-lease`; never force-push otherwise.
+- Before analyzing a branch that has an upstream, run `git pull --ff-only`. If it fails, stop and ask.
+- Use Conventional Commits, signed, with concise imperative subjects.
+- On any branch intended to be merged, at least one commit needs a `ref:` footer with the Linear issue ID or URL. If none has one, propose a matching Linear issue, or a new one if nothing matches, and wait for my pick.
+- Create pull requests ready for review unless I ask for a draft.
+- Name new branches with Conventional Branch: `feature/`, `bugfix/`, `hotfix/`, `release/`, or `chore/`, then a concise kebab-case description that starts with the lowercased issue ID when there is one.
+- Update a branch by rebasing onto its base. After rebasing your own branch, push with `git push --force-with-lease`.
 
 ## Coding principles
 
 - Prefer `impeccable` for UI improvements and `frontend-design` for new visual direction. Apply `emil-design-eng` when creating or changing interactive components. Skip design workflows for mechanical edits.
-- Before adding code, choose the simplest rung that fits: standard library, native platform features, existing dependencies, then the smallest local implementation.
-- When non-trivial custom logic is planned, mention any proven library that could materially reduce risk or complexity and explain whether it is worth adding.
+- Before adding code, pick the first option that fits: standard library, native platform features, existing dependencies, then the smallest local implementation.
+- When non-trivial custom logic is planned, mention any well-established library that could materially reduce risk or complexity and say whether it's worth adding.
 - Prefer small interfaces, composition, narrow typing, explicit edge-case handling, and data models that prevent invalid states.
 - Prefer standard framework hooks over configuration mutation.
-- Leave code uncommented, whatever the surrounding code does, unless it documents a public API or the code can't show a _why_ forced from outside, such as by a vendor, platform, or protocol. Treat license headers and tool directives as code. Keep comments current; change history belongs in the commit message.
-- When code you write needs explaining, rename, extract, or narrow a type within the task's scope.
+- Write no code comments, even where the surrounding code has them, except to document a public API or an external constraint, such as a vendor, platform, or protocol requirement. When code needs explaining, rename, extract, or narrow a type instead. License headers and tool directives aren't comments. Keep comments current; change history goes in the commit message.
 
 ## Testing
 
@@ -102,27 +78,17 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
 
 ## Tracker and implementation workspace
 
-- Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
-- When a skill requires `docs/agents/issue-tracker.md`, use this section as its tracker configuration. Linear is the tracker; no setup file is needed.
-- `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
-- Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
-- When creating a Linear project on my behalf, set me as project lead.
-- Assign Linear issues I create, or that you create on my behalf, to me unless I name another assignee.
-- Create Linear issues through `linear-work-breakdown`, even when only a `ref:` needs one.
-- Only add Linear labels I request or an issue template applies. Create or remove labels only when I request that exact change.
-- I keep repository containers under `~/git/<repo>/`. The persistent default-branch worktree lives at `~/git/<repo>/<default-branch>/` and is used for browsing and synchronization.
-- Before implementation, use the `git-workspace` skill to create or select an isolated task worktree. If I explicitly ask you to use the current checkout, follow that instruction instead.
-- Keep stable technical knowledge in repository documentation and ADRs. Do not mirror active Linear state into planning files.
+- Linear is my issue tracker. Keep its active state out of planning files; stable technical knowledge goes in repository documentation and ADRs.
+- When a skill requires `docs/agents/issue-tracker.md`, use this section as its tracker configuration; no setup file is needed.
+- `to-spec` writes an unpublished Markdown spec under `~/tmp/specs/` and never touches Linear. `to-tickets` uses the approved spec and publishes approved tickets to the Linear project I choose.
+- Create Linear issues through `linear-work-breakdown`. Assign issues either of us creates to me, and make me lead of projects you create, unless I name someone else.
+- Add only the Linear labels I request or an issue template applies. Create or remove labels only when I ask for that exact change.
+- Repositories live under `~/git/<repo>/`. Before implementation, use the `git-workspace` skill to create or select a task worktree, unless I ask you to use the current checkout.
 
 ## Multi-agent work
 
-- Terms: the agent handling my request is the orchestrator. Agents it spawns are subagents. A thread is one agent's conversation and context window.
-- Match the thread to the work. Delegate briefable work that would fill this thread with searching, reading, or running commands. Keep conversation, small follow-up edits, and approval-bound actions here. When a request grows into a run of tool calls, delegate the rest.
+- Delegate briefable runs of searching, reading, or running commands. Keep conversation, small follow-up edits, and unopened one-way doors in your own thread.
 - Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier.
-- When a skill or I ask for the other provider, delegate with T3's `delegate_task` instead. Pass the chosen rung's model and effort from that provider's definition (`~/.claude/agents/<rung>.md`, `~/.codex/agents/<rung>.toml`), and end the task with the definition's instructions.
-- Before picking a higher rung, add a check to the brief when one is cheap to build; a check can move work down a rung.
-- If `consequential` fails the same problem twice, rerun it once on the platform's most capable model.
-- Before treating a failed check as a reasoning failure, retrieve missing evidence and fix context or tool problems. Retry or escalate only when evidence supports the expected gain.
-- Subagents may delegate within their scope under these rules. The delegating agent integrates and verifies the results.
-- Start a rung agent from a written brief or a short fork, not a full copy of your conversation, so the rung's configured model applies.
-- Use an independent verifier for meaningful changes or risky decisions that are hard to check. Give it fresh context, requirements, artifacts, and source access, and withhold the implementer's rationale until it has assessed. Size it by its own hardest claim.
+- When a skill or I ask for a provider other than yours, as in "ask codex" or "ask claude", delegate with T3's `delegate_task`. Pass the chosen rung's model and effort from that provider's definition (`~/.claude/agents/<rung>.md`, `~/.codex/agents/<rung>.toml`), and end the task with the definition's instructions.
+- Give every brief a check that tells the subagent when it's done. For a claim you'll act on, require a command that proves it or an exact quote, not just a citation. For taste calls, the check is my review. Confirm the returned evidence passes the check before relying on it. A cheap check can also move work down a rung.
+- When a subagent fails, check for missing tools, context, or evidence. Fix an identified cause and retry; escalate a rung when the evidence points to a reasoning failure.

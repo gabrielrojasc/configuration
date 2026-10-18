@@ -1,32 +1,31 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index acf912e1349e3844642932bc2864af868876c658..d298a463e5a97b855c34b8751fbca8e456a4c580 100644
+index b63250f513524ea0c44a0f19bae35d1134b5aa13..d7b3a8d1f1c81347c7700793eea21571eaa8fc2e 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
-@@ -2,7 +2,7 @@
+@@ -1,6 +1,6 @@
+ # AGENTS.md
  
- ## Working with me
+-I'm Gabriel.
++I'm Gabriel. I work across ZeroFox repos.
  
--I'm Gabriel. I care about simple systems, traceable evidence, direct communication, and low duplicated state.
-+I'm Gabriel. I work across ZeroFox repos and care about simple systems, traceable evidence, direct communication, and low duplicated state.
+ ## Doors
  
- Make progress when the request is clear enough to attempt. When a step doesn't need my input, keep going, and put status notes in the same message as your next action. Check available sources before asking me for facts.
+@@ -43,7 +43,9 @@ I'm Gabriel.
+ ## External services
  
-@@ -55,7 +55,9 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
- - Default to bounded, non-mutating external-service lookups.
- - Assume service tools are authenticated. Do not change authentication unless I ask.
- - If a sandboxed read-only command hits an authentication error, retry it once outside the sandbox. If that fails too, run the service's non-mutating auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
+ - Assume service tools are authenticated. If a sandboxed read hits an auth error, retry it once outside the sandbox. If that fails too, run the service's auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
 -- Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
-+- Use `gh` for GitHub, and the matching connector for Slack and the Google suite. Default GitHub searches to `org:riskive` unless a different scope is explicitly required.
++- Use `gh` for GitHub, and the matching connector for Slack and the Google suite. Scope GitHub searches to `org:riskive` unless the task needs another org.
 +- For observability checks and Grafana links, use the Grafana MCP for the target environment.
 +- For context the repository doesn't hold, such as why code is built that way, ownership, or past incidents, use the `unblocked-context-research` skill before searching PRs, Slack, Linear, or docs one by one.
  
  ## Personal knowledge
  
-@@ -104,6 +106,7 @@ Make progress when the request is clear enough to attempt. When a step doesn't n
+@@ -79,6 +81,7 @@ I'm Gabriel.
  ## Tracker and implementation workspace
  
- - Linear is my default issue tracker unless the repository explicitly states otherwise. Linear owns active scope, dependencies, ownership, and progress. Git owns code, branches, worktrees, and commits.
-+- Default Linear work to the EP team unless the request or repository names another.
- - When a skill requires `docs/agents/issue-tracker.md`, use this section as its tracker configuration. Linear is the tracker; no setup file is needed.
- - `to-spec` always writes an unpublished Markdown spec under `~/tmp/specs/`. It must not create or update Linear entities.
- - Use the approved spec as input to `to-tickets`; publish approved tickets to the chosen Linear project.
+ - Linear is my issue tracker. Keep its active state out of planning files; stable technical knowledge goes in repository documentation and ADRs.
++- Default Linear work to the EP team unless I name another.
+ - When a skill requires `docs/agents/issue-tracker.md`, use this section as its tracker configuration; no setup file is needed.
+ - `to-spec` writes an unpublished Markdown spec under `~/tmp/specs/` and never touches Linear. `to-tickets` uses the approved spec and publishes approved tickets to the Linear project I choose.
+ - Create Linear issues through `linear-work-breakdown`. Assign issues either of us creates to me, and make me lead of projects you create, unless I name someone else.
