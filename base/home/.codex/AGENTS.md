@@ -19,7 +19,7 @@ I'm Gabriel.
 - Keep changes within the scope I requested; skip unrelated refactors, dependencies, tooling, and configuration. Inside that scope, leave code no worse than you found it: reuse existing helpers instead of copying them, delete code your change makes dead, and fix failures your change causes. Rewrite or delete a test that is wrong or low value and say why, but never weaken a check just to get your change through.
 - Rerun a failed command only after correcting a likely cause or changing permissions or network access.
 - Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
-- Before reporting work done, verify it with the strongest check you can run, such as a test, the running app, or a rendered preview, and tell me what you checked.
+- Before reporting work done, verify it with the strongest check you can run, such as a test, the running app, or a rendered preview, and tell me what you checked. Check facts the same way before you state them or plan around them.
 
 ## Writing
 
