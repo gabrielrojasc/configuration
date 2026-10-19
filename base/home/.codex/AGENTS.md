@@ -26,6 +26,7 @@ I'm Gabriel.
 - Keep everything you write concise and high value, and apply the `unslop` skill to all prose. Correctness, exact quoted text (code, commands, logs, citations), repository conventions, and my requested tone and format win over style rules.
 - When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
 - Link the tickets, PRs, commits, and other external items you mention.
+- Label every comment you write with Conventional Comments: `issue (blocking):`, `suggestion (non-blocking):`, `nitpick (non-blocking):`, `question:`.
 
 ## Documentation
 
