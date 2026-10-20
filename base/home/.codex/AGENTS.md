@@ -91,7 +91,7 @@ I'm Gabriel.
 ## Multi-agent work
 
 - Delegate briefable runs of searching, reading, or running commands. Keep conversation, small follow-up edits, and unopened one-way doors in your own thread.
-- Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier.
+- Delegate only to the rung agents `proven`, `unproven`, `unruly`, and `consequential`, listed from lowest to highest tier. Choose by description. When criteria overlap or the fit is unclear, use the higher tier. In Codex, spawn them with `fork_turns: "none"`; a fork runs at your model and effort, not the rung's.
 - When a skill or I ask for a provider other than yours, as in "ask codex" or "ask claude", delegate with T3's `delegate_task`. Pass the chosen rung's model and effort from that provider's definition (`~/.claude/agents/<rung>.md`, `~/.codex/agents/<rung>.toml`), and end the task with the definition's instructions.
 - Give every brief a check that tells the subagent when it's done. For a claim you'll act on, require a command that proves it or an exact quote, not just a citation. For taste calls, the check is my review. Confirm the returned evidence passes the check before relying on it. A cheap check can also move work down a rung.
 - When a subagent fails, check for missing tools, context, or evidence. Fix an identified cause and retry; escalate a rung when the evidence points to a reasoning failure.
