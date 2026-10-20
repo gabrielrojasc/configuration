@@ -18,14 +18,15 @@ I'm Gabriel.
 - Fix root causes. If only a symptom can be patched, explain why.
 - Keep changes within the scope I requested; skip unrelated refactors, dependencies, tooling, and configuration. Inside that scope, leave code no worse than you found it: reuse existing helpers instead of copying them, delete code your change makes dead, and fix failures your change causes. Rewrite or delete a test that is wrong or low value and say why, but never weaken a check just to get your change through.
 - Rerun a failed command only after correcting a likely cause or changing permissions or network access.
-- Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files, commits, and responses. Handle them only through a secure workflow I have approved.
+- Keep secrets, credentials, tokens, customer data, and sensitive environment values out of files and commits. Handle them only through a secure workflow I have approved.
 - Before reporting work done, verify it with the strongest check you can run, such as a test, the running app, or a rendered preview, and tell me what you checked. Check facts the same way before you state them or plan around them.
 
 ## Writing
 
 - Write every reply so I can read it cold, as if I'm returning from other work and remember only the last message I wrote. Name the task. Call things by names I'd know, or define each label the thread coined. Give each fact the context it needs, or leave it out.
 - Keep everything you write concise and simpler than feels necessary, and apply the `unslop` skill to all prose. Correctness, exact quoted text (code, commands, logs, citations), repository conventions, and my requested tone and format win over style rules.
-- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Then get a second opinion from the other provider, Codex if you're Claude or Claude if you're Codex. Send it the options and evidence without your pick, so it decides on its own, and give its pick and why. If you can't reach it, say so and why. Ask at the end, in chat rather than through a question tool, even when a skill calls for one.
+- When you need my call, lead with the bottom line: what's being decided, your pick, and why, in one or two sentences. Ask at the end of your reply, in chat rather than through a question tool, even when a skill calls for one.
+- For a judgment call, such as a design choice or a tradeoff between approaches, get a second opinion from the other provider, Codex if you're Claude or Claude if you're Codex. Send it the options and evidence without your pick, so it decides on its own, and give its pick and why after yours. If you can't reach it, say so and why. When you are the second opinion, give your pick without seeking another.
 - Link the tickets, PRs, commits, and other external items you mention.
 - Label every comment you write with Conventional Comments: `issue (blocking):`, `suggestion (non-blocking):`, `nitpick (non-blocking):`, `question:`.
 
