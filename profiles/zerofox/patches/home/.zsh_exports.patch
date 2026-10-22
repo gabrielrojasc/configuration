@@ -1,8 +1,8 @@
 diff --git a/home/.zsh_exports b/home/.zsh_exports
-index 9d93d0b0bceaa57c2f24e6f2a69dbb95d85c691c..c2337449b13a825e89a7d4565789a21def01ae76 100644
+index 9d93d0b0bceaa57c2f24e6f2a69dbb95d85c691c..b8a8770dfbf85264b64fbfbb476b8ac3f527a308 100644
 --- a/home/.zsh_exports
 +++ b/home/.zsh_exports
-@@ -24,9 +24,37 @@ export LC_ALL='en_US.UTF-8'
+@@ -24,9 +24,38 @@ export LC_ALL='en_US.UTF-8'
  # Highlight section titles in manual pages.
  export LESS_TERMCAP_md="${yellow}"
  
@@ -21,6 +21,7 @@ index 9d93d0b0bceaa57c2f24e6f2a69dbb95d85c691c..c2337449b13a825e89a7d4565789a21d
 +
  # docker
  export COMPOSE_BAKE=true
++export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
  
  # brew
  export HOMEBREW_UPGRADE_GREEDY=1
