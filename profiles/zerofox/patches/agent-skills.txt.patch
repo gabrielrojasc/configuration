@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 079db76cde75679251e31537ce3f53a99c475565..705adafa3bf0537331164bc22ffa25adf83f08bc 100644
+index 0b6451c073ab997a42e055efa97cfec8b9ccc0e2..dbf40670a40601ac5d7a44fba8149738edce5377 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -9,7 +9,7 @@ index 079db76cde75679251e31537ce3f53a99c475565..705adafa3bf0537331164bc22ffa25ad
 -emilkowalski/skills apple-design
  emilkowalski/skills emil-design-eng
  gabrielrojasc/skills babysit-pr
- gabrielrojasc/skills codex
+ gabrielrojasc/skills computer-use
 @@ -11,8 +10,7 @@ gabrielrojasc/skills cross-review
  gabrielrojasc/skills developer-documentation-style
  gabrielrojasc/skills gh-review-comments
@@ -19,8 +19,8 @@ index 079db76cde75679251e31537ce3f53a99c475565..705adafa3bf0537331164bc22ffa25ad
 +gabrielrojasc/skills pr-review
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
- github/gh-stack gh-stack
-@@ -46,4 +44,7 @@ mattpocock/skills wizard
+ gabrielrojasc/skills test-plan
+@@ -47,4 +45,7 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
