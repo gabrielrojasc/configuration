@@ -70,7 +70,8 @@
   "snapShotEnabled": true,
   "snapShotIncludeAccessibility": true,
   "snapShotShortcut": {
-    "kind": "both-shift-keys"
+    "kind": "modifier-pair",
+    "modifier": "meta"
   },
   "snapShotPlaySound": true,
   "snapShotSound": "soft-pop",
