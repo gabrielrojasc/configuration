@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 0b6451c073ab997a42e055efa97cfec8b9ccc0e2..dbf40670a40601ac5d7a44fba8149738edce5377 100644
+index ff9b9fc9ae05acdb8480bdd45058a212c3cf412a..24191f3be29875d14c8e23c0d4cf1cd4d8173d2a 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -19,8 +19,8 @@ index 0b6451c073ab997a42e055efa97cfec8b9ccc0e2..dbf40670a40601ac5d7a44fba8149738
 +gabrielrojasc/skills pr-review
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
- gabrielrojasc/skills test-plan
-@@ -47,4 +45,7 @@ mattpocock/skills wizard
+ gabrielrojasc/skills slack-message
+@@ -48,4 +46,7 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
