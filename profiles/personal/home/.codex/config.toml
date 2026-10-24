@@ -91,9 +91,6 @@ enabled = false
 [plugins."unified-computer-use@openai-bundled"]
 enabled = true
 
-[plugins."code-review@openai-bundled"]
-enabled = true
-
 [[skills.config]]
 path = "/Users/gabriel/.codex/skills/.system/skill-installer/SKILL.md"
 enabled = false
@@ -204,6 +201,7 @@ skill = "#ad7bf9"
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+env_vars = ["BROWSER_USE_ACCESS_EXECUTOR_ID", "BROWSER_USE_ACCESS_PIPE_PATH", "BROWSER_USE_ACCESS_VERIFYING_IDENTITY"]
 startup_timeout_sec = 120
 
 [mcp_servers.computer-use]
