@@ -26,7 +26,8 @@
   "defaultRuntimeMode": "auto",
   "projectSettingsFolded": true,
   "sidebarAutoSettleAfterDays": null,
-  "snoozeLimitedThreads": true,
+  "compactIdleThreads": true,
+  "idleCompaction": "beforeCacheExpires",
   "autoResumeLimitedThreads": true,
   "sidebarAutoSettleOnMerge": false,
   "textGenerationModelSelection": {
