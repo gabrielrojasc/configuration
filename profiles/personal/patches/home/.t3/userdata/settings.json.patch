@@ -1,0 +1,12 @@
+diff --git a/home/.t3/userdata/settings.json b/home/.t3/userdata/settings.json
+index 6cfece9936e59dfaf39bdd94f56b58db1f475fb1..338c0d8167b3af0adaf45f66a2d5bad17964f742 100644
+--- a/home/.t3/userdata/settings.json
++++ b/home/.t3/userdata/settings.json
+@@ -23,7 +23,6 @@
+       }
+     ]
+   },
+-  "defaultRuntimeMode": "auto",
+   "projectSettingsFolded": true,
+   "sidebarAutoSettleAfterDays": null,
+   "compactIdleThreads": true,
