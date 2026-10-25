@@ -1,0 +1,12 @@
+diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
+index 8035564405e91e11156525492d1b521edd456ffd..41b2636507abfd0db2a868ace907ecccbf0b55b3 100644
+--- a/home/.codex/AGENTS.md
++++ b/home/.codex/AGENTS.md
+@@ -47,6 +47,7 @@ I'm Gabriel.
+ 
+ - Assume service tools are authenticated. If a sandboxed read hits an auth error, retry it once outside the sandbox. If that fails too, run the service's auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
+ - Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
++- Use `--profile runmyday-agent` for AWS. When it lacks a permission you need, ask me for `runmyday` (admin), naming the command and why `runmyday-agent` can't do it.
+ 
+ ## Personal knowledge
+ 
