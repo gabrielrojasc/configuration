@@ -16,6 +16,7 @@ gabrielrojasc/skills linear-gh-linking
 gabrielrojasc/skills linear-work-breakdown
 gabrielrojasc/skills python-environments
 gabrielrojasc/skills review-revise
+gabrielrojasc/skills rewrite-it
 gabrielrojasc/skills slack-message
 gabrielrojasc/skills test-plan
 github/gh-stack gh-stack
