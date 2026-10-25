@@ -74,7 +74,7 @@ I'm Gabriel.
 
 ## Testing
 
-- Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add.
+- Prove features with end-to-end tests that drive the real system along the path a user takes. Make them the default and usually the only tests you add. Add a case for each caller the change affects and for each access boundary, including the requests that must be denied.
 - End each end-to-end run with an artifact I can inspect and regenerate, such as a log, screenshot, recording, or output file. Record the command that reproduces it in or next to the artifact, and show it in the response only when I ask for it.
 - Add an isolated test only for behavior an end-to-end test cannot reach or pin down. Write it before the code: list every way the unit can fail, turn that list into tests, then implement.
 - Tests and verification scripts state what they check through test names and assertion messages.
