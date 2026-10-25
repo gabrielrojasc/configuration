@@ -213,5 +213,8 @@ enabled = false
 [mcp_servers.grafana]
 url = "https://mcp.grafana.com/mcp"
 
+[shell_environment_policy.set]
+AWS_PROFILE = "runmyday-agent"
+
 [sandbox_workspace_write]
 network_access = true

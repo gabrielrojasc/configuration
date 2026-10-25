@@ -1,0 +1,12 @@
+diff --git a/home/.claude/settings.json b/home/.claude/settings.json
+index 8b8cff89a28b40ec1c97be8eb8e0ca797deecf24..404796ecb8be026af09aa26fb80cf4a253ee2919 100644
+--- a/home/.claude/settings.json
++++ b/home/.claude/settings.json
+@@ -15,6 +15,7 @@
+   },
+   "enforceAvailableModels": true,
+   "env": {
++    "AWS_PROFILE": "runmyday-agent",
+     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+     "CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK": "1",
+     "CLAUDE_CODE_ENABLE_CFC": "1",
