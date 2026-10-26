@@ -47,6 +47,12 @@ and removes skills the list dropped since the previous install. Skills that
 aren't in the repo are always only reported, including on a first install,
 because the repo has no earlier record of them.
 
+A skill line can end with its own agents, as in
+`gabrielrojasc/skills google-docs claude-code`, to install that skill for
+only those agents instead of the `agents` line. `copy.sh` writes them when a
+skill reaches only some of the listed agents. When a skill's agents change,
+install removes the skill and adds it again.
+
 A source can include a subdirectory, as in `cursor/plugins/pstack`, for skills
 the CLI finds only from there. `copy.sh` takes it from the skill's path in the
 CLI's lock file, so add the skill however you like and run `copy.sh`.
@@ -128,7 +134,7 @@ base/
 ├── home/                  # mirrors $HOME; shared by every profile
 ├── Brewfile
 ├── pnpm-globals.txt
-├── agent-skills.txt       # agents line, then "<source> <skill>" per global skill
+├── agent-skills.txt       # agents line, then "<source> <skill> [agent...]" per global skill
 ├── apps.txt               # apps installed by hand, one name per line
 └── Basic.terminal
 profiles/<name>/

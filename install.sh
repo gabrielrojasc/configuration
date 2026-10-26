@@ -291,13 +291,13 @@ function install_pnpm_globals() {
     return 0
 }
 
-# Add skills the list has and this machine lacks, and remove skills the list
-# dropped since the previous install. As with Homebrew, skills added on this
+# Add skills the list has and this machine lacks, reinstall skills whose agents
+# changed, and remove skills the list dropped since the previous install. As with Homebrew, skills added on this
 # machine since then are only reported; with no previous install, unlisted
 # skills are only reported too, because the repo has no record of them yet.
 function install_agent_skills() {
     local list="$work/agent-skills.txt" installed="$work/skills-installed" snapshot="$snapshot_dir/agent-skills.txt"
-    local agents missing extra entry source name
+    local agents missing extra entry source name group skill_agents
     local add_args remove_names local_only
     render agent-skills.txt "$list"
     if ! grep -qv '^agents ' "$list"; then
@@ -325,8 +325,12 @@ function install_agent_skills() {
     local_only=()
     while IFS= read -r entry; do
         [[ -n "$entry" ]] || continue
-        if [[ -f "$snapshot" ]] && grep -qxF "$entry" "$snapshot"; then
-            remove_names+=("${entry#* }")
+        name=$(echo "$entry" | awk '{ print $2 }')
+        # A skill whose agents changed is reinstalled: the CLI only adds agents.
+        if echo "$missing" | awk -v n="$name" '$2 == n { found = 1 } END { exit !found }'; then
+            remove_names+=("$name")
+        elif [[ -f "$snapshot" ]] && grep -qxF "$entry" "$snapshot"; then
+            remove_names+=("$name")
         else
             local_only+=("$entry")
         fi
@@ -341,20 +345,23 @@ $(printf '  %s\n' "${local_only[@]}")"
         color_print "$green" 'Agent skills are all installed'
         record 'Agent skills' ok 'all installed'
     elif ((apply)); then
-        # One add per source repo, with every missing skill from it.
-        for source in $(echo "$missing" | awk 'NF { print $1 }' | sort -u); do
-            add_args=()
-            for name in $(echo "$missing" | awk -v s="$source" '$1 == s { print $2 }'); do
-                add_args+=(-s "$name")
-            done
-            for name in $agents; do
-                add_args+=(-a "$name")
-            done
-            skills_cli add "$source" -g "${add_args[@]}" -y </dev/null
-        done
         if ((${#remove_names[@]})); then
             skills_cli remove "${remove_names[@]}" -g -y </dev/null
         fi
+        # One add per source repo and agent set, with every missing skill from it.
+        while IFS= read -r group; do
+            [[ -n "$group" ]] || continue
+            source=${group%% *}
+            skill_agents=${group#"$source"}
+            add_args=()
+            for name in $(echo "$missing" | awk -v g="$group" '{ k = $1; for (i = 3; i <= NF; i++) k = k " " $i } k == g { print $2 }'); do
+                add_args+=(-s "$name")
+            done
+            for name in ${skill_agents:-$agents}; do
+                add_args+=(-a "$name")
+            done
+            skills_cli add "$source" -g "${add_args[@]}" -y </dev/null
+        done < <(echo "$missing" | awk 'NF { k = $1; for (i = 3; i <= NF; i++) k = k " " $i; print k }' | sort -u)
         color_print "$green" "Agent skills: added $(count_lines "$missing"), removed ${#remove_names[@]}"
         record 'Agent skills' ok "added $(count_lines "$missing"), removed ${#remove_names[@]}"
     else
@@ -363,7 +370,7 @@ $(printf '  %s\n' "${local_only[@]}")"
 $(echo "$missing" | sed 's/^/  /')"
         fi
         if ((${#remove_names[@]})); then
-            color_print "$blue" "Would remove these skills the list no longer has:
+            color_print "$blue" "Would remove these skills (dropped from the list, or reinstalled for new agents):
 $(printf '  %s\n' "${remove_names[@]}")"
         fi
         record 'Agent skills' change "$(count_lines "$missing") to add, ${#remove_names[@]} to remove"

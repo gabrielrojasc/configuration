@@ -1,4 +1,4 @@
-agents amp claude-code cline codex cursor droid gemini-cli github-copilot kilo kimi-code-cli opencode warp zed
+agents claude-code codex
 anthropics/skills frontend-design
 cursor/plugins/pstack bro
 cursor/plugins/pstack ketchup
