@@ -1,8 +1,8 @@
 diff --git a/apps.txt b/apps.txt
-index 0057b69df444773218c432031c9a9c3d27f1ee4b..f4ea1095e89a1c79bf0f2cfc8169b8338d83c359 100644
+index 0057b69df444773218c432031c9a9c3d27f1ee4b..3413c65034481d6e83992ccb3f2ad819c24e48d3 100644
 --- a/apps.txt
 +++ b/apps.txt
-@@ -1 +1,27 @@
+@@ -1 +1,28 @@
 +1Password
 +Android Studio
 +AppCleaner
@@ -29,4 +29,5 @@ index 0057b69df444773218c432031c9a9c3d27f1ee4b..f4ea1095e89a1c79bf0f2cfc8169b833
 +Sublime Text
  T3 Code (Beta)
 +Visual Studio Code
++Workbrew
 +zoom.us
