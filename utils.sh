@@ -353,28 +353,27 @@ function read_machine() {
             ;;
         agent-skills.txt)
             # The CLI's lock file can't restore global skills, so the repo keeps
-            # a list instead: an "agents ..." line (where skills install; with
-            # none the CLI installs into every agent it knows), then one
-            # "<source> <skill> [agent...]" line per skill. Agents after the
-            # skill override the agents line for that skill. Skills without a
-            # source (put there by another tool) can't be reinstalled, so
-            # they're left out.
+            # a list instead: sections of an "agents ..." line (where the skills
+            # below it install; with none the CLI installs into every agent it
+            # knows) and one "<source> <skill>" line per skill, separated by
+            # blank lines. Skills without a source (put there by another tool)
+            # can't be reinstalled, so they're left out.
             command -v pnpx >/dev/null || return 1
-            local skills lock rendered agents_line paths='{}'
+            local skills lock rendered headers paths='{}'
             # The CLI's lock file follows XDG_STATE_HOME when set.
             lock="${XDG_STATE_HOME:+$XDG_STATE_HOME/skills/.skill-lock.json}"
             [[ -n "$lock" && -f "$lock" ]] || lock="$HOME/.agents/.skill-lock.json"
             if [[ -f "$lock" ]]; then paths=$(jq -c '.skills // {} | map_values(.skillPath // "")' "$lock"); fi
-            # The agents line belongs to the repo: installing with explicit
+            # The agents lines belong to the repo: installing with explicit
             # agents doesn't record them anywhere. Fall back to the agents last
             # picked in the CLI.
             rendered=$(mktemp)
             if render agent-skills.txt "$rendered" 2>/dev/null && grep -q '^agents ' "$rendered"; then
-                agents_line=$(grep -m 1 '^agents ' "$rendered")
+                headers=$(sed -n 's/^agents //p' "$rendered")
             elif [[ -f "$lock" ]]; then
-                agents_line=$(jq -r '(.lastSelectedAgents // []) | sort | select(length > 0) | "agents " + join(" ")' "$lock")
+                headers=$(jq -r '(.lastSelectedAgents // []) | sort | join(" ")' "$lock")
             else
-                agents_line=""
+                headers=""
             fi
             rm -f "$rendered"
             # Adding from a repo's root finds only some of its skills (cursor/plugins
@@ -383,24 +382,32 @@ function read_machine() {
             # gets the subpath back from the skill's path: everything before the
             # last skills/ dir, as in cursor/plugins/pstack.
             # The CLI lists a skill's agents by display name ("Claude Code"), so
-            # they're matched to the agents line's ids ("claude-code") by
+            # they're matched to the agents lines' ids ("claude-code") by
             # lowercasing and hyphenating. A listed agent that no skill reaches
-            # (not installed here) is ignored, so every skill still matches.
-            skills=$(skills_cli ls -g --json 2>/dev/null | jq -r --argjson paths "$paths" --arg line "${agents_line#agents }" '
-                ($line | split(" ") | map(select(length > 0))) as $want
+            # (not installed here) counts as reached, so skills stay in their
+            # section. Sections keep the repo's order; new agent sets go last.
+            skills_cli ls -g --json 2>/dev/null | jq -r --argjson paths "$paths" --arg headers "$headers" '
+                ($headers | split("\n") | map(split(" ") | map(select(length > 0))) | map(select(length > 0))) as $order
+                | ([$order[][]] | reduce .[] as $a ([]; if any(.[]; . == $a) then . else . + [$a] end)) as $want
                 | map(select(.source) | .ids = ((.agents // []) | map(ascii_downcase | gsub(" "; "-"))))
                 | ([.[].ids[]] | unique) as $present
-                | ($want | map(select(IN($present[])))) as $seen
-                | .[]
-                | .ids as $ids
-                | ($seen | map(select(IN($ids[])))) as $mine
-                | (if $mine == $seen then "" elif $mine == [] then $ids | map(" " + .) | join("") else $mine | map(" " + .) | join("") end) as $only
-                | (($paths[.name] // "") | split("/") | .[:-2]) as $dir
-                | ($dir | indices("skills") | last) as $i
-                | (if .sourceType == "github" and $i != null and $i > 0 then "/" + ($dir[:$i] | join("/")) else "" end) as $sub
-                | "\(.source)\($sub) \(.name)\($only)"' | sort) || return 1
-            if [[ -n "$agents_line" ]]; then echo "$agents_line" >"$out"; else : >"$out"; fi
-            if [[ -n "$skills" ]]; then echo "$skills" >>"$out"; fi
+                | map(
+                    .ids as $ids
+                    | (if any($want[]; IN($ids[])) then $want | map(select(IN($ids[]) or (IN($present[]) | not)))
+                       elif $ids == [] then $want
+                       else $ids end) as $set
+                    | (($paths[.name] // "") | split("/") | .[:-2]) as $dir
+                    | ($dir | indices("skills") | last) as $i
+                    | (if .sourceType == "github" and $i != null and $i > 0 then "/" + ($dir[:$i] | join("/")) else "" end) as $sub
+                    | {set: $set, key: ($set | sort), line: "\(.source)\($sub) \(.name)"})
+                | . as $skills
+                | ($order + ($skills | map(.set)))
+                | reduce .[] as $h ([]; if any(.[]; sort == ($h | sort)) then . else . + [$h] end)
+                | map(. as $h | ($h | sort) as $k
+                    | [$skills[] | select(.key == $k) | .line] | sort
+                    | select(length > 0) | ["agents " + ($h | join(" "))] + .)
+                | if length == 0 then $order[:1] | map("agents " + join(" ")) else [map(join("\n")) | join("\n\n")] end
+                | .[]' >"$out" || return 1
             ;;
         apps.txt)
             # Cask and App Store apps belong to the Brewfile; the rest were
@@ -468,6 +475,13 @@ function layer_of_dir() {
 
 # skills_cli <args...>: the skills CLI, from ~ and without telemetry, as the
 # skills-update-global alias in .zsh_aliases runs it.
+# skill_entries <file>: one "<source> <skill> <agent>..." line per skill in an
+# agent-skills.txt, with the agents of its section.
+function skill_entries() {
+    awk '$1 == "agents" { agents = ""; for (i = 2; i <= NF; i++) agents = agents " " $i; next }
+        NF { print $1 " " $2 agents }' "$1"
+}
+
 function skills_cli() {
     (cd "$HOME" && env DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 pnpx skills@latest "$@")
 }

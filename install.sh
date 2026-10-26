@@ -292,15 +292,17 @@ function install_pnpm_globals() {
 }
 
 # Add skills the list has and this machine lacks, reinstall skills whose agents
-# changed, and remove skills the list dropped since the previous install. As with Homebrew, skills added on this
-# machine since then are only reported; with no previous install, unlisted
-# skills are only reported too, because the repo has no record of them yet.
+# changed, and remove skills the list dropped since the previous install. As
+# with Homebrew, skills added on this machine since then are only reported;
+# with no previous install, unlisted skills are only reported too, because the
+# repo has no record of them yet.
 function install_agent_skills() {
     local list="$work/agent-skills.txt" installed="$work/skills-installed" snapshot="$snapshot_dir/agent-skills.txt"
-    local agents missing extra entry source name group skill_agents
+    local wanted missing extra entry source name group
     local add_args remove_names local_only
     render agent-skills.txt "$list"
-    if ! grep -qv '^agents ' "$list"; then
+    wanted=$(skill_entries "$list")
+    if [[ -z "$wanted" ]]; then
         color_print "$green" 'No agent skills for this profile'
         record 'Agent skills' ok 'none for this profile'
         if ((apply)); then save_snapshot agent-skills.txt "$list"; fi
@@ -311,15 +313,14 @@ function install_agent_skills() {
         record 'Agent skills' fail 'skipped: pnpx not on PATH'
         return 0
     fi
-    agents=$(sed -n 's/^agents //p' "$list")
-    if [[ -z "$agents" ]]; then
-        color_print "$red" 'agent-skills.txt has no "agents ..." line; skipped (the CLI would install into every agent it knows)'
-        record 'Agent skills' fail 'skipped: no agents line'
+    if ! awk 'NF { exit $1 != "agents" }' "$list"; then
+        color_print "$red" 'agent-skills.txt lists skills before its first "agents ..." line; skipped (the CLI would install them into every agent it knows)'
+        record 'Agent skills' fail 'skipped: skills before the first agents line'
         return 0
     fi
     read_machine agent-skills.txt "$installed" || : >"$installed"
-    missing=$(grep -v '^agents ' "$list" | grep -vxFf <(grep -v '^agents ' "$installed") || true)
-    extra=$(grep -v '^agents ' "$installed" | grep -vxFf <(grep -v '^agents ' "$list") || true)
+    missing=$(echo "$wanted" | grep -vxFf <(skill_entries "$installed") || true)
+    extra=$(skill_entries "$installed" | grep -vxFf <(echo "$wanted") || true)
 
     remove_names=()
     local_only=()
@@ -329,7 +330,7 @@ function install_agent_skills() {
         # A skill whose agents changed is reinstalled: the CLI only adds agents.
         if echo "$missing" | awk -v n="$name" '$2 == n { found = 1 } END { exit !found }'; then
             remove_names+=("$name")
-        elif [[ -f "$snapshot" ]] && grep -qxF "$entry" "$snapshot"; then
+        elif [[ -f "$snapshot" ]] && skill_entries "$snapshot" | grep -qxF "$entry"; then
             remove_names+=("$name")
         else
             local_only+=("$entry")
@@ -352,12 +353,11 @@ $(printf '  %s\n' "${local_only[@]}")"
         while IFS= read -r group; do
             [[ -n "$group" ]] || continue
             source=${group%% *}
-            skill_agents=${group#"$source"}
             add_args=()
             for name in $(echo "$missing" | awk -v g="$group" '{ k = $1; for (i = 3; i <= NF; i++) k = k " " $i } k == g { print $2 }'); do
                 add_args+=(-s "$name")
             done
-            for name in ${skill_agents:-$agents}; do
+            for name in ${group#"$source"}; do
                 add_args+=(-a "$name")
             done
             skills_cli add "$source" -g "${add_args[@]}" -y </dev/null
@@ -366,7 +366,7 @@ $(printf '  %s\n' "${local_only[@]}")"
         record 'Agent skills' ok "added $(count_lines "$missing"), removed ${#remove_names[@]}"
     else
         if [[ -n "$missing" ]]; then
-            color_print "$blue" "Would add these skills (for agents: $agents):
+            color_print "$blue" "Would add these skills (source, skill, agents):
 $(echo "$missing" | sed 's/^/  /')"
         fi
         if ((${#remove_names[@]})); then

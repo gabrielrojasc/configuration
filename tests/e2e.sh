@@ -230,19 +230,25 @@ in_repo env PATH="$home/bin:$PATH" bash -c 'source ./utils.sh && load_profile >/
 check "a skill added from a subpath keeps it" grep -qx 'cursor/plugins/pstack bro' "$log_dir/skills-machine.txt"
 check "a skill under the repo's skills/ keeps the bare repo" grep -qx 'anthropics/skills frontend-design' "$log_dir/skills-machine.txt"
 check "a skill at the repo root keeps the bare repo" grep -qx 'zarazhangrui/frontend-slides frontend-slides' "$log_dir/skills-machine.txt"
-check "a skill for only some listed agents names them" grep -qx 'gabrielrojasc/skills google-docs claude-code' "$log_dir/skills-machine.txt"
+check "a skill for only some listed agents goes in their own section" \
+    bash -c "tail -3 '$log_dir/skills-machine.txt' | cmp -s - <(printf '%s\\n' '' 'agents claude-code' 'gabrielrojasc/skills google-docs')"
 
-# The list wants frontend-design for Claude Code only, so it's reinstalled.
-# install_agent_skills runs alone: the rest of install.sh acts on the real machine.
-printf '%s\n' 'agents claude-code codex' 'anthropics/skills frontend-design claude-code' \
-    'cursor/plugins/pstack bro' 'gabrielrojasc/skills google-docs claude-code' 'gabrielrojasc/skills slack-message claude-code' \
-    'openclaw/openclaw summarize' 'zarazhangrui/frontend-slides frontend-slides' >"$repo/base/agent-skills.txt"
-: >"$home/skills-calls.txt"
-in_repo env PATH="$home/bin:$PATH" bash -c '
-    source ./utils.sh && load_profile >/dev/null
-    apply=1 work=$(mktemp -d)
-    eval "$(sed -n "/^function count_lines/,/^}/p; /^function install_agent_skills/,/^}/p" install.sh)"
-    install_agent_skills' >"$log_dir/skills-install.txt"
+# install_skills: run install_agent_skills alone with --apply, since the rest
+# of install.sh acts on the real machine.
+function install_skills() {
+    : >"$home/skills-calls.txt"
+    in_repo env PATH="$home/bin:$PATH" bash -c '
+        source ./utils.sh && load_profile >/dev/null
+        apply=1 work=$(mktemp -d)
+        eval "$(sed -n "/^function count_lines/,/^}/p; /^function install_agent_skills/,/^}/p" install.sh)"
+        install_agent_skills'
+}
+
+# The list moves frontend-design to the Claude Code section, so it's reinstalled.
+printf '%s\n' 'agents claude-code codex' 'cursor/plugins/pstack bro' 'openclaw/openclaw summarize' \
+    'zarazhangrui/frontend-slides frontend-slides' '' 'agents claude-code' 'anthropics/skills frontend-design' \
+    'gabrielrojasc/skills google-docs' 'gabrielrojasc/skills slack-message' >"$repo/base/agent-skills.txt"
+install_skills >"$log_dir/skills-install.txt"
 grep -v ' ls ' "$home/skills-calls.txt" >"$log_dir/skills-calls.txt"
 check "install removes a skill before reinstalling it for other agents" \
     bash -c "head -1 '$log_dir/skills-calls.txt' | grep -qx 'skills@latest remove frontend-design -g -y'"
@@ -253,6 +259,11 @@ check "install adds a missing skill for its own agents" \
 check "install adds other skills for the agents line" \
     grep -qx 'skills@latest add openclaw/openclaw -g -s summarize -a claude-code -a codex -y' "$log_dir/skills-calls.txt"
 check "install makes no other skills calls" test "$(wc -l <"$log_dir/skills-calls.txt" | tr -d ' ')" -eq 4
+
+printf '%s\n' 'openclaw/openclaw summarize' '' 'agents claude-code codex' 'cursor/plugins/pstack bro' >"$repo/base/agent-skills.txt"
+install_skills >"$log_dir/skills-install-unsectioned.txt"
+check "install skips a list with skills before its first agents line" \
+    bash -c "! grep -qv ' ls ' '$home/skills-calls.txt' && grep -q 'before its first' '$log_dir/skills-install-unsectioned.txt'"
 echo
 
 # Apps installed by hand: install reports the missing ones, copy adds new ones

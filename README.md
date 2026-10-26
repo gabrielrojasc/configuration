@@ -42,16 +42,24 @@ copy it with `copy.sh` first. On a machine's first install there's nothing to
 compare against, so the dry run lists every unlisted package as a removal.
 
 Global agent skills work the same way, from `agent-skills.txt`: install adds
-missing skills with `skills add -g` for the agents on the list's `agents` line,
-and removes skills the list dropped since the previous install. Skills that
-aren't in the repo are always only reported, including on a first install,
-because the repo has no earlier record of them.
+missing skills with `skills add -g`, and removes skills the list dropped since
+the previous install. Skills that aren't in the repo are always only reported,
+including on a first install, because the repo has no earlier record of them.
 
-A skill line can end with its own agents, as in
-`gabrielrojasc/skills google-docs claude-code`, to install that skill for
-only those agents instead of the `agents` line. `copy.sh` writes them when a
-skill reaches only some of the listed agents. When a skill's agents change,
-install removes the skill and adds it again.
+The list has a section per set of agents. Each section starts with an `agents`
+line, and its skills install for those agents only:
+
+```text
+agents claude-code codex
+anthropics/skills frontend-design
+
+agents claude-code
+gabrielrojasc/skills google-docs
+```
+
+`copy.sh` puts each skill in the section that matches the agents it's installed
+for, and adds a section for a new set of agents. When a skill moves to another
+section, install removes it and adds it again for the new agents.
 
 A source can include a subdirectory, as in `cursor/plugins/pstack`, for skills
 the CLI finds only from there. `copy.sh` takes it from the skill's path in the
@@ -134,7 +142,7 @@ base/
 ├── home/                  # mirrors $HOME; shared by every profile
 ├── Brewfile
 ├── pnpm-globals.txt
-├── agent-skills.txt       # agents line, then "<source> <skill> [agent...]" per global skill
+├── agent-skills.txt       # "agents ..." sections of "<source> <skill>" per global skill
 ├── apps.txt               # apps installed by hand, one name per line
 └── Basic.terminal
 profiles/<name>/
