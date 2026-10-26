@@ -51,3 +51,6 @@ mattpocock/skills writing-for-agents
 openclaw/openclaw summarize
 pbakaus/impeccable/.agents impeccable
 zarazhangrui/frontend-slides frontend-slides
+
+agents claude-code
+gabrielrojasc/skills google-docs
