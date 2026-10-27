@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 4841583634af2a45edb529456d65711cbdade108..fa0eccc98632b730c9c73f436ee52a17c3b0c7c1 100644
+index 40cc27ed22ae97808723c600f765dcc504aee7b5..c1847016fd2ed177408e8bf877a444eb084d46d0 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -10,8 +10,8 @@ index 4841583634af2a45edb529456d65711cbdade108..fa0eccc98632b730c9c73f436ee52a17
  emilkowalski/skills emil-design-eng
  gabrielrojasc/skills babysit-pr
  gabrielrojasc/skills chief-of-staff
-@@ -12,8 +11,7 @@ gabrielrojasc/skills cross-review
- gabrielrojasc/skills developer-documentation-style
+@@ -13,8 +12,7 @@ gabrielrojasc/skills developer-documentation-style
+ gabrielrojasc/skills full-stop
  gabrielrojasc/skills gh-review-comments
  gabrielrojasc/skills git-workspace
 -gabrielrojasc/skills linear-gh-linking
@@ -20,7 +20,7 @@ index 4841583634af2a45edb529456d65711cbdade108..fa0eccc98632b730c9c73f436ee52a17
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  gabrielrojasc/skills rewrite-it
-@@ -50,6 +48,9 @@ mattpocock/skills wizard
+@@ -51,4 +49,7 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
@@ -28,5 +28,3 @@ index 4841583634af2a45edb529456d65711cbdade108..fa0eccc98632b730c9c73f436ee52a17
 +unblocked/skills unblocked-context-research
 +unblocked/skills unblocked-tools-guide
  zarazhangrui/frontend-slides frontend-slides
- 
- agents claude-code
