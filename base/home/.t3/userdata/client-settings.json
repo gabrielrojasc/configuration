@@ -16,6 +16,8 @@
   "browserRecordingShowKeyPresses": false,
   "browserRecordingShowMousePresses": false,
   "browserLinkTarget": "system",
+  "browserSearchEngine": "custom",
+  "browserCustomSearchUrl": "https://unduck.link?q=%s",
   "browserAutoShowFloatingPreview": true,
   "browserProfiles": [],
   "browserDefaultProfileId": "default",
@@ -77,5 +79,7 @@
   "snapShotSound": "soft-pop",
   "snapShotFlash": true,
   "snapShotAnimations": true,
-  "wordWrap": true
+  "wordWrap": true,
+  "mathRenderingEnabled": false,
+  "redesignEnabled": true
 }
