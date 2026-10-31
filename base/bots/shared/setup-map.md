@@ -4,10 +4,10 @@ What this is: a short map of Gabriel's agent skills, work flows, and machine
 configuration, so bots can work the way he does without re-reading both repos.
 Built read-only from GitHub (cursor-github connector) and his ZeroFox Mac.
 
-Last refreshed: 2026-10-31 10:57 Chile time (UTC-3)
+Last refreshed: 2026-10-31 11:48 Chile time (UTC-3)
 
 skills: adb9a0a00dc9d32830809694c064bc1a00dee4e6 2026-10-31T10:52:18-03:00
-configuration: 92742b344f29790aee1c10b860beab3645f01725 2026-10-31T10:43:42-03:00
+configuration: d7e5fe7b53806c89f0fa675c5536bdc6f2b809c2 2026-10-31T11:46-03:00
 
 ## 1. His skills (gabrielrojasc/skills)
 
