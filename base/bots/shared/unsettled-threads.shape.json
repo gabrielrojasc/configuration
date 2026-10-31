@@ -5,6 +5,7 @@
   "threads": {
     "<key>": {
       "decision": "string",
+      "followUp": "string",
       "kind": "string",
       "latestRunId": "string",
       "machine": "string",

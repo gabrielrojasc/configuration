@@ -4,13 +4,10 @@ What this is: a short map of Gabriel's agent skills, work flows, and machine
 configuration, so bots can work the way he does without re-reading both repos.
 Built read-only from GitHub (cursor-github connector) and his ZeroFox Mac.
 
-Last refreshed: 2026-10-30 18:07 Chile time (UTC-3)
+Last refreshed: 2026-10-31 10:57 Chile time (UTC-3)
 
-skills: 21d17dd8c6ab31a3ee352649e3f1685f8c5d08fe 2026-10-29T18:42:28-03:00
-configuration: 33ab1bdb46f6fb0d20ada8e1ace7f67c38ac9329 2026-10-27T10:05:00-03:00
-
-- skills (gabrielrojasc/skills, main): "refactor(pr-review): shorten the missing-test, question, and suggestion rules"
-- configuration (gabrielrojasc/configuration, master): "chore(t3): search with unduck, enable the redesign, disable math rendering"
+skills: adb9a0a00dc9d32830809694c064bc1a00dee4e6 2026-10-31T10:52:18-03:00
+configuration: 92742b344f29790aee1c10b860beab3645f01725 2026-10-31T10:43:42-03:00
 
 ## 1. His skills (gabrielrojasc/skills)
 
@@ -20,7 +17,7 @@ are the quoted `description` lines.
 - babysit-pr: "Use when asked to babysit a GitHub PR." Runs unattended in rounds (fresh subagent each round): review feedback via gh-review-comments, fixes CI failures the PR causes, rebases when behind, pushes once per round. Ends Merge-ready, Waiting on people, or Blocked. Never merges.
 - chief-of-staff: "Use when asked for chief-of-staff updates in T3." Reads his other unsettled T3 threads, ranks what needs him (work by prod impact, Linear project, deadline, effort; personal separately), renders a glance page, tables `RV <repo>#<n>` review threads. On request: tidy threads, Slack follow-ups. Acts on a thread only when asked.
 - computer-use: "Use when a task needs a signed-in site or a Mac app." T3 preview tools cover public sites; this covers his signed-in browser and native apps.
-- cross-review: "Use when asked to cross-review and fix a change." Runs review-revise with the other provider (Claude vs Codex) as sole reviewer via T3 `delegate_task`; 3 rounds (5 for auth, secrets, data deletion, concurrency). Findings use Conventional Comments labels and IDs; ends with a `Cross-reviewed: ... Verdict: ...` line.
+- cross-review: "Use when asked to cross-review and fix a change." Runs review-revise with the other provider (Claude vs Codex) as sole reviewer via T3 `delegate_task`; 3 rounds (5 for auth, secrets, data deletion, concurrency). Findings use Conventional Comments labels and IDs; ends with a `Cross-reviewed: ... Verdict: ...` line. Fix rule (adb9a0a): a finding about another path, a rare case, or a small cost is a nitpick whatever its label, unless its harm is severe (security hole, lost or corrupted data, lost message, outage).
 - developer-documentation-style: "Use when working on developer docs." Applies the live Google Developer Documentation Style Guide after repo conventions.
 - full-stop: "Use when told 'full stop'." Unattended run from current state to a mergeable PR (see section 3).
 - gh-review-comments: "Use when addressing PR review feedback." Classifies feedback, fixes what holds up, replies to every thread, raises only judgment calls. Has fetch scripts.
@@ -144,7 +141,7 @@ AGENTS.md details that apply: Linear issues are created through linear-work-brea
 
 ## 6. Key configuration
 
-Repo layout: `base/` (home/ mirrors $HOME; Brewfile, pnpm-globals.txt, agent-skills.txt, apps.txt), `profiles/<name>/` (profile.sh hooks, whole-file home/ overrides, patches/ per base file). Scripts: install.sh, upgrade.sh, copy.sh (pulls machine edits back, asks base vs profile per hunk; conflicts go to `.conflicts/<key>`), utils.sh, set_defaults.sh, tests/e2e.sh. Apply backs up replaced files to `~/.config-backup/<timestamp>`; `~/.codex/config.toml` is written only when missing.
+Repo layout: `base/` (home/ mirrors $HOME; Brewfile, pnpm-globals.txt, agent-skills.txt, apps.txt), `profiles/<name>/` (profile.sh hooks, whole-file home/ overrides, patches/ per base file). Scripts: install.sh, upgrade.sh, copy.sh (pulls machine edits back, asks base vs profile per hunk; conflicts go to `.conflicts/<key>`), utils.sh, set_defaults.sh, tests/e2e.sh. Since 2026-10-31 (92742b3) the Grok Bot fleet is versioned too: snapshots in `base/bots/<bot>/` (profile.json, settings.json, routines/*.md) plus `base/bots/shared/` (setup-map.md, unsettled-threads.shape.json); per-profile differences as patches under `profiles/<p>/patches/bots/`, roster in `profiles/<p>/bots.txt` (zerofox: 6 bots). `bots/snapshot.sh` filters a staged export through `bots/fields.txt`, scans it for secrets, merges fleet changes since the last snapshot and asks per change base vs profile; `--list` and `--expect` let a bot relay those questions and answers (a fingerprint rejects answers to a stale list). The per-change sorter moved from copy.sh into utils.sh, and patches can now delete files. Docs in `bots/README.md`. Apply backs up replaced files to `~/.config-backup/<timestamp>`; `~/.codex/config.toml` is written only when missing.
 
 Profiles: `personal` and `zerofox`. Selected by `DOTFILES_PROFILE` in the repo's git-ignored `.env`, overridable by the environment; scripts stop if it's missing or unknown. This Mac: `.env` says `DOTFILES_PROFILE=zerofox`. Zerofox uses Workbrew (/opt/workbrew) and proto (node, pnpm), a KeyboardRemap login app, and 1Password `op` for shell secrets; personal uses mise.
 
