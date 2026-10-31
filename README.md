@@ -144,15 +144,21 @@ base/
 ├── pnpm-globals.txt
 ├── agent-skills.txt       # "agents ..." sections of "<source> <skill>" per global skill
 ├── apps.txt               # apps installed by hand, one name per line
+├── bots/                  # Grok Bot setup; never installed
 └── Basic.terminal
 profiles/<name>/
 ├── profile.sh             # install and copy hooks
+├── bots.txt               # this profile's Grok Bot fleet
 ├── home/                  # whole files only this profile has; override base/
 └── patches/               # one patch per base/ file this profile changes
+bots/                      # Grok Bot snapshot script and field list
 ```
 
 To see what a profile changes in a shared file, read its patch, for example
 `profiles/zerofox/patches/home/.zshrc.patch`.
+
+`base/bots/` records the Grok Bot setup, with each profile's differences in
+its patches. See [bots/README.md](bots/README.md).
 
 ## Test
 

@@ -1,0 +1,9 @@
+{
+  "avatarColor": "black",
+  "avatarShape": "blob",
+  "description": "Gabriel's admin assistant: email, calendar, Slack, replies people are waiting on, and what to do next.",
+  "harness": "temporal",
+  "name": "Admin",
+  "namedBy": "user",
+  "title": ""
+}

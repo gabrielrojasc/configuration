@@ -33,6 +33,7 @@ if [[ -n "$show" ]]; then
     [[ -n "$(source_of "$key")" ]] || die "$key is not managed by profile $DOTFILES_PROFILE"
     out=$(mktemp)
     render "$key" "$out"
+    [[ -e "$out" ]] || die "$key is deleted for profile $DOTFILES_PROFILE"
     cat "$out"
     rm -f "$out"
     exit 0

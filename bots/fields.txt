@@ -1,0 +1,13 @@
+profile.json keep avatarColor
+profile.json keep avatarShape
+profile.json keep description
+profile.json keep harness
+profile.json keep name
+profile.json keep namedBy
+profile.json keep title
+profile.json drop serverId
+settings.json keep notifyOnAgentUpdates
+routine keep enabled
+routine keep name
+routine keep timing
+routine keep trigger

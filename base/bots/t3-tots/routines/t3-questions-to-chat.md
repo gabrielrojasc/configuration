@@ -1,0 +1,32 @@
+---
+name: T3 questions to chat
+trigger: webhook
+enabled: true
+---
+A T3 listener on one of the owner's computers POSTed a T3 Code event to this webhook. Follow t3-phone-answers and t3-tots-rules if those skills exist; if not, these saved steps are the whole rule set.
+
+Hard rule: never interrupt or steer a thread that is already running or already has a clear next step. Monitoring means report, answer questions, handle permissions, and fix only when truly stuck or broken. Reading a thread is always fine; writing to one is not part of this routine.
+
+No messages to the owner from this routine (approved 2026-10-30: "have T3 Tots go quiet and hand decisions to Closer"). Two of the owner's Grok Bot assistants are the only bots that nudge him about decisions, priorities and blockers (approved 2026-10-30: "Yes, switch to EP team vs everything else, tooling to Side Closer"): Closer (agent id adf96437-85e2-40fa-b4a7-59d3799996dc) gets entries tagged "ep", and Side Closer (agent id 321acb9c-859e-4f9d-b61d-f0549414f463) gets entries tagged "other". Below, "the closer" means whichever of the two matches the entry's kind.
+
+Unsettled-threads ledger: keep a live list of every T3 thread that is waiting on the owner in the JSON file /home/box/t3-tots/unsettled-threads.json on my computer (one entry per thread id: title, machine, project, kind, reason (open-question, failed, finished-with-decision, or tracking), the exact decision needed, since, notified, request ids for open questions, and an optional followUp). Read it at the start of every run and write it back with a lock (flock), because many events can arrive at once. Each run, also drop entries whose thread the event shows the owner has replied in since the entry was added, or that is archived or deleted. A "tracking" entry is not waiting on the owner; it exists only to carry a followUp.
+
+Kind: tag every new or updated entry with exactly one of "ep" (the thread belongs to an Executive Protection team project: the EPL Linear team and its projects, such as EU PII, ep-api and EPL-* issues) or "other" (everything else: other teams such as DMI, Cosmos, EKS and OSIS, ops questions, other teams' PR reviews, and the owner's own tooling). When unsure whether a thread is an EP project, use "other". Keep an existing entry's kind unless the thread clearly changed.
+
+- event test: listener connected; no output.
+- event request.opened, kind user_input: add it to the ledger as open-question (with machine, threadId, requestId and question ids, so an answer can later be sent back with t3ctl answer), then hand it to the closer as described under Notifying. Include the exact question and option labels; never recommend a pick.
+- kind approval: only relay if the owner turned approvals on in memory, and then hand it to the closer with the prompt, its "why it asks" reason and options verbatim. Never accept one without the owner's yes for that request. In delegated mode, decline with --redirect.
+- event request.resolved: remove that request from the ledger (and the thread's entry if nothing else is pending). No output.
+- event thread.finished, on any thread (including ones the owner runs himself and ones this bot started): don't trust the trimmed lastReply. Read the full latest reply on the owner's computer (t3 thread show with the full thread id and the last few messages). First, if the thread's entry has a followUp, do what it says (usually a one-line confirmation to the closer by priority agent message), then delete the followUp field. Then decide whether the reply ends on a question, choice, or go-ahead the owner must give. If yes, add or update the ledger entry as finished-with-decision and hand off. If no, remove the thread's entry (a new finish after his reply settles the old wait); output nothing beyond any followUp message.
+- Setup map (approved 2026-10-30: "Yes, set up the setup map and keep it current"): on thread.finished for a thread in the skills project (~/fun/skills) or the configuration project (~/fun/configuration), also check, read-only, whether that repo's HEAD changed versus the sha in the header of /home/box/t3-tots/setup-map.md. Use git log on the owner's Mac, with no fetch, pull or edits. If it changed, refresh only the affected sections of the map and the header sha and date. Stay silent unless the change affects how the bots work: a new or renamed trigger phrase, changed full-stop behavior, or a new or changed work flow. In that case, send one line to Closer (adf96437-85e2-40fa-b4a7-59d3799996dc) by priority agent message saying what changed. This is separate from the ledger steps above.
+- event thread.failed: add or update the ledger entry as failed with the short error, and hand it to the closer. thread.cancelled: remove the entry; no output.
+- Result files (owner's rule, 2026-10-30): when a thread that you hand off produced a file the closer needs (a report, spec, cost doc and the like), copy it read-only from the owner's computer onto my computer with CopyToBox, to /home/box/t3-tots/results/<first 8 chars of thread id>/<filename>. Never hand the owner or a closer a path that exists only on the Mac as the result.
+- Notifying: claim the handoff atomically. While holding the lock, re-read the ledger; only if the entry is missing, not yet notified, or its decision text materially changed, set notified true (with notifiedAt) and write it back, then release the lock and hand off. If another run already marked it notified, send nothing, because several runs often handle replays of the same thread at the same moment. The handoff goes to the closer for the entry's kind as one priority agent message per wait, kept short:
+  - the thread title, full thread id and kind;
+  - the key findings inline, at most 5 bullets with the actual numbers and the conclusion in plain words, read from the thread's reply or its files;
+  - the box path of any copied result file, so the closer can turn it into a Grok Bot Page or inline findings for the owner;
+  - the one decision needed plus the thread's own recommendation;
+  - a PR or issue link when there is one.
+- Malformed or unknown: no output.
+
+Results go only to Closer (ep) or Side Closer (other), the owner's assistants in Grok Bot, never to the owner in this chat. Runs with nothing new (plain finishes, CI or status updates, stale replays, repeats, events already marked notified, setup-map changes that don't affect how the bots work) end with no output at all, not even a note saying nothing was sent.

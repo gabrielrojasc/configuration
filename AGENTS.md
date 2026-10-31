@@ -27,6 +27,10 @@ Work and commit directly on `master` in this checkout, even when a global defaul
 
 Credentials stay on the machine. `read_machine` in `utils.sh` strips them on the way into the repo (npm auth lines, Docker inline auths), and `add_machine_secrets` puts them back on install. Any new key that can hold a credential gets the same pair of filters, plus an `e2e` check that the credential reaches neither the repo nor the snapshot.
 
+## Grok Bot
+
+Bot files are keys under `bots/` (`base/bots/`, `profiles/<p>/patches/bots/`), but `install.sh` never installs them; `bots/snapshot.sh` writes them from a fleet's snapshot. Read `bots/README.md` before changing anything there, and add a field to `bots/fields.txt` as `keep` only if it can never hold a credential.
+
 ## Script conventions
 
 - Scripts run on a fresh Mac: `/bin/bash` 3.2 with BSD tools, under `set -euo pipefail`. Expand possibly-empty arrays as `${a[@]+"${a[@]}"}`, and write portable `sed` (no bare `sed -i`).

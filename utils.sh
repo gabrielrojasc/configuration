@@ -3,6 +3,7 @@
 #
 # A "key" is a path relative to a layer root (base/ or profiles/<name>/):
 #   home/<path>       a file that lives at $HOME/<path>
+#   bots/<path>       a Grok Bot file, written by bots/snapshot.sh, never installed
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
 #   agent-skills.txt  installed with skills add -g, read back with skills ls -g
@@ -178,7 +179,7 @@ function source_of() {
 function to_key() {
     local path=${1#"$HOME"/}
     case "$path" in
-        home/* | Brewfile | pnpm-globals.txt | agent-skills.txt | apps.txt) echo "$path" ;;
+        home/* | bots/* | Brewfile | pnpm-globals.txt | agent-skills.txt | apps.txt) echo "$path" ;;
         *) echo "home/$path" ;;
     esac
 }
@@ -203,7 +204,7 @@ function apply_patch() {
     mkdir -p "$dir/$(dirname "$key")"
     cat "$file" >"$dir/$key"
     if (cd "$dir" && git apply "$repo/$patch" 2>/dev/null); then
-        cat "$dir/$key" >"$file"
+        if [[ -e "$dir/$key" ]]; then cat "$dir/$key" >"$file"; else rm -f "$file"; fi
         rm -rf "$dir"
         return 0
     fi
@@ -246,6 +247,11 @@ function merge_patch() {
         color_print "$red" "$patch does not apply to its own base ($blob); fix the patch by hand." >&2
         return 1
     fi
+    if [[ ! -e "$dir/old-profile" ]]; then
+        rm -f "$out"
+        rm -rf "$dir"
+        return 0
+    fi
     if ! git merge-file -p -L "$DOTFILES_PROFILE" -L "old base" -L "base" \
         "$dir/old-profile" "$dir/old-base" "base/$key" >"$out"; then
         mkdir -p "$(dirname "$conflicts_dir/$key")"
@@ -258,15 +264,20 @@ function merge_patch() {
 }
 
 # make_patch <key> <target>: store <target> as base/<key> plus a patch, or
-# drop the patch when <target> equals base.
+# drop the patch when <target> equals base. A missing <target> makes a patch
+# that deletes the file for this profile.
 function make_patch() {
     local key=$1 target=$2 patch dir
     patch=$(patch_of "$key")
     dir=$(mktemp -d)
     mkdir -p "$dir/a/$(dirname "$key")" "$dir/b/$(dirname "$key")"
     cat "base/$key" >"$dir/a/$key"
-    cat "$target" >"$dir/b/$key"
-    (cd "$dir" && git diff --no-index --no-prefix --full-index -- "a/$key" "b/$key") >"$dir/patch" || true
+    if [[ -e "$target" ]]; then
+        cat "$target" >"$dir/b/$key"
+        (cd "$dir" && git diff --no-index --no-prefix --full-index -- "a/$key" "b/$key") >"$dir/patch" || true
+    else
+        (cd "$dir" && git diff --no-index --no-prefix --full-index -- "a/$key" /dev/null) >"$dir/patch" || true
+    fi
     if [[ -s "$dir/patch" ]]; then
         mkdir -p "$(dirname "$patch")"
         cat "$dir/patch" >"$patch"
@@ -511,4 +522,230 @@ function add_machine_secrets() {
             mv "$file.tmp" "$file"
             ;;
     esac
+}
+
+# Scratch repo whose index holds the repo version of each changed file and
+# whose worktree holds the machine version. Each hunk answered y is applied to
+# the index; whatever the index holds at the end goes to base.
+function sort_init() {
+    sort_repo="$work/sort"
+    git init -q "$sort_repo"
+    candidates=()
+    new_files=()
+    deleted_files=()
+    # One line per file changed in the repo, for the summary at the end.
+    copied=()
+    sort_mode=ask
+    keep_unmoved_patches=0
+}
+
+# stage <key> <index version> <worktree version>
+function stage() {
+    local key=$1
+    mkdir -p "$sort_repo/$(dirname "$key")" "$work/candidates/$(dirname "$key")"
+    cat "$2" >"$sort_repo/$key"
+    git -C "$sort_repo" add -- "$key"
+    cat "$3" >"$sort_repo/$key"
+    cat "$2" >"$work/candidates/$key"
+    candidates+=("$key")
+}
+
+function stage_new() {
+    mkdir -p "$sort_repo/$(dirname "$1")"
+    cat "$2" >"$sort_repo/$1"
+    git -C "$sort_repo" add -N -- "$1"
+    new_files+=("$1")
+}
+
+function stage_deleted() {
+    mkdir -p "$work/deleted/$(dirname "$1")"
+    cat "$2" >"$work/deleted/$1"
+    deleted_files+=("$1")
+}
+
+# show_lines <file>: print diff lines colored, with changed words marked.
+function show_lines() {
+    highlight_words <"$1" | awk -v plus="$(printf '%b' "$green")" -v minus="$(printf '%b' "$red")" \
+        -v reset="$(printf '%b' "$default")" '
+        /^\+/ { print plus $0 reset; next }
+        /^-/ { print minus $0 reset; next }
+        { print }
+    '
+}
+
+# ask: read y, n, or q into $answer. Running out of input (the end of a piped
+# answer list) counts as q, so nothing moves to base without an explicit y.
+function ask() {
+    local reply
+    while true; do
+        printf '%b' "Who gets this change?  ${bold}y${default} every profile (base)   ${bold}n${default} only $DOTFILES_PROFILE   ${bold}q${default} only $DOTFILES_PROFILE, and every change after it   ${bold}?${default} help\n> "
+        if ! IFS= read -r reply; then
+            echo
+            answer=q
+            answers_ran_out=1
+            return
+        fi
+        case "$reply" in
+            y | n | q) answer=$reply; return ;;
+            '?' | h | help)
+                echo "  y  move this change to base/, so every profile's install gets it"
+                echo "  n  keep it in profiles/$DOTFILES_PROFILE/, so only this profile gets it"
+                echo "  q  like n, for this change and every one after it (no more questions)"
+                echo "  The change stays where it was made either way; the answer decides who else gets it."
+                ;;
+            *) echo "Answer y, n, or q (? for help)." ;;
+        esac
+    done
+}
+
+# tally <key> <where>: remember where a change went, for the summary.
+function tally() {
+    echo "$2" >>"$work/tally/$(echo "$1" | tr / %)"
+}
+
+function offer() {
+    echo
+    if [[ "$sort_mode" == list ]]; then
+        echo "$(display_name "$1")   $2"
+        cat "$work/lines"
+        return 1
+    fi
+    echo -e "${cyan}${bold}$(display_name "$1")${default}   $2"
+    show_lines "$work/lines"
+    ask
+}
+
+# sort_changes: ask about every hunk of every changed file, then every new file,
+# then every deleted file.
+function sort_changes() {
+    local key hunk total=0 i=0 quitting=0 line
+    mkdir -p "$work/hunks" "$work/tally"
+    : >"$work/delete-from-base"
+    # One patch file per hunk (the file's diff header plus that hunk), numbered
+    # in order, so a y can apply exactly that hunk to the index.
+    for key in ${candidates[@]+"${candidates[@]}"}; do
+        git -C "$sort_repo" diff --no-color --no-ext-diff -- "$key" | awk -v dir="$work/hunks" -v start="$total" -v key="$key" '
+            /^@@/ { n++; file = sprintf("%s/%05d.patch", dir, start + n); printf "%s", header > file; print key > (file ".key") }
+            n == 0 { header = header $0 "\n"; next }
+            { print > file }
+        '
+        total=$(find "$work/hunks" -name '*.patch' | wc -l | tr -d ' ')
+    done
+    total=$((total + ${#new_files[@]} + ${#deleted_files[@]}))
+
+    for hunk in "$work"/hunks/*.patch; do
+        [[ -f "$hunk" ]] || continue
+        i=$((i + 1))
+        key=$(cat "$hunk.key")
+        if ((quitting)) || [[ "$sort_mode" == keep ]]; then
+            tally "$key" kept
+            continue
+        fi
+        line=$(sed -n 's/^@@ -[0-9,]* +\([0-9]*\).*/\1/p' "$hunk" | head -n 1)
+        sed -n '/^@@/,$p' "$hunk" | sed 1d >"$work/lines"
+        offer "$key" "change $i of $total, near line $line" || continue
+        case "$answer" in
+            y)
+                if git -C "$sort_repo" apply --cached "$hunk" 2>/dev/null; then
+                    tally "$key" base
+                else
+                    color_print "$yellow" "Couldn't place this change apart from the ones before it; kept in $DOTFILES_PROFILE."
+                    tally "$key" kept
+                fi
+                ;;
+            q) quitting=1; tally "$key" kept ;;
+            *) tally "$key" kept ;;
+        esac
+    done
+
+    for key in ${new_files[@]+"${new_files[@]}"}; do
+        i=$((i + 1))
+        if ((quitting)) || [[ "$sort_mode" == keep ]]; then
+            continue
+        fi
+        sed 's/^/+/' "$sort_repo/$key" >"$work/lines"
+        offer "$key" "change $i of $total, new file" || continue
+        case "$answer" in
+            y) git -C "$sort_repo" add -- "$key" ;;
+            q) quitting=1 ;;
+        esac
+    done
+
+    for key in ${deleted_files[@]+"${deleted_files[@]}"}; do
+        i=$((i + 1))
+        if ((quitting)) || [[ "$sort_mode" == keep ]]; then
+            continue
+        fi
+        sed 's/^/-/' "$work/deleted/$key" >"$work/lines"
+        offer "$key" "change $i of $total, deleted file" || continue
+        case "$answer" in
+            y) echo "$key" >>"$work/delete-from-base" ;;
+            q) quitting=1 ;;
+        esac
+    done
+}
+
+function patched_elsewhere() {
+    local patch
+    for patch in profiles/*/patches/"$1".patch; do
+        [[ -f "$patch" && "$patch" != "$(patch_of "$1")" ]] || continue
+        if ! grep -qx '+++ /dev/null' "$patch"; then echo "$patch" | cut -d/ -f2; fi
+    done
+}
+
+function place_changes() {
+    local key to_base kept other
+    for key in ${candidates[@]+"${candidates[@]}"}; do
+        # Staged hunks are the ones promoted to base; carry them onto base
+        # (which may differ from the index version by this profile's patch).
+        git -C "$sort_repo" show ":$key" >"$work/staged"
+        if ! cmp -s "$work/staged" "$work/candidates/$key"; then
+            if git merge-file -p "base/$key" "$work/candidates/$key" "$work/staged" >"$work/new-base"; then
+                cat "$work/new-base" >"base/$key"
+            else
+                # Happens when a promoted hunk sits right next to lines only this
+                # profile has, so there's no base context to place it in.
+                color_print "$yellow" "Kept the chosen $key hunks in this profile: they sit next to profile-only lines. Move them into base/$key by hand, then rerun ./copy.sh --sort."
+            fi
+        elif ((keep_unmoved_patches)); then
+            # Nothing moved, so the patch stays byte for byte, even one made
+            # against an older base that still renders.
+            continue
+        fi
+        make_patch "$key" "$sort_repo/$key"
+        to_base=$(grep -c '^base$' "$work/tally/$(echo "$key" | tr / %)" 2>/dev/null || true)
+        kept=$(grep -c '^kept$' "$work/tally/$(echo "$key" | tr / %)" 2>/dev/null || true)
+        copied+=("$(display_name "$key"): ${to_base:-0} to base, ${kept:-0} kept in $DOTFILES_PROFILE")
+    done
+
+    for key in ${new_files[@]+"${new_files[@]}"}; do
+        git -C "$sort_repo" show ":$key" >"$work/staged"
+        if [[ -s "$work/staged" ]]; then
+            mkdir -p "$(dirname "base/$key")"
+            cat "$work/staged" >"base/$key"
+            if [[ "$key" == home/* && -x "$HOME/${key#home/}" ]]; then chmod +x "base/$key"; fi
+            make_patch "$key" "$sort_repo/$key"
+            copied+=("$(display_name "$key"): new file in base")
+        else
+            mkdir -p "$(dirname "$profile_dir/$key")"
+            cat "$sort_repo/$key" >"$profile_dir/$key"
+            if [[ "$key" == home/* && -x "$HOME/${key#home/}" ]]; then chmod +x "$profile_dir/$key"; fi
+            copied+=("$(display_name "$key"): new file in $DOTFILES_PROFILE")
+        fi
+    done
+
+    for key in ${deleted_files[@]+"${deleted_files[@]}"}; do
+        other=""
+        if grep -qxF -- "$key" "$work/delete-from-base"; then
+            other=$(patched_elsewhere "$key" | paste -sd , -)
+            if [[ -z "$other" ]]; then
+                rm -f "base/$key" profiles/*/patches/"$key".patch
+                copied+=("$(display_name "$key"): deleted from base")
+                continue
+            fi
+            color_print "$yellow" "Kept base/$key: $other changes it, so it's deleted only in $DOTFILES_PROFILE."
+        fi
+        make_patch "$key" "$work/absent"
+        copied+=("$(display_name "$key"): deleted in $DOTFILES_PROFILE only")
+    done
 }

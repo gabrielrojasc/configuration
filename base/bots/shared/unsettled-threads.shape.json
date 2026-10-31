@@ -1,0 +1,26 @@
+{
+  "about": "string",
+  "kindValues": "string",
+  "seedNote": "string",
+  "threads": {
+    "<key>": {
+      "decision": "string",
+      "kind": "string",
+      "latestRunId": "string",
+      "machine": "string",
+      "notified": "boolean",
+      "notifiedAt": "string",
+      "project": "string",
+      "reason": "string",
+      "requestIds": [],
+      "resultFile": "string",
+      "runId": "string",
+      "since": "string",
+      "snoozedUntil": "string",
+      "source": "string",
+      "title": "string",
+      "updatedNote": "string"
+    }
+  },
+  "updatedAt": "string"
+}
