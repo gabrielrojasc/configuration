@@ -4,6 +4,7 @@
 # bots/README.md describes the staging layout and the flow.
 #
 # Usage: bots/snapshot.sh [--list | --expect <fingerprint>] <staging-dir>
+#        bots/snapshot.sh --discard <staging-dir>
 #        bots/snapshot.sh --seed
 #   (no flags)        ask at the terminal for each change:
 #                     y = every profile (base), n = only this profile,
@@ -11,8 +12,15 @@
 #   --list            print the numbered changes and their fingerprint; writes nothing
 #   --expect <fp>     read the answers from stdin, one y, n, or q per line in
 #                     --list order; refuse if the changes differ from that list
+#   --discard         delete the staging folder without applying it
 #   --seed            record this profile's bots in the repo as what its fleet
 #                     has now, as the starting point for later snapshots
+#
+# After it applies every change without a warning, and with --discard, the
+# script deletes the staging folder and every file beside it named
+# <staging-dir>.*, such as a tarball. It does so only for a staging folder
+# directly inside /tmp, $TMPDIR, or the user's temp folder, where mktemp -d
+# makes one. When it stops on an error or ends with a warning, it keeps them.
 
 set -euo pipefail
 start_dir=$PWD
@@ -26,6 +34,7 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --list) mode=list ;;
         --seed) mode=seed ;;
+        --discard) mode=discard ;;
         --expect) [[ $# -ge 2 ]] || die "--expect needs the fingerprint from --list"; mode=expect; expect=$2; shift ;;
         -*) die "Unknown argument: $1 (see the usage at the top of bots/snapshot.sh)" ;;
         *) [[ -z "$staging_arg" ]] || die "Give one staging folder"; staging_arg=$1 ;;
@@ -91,17 +100,12 @@ if [[ "$mode" == seed ]]; then
     exit 0
 fi
 
-[[ -n "$staging_arg" ]] || die "Usage: bots/snapshot.sh [--list | --expect <fingerprint>] <staging-dir>"
+[[ -n "$staging_arg" ]] || die "Usage: bots/snapshot.sh [--list | --expect <fingerprint> | --discard] <staging-dir>"
 staging=$(cd "$start_dir" && cd "$staging_arg" 2>/dev/null && pwd -P) || die "Staging folder not found: $staging_arg"
 root=$(pwd -P)
 if [[ "$staging" == "$root" || "$staging" == "$root"/* ]]; then
     die "Stage outside the repo, for example in mktemp -d: $staging is inside $root"
 fi
-[[ -d "$baseline" ]] || die "There's no record of what the $DOTFILES_PROFILE fleet had at its last snapshot. If the repo matches the fleet now, run bots/snapshot.sh --seed first. See bots/README.md."
-
-out="$work/out"
-mkdir -p "$out/bots/shared"
-
 routine_re='^[a-z0-9][a-z0-9-]*\.md$'
 
 function expected() {
@@ -126,6 +130,44 @@ unexpected=$(cd "$staging" && find . -mindepth 1 ! -name .DS_Store | sed 's|^\./
     done)
 [[ -z "$unexpected" ]] || die "Unexpected files in $staging (see bots/README.md for the layout):
 $unexpected"
+
+function in_temp_folder() {
+    local dir
+    for dir in /tmp ${TMPDIR:+"$TMPDIR"} "$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null || true)"; do
+        dir=$(cd "${dir:-/nonexistent}" 2>/dev/null && pwd -P) || continue
+        if [[ "$(dirname "$staging")" == "$dir" ]]; then return 0; fi
+    done
+    return 1
+}
+
+function clean_staging() {
+    local f
+    if ! in_temp_folder; then
+        color_print "$yellow" "Left $staging in place: the script deletes only a staging folder directly inside a temp folder. Delete it yourself; it holds the live ledger and each bot's serverId."
+        return 0
+    fi
+    if rm -rf "$staging"; then
+        echo "Deleted $staging"
+    else
+        color_print "$yellow" "Couldn't delete $staging. Delete it yourself."
+    fi
+    for f in "$staging".*; do
+        if [[ ! -f "$f" || -L "$f" ]]; then continue; fi
+        if rm -f "$f"; then
+            echo "Deleted $f"
+        else
+            color_print "$yellow" "Couldn't delete $f. Delete it yourself."
+        fi
+    done
+}
+
+if [[ "$mode" == discard ]]; then
+    in_temp_folder || die "Delete $staging yourself: --discard deletes only a staging folder directly inside /tmp, \$TMPDIR, or the user's temp folder."
+    clean_staging
+    exit 0
+fi
+
+[[ -d "$baseline" ]] || die "There's no record of what the $DOTFILES_PROFILE fleet had at its last snapshot. If the repo matches the fleet now, run bots/snapshot.sh --seed first. See bots/README.md."
 
 missing=""
 for f in setup-map.md unsettled-threads.json; do
@@ -181,6 +223,9 @@ function check_routine() {
     done
     grep -qxE 'enabled: (true|false)' <<<"$front" || die "$name needs enabled: true or enabled: false"
 }
+
+out="$work/out"
+mkdir -p "$out/bots/shared"
 
 for i in "${!ids[@]}"; do
     slug=${slugs[i]}
@@ -359,6 +404,7 @@ mkdir -p "$baseline"
 cp -R "$out/bots" "$baseline/bots"
 cp "$roster" "$baseline/bots.txt"
 
+warned=$answers_ran_out
 for other in profiles/*; do
     p=${other#profiles/}
     if [[ "$p" == "$DOTFILES_PROFILE" || ! -d "$other/patches/bots" ]]; then continue; fi
@@ -367,6 +413,7 @@ for other in profiles/*; do
         key=${key%.patch}
         if ! (DOTFILES_PROFILE=$p profile_dir=$other rendered "$key" "$work/check") 2>/dev/null; then
             color_print "$yellow" "$key no longer renders for $p. Fix it with DOTFILES_PROFILE=$p ./copy.sh --resolve $key"
+            warned=1
         fi
     done < <(find "$other/patches/bots" -name '*.patch' | sort)
 done
@@ -381,4 +428,9 @@ if ((${#copied[@]})); then
     echo 'Review with git diff, then commit.'
 else
     echo 'Nothing changed.'
+fi
+if ((warned)); then
+    color_print "$yellow" "Kept $staging because of the warning above. Once you've dealt with it, delete it with bots/snapshot.sh --discard $staging_arg"
+else
+    clean_staging
 fi

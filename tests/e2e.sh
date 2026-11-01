@@ -497,6 +497,59 @@ check "snapshot stops on files outside the layout, such as memory" snap_stops "$
 cp -R "$zf" "$repo/.staging"
 check "snapshot refuses a staging folder inside the repo" snap_stops 'Stage outside the repo' "$log_dir/bots-inside-repo.txt" snap zerofox --list .staging
 rm -rf "${repo:?}/.staging"
+function mktemp_staging() {
+    local dir
+    dir=$(mktemp -d)
+    cp -R "$zf/." "$dir/"
+    touch "$dir.tgz" "$dir-unrelated.txt"
+    mkdir "$dir.keep"
+    echo "$dir"
+}
+function gone() { test ! -e "$1" && test ! -e "$1.tgz" && test -e "$1-unrelated.txt" && test -d "$1.keep"; }
+function kept() { test -d "$1" && test -e "$1.tgz"; }
+
+nested="$home/staging-nested"
+cp -R "$zf" "$nested"
+touch "$nested.tgz"
+check "applying from a staging folder that isn't directly in a temp folder succeeds" snap_answer zerofox "$nested" '' "$log_dir/bots-clean-nested.txt"
+check "that staging folder and its copies stay, and the script says so" bash -c "test -d '$nested' && test -e '$nested.tgz' && grep -q 'Left .* in place' '$log_dir/bots-clean-nested.txt'"
+applied=$(mktemp_staging)
+check "applying a snapshot from a mktemp -d folder succeeds" snap_answer zerofox "$applied" '' "$log_dir/bots-clean-apply.txt"
+check "the applied staging folder and its file copies are deleted, but not other files or a folder named after it" gone "$applied"
+refused=$(mktemp_staging)
+check "a refused apply keeps the staging folder and its copies" snap_stops 'Run --list again' "$log_dir/bots-clean-refused.txt" snap_expect 0000000000000000 "$refused"
+check "the refused staging folder is still there" kept "$refused"
+check "--discard deletes a mktemp -d staging folder and its copies" snap zerofox --discard "$refused" >"$log_dir/bots-discard.txt" 2>&1
+check "the discarded staging folder and its file copies are gone, but not other files or a folder named after it" gone "$refused"
+check "--discard refuses a folder that isn't directly in a temp folder" snap_stops 'Delete .* yourself' "$log_dir/bots-discard-nested.txt" snap zerofox --discard "$nested"
+check "the refused nested folder is still there" kept "$nested"
+odd=$(mktemp_staging)
+mkdir "$odd/memory"
+check "--discard refuses a folder with files outside the layout" snap_stops 'Unexpected files' "$log_dir/bots-discard-odd.txt" snap zerofox --discard "$odd"
+check "the refused odd folder is still there" kept "$odd"
+ran_out=$(mktemp_staging)
+set_field "$ran_out/$(id_of zerofox closer)/profile.json" '.title = "answers ran out"'
+check "an apply whose answers run out succeeds" snap_answer zerofox "$ran_out" '' "$log_dir/bots-clean-ran-out.txt"
+check "an apply whose answers ran out keeps the staging folder and says so" \
+    bash -c "grep -q 'answers ran out' '$log_dir/bots-clean-ran-out.txt' && grep -q 'Kept .* because of the warning' '$log_dir/bots-clean-ran-out.txt'"
+check "the ran-out staging folder is still there" kept "$ran_out"
+commit_all ran-out
+mkdir -p "$repo/.conflicts/bots/router"
+shows personal bots/router/profile.json | jq '.description = "personal router"' >"$repo/.conflicts/bots/router/profile.json"
+in_repo env DOTFILES_PROFILE=personal ./copy.sh --resolve bots/router/profile.json >/dev/null
+commit_all personal-router
+unrendered=$(mktemp_staging)
+set_field "$unrendered/$(id_of zerofox closer)/profile.json" '.title = "answers ran out"'
+set_field "$unrendered/$(id_of zerofox router)/profile.json" '.description = "routes work, v3"'
+check "an apply that breaks another profile's patch succeeds" snap_answer zerofox "$unrendered" 'y\n' "$log_dir/bots-clean-unrendered.txt"
+check "an apply that breaks another profile's patch keeps the staging folder and says so" \
+    bash -c "grep -q 'bots/router/profile.json no longer renders for personal' '$log_dir/bots-clean-unrendered.txt' && ! grep -q 'answers ran out' '$log_dir/bots-clean-unrendered.txt' && grep -q 'Kept .* because of the warning' '$log_dir/bots-clean-unrendered.txt'"
+check "the staging folder for the broken patch is still there" kept "$unrendered"
+commit_all unrendered
+for dir in "$applied" "$refused" "$odd" "$ran_out" "$nested" "$unrendered"; do
+    rm -rf "${dir:?}" "$dir.tgz" "$dir-unrelated.txt" "$dir.keep"
+done
+
 check "no serverId, token, or ledger data reaches the repo, a commit, or the baseline" no_planted_values
 check "the refused snapshots leave the repo clean" repo_clean || show_status
 echo

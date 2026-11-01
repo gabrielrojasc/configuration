@@ -9,6 +9,8 @@ Each fleet's box is the source of truth. Changes flow one way, from a fleet
 into git. The app can't import from git, and `install.sh` never installs these
 files.
 
+To install these bots on a new Grok Bot account, see [INSTALL.md](INSTALL.md).
+
 ## Layout
 
 ```text
@@ -79,10 +81,25 @@ DOTFILES_PROFILE=zerofox ./install.sh --show bots/router/profile.json
    the list, the script writes nothing and asks for a new list. At a terminal,
    `bots/snapshot.sh <staging-folder>` asks about each change directly.
 
+   After it applies every change without a warning, the script deletes the
+   staging folder and every file beside it named `<staging-folder>.*`, such
+   as a tarball. Name a copy you want to keep differently. The script deletes
+   only a staging folder directly inside `/tmp`, `$TMPDIR`, or the user's
+   temp folder, where `mktemp -d` makes one. Delete any other staging folder
+   yourself: it holds the live ledger and each bot's `serverId`. When the
+   script stops on an error, it keeps them so you can fix the staging folder
+   and rerun. When it ends with a warning, such as answers running out, it
+   keeps them too: deal with the warning, then run `--discard` below.
+
 5. Review `git status` and `git diff`, then commit `base/` and the patches
    together.
-6. Delete the staging folder. It holds the live ledger and each bot's
-   `serverId`.
+
+To drop a snapshot without applying it, delete its staging folder and the
+copies named after it:
+
+```sh
+bots/snapshot.sh --discard <staging-folder>
+```
 
 ## How a snapshot sorts changes
 
