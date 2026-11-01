@@ -4,10 +4,10 @@ What this is: a short map of Gabriel's agent skills, work flows, and machine
 configuration, so bots can work the way he does without re-reading both repos.
 Built read-only from GitHub (cursor-github connector) and his ZeroFox Mac.
 
-Last refreshed: 2026-10-31 11:48 Chile time (UTC-3)
+Last refreshed: 2026-10-31 17:55 Chile time (UTC-3)
 
-skills: adb9a0a00dc9d32830809694c064bc1a00dee4e6 2026-10-31T10:52:18-03:00
-configuration: d7e5fe7b53806c89f0fa675c5536bdc6f2b809c2 2026-10-31T11:46-03:00
+skills: 4157dc61774e3d2cea90d02e4c9420feaf6db24b 2026-10-31T17:50:30-03:00
+configuration: d4c8215136930ea33359e258b9b7a4c9e4447354 2026-10-31T11:57:55-03:00
 
 ## 1. His skills (gabrielrojasc/skills)
 
@@ -17,7 +17,7 @@ are the quoted `description` lines.
 - babysit-pr: "Use when asked to babysit a GitHub PR." Runs unattended in rounds (fresh subagent each round): review feedback via gh-review-comments, fixes CI failures the PR causes, rebases when behind, pushes once per round. Ends Merge-ready, Waiting on people, or Blocked. Never merges.
 - chief-of-staff: "Use when asked for chief-of-staff updates in T3." Reads his other unsettled T3 threads, ranks what needs him (work by prod impact, Linear project, deadline, effort; personal separately), renders a glance page, tables `RV <repo>#<n>` review threads. On request: tidy threads, Slack follow-ups. Acts on a thread only when asked.
 - computer-use: "Use when a task needs a signed-in site or a Mac app." T3 preview tools cover public sites; this covers his signed-in browser and native apps.
-- cross-review: "Use when asked to cross-review and fix a change." Runs review-revise with the other provider (Claude vs Codex) as sole reviewer via T3 `delegate_task`; 3 rounds (5 for auth, secrets, data deletion, concurrency). Findings use Conventional Comments labels and IDs; ends with a `Cross-reviewed: ... Verdict: ...` line. Fix rule: a finding about another path, a rare case, or a small cost is a nitpick whatever its label, unless its harm is severe (security hole, lost or corrupted data, lost message, outage).
+- cross-review: "Use when asked to cross-review and fix a change." Runs review-revise with the other provider (Claude vs Codex) as sole reviewer via T3 `delegate_task`; 3 rounds (5 for auth, secrets, data deletion, concurrency). Findings use Conventional Comments labels and IDs; ends with a `Cross-reviewed: ... Verdict: ...` line. Fix rule: a finding about another path, a rare case, or a small cost is a nitpick whatever its label, unless its harm is severe.
 - developer-documentation-style: "Use when working on developer docs." Applies the live Google Developer Documentation Style Guide after repo conventions.
 - full-stop: "Use when told 'full stop'." Unattended run from current state to a mergeable PR (see section 3).
 - gh-review-comments: "Use when addressing PR review feedback." Classifies feedback, fixes what holds up, replies to every thread, raises only judgment calls. Has fetch scripts.
