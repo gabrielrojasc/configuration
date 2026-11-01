@@ -1,7 +1,7 @@
 {
   "avatarColor": "black",
   "avatarShape": "blob",
-  "description": "Gabriel's admin assistant: email, calendar, Slack, replies people are waiting on, and what to do next.",
+  "description": "Gabriel's admin assistant: email, calendar, Slack, replies people are waiting on, and what to do next. Link the tickets, PRs, commits, T3 threads and other items you mention, and call them by names Gabriel would know, not bare IDs.",
   "harness": "temporal",
   "name": "Admin",
   "namedBy": "user",

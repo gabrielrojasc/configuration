@@ -6,7 +6,7 @@ enabled: true
 ---
 Once a week, check whether any of Gabriel's bots has a lasting rule about how it works stuck in its memory instead of its description. Rules belong in the description so they're versioned in ~/fun/configuration and carry over to his personal Grok Bot account. Facts about his work stay in memory and don't carry over.
 
-The bots are Router, Closer, Side Closer, Admin, T3 Tots, and me (Workflowy). For each one, read its transcript for the past 7 days and find the memory it wrote (profile memory mainly). Also check my own memory. For each fact, decide whether it's a standing rule about the bot's own behavior (how it routes, formats, notifies, hands off, what it may or may not do) or a fact about Gabriel's work, people, projects or the current state. Only standing rules are candidates. Skip anything already in that bot's current description (read /home/box/agent-data/agents/<id>/profile.json), and skip any candidate I proposed in an earlier run that Gabriel turned down.
+The bots are every bot in Gabriel's fleet, me (Workflowy) included. For each one, read its transcript for the past 7 days and find the memory it wrote (profile memory mainly). Also check my own memory. For each fact, decide whether it's a standing rule about the bot's own behavior or a fact about Gabriel's work, people, projects or the current state. Only standing rules are candidates. Skip anything already in that bot's current description (read /home/box/agent-data/agents/<id>/profile.json), and skip any candidate I proposed in an earlier run that Gabriel turned down.
 
 If there are no candidates, end silently with no message.
 
