@@ -20,11 +20,11 @@ base/bots/
 │   ├── settings.json
 │   └── routines/<routine>.md      # absent when the bot has none
 └── shared/
-    ├── setup-map.md                 # copied from the box
     └── unsettled-threads.shape.json # the ledger's fields and types, no values
 profiles/<profile>/
 ├── bots.txt                         # this profile's fleet: "<slug> <bot id>" per line
 ├── bots/<path>                      # files only this profile has
+├── bots/shared/setup-map.md         # copied from this fleet's box
 └── patches/bots/<path>.patch        # this profile's changes to base/bots, including deletions
 bots/
 ├── snapshot.sh                      # brings a staged snapshot into the repo
@@ -33,6 +33,8 @@ bots/
 ```
 
 `shared/setup-map.md` describes what each bot does and how the bots connect.
+Each fleet's T3 Tots builds its own from that account's Mac, so it lives in
+the profile, not in base.
 To print the file a profile has, run:
 
 ```sh
@@ -68,7 +70,9 @@ DOTFILES_PROFILE=zerofox ./install.sh --show bots/router/profile.json
      `profiles/<profile>/bots/` for a new file.
    - `q`: only this profile, for this change and every one after it.
 
-   A change without an answer stays in this profile only.
+   A change without an answer stays in this profile only. Answer `n` to a
+   change that names this account's Linear teams, inboxes, Slack workspace,
+   machine, or T3 threads: `base/bots/` names no account.
 
 4. Apply the answers, one per line in list order, with the list's
    fingerprint:

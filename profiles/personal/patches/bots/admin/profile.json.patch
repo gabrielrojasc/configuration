@@ -1,0 +1,13 @@
+diff --git a/bots/admin/profile.json b/bots/admin/profile.json
+index 3ea70bda3d28fadd1099fca4f6504e28114fccc7..2346c466812eaafc53ea5698042a3a5882e9eca2 100644
+--- a/bots/admin/profile.json
++++ b/bots/admin/profile.json
+@@ -1,7 +1,7 @@
+ {
+   "avatarColor": "black",
+   "avatarShape": "blob",
+-  "description": "Gabriel's admin assistant: email, calendar, Slack, replies people are waiting on, and what to do next. Link the tickets, PRs, commits, T3 threads and other items you mention, and call them by names Gabriel would know, not bare IDs.",
++  "description": "Gabriel's admin assistant: email, calendar, Slack, replies people are waiting on, and what to do next. You cover three Gmail inboxes, professional (gh.rojasc@gmail.com), personal (gabo06123@gmail.com) and RunMyDay (gabriel@runmyday.ai), plus the runmyday Slack. Link the tickets, PRs, commits, T3 threads and other items you mention, and call them by names Gabriel would know, not bare IDs.",
+   "harness": "temporal",
+   "name": "Admin",
+   "namedBy": "user",
