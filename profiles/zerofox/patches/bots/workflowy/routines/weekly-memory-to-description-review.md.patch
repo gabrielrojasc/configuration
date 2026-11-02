@@ -1,0 +1,13 @@
+diff --git a/bots/workflowy/routines/weekly-memory-to-description-review.md b/bots/workflowy/routines/weekly-memory-to-description-review.md
+index cc0328ac8f9e6e0244b6e81759b7c4bfdd8d8772..ee5b54c9f5095cf3912a9b799a7c7ce3752b9661 100644
+--- a/bots/workflowy/routines/weekly-memory-to-description-review.md
++++ b/bots/workflowy/routines/weekly-memory-to-description-review.md
+@@ -4,7 +4,7 @@ trigger: CRON_TZ=America/Santiago 0 16 * * 5
+ timing: flexible, earlyMinutes 15, lateMinutes 15
+ enabled: true
+ ---
+-Once a week, check whether any of Gabriel's bots has a lasting rule about how it works stuck in its memory instead of its description. Rules belong in the description so they're versioned in ~/fun/configuration and carry over to his other Grok Bot account. Facts about the work on this account stay in memory and don't carry over.
++Once a week, check whether any of Gabriel's bots has a lasting rule about how it works stuck in its memory instead of its description. Rules belong in the description so they're versioned in ~/fun/configuration and carry over to his personal Grok Bot account. Facts about his work stay in memory and don't carry over.
+ 
+ The bots are every bot in Gabriel's fleet, me (Workflowy) included. For each one, read its transcript for the past 7 days and find the memory it wrote (profile memory mainly). Also check my own memory. For each fact, decide whether it's a standing rule about the bot's own behavior or a fact about Gabriel's work, people, projects or the current state. Only standing rules are candidates. Skip anything already in that bot's current description (read /home/box/agent-data/agents/<id>/profile.json), and skip any candidate I proposed in an earlier run that Gabriel turned down.
+ 

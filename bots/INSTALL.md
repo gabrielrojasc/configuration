@@ -51,8 +51,10 @@ If the profile deletes that file, the command says so instead.
 
 ## Adapt the text
 
-The base files describe one person's setup: their name, team, tools, and file
-paths. Decide for each change whether every profile should get it:
+The base files describe one person's bots without naming any account: they
+say "his main line" and "his Mac" where a profile names its Linear teams,
+inboxes, Slack workspace, machine, and T3 threads. Decide for each change
+whether every profile should get it:
 
 - A change for every profile goes in `base/bots/<path>`. Check that each
   profile with a fleet still renders the file with `--show`.
@@ -101,7 +103,9 @@ afterwards; the snapshot in the last step shows anything it missed.
 ### Shared files
 
 `shared/setup-map.md` is a document the bots read on the account's box. Copy
-the rendered file to the path the routines name for it.
+the rendered file to the path the routines name for it. A profile without its
+own map has none to copy: ask T3 Tots to build one, and the next snapshot adds
+it to the profile.
 
 `shared/unsettled-threads.shape.json` records only the format of the
 unsettled-threads ledger, the live list of threads waiting on the owner. Don't
