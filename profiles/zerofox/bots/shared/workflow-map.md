@@ -69,7 +69,8 @@ that work; everything else to the bot that owns its lane
 #### Lanes
 
 - **Closer**: Work tracked in an Executive Protection Linear project. ↑ What's
-  next, decisions, settle questions, weekday brief
+  next, decisions, settle questions, and the weekday brief: one line per active
+  Executive Protection project, its decisions, then one line of other work
 - **Side Closer**: Everything else from any team, except Workflowy's and
   Kaizen's areas. ↑ Answers, decisions, settle questions
 - **Spark**: His one-off questions, answered and done. Most email and calendar
@@ -497,7 +498,7 @@ Unsettled-threads ledger, GitHub, Deploys.
 | Commitments, disrupting others, discarding others' work | Not theirs | His yes |
 | Auth changes, changes outside the task's repo or worktree | Not theirs | His yes |
 | File or attach a Linear issue in an Executive Protection project | Never (read-only on Linear; the owning T3 thread does it) | His yes (asks now when the `ref:` footer has none) |
-| Change a Linear issue | Never (read-only on Linear; the owning T3 thread does it) | His yes |
+| Change a Linear issue | Never (read-only on Linear; the owning T3 thread does it) | Follows AGENTS.md guidelines |
 | Settle a T3 thread | His yes (asked in one line, done by T3 Tots) | Never |
 | Change another bot's description, routine or skills | His yes (through Workflowy) | Not theirs |
 | Start a snapshot after a bot change | Alone (Workflowy, through T3 Tots) | Not theirs |
@@ -639,8 +640,8 @@ the week of Oct 26.
   in the thread that owns the repo. No PR and no full stop.
 - **No-code threads**: Slack questions, incidents, research and drafts: almost
   half of my threads.
-- **Who starts threads**: T3 Tots for the bots, or me directly. Each thread owns
-  one item; T3 Tots sends follow-ups to the thread that already owns it.
+- **Who starts threads**: T3 Tots for the bots, or me directly. A thread usually
+  owns one item; T3 Tots sends follow-ups to the thread that already owns it.
 - **Settling**: Only I decide. T3 Code never settles on its own; T3 Tots settles
   with t3ctl after the owning bot relays my answer.
 
@@ -747,10 +748,12 @@ Installed for Claude Code and Codex; manual means it runs only when named.
   expires within 10 days. Says nothing when all is healthy; one line per problem
   otherwise. Never reports priorities or work status.
 - **Start-of-day brief** (Closer; weekdays around 8:30 AM Chile time (UTC-3)):
-  Executive Protection project items plus one line of everything-else work, from
-  Side Closer or the ledger entries Side Closer owns. When every project item is
-  blocked or waiting, says so and points to Side Closer's top item as dead-time
-  work.
+  One line per active Executive Protection project, up to 4, most urgent first,
+  each with its status, what's next, and its target date if that's within two
+  weeks. Then the Executive Protection decisions waiting on me, grouped by
+  project. Then one line of other work, from Side Closer's top item or the
+  ledger entries Side Closer owns. When every project item is blocked or
+  waiting, says so and points to Side Closer's top item as dead-time work.
 - **Friday harness friction review** (Workflowy; Fridays around 9:00 AM Chile
   time (UTC-3), flexible): Reads the past week of bot transcripts, the bot
   descriptions, this Page and the ledger. Asks T3 Tots for a T3 Code friction
@@ -915,13 +918,10 @@ Linear.
   doesn't name merging, and full stop stops at merge-ready.
 - **Who owns email and calendar** (Decided): It depends on the work, but most
   will probably land on Spark. No description names it yet.
-- **Anything that still names Admin** (Change pending): Router's health check
-  and anything else naming Admin needs updating. Router's saved health-check
-  prompt, as Router quoted it to Workflowy on Nov 2 around 9:02 PM Chile time
-  (UTC-3), doesn't name Admin; it works from the bot map in Router's memory. No
-  bot description names Admin. What still does: older facts in Router's memory,
-  and in the configuration repo the Admin slug and folders, roster lines and
-  personal-fleet mentions, which wait on my snapshot 15 answers.
+- **Anything that still names Admin** (Done, 2026-11-03): No bot description
+  or Router's saved health-check prompt names Admin. The configuration repo
+  renamed the admin slug, folders and roster lines to spark in commit 7b8ec9a.
+  Older facts in Router's memory sit outside the repo.
 - **Where this map lives** (Decided, 2026-11-03):
   `profiles/zerofox/bots/shared/workflow-map.md` in the configuration repo.
 - **SDLC review** (Decided, 2026-11-03): Done. Deploy and maintain are parked
