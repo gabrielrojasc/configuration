@@ -1,16 +1,18 @@
 {
   "about": "string",
-  "kindValues": "string",
   "seedNote": "string",
+  "statusValues": "string",
   "threads": {
     "<key>": {
       "decision": "string",
       "followUp": "string",
-      "kind": "string",
       "latestRunId": "string",
+      "links": [],
       "machine": "string",
       "notified": "boolean",
       "notifiedAt": "string",
+      "owner": "string",
+      "ownerGuessed": "boolean",
       "project": "string",
       "reason": "string",
       "requestIds": [],
@@ -19,7 +21,9 @@
       "since": "string",
       "snoozedUntil": "string",
       "source": "string",
+      "status": "string",
       "title": "string",
+      "updatedAt": "string",
       "updatedNote": "string"
     }
   },

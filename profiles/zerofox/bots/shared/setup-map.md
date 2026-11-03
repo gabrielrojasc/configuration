@@ -4,10 +4,10 @@ What this is: a short map of Gabriel's agent skills, work flows, and machine
 configuration, so bots can work the way he does without re-reading both repos.
 Built read-only from GitHub (cursor-github connector) and his ZeroFox Mac.
 
-Last refreshed: 2026-10-31 17:55 Chile time (UTC-3)
+Last refreshed: 2026-11-03 01:11 Chile time (UTC-3)
 
-skills: eba0d2e54b1da2b08c1318738d2af47e5b03d64b 2026-11-01T08:06:40-03:00
-configuration: 06e12cc88c809057abc84fa251b91cbeaf719415 2026-11-01T07:58:22-03:00
+skills: a3339dd39bf6274f6310c541ce85852dcffc8f02 2026-11-03T01:10-03:00
+configuration: 1f31ebe80b393bff06938f8ddc96de0764e4bf89 2026-11-02T22:43:40-03:00
 
 ## 1. His skills (gabrielrojasc/skills)
 
@@ -30,6 +30,11 @@ are the quoted `description` lines.
 - slack-message: "Use when drafting a Slack message." Formats text he will paste into Slack with Slack markup.
 - test-plan: "Use when asked to plan pre-production feature checks." Plans end-to-end checks for shipping to prod, in chat only, and asks for missing access.
 - zerofox/pr-review: "Use when reviewing a GitHub PR." Reviewer subagent plus a fresh verifier, raises only judgment calls, submits one review per PR. Installed on the zerofox profile only.
+
+Grok Bot skills live in skills/bots/<name>/ (added in 3be7d27). They have only SKILL.md: a3339dd exempts skills/bots/ from agents/openai.yaml in the validator.
+- grok-rewrite-it: "Use when asked to rewrite text as Grok Bot." Grok Bot copy of rewrite-it.
+- grok-slack-message: "Use when drafting a Slack message as Grok Bot." Grok Bot copy of slack-message.
+- my-plate: "Use when asked what's on your plate or the status of your items." Status of the bot's own items.
 
 ## 2. External skills (base/agent-skills.txt plus zerofox patch)
 
@@ -141,7 +146,7 @@ AGENTS.md details that apply: Linear issues are created through linear-work-brea
 
 ## 6. Key configuration
 
-Repo layout: `base/` (home/ mirrors $HOME; Brewfile, pnpm-globals.txt, agent-skills.txt, apps.txt), `profiles/<name>/` (profile.sh hooks, whole-file home/ overrides, patches/ per base file). Scripts: install.sh, upgrade.sh, copy.sh (pulls machine edits back, asks base vs profile per hunk; conflicts go to `.conflicts/<key>`), utils.sh, set_defaults.sh, tests/e2e.sh. Since 2026-10-31 the Grok Bot fleet is versioned too: snapshots in `base/bots/<bot>/` (profile.json, settings.json, routines/*.md) plus `base/bots/shared/` (setup-map.md, unsettled-threads.shape.json); per-profile differences as patches under `profiles/<p>/patches/bots/`, roster in `profiles/<p>/bots.txt` (zerofox: 6 bots). `bots/snapshot.sh` filters a staged export through `bots/fields.txt`, scans it for secrets, merges fleet changes since the last snapshot and asks per change base vs profile; `--list` and `--expect` let a bot relay those questions and answers (a fingerprint rejects answers to a stale list). The per-change sorter moved from copy.sh into utils.sh, and patches can now delete files. Docs in `bots/README.md`. Apply backs up replaced files to `~/.config-backup/<timestamp>`; `~/.codex/config.toml` is written only when missing.
+Repo layout: `base/` (home/ mirrors $HOME; Brewfile, pnpm-globals.txt, agent-skills.txt, apps.txt), `profiles/<name>/` (profile.sh hooks, whole-file home/ overrides, patches/ per base file). Scripts: install.sh, upgrade.sh (since 2026-11-02, 1f31ebe, `--apply` also runs `unblocked update --yes` when the Unblocked CLI is on PATH; the dry run only prints its version), copy.sh (pulls machine edits back, asks base vs profile per hunk; conflicts go to `.conflicts/<key>`), utils.sh, set_defaults.sh, tests/e2e.sh. Since 2026-10-31 the Grok Bot fleet is versioned too: snapshots in `base/bots/<bot>/` (profile.json, settings.json, routines/*.md) plus `base/bots/shared/` (unsettled-threads.shape.json); per-profile differences as patches under `profiles/<p>/patches/bots/`, roster in `profiles/<p>/bots.txt` (zerofox: 6 bots; personal: 7 bots). Since 2026-11-02 (20595b0) `base/bots` is account-neutral ("his main line", "his Mac"); zerofox patches restore the Executive Protection, zerofox workspace, grojas-mbp and T3 wording, and the setup map is per fleet at `profiles/zerofox/bots/shared/setup-map.md`. A `personal` profile adds the RunMyDay personal fleet (Closer on RunMyDay Linear teams, Kaizen on job search and the ~/work/brain second brain, Admin on three Gmail inboxes and the runmyday Slack). `bots/snapshot.sh` filters a staged export through `bots/fields.txt`, scans it for secrets, merges fleet changes since the last snapshot and asks per change base vs profile; `--list` and `--expect` let a bot relay those questions and answers (a fingerprint rejects answers to a stale list). The per-change sorter moved from copy.sh into utils.sh, and patches can now delete files. snapshot.sh now cleans up its own staging files after a run (keeping them when it warns), and `bots/INSTALL.md` explains installing the bots on a new Grok Bot account. Docs in `bots/README.md`. Apply backs up replaced files to `~/.config-backup/<timestamp>`; `~/.codex/config.toml` is written only when missing.
 
 Profiles: `personal` and `zerofox`. Selected by `DOTFILES_PROFILE` in the repo's git-ignored `.env`, overridable by the environment; scripts stop if it's missing or unknown. This Mac: `.env` says `DOTFILES_PROFILE=zerofox`. Zerofox uses Workbrew (/opt/workbrew) and proto (node, pnpm), a KeyboardRemap login app, and 1Password `op` for shell secrets; personal uses mise.
 

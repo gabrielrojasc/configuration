@@ -25,6 +25,7 @@ profiles/<profile>/
 ├── bots.txt                         # this profile's fleet: "<slug> <bot id>" per line
 ├── bots/<path>                      # files only this profile has
 ├── bots/shared/setup-map.md         # copied from this fleet's box
+├── bots/shared/workflow-map.md      # how work moves through the bots and T3 Code; placed by hand
 └── patches/bots/<path>.patch        # this profile's changes to base/bots, including deletions
 bots/
 ├── snapshot.sh                      # brings a staged snapshot into the repo
