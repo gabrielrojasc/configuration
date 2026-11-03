@@ -1,7 +1,7 @@
-diff --git a/bots/admin/profile.json b/bots/admin/profile.json
+diff --git a/bots/spark/profile.json b/bots/spark/profile.json
 index 5b4e038c99d86e566567ba3f46b38ff46a822f4f..74575f2511e6fe0096d0573d5ac6d4df2f199193 100644
---- a/bots/admin/profile.json
-+++ b/bots/admin/profile.json
+--- a/bots/spark/profile.json
++++ b/bots/spark/profile.json
 @@ -1,7 +1,7 @@
  {
    "avatarColor": "green",
