@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Upgrade what install.sh installed for the profile in .env (DOTFILES_PROFILE):
 # Homebrew formulae and casks (then brew cleanup --prune=all), Mac App Store
-# apps, the profile's toolchain (mise or proto), pnpm globals, uv tools, and
-# global agent skills.
+# apps, the profile's toolchain (mise or proto), pnpm globals, uv tools, global
+# agent skills, and the Unblocked CLI.
 #
 # Usage: ./upgrade.sh [-a | --apply]
 #   (no flags)   list what's outdated without upgrading (brew update still
@@ -183,6 +183,18 @@ else
         installed=$(skills_cli ls -g --json 2>/dev/null | jq length)
         color_print "$blue" "$installed global skills installed; --apply updates them to their latest versions"
         record 'Agent skills' info "$installed installed; no outdated check, --apply updates"
+    fi
+fi
+
+if command -v unblocked >/dev/null; then
+    section 'Unblocked'
+    if ((apply)); then
+        unblocked update --yes
+        record 'Unblocked' ok 'updated'
+    else
+        # unblocked update can't report a newer release without offering to install it.
+        color_print "$blue" "Unblocked $(unblocked --version | sed -n 's/^Version: //p') installed; --apply updates it to the latest release"
+        record 'Unblocked' info 'no outdated check, --apply updates'
     fi
 fi
 

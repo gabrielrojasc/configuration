@@ -79,9 +79,10 @@ installed it yet.
 formulae and casks (including casks that update themselves, followed by
 `brew cleanup --prune=all`, which also deletes every cached download), Mac App Store
 apps, the profile's toolchain (mise on `personal`, proto on `zerofox`), pnpm
-globals, uv tools such as `cswap`, and global agent skills (`skills update -g`).
-The skills CLI can't report which skills are outdated, so the dry run only
-counts them. Upgrading `cswap` also restarts its menu bar service, if it's
+globals, uv tools such as `cswap`, global agent skills (`skills update -g`), and
+the Unblocked CLI (`unblocked update --yes`), if it's installed. Neither the
+skills CLI nor Unblocked can report what's outdated, so the dry run only counts
+skills and prints the Unblocked version. Upgrading `cswap` also restarts its menu bar service, if it's
 installed, so the service runs the new version.
 
 ```sh
