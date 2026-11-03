@@ -327,13 +327,16 @@ function id_of() { awk -v s="$2" '$1 == s { print $2 }' "$repo/profiles/$1/bots.
 function add_routine() {
     printf -- '---\nname: %s\ntrigger: every weekday at 09:00\nenabled: false\n---\n%s\n' "$2" "$3" >"$1/routines/$2.md"
 }
+function stage_ledger() {
+    printf '{"threads": [{"id": "%s", "title": "%s", "settled": false}], "byThread": {"%s": {"owner": "closer"}}}\n' \
+        "$planted_thread_id" "$planted_thread" "$planted_thread_id" >"$1/unsettled-threads.json"
+}
 function stage_fleet() {
     local profile=$1 dir=$2 slug id
     rm -rf "${dir:?}"
     mkdir -p "$dir"
     printf '# Setup map\n\nRouter sends work to Closer.\n' >"$dir/setup-map.md"
-    printf '{"threads": [{"id": "%s", "title": "%s", "settled": false}], "byThread": {"%s": {"owner": "closer"}}}\n' \
-        "$planted_thread_id" "$planted_thread" "$planted_thread_id" >"$dir/unsettled-threads.json"
+    stage_ledger "$dir"
     while read -r slug id; do
         mkdir -p "$dir/$id/routines"
         printf '{"name": "%s", "description": "%s bot", "title": "t", "avatarShape": "circle", "avatarColor": "blue", "harness": "h", "serverId": "%s"}\n' \
@@ -549,6 +552,75 @@ commit_all unrendered
 for dir in "$applied" "$refused" "$odd" "$ran_out" "$nested" "$unrendered"; do
     rm -rf "${dir:?}" "$dir.tgz" "$dir-unrelated.txt" "$dir.keep"
 done
+
+function stage_from_record() {
+    local profile=$1 dir=$2 slug id
+    rm -rf "${dir:?}"
+    mkdir -p "$dir"
+    cp "$state/$profile/bots/shared/setup-map.md" "$dir/setup-map.md"
+    stage_ledger "$dir"
+    while read -r slug id; do
+        mkdir -p "$dir/$id/routines"
+        cp "$state/$profile/bots/$slug/profile.json" "$state/$profile/bots/$slug/settings.json" "$dir/$id/"
+        if [[ -d "$state/$profile/bots/$slug/routines" ]]; then cp "$state/$profile/bots/$slug/routines/"*.md "$dir/$id/routines/"; fi
+    done <"$state/$profile/bots.txt"
+}
+function rename_bot() {
+    local old=$1 new=$2 file dir
+    for file in "$repo"/profiles/*/bots.txt; do
+        awk -v o="$old" -v n="$new" '$1 == o { $1 = n } { print }' "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+    done
+    for dir in "$repo/base/bots" "$repo"/profiles/*/bots "$repo"/profiles/*/patches/bots; do
+        if [[ -d "$dir/$old" ]]; then mv "$dir/$old" "$dir/$new"; fi
+    done
+    for dir in "$repo"/profiles/*/patches/bots/"$new"; do
+        if [[ -d "$dir" ]]; then
+            find "$dir" -name '*.patch' -exec perl -pi -e "s#bots/$old/#bots/$new/#g if /^(diff --git|--- |\\+\\+\\+ )/" {} +
+        fi
+    done
+}
+function renders_both() { renders zerofox "$1" && renders personal "$1"; }
+function synced() { snap "$1" --sync-record >"$2" 2>&1 && grep -q -- "$3" "$2"; }
+
+moved="$home/staging-moved"
+stage_from_record zerofox "$moved"
+check "a stage built from the last snapshot has no changes" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-before.txt"
+rename_bot closer finisher
+set_field "$repo/base/bots/finisher/profile.json" '.description = "finishes work, edited in the repo"'
+commit_all rename
+check "both profiles render a renamed bot" renders_both bots/finisher/profile.json
+check "a renamed bot keeps its last snapshot, so a repo edit isn't offered back" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-list.txt"
+check "the list doesn't name the old slug" bash -c "! grep -q 'bots/closer/' '$log_dir/bots-rename-list.txt'"
+check "--sync-record says it followed the rename" synced zerofox "$log_dir/bots-sync-rename.txt" 'Renamed closer to finisher'
+check "the record files the bot under its new slug" \
+    bash -c "test -f '$state/zerofox/bots/finisher/profile.json' && test ! -e '$state/zerofox/bots/closer' && grep -q '^finisher ' '$state/zerofox/bots.txt'"
+check "the renamed bot still has no changes after --sync-record" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-synced.txt"
+
+removed_id=$(id_of zerofox finisher)
+awk '$1 != "finisher"' "$repo/profiles/zerofox/bots.txt" >"$repo/profiles/zerofox/bots.txt.tmp"
+mv "$repo/profiles/zerofox/bots.txt.tmp" "$repo/profiles/zerofox/bots.txt"
+rm -rf "${moved:?}/$removed_id"
+commit_all remove
+check "a fleet without a removed bot has no changes" lists_no_changes zerofox "$moved" "$log_dir/bots-remove-list.txt"
+check "--sync-record says it dropped the removed bot" synced zerofox "$log_dir/bots-sync-remove.txt" 'Dropped finisher'
+check "the record no longer has the removed bot" \
+    bash -c "test ! -e '$state/zerofox/bots/finisher' && ! grep -q '$removed_id' '$state/zerofox/bots.txt'"
+
+mkdir -p "$repo/profiles/zerofox/bots/shared"
+printf '# Workflow map\n\nHow work moves through the bots.\n' >"$repo/profiles/zerofox/bots/shared/workflow-map.md"
+commit_all workflow-map
+cp "$repo/profiles/zerofox/bots/shared/workflow-map.md" "$state/zerofox/bots/shared/workflow-map.md"
+check "a repo-only shared file isn't listed, even when an old record has it" lists_no_changes zerofox "$moved" "$log_dir/bots-shared-list.txt"
+check "applying that snapshot succeeds" snap_answer zerofox "$moved" '' "$log_dir/bots-shared-apply.txt"
+check "the apply keeps the repo-only shared file" test -f "$repo/profiles/zerofox/bots/shared/workflow-map.md"
+check "the apply leaves it out of the record" test ! -e "$state/zerofox/bots/shared/workflow-map.md"
+check "the shared-file snapshot leaves the repo clean" repo_clean || show_status
+snap zerofox --seed >"$log_dir/bots-shared-seed.txt" 2>&1
+check "--seed leaves a repo-only shared file out of the record" test ! -e "$state/zerofox/bots/shared/workflow-map.md"
+cp "$repo/profiles/zerofox/bots/shared/workflow-map.md" "$state/zerofox/bots/shared/workflow-map.md"
+check "--sync-record drops a repo-only shared file from the record" synced zerofox "$log_dir/bots-sync-shared.txt" 'Dropped bots/shared/workflow-map.md'
+check "the record no longer has the repo-only shared file" test ! -e "$state/zerofox/bots/shared/workflow-map.md"
+rm -rf "${moved:?}"
 
 check "no serverId, token, or ledger data reaches the repo, a commit, or the baseline" no_planted_values
 check "the refused snapshots leave the repo clean" repo_clean || show_status

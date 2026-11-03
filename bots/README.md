@@ -123,6 +123,10 @@ applied yet, isn't offered as a change to undo.
   writes a patch that deletes it for this profile.
 - A file only this profile has is updated or deleted without asking.
 
+Of `bots/shared/`, a snapshot handles only `setup-map.md` and
+`unsettled-threads.shape.json`. It never lists, records, or deletes any other
+file there, such as a profile's `workflow-map.md`.
+
 If the fleet and the repository changed the same lines since the last
 snapshot, the script writes the merged file with conflict markers to
 `.conflicts/<key>` and stops. Fix the markers, run
@@ -143,6 +147,20 @@ bots/snapshot.sh --seed
 For a new fleet with nothing in the repository yet, seed first, and the next
 snapshot offers every file as new. A fleet's `bots.txt` is never shared:
 bot ids belong to one fleet.
+
+### Rename or remove a bot
+
+The last snapshot matches `bots.txt` by bot id. To rename a bot's slug,
+rename its folder in `base/bots/` and in each profile's `bots/` and
+`patches/bots/`, change the paths on each moved patch's `diff --git`, `---`,
+and `+++` lines, and change the slug in every `bots.txt` that lists it. To
+remove a bot from a fleet, delete its line from that fleet's `bots.txt`. The
+next snapshot follows the change. To update the last snapshot right away,
+run:
+
+```sh
+bots/snapshot.sh --sync-record
+```
 
 ## Staging layout
 

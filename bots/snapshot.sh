@@ -6,6 +6,7 @@
 # Usage: bots/snapshot.sh [--list | --expect <fingerprint>] <staging-dir>
 #        bots/snapshot.sh --discard <staging-dir>
 #        bots/snapshot.sh --seed
+#        bots/snapshot.sh --sync-record
 #   (no flags)        ask at the terminal for each change:
 #                     y = every profile (base), n = only this profile,
 #                     q = only this profile, for this and every remaining change
@@ -15,6 +16,13 @@
 #   --discard         delete the staging folder without applying it
 #   --seed            record this profile's bots in the repo as what its fleet
 #                     has now, as the starting point for later snapshots
+#   --sync-record     update that record to bots.txt: follow renamed slugs and
+#                     drop bots it no longer lists; writes nothing in the repo
+#
+# The record matches bots.txt by bot id, so a slug renamed there keeps its
+# bot's last snapshot, and a bot removed from it drops out. Of bots/shared/,
+# snapshots handle only setup-map.md and unsettled-threads.shape.json; they
+# never list, record, or delete any other file there.
 #
 # After it applies every change without a warning, and with --discard, the
 # script deletes the staging folder and every file beside it named
@@ -35,6 +43,7 @@ while [[ $# -gt 0 ]]; do
         --list) mode=list ;;
         --seed) mode=seed ;;
         --discard) mode=discard ;;
+        --sync-record) mode=sync ;;
         --expect) [[ $# -ge 2 ]] || die "--expect needs the fingerprint from --list"; mode=expect; expect=$2; shift ;;
         -*) die "Unknown argument: $1 (see the usage at the top of bots/snapshot.sh)" ;;
         *) [[ -z "$staging_arg" ]] || die "Give one staging folder"; staging_arg=$1 ;;
@@ -58,14 +67,19 @@ done <"$roster"
 
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
+fleet_shared=(bots/shared/setup-map.md bots/shared/unsettled-threads.shape.json)
+record="$work/record"
 
 function repo_keys() {
-    local layer slug
+    local layer slug key
     for layer in base "$profile_dir"; do
-        for slug in "${slugs[@]}" shared; do
+        for slug in "${slugs[@]}"; do
             if [[ -d "$layer/bots/$slug" ]]; then
                 (cd "$layer" && find "bots/$slug" -type f ! -name .DS_Store)
             fi
+        done
+        for key in "${fleet_shared[@]}"; do
+            if [[ -f "$layer/$key" ]]; then echo "$key"; fi
         done
     done | sort -u
 }
@@ -75,13 +89,29 @@ function rendered() {
     if [[ -n "$(source_of "$1")" ]]; then render "$1" "$2"; fi
 }
 
+function recorded_slug() {
+    if [[ -f "$baseline/bots.txt" ]]; then awk -v id="$1" '$2 == id { print $1; exit }' "$baseline/bots.txt"; fi
+}
+
+function translate_record() {
+    local i key old
+    rm -rf "$record"
+    mkdir -p "$record/bots"
+    cp "$roster" "$record/bots.txt"
+    for key in "${fleet_shared[@]}"; do
+        if [[ -f "$baseline/$key" ]]; then
+            mkdir -p "$(dirname "$record/$key")"
+            cp "$baseline/$key" "$record/$key"
+        fi
+    done
+    for i in "${!ids[@]}"; do
+        old=$(recorded_slug "${ids[i]}")
+        if [[ -n "$old" && -d "$baseline/bots/$old" ]]; then cp -R "$baseline/bots/$old" "$record/bots/${slugs[i]}"; fi
+    done
+}
+
 function baseline_of() {
-    local key=$1 slug
-    slug=$(echo "$key" | cut -d/ -f2)
-    if [[ "$slug" != shared ]] && ! cmp -s <(grep "^$slug " "$roster") <(grep "^$slug " "$baseline/bots.txt" 2>/dev/null); then
-        return 0
-    fi
-    if [[ -f "$baseline/$key" ]]; then echo "$baseline/$key"; fi
+    if [[ -f "$record/$1" ]]; then echo "$record/$1"; fi
 }
 
 if [[ "$mode" == seed ]]; then
@@ -97,6 +127,32 @@ if [[ "$mode" == seed ]]; then
     mkdir -p "$(dirname "$baseline")"
     cp -R "$work/seed" "$baseline"
     color_print "$green" "Recorded $(find "$baseline/bots" -type f 2>/dev/null | wc -l | tr -d ' ') files as what the $DOTFILES_PROFILE fleet has now."
+    exit 0
+fi
+
+if [[ "$mode" == sync ]]; then
+    [[ -z "$staging_arg" ]] || die "--sync-record takes no staging folder"
+    [[ -d "$baseline" ]] || die "There's no record of the $DOTFILES_PROFILE fleet to update. See bots/README.md."
+    translate_record
+    if [[ -f "$baseline/bots.txt" ]]; then
+        while read -r slug id; do
+            [[ -n "$slug" ]] || continue
+            now=$(awk -v id="$id" '$2 == id { print $1; exit }' "$roster")
+            if [[ -z "$now" ]]; then
+                echo "Dropped $slug: $roster no longer lists it."
+            elif [[ "$now" != "$slug" ]]; then
+                echo "Renamed $slug to $now."
+            fi
+        done <"$baseline/bots.txt"
+    fi
+    for f in "$baseline"/bots/shared/*; do
+        if [[ -f "$f" && ! -f "$record/bots/shared/${f##*/}" ]]; then
+            echo "Dropped bots/shared/${f##*/}: snapshots don't handle it."
+        fi
+    done
+    rm -rf "$baseline"
+    cp -R "$record" "$baseline"
+    color_print "$green" "Updated the record of the $DOTFILES_PROFILE fleet to match $roster."
     exit 0
 fi
 
@@ -168,6 +224,7 @@ if [[ "$mode" == discard ]]; then
 fi
 
 [[ -d "$baseline" ]] || die "There's no record of what the $DOTFILES_PROFILE fleet had at its last snapshot. If the repo matches the fleet now, run bots/snapshot.sh --seed first. See bots/README.md."
+translate_record
 
 missing=""
 for f in setup-map.md unsettled-threads.json; do
@@ -277,7 +334,7 @@ $(sed 's/^/  /' <<<"$hits")"
 all_keys=$({
     (cd "$out" && find bots -type f)
     repo_keys
-    if [[ -d "$baseline/bots" ]]; then (cd "$baseline" && find bots -type f); fi
+    (cd "$record" && find bots -type f)
 } | while IFS= read -r key; do
     slug=$(echo "$key" | cut -d/ -f2)
     if [[ "$slug" == shared ]] || grep -q "^$slug " "$roster"; then echo "$key"; fi
