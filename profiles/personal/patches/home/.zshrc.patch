@@ -1,8 +1,20 @@
 diff --git a/home/.zshrc b/home/.zshrc
-index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..54d67a61bc0bc50140604c38995f97b479c4e110 100644
+index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..c6e474aa0de3c9f8733c0db1c1027899f100490d 100644
 --- a/home/.zshrc
 +++ b/home/.zshrc
-@@ -6,6 +6,7 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
+@@ -1,3 +1,11 @@
++# ASCII BOAT SHELL INTEGRATION START boat
++case ":$PATH:" in
++  *":/Users/gabriel/.ascii/bin:"*) ;;
++  *) PATH="/Users/gabriel/.ascii/bin:$PATH" ;;
++esac
++export PATH
++# ASCII BOAT SHELL INTEGRATION END boat
++
+ # source exports
+ source ~/.zsh_exports
+ 
+@@ -6,6 +14,7 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
  export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
  export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
  export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
@@ -10,7 +22,7 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..54d67a61bc0bc50140604c38995f97b4
  
  # source aliases
  source ~/.zsh_aliases
-@@ -44,6 +45,9 @@ if type brew &>/dev/null; then
+@@ -44,6 +53,9 @@ if type brew &>/dev/null; then
    compdump
  fi
  
@@ -20,3 +32,42 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..54d67a61bc0bc50140604c38995f97b4
  # fzf
  eval "$(fzf --zsh)"
  
+@@ -67,3 +79,38 @@ autoload -Uz add-zsh-hook
+ 
+ add-zsh-hook precmd vcs_info
+ add-zsh-hook precmd _tmux_update_virtual_env
++
++# ASCII BOAT SHELL INTEGRATION START boat
++boat() {
++  current_file=$(mktemp)
++  convo_file=$(mktemp)
++  old_current_file=${BOAT_CURRENT_ID_FILE-}
++  old_convo_file=${BOAT_CURRENT_CONVO_FILE-}
++  export BOAT_CURRENT_ID_FILE="$current_file"
++  export BOAT_CURRENT_CONVO_FILE="$convo_file"
++  command "/Users/gabriel/.ascii/bin/boat" "$@"
++  boat_status=$?
++  if [ "$boat_status" -eq 0 ]; then
++    case "${1:-}" in
++      new|start|fork)
++        if [ -s "$current_file" ]; then
++          current_id=$(tr -d '[:space:]' < "$current_file")
++          if [ -n "$current_id" ]; then export BOAT_CURRENT_ID="$current_id"; fi
++        fi
++        ;;
++    esac
++    case "${1:-}" in
++      prompt)
++        if [ -s "$convo_file" ]; then
++          IFS= read -r current_convo < "$convo_file" || current_convo=""
++          if [ -n "$current_convo" ]; then export BOAT_CURRENT_CONVO="$current_convo"; fi
++        fi
++        ;;
++    esac
++  fi
++  if [ -n "$old_current_file" ]; then export BOAT_CURRENT_ID_FILE="$old_current_file"; else unset BOAT_CURRENT_ID_FILE; fi
++  if [ -n "$old_convo_file" ]; then export BOAT_CURRENT_CONVO_FILE="$old_convo_file"; else unset BOAT_CURRENT_CONVO_FILE; fi
++  rm -f "$current_file" "$convo_file"
++  return "$boat_status"
++}
++# ASCII BOAT SHELL INTEGRATION END boat
