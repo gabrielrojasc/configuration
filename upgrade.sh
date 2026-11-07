@@ -2,7 +2,7 @@
 # Upgrade what install.sh installed for the profile in .env (DOTFILES_PROFILE):
 # Homebrew formulae and casks (then brew cleanup --prune=all), Mac App Store
 # apps, the profile's toolchain (mise or proto), pnpm globals, uv tools, global
-# agent skills, and the Unblocked CLI.
+# agent skills, and the Unblocked and Boat CLIs.
 #
 # Usage: ./upgrade.sh [-a | --apply]
 #   (no flags)   list what's outdated without upgrading (brew update still
@@ -195,6 +195,18 @@ if command -v unblocked >/dev/null; then
         # unblocked update can't report a newer release without offering to install it.
         color_print "$blue" "Unblocked $(unblocked --version | sed -n 's/^Version: //p') installed; --apply updates it to the latest release"
         record 'Unblocked' info 'no outdated check, --apply updates'
+    fi
+fi
+
+if command -v boat >/dev/null; then
+    section 'Boat'
+    if ((apply)); then
+        boat self-update
+        record 'Boat' ok 'updated'
+    else
+        # boat self-update has no check-only mode, and any other boat command may update it on exit.
+        color_print "$blue" "Boat $(boat --no-update --version | sed -n 's/^boat //p') installed; --apply updates it to the latest release"
+        record 'Boat' info 'no outdated check, --apply updates'
     fi
 fi
 
