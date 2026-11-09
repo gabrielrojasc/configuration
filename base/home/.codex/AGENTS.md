@@ -95,3 +95,8 @@ I'm Gabriel.
 - When a skill or I ask for a provider other than yours, as in "ask codex" or "ask claude", delegate with T3's `delegate_task`. Pass the chosen rung's model and effort from that provider's definition (`~/.claude/agents/<rung>.md`, `~/.codex/agents/<rung>.toml`), and end the task with the definition's instructions. When the target is Codex, set `runtimeMode: "auto"`.
 - Give every brief a check that tells the subagent when it's done. For a claim you'll act on, require a command that proves it or an exact quote, not just a citation. For taste calls, the check is my review. Confirm the returned evidence passes the check before relying on it. A cheap check can also move work down a rung.
 - When a subagent fails, check for missing tools, context, or evidence. Fix an identified cause and retry; escalate a rung when the evidence points to a reasoning failure.
+
+## Waiting
+
+- Before you end a turn that promises to wait, watch, or report back, confirm something will wake you: a PR watch, a background command or subagent you started, or a scheduled task. Use a scheduled task for a later date or a wait that can outlast a command's time limit. Say in your reply what will wake you. If nothing will, say so and name who picks it up.
+- Stop waiting when your next step no longer depends on it: the work reached its end state, you're handing back or asking me something, or only a person can move it, such as a maintainer's reply, an approval, or a gated check. Unwatch the PR, stop the commands you started, and name who holds the item, unless I asked you to keep watching. Keep waiting through wakes that change nothing while checks or a bot review still run on the current head.
