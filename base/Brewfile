@@ -75,6 +75,8 @@ brew "watch"
 brew "wget"
 # Additional completion definitions for zsh
 brew "zsh-completions"
+# Fast CLI for Apple Reminders
+brew "steipete/tap/remindctl", trusted: true
 # Terminal-based AI coding assistant
 cask "claude-code@latest"
 # OpenAI's coding agent that runs in your terminal

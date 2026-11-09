@@ -164,6 +164,7 @@ mac-menu-bar-enabled = false
 open-link-in-target-preference = "external-browser"
 open-local-url-in-target-preference = "external-browser"
 git-create-pull-request-as-draft = false
+migratedFollowUpQueueToSteer = false
 
 [desktop.open-in-target-preferences]
 global = "vscode"

@@ -12,6 +12,7 @@ I'm Gabriel.
 
 ## Core rules
 
+- Be thorough in your analysis and bold in your recommendations.
 - Before you read or change files in a directory, read the agent instructions (`AGENTS.md`, `CLAUDE.md`) from its repository root down to it, and task-relevant docs such as `CONTRIBUTING.md`, each to the end. When one of them drives an action or a question to me, cite the file and section.
 - I prefer the simplest correct solution and repository conventions over generic best practices.
 - Keep one source of truth for each fact or piece of state, across code, docs, and config. Derive or link to it instead of copying it.

@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 23b3eac9dff77a3bd225eca8caa61767baed8735..39be31b771c1b175b61495fad20c02c4a5cf3aa8 100644
+index 0c5d70d948886799ab5fce3981039dc0616fdc74..b4734f85118d596d96d1b47d1fa60196bf1a1fab 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -7,16 +7,22 @@ brew "bash"
@@ -65,7 +65,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..39be31b771c1b175b61495fad20c02c4
  # Extremely fast Python package installer and resolver, written in Rust
  brew "uv"
  # Vi 'workalike' with many additional features
-@@ -73,20 +91,52 @@ brew "vim"
+@@ -73,6 +91,8 @@ brew "vim"
  brew "watch"
  # Internet file retriever
  brew "wget"
@@ -73,7 +73,8 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..39be31b771c1b175b61495fad20c02c4
 +brew "whisper.cpp"
  # Additional completion definitions for zsh
  brew "zsh-completions"
- # Terminal-based AI coding assistant
+ # Fast CLI for Apple Reminders
+@@ -81,14 +101,44 @@ brew "steipete/tap/remindctl", trusted: true
  cask "claude-code@latest"
  # OpenAI's coding agent that runs in your terminal
  cask "codex"
@@ -118,7 +119,7 @@ index 23b3eac9dff77a3bd225eca8caa61767baed8735..39be31b771c1b175b61495fad20c02c4
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -96,6 +146,12 @@ vscode "ms-python.vscode-pylance"
+@@ -98,6 +148,12 @@ vscode "ms-python.vscode-pylance"
  vscode "ms-python.vscode-python-envs"
  vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
