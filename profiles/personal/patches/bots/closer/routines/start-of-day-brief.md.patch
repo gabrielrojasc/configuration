@@ -1,5 +1,5 @@
 diff --git a/bots/closer/routines/start-of-day-brief.md b/bots/closer/routines/start-of-day-brief.md
-index 77025f7286319af1ebc2b96375de953525d1c332..eb1d83ee9258a98b78c6318319729933102eb301 100644
+index ae180efada6cc739277df2d6776924964ab7070f..1b8ef0a9478d5a89809ee565a7d901b611858eb9 100644
 --- a/bots/closer/routines/start-of-day-brief.md
 +++ b/bots/closer/routines/start-of-day-brief.md
 @@ -4,16 +4,16 @@ trigger: CRON_TZ=America/Santiago 30 8 * * 1-5
@@ -25,3 +25,4 @@ index 77025f7286319af1ebc2b96375de953525d1c332..eb1d83ee9258a98b78c6318319729933
 +If every RunMyDay project is blocked or waiting, say so and point to Side Closer's top item as dead-time work. If there is nothing at all, send one line saying so.
  
  Deliver it to Gabriel in this Grok Bot chat (Closer). Message no one else.
+\ No newline at end of file
