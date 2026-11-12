@@ -12,6 +12,10 @@
 # A key renders from the profile's own copy if it has one, otherwise from
 # base plus the profile's patches/<key>.patch when that exists.
 
+# Homebrew's bash segfaults in a subshell that undoes a temporary LC_ALL=C while
+# LANG is unset: its libintl asks CoreFoundation for the default locale after fork.
+if [[ -z "${LANG:-}" ]]; then export LANG=C; fi
+
 # Format helpers for color_print
 green="\033[0;32m"
 blue="\033[0;34m"

@@ -50,6 +50,11 @@ function in_repo() { (cd "$repo" && HOME="$home" XDG_STATE_HOME="$home/.local/st
 function repo_clean() { [[ -z "$(git -C "$repo" status --porcelain)" ]]; }
 function show_status() { git -C "$repo" status --short; }
 
+echo "== locale"
+check "scripts set LANG=C when it is unset" env -u LANG bash -c "source '$src/utils.sh' && [[ \$LANG == C ]]"
+check "scripts keep a LANG that is set" env LANG=en_US.UTF-8 bash -c "source '$src/utils.sh' && [[ \$LANG == en_US.UTF-8 ]]"
+echo
+
 for profile in $(ls "$src/profiles"); do
     echo "== $profile"
 
