@@ -23,6 +23,13 @@ function profile_path() {
     export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH:$PNPM_HOME/bin"
 }
 
+# Homebrew Bundle finds uv on this PATH but runs it with Homebrew's own PATH,
+# where proto's shims can't find proto. Without the shims it runs Homebrew's uv.
+function brew() {
+    local shims="$PROTO_HOME/shims:"
+    PATH=${PATH//$shims/} command brew "$@"
+}
+
 function profile_install() {
     install_keyboard_remap
     install_proto_tools
