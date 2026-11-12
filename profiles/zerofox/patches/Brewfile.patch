@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 0c5d70d948886799ab5fce3981039dc0616fdc74..28db8b5a13c7a674cd9dd9acd9012027ea57f86e 100644
+index 0c5d70d948886799ab5fce3981039dc0616fdc74..3123c037b2220727b22a06d1283f2a2448792c9c 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -167,7 +167,7 @@ index 0c5d70d948886799ab5fce3981039dc0616fdc74..28db8b5a13c7a674cd9dd9acd9012027
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -100,4 +184,15 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -100,4 +184,16 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"
@@ -183,3 +183,4 @@ index 0c5d70d948886799ab5fce3981039dc0616fdc74..28db8b5a13c7a674cd9dd9acd9012027
 +go "github.com/josharian/impl"
 +go "github.com/yeya24/promlinter/cmd/promlinter"
 +go "honnef.co/go/tools/cmd/staticcheck"
++uv "claude-swap[menubar]"
