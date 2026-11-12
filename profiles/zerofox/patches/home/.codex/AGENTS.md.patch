@@ -1,5 +1,5 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index 874aa1dc4167e5799baf05c5d00fb7d11735cbbb..b3c114a11a27e9a773d4cbd4a971c035f17edc50 100644
+index 2540399716d0923bc2b899665fbdc4d5a060f5b0..ecf0d6a13560b9a6655c484bc175d7ad90d86b05 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
 @@ -1,6 +1,6 @@
@@ -10,7 +10,7 @@ index 874aa1dc4167e5799baf05c5d00fb7d11735cbbb..b3c114a11a27e9a773d4cbd4a971c035
  
  ## Doors
  
-@@ -46,7 +46,9 @@ I'm Gabriel.
+@@ -49,7 +49,9 @@ I'm Gabriel.
  ## External services
  
  - Assume service tools are authenticated. If a sandboxed read hits an auth error, retry it once outside the sandbox. If that fails too, run the service's auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
@@ -21,7 +21,7 @@ index 874aa1dc4167e5799baf05c5d00fb7d11735cbbb..b3c114a11a27e9a773d4cbd4a971c035
  
  ## Personal knowledge
  
-@@ -82,6 +84,7 @@ I'm Gabriel.
+@@ -85,6 +87,7 @@ I'm Gabriel.
  ## Tracker and implementation workspace
  
  - Linear is my issue tracker. Keep its active state out of planning files; stable technical knowledge goes in repository documentation and ADRs.

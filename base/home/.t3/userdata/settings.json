@@ -7,6 +7,10 @@
     {
       "provider": "codex",
       "model": "gpt-6.1-sol"
+    },
+    {
+      "provider": "claudeAgent",
+      "model": "claude-fable-5-2"
     }
   ],
   "defaultModelSelection": {
@@ -16,10 +20,6 @@
       {
         "id": "effort",
         "value": "high"
-      },
-      {
-        "id": "contextWindow",
-        "value": "1m"
       }
     ]
   },

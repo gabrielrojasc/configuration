@@ -146,6 +146,7 @@ reviewDelivery = "inline"
 mac-menu-bar-enabled = false
 dock-icon-preference = "app-default"
 open-local-url-in-target-preference = "external-browser"
+migratedFollowUpQueueToSteer = false
 
 [desktop.open-in-target-preferences]
 global = "vscode"
@@ -197,3 +198,6 @@ trusted_hash = "sha256:7e222295f1c9fd7b1edbf68fda0c95fb2fce8f22ee33cefb1bd0bc71e
 
 [hooks.state."/Users/grojas/.codex/hooks.json:stop:0:0"]
 trusted_hash = "sha256:1ac4959a4bb2dfb80dfb17c56be9035397f663192d020f0c0994915a7038ebe7" # aicodemetricsd:managed
+
+[hooks.state."/Users/grojas/.codex/hooks.json:interrupt:0:0"]
+trusted_hash = "sha256:ae8aca0c20c1344703d4c5ce8831ebde4e730ccc9f350f4a0da918feb4cefff8" # aicodemetricsd:managed
