@@ -1,32 +1,26 @@
-diff --git a/bots/closer/routines/start-of-day-brief.md b/bots/closer/routines/start-of-day-brief.md
-index ae180efada6cc739277df2d6776924964ab7070f..1186ac362dfe4a238e36b663ad0a1a32225c46e2 100644
+diff --git a/bots/closer/routines/start-of-day-brief.md a/bots/closer/routines/start-of-day-brief.md
+deleted file mode 100644
+index ae180efada6cc739277df2d6776924964ab7070f..0000000000000000000000000000000000000000
 --- a/bots/closer/routines/start-of-day-brief.md
-+++ b/bots/closer/routines/start-of-day-brief.md
-@@ -4,16 +4,17 @@ trigger: CRON_TZ=America/Santiago 30 8 * * 1-5
- timing: flexible, earlyMinutes 15, lateMinutes 15
- enabled: true
- ---
++++ /dev/null
+@@ -1,19 +0,0 @@
+----
+-name: Start-of-day brief
+-trigger: CRON_TZ=America/Santiago 30 8 * * 1-5
+-timing: flexible, earlyMinutes 15, lateMinutes 15
+-enabled: true
+----
 -Write Gabriel's start-of-day brief for his main-line work. This is read-only: change nothing in Linear, in threads, or in other bots.
-+Write Gabriel's start-of-day brief for his RunMyDay work. This is read-only: change nothing in Linear, in threads, or in other bots.
- 
- Sources:
+-
+-Sources:
 -- His assigned, open issues in the Linear teams or projects he names as his main line. Look at status, priority, due dates and blockers.
 -- The open-thread ledger at /home/box/t3-tots/unsettled-threads.json. Main-line entries are the ledger entries whose owner is Closer. If an entry has no owner, judge from its title and project whether its work is tracked in the main line.
-+- His assigned, open issues in every active RunMyDay Linear team of the runmyday workspace: runmyday, CSByte, XS Market, Agentic Software Factory and Case Tracker. Skip the retired FamilyFlow and AccountingFlow teams. Look at status, priority, due dates and blockers.
-+- The open-thread ledger at /home/box/t3-tots/unsettled-threads.json. RunMyDay entries are the ledger entries whose owner is Closer. If an entry has no owner, judge from its title and project whether its work is tracked in one of those teams.
- 
+-
 -Keep it to at most 6 short lines, at the project level, not issue by issue:
 -1. One line per active main-line project he's on, up to 4, most urgent first: the project name with its link, where it stands (on track, at risk or blocked), and what's next or what changed since yesterday. Add the target date when it's within two weeks. Name a single issue only when it's what blocks the project or is overdue.
 -2. Then any main-line decisions waiting on him, one line each with a link, grouped under their project.
 -3. Then one line for everything else from any team. Take it from Side Closer, a Grok Bot teammate, if it has shared a top item, or otherwise from the ledger entries Side Closer owns.
 -If every main-line project is blocked or waiting, say so and point to Side Closer's top item as dead-time work. If there is nothing at all, send one line saying so.
-+Write one flat list, ranked by what needs Gabriel first: decisions and replies only he can give, then blocked or overdue work, then what moves next. No project or team headings, and no grouping. At most 6 items.
-+- Each item is one or two plain, complete sentences: what it is, why it matters today, and the next step. Write so he understands it cold, without shorthand or internal jargon.
-+- Link each item by the real name of what the link opens (the ticket's title, the PR's title), never by a team or project name.
-+- Mention the team or project only when it's needed to tell items apart, inside the sentence.
-+- End with one line for the top item outside RunMyDay. Take it from Side Closer, a Grok Bot teammate, if it has shared a top item, or otherwise from the ledger entries Side Closer owns. If nothing in RunMyDay can move, say so and point to that item as dead-time work.
-+If there is nothing at all, send one line saying so.
- 
+-
 -Deliver it to Gabriel in this Grok Bot chat (Closer). Message no one else.
 \ No newline at end of file
-+Deliver it to Gabriel in this Grok Bot chat (Closer). Message no one else.

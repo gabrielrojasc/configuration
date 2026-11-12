@@ -1,0 +1,11 @@
+diff --git a/bots/workflowy/routines/friday-harness-friction-review.md b/bots/workflowy/routines/friday-harness-friction-review.md
+index daa9699c3f23caadc2e4817a4464baaf30669be4..558db6db1685b2294cff7f58ee923b499ab1e9e5 100644
+--- a/bots/workflowy/routines/friday-harness-friction-review.md
++++ b/bots/workflowy/routines/friday-harness-friction-review.md
+@@ -13,3 +13,6 @@ How:
+ Change nothing in this run: no bot, routine, file, ticket or thread edits.
+ 
+ Send Gabriel one short message in this Workflowy chat in Grok Bot. List the top 3 to 5 friction points, each with one line of evidence (linked to the thread, message or item), the likely root cause and a proposed fix. Then ask which one to tackle first. If nothing meaningful turned up, send one line saying so.
++- Messaging check: count T3 Tots' chat messages per bot-started turn, messages to Gabriel per T3 hand-off, and characters per settle request.
++List any decision that reached him without the thread's recommendation, and any thread that went past a limit it was sent.
++Put these counts in the message too.
