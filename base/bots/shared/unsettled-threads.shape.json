@@ -1,30 +1,25 @@
 {
   "about": "string",
-  "seedNote": "string",
+  "seedNote": "string|null",
   "statusValues": "string",
   "threads": {
-    "<key>": {
-      "decision": "string",
-      "followUp": "string",
-      "latestRunId": "string",
-      "links": [],
-      "machine": "string",
-      "notified": "boolean",
-      "notifiedAt": "string",
-      "owner": "string",
-      "ownerGuessed": "boolean",
-      "project": "string",
-      "reason": "string",
-      "requestIds": [],
-      "resultFile": "string",
-      "runId": "string",
-      "since": "string",
-      "snoozedUntil": "string",
-      "source": "string",
-      "status": "string",
+    "<thread id>": {
       "title": "string",
+      "machine": "string|null",
+      "project": "string|null",
+      "owner": "string",
+      "ownerGuessed": "boolean|null",
+      "status": ["needs-you", "working", "waiting-on-others", "done-to-settle"],
+      "reason": "string|null",
+      "links": "string[]",
+      "since": "string|null",
       "updatedAt": "string",
-      "updatedNote": "string"
+      "updatedNote": "string|null",
+      "requestIds": "string[]",
+      "decision": "string|null",
+      "followUp": "string|null",
+      "notifiedAt": "string|null",
+      "notifiedFingerprint": "string|null"
     }
   },
   "updatedAt": "string"

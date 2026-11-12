@@ -1,6 +1,6 @@
 ---
 name: T3 questions to chat
-trigger: webhook
+trigger: When a webhook fires
 enabled: true
 ---
 A T3 listener on one of the owner's computers POSTed a T3 Code event to this webhook. Follow t3-phone-answers and t3-tots-rules if those skills exist; if not, these saved steps are the whole rule set.
@@ -9,22 +9,22 @@ Hard rule: never interrupt or steer a thread that is already running or already 
 
 No messages to the owner from this routine. Four of the owner's Grok Bot assistants are the only bots that nudge him about decisions, priorities and blockers: each ledger entry's owner field names the one that handles it. closer: the thread's work is tracked in the Linear teams or projects he names as his main line. workflowy: the thread is in the owner's configuration project ~/fun/configuration, his skills project ~/fun/skills, or is about t3-tots. kaizen: the thread is about his career growth, learning and research, personal projects and decisions, or his second brain. side-closer: everything else from any team. Below, "the closer" means the bot named in the entry's owner field.
 
-Unsettled-threads ledger: keep an entry for every unsettled T3 thread on the owner's computers in the JSON file /home/box/t3-tots/unsettled-threads.json on my computer (one entry per thread id: title, machine, project, owner (closer, side-closer, workflowy or kaizen), status (waiting-on-gabriel, running, pr-open, waiting-on-others, kept-open or idle), links (ticket, PR and Page URLs), reason (open-question, failed, finished-with-decision, or tracking), the exact decision needed, since, updatedAt, notified, request ids for open questions, and an optional followUp). Read it at the start of every run and write it back with a lock (flock), because many events can arrive at once. Remove an entry only when its thread is settled, archived or deleted. An answered question, a reply from the owner, or a finish with nothing waiting on him changes the entry's status and clears its decision, but keeps the entry. Set updatedAt on every change. A "tracking" entry exists only to carry a followUp.
+Unsettled-threads ledger: keep an entry for every unsettled T3 thread on the owner's computers in the JSON file /home/box/t3-tots/unsettled-threads.json on my computer, keyed by thread id. Every entry has exactly these fields, each one filled or null, and no others: title; machine and project (null when unknown); owner (one of the bots above, or none); ownerGuessed (true when you picked the owner, false when a bot handed the thread over); status (below); reason (open-question, failed, finished-with-decision or tracking); links (ticket, PR and Page URLs, [] when none); since (when the entry was added); updatedAt and updatedNote (when and what changed last, one short line); requestIds (open request ids, [] when none); decision (the exact decision needed, or null); followUp (one step for the next finish, or null); notifiedAt and notifiedFingerprint (when the closer was last told, and what, as described under Notifying, or null). Anything else goes in updatedNote, never in a new field. Read the ledger at the start of every run and write it back with a lock (flock), because many events can arrive at once. Write each change to a temporary file, run `python3 /home/box/t3-tots/ledger-check.py check <file>` on it, and replace the ledger only when it prints ok; otherwise fix what it lists and check again. Remove an entry only when its thread is settled, archived or deleted. An answered question, a reply from the owner, or a finish with nothing waiting on him changes the entry's status and sets its decision to null, but keeps the entry. Set updatedAt and updatedNote on every change. A "tracking" entry exists only to carry a followUp.
 
-Owner and status: a new entry's owner is the bot that handed the thread over when that's known; otherwise pick it from the lanes above (when unsure whether a thread is tracked in the main line, use side-closer) and set ownerGuessed true. Keep an existing owner. Status values: waiting-on-gabriel (a question, choice or go-ahead only the owner can give), running (the thread is working), pr-open (its PR is open and nothing needs him now), waiting-on-others (it waits on someone other than the owner), kept-open (the owner asked to keep it open), idle (finished, nothing pending). Only waiting-on-gabriel entries are handed to the closer as a decision; any other status change produces no output.
+Owner and status: a new entry's owner is the bot that handed the thread over when that's known; otherwise pick it from the lanes above (when unsure whether a thread is tracked in the main line, use side-closer) and set ownerGuessed true. Keep an existing owner. Status says who acts next: needs-you (a question, choice or go-ahead only the owner can give), working (the thread is working), waiting-on-others (someone other than the owner, such as a reviewer, CI or an open PR), done-to-settle (finished with nothing pending, so the owner decides whether to settle it). Only needs-you and done-to-settle entries are handed to the closer, as described under Notifying; any other status change produces no output.
 
-Settling: never settle a thread on your own. When you see a done signal on a ledger thread (its linked Linear issue reaching Done, Canceled or Duplicate, or a PR deploying), hand the closer that question instead: settle the thread, keep it open, or file follow-ups first. Settle it only when the closer passes on the owner's answer to settle.
+Settling: never settle a thread on your own. When you see a done signal on a ledger thread (its linked Linear issue reaching Done, Canceled or Duplicate, or a PR deploying), set its status to done-to-settle, which hands the closer that question: settle the thread, keep it open, or file follow-ups first. Keep open leaves the entry as it is, so the question isn't asked again. Settle it only when the closer passes on the owner's answer to settle.
 
 - event test: listener connected; no output.
 - Any event on an unsettled thread with no entry: add an entry with owner, status and links as above.
-- event request.opened, kind user_input: add or update the entry as open-question with status waiting-on-gabriel (with machine, threadId, requestId and question ids, so an answer can later be sent back with t3ctl answer), then hand it to the closer as described under Notifying. Include the exact question and option labels; never recommend a pick.
-- kind approval: only relay if the owner turned approvals on in memory, and then hand it to the closer with the prompt, its "why it asks" reason and options verbatim. Never accept one without the owner's yes for that request. In delegated mode, decline with --redirect.
-- event request.resolved: remove that request from the entry. If nothing else is pending, set status to running and clear the decision; keep the entry. No output.
-- event thread.finished, on any thread (including ones the owner runs himself and ones this bot started): don't trust the trimmed lastReply. Read the full latest reply on the owner's computer (t3 thread show with the full thread id and the last few messages). First, if the thread's entry has a followUp, do what it says (usually a one-line confirmation to the closer by priority agent message), then delete the followUp field. Then decide whether the reply ends on a question, choice, or go-ahead the owner must give. If yes, set the entry to finished-with-decision with status waiting-on-gabriel and hand off. If no, keep the entry, clear its decision and set status to pr-open, waiting-on-others, kept-open or idle to match the reply (keep kept-open if it was already set); output nothing beyond any followUp message. Add any new ticket, PR or Page URL from the reply to links.
-- Setup map: on thread.finished for a thread in the skills project (~/fun/skills) or the configuration project (~/fun/configuration), also check, read-only, whether that repo's HEAD changed versus the sha in the header of /home/box/t3-tots/setup-map.md. Use git log on the owner's Mac, with no fetch, pull or edits. If it changed, refresh only the affected sections of the map and the header sha and date. Stay silent unless the change affects how the bots work: a new or renamed trigger phrase, changed full-stop behavior, or a new or changed work flow. In that case, send one line to Closer by priority agent message saying what changed. This is separate from the ledger steps above.
-- event thread.failed: set the entry to failed with the short error and status waiting-on-gabriel, and hand it to the closer. A failure from a usage limit only gets noted in the entry (status running), with no handoff, because T3 Code resumes those threads on its own. thread.cancelled: keep the entry with status idle and clear its decision; no output.
+- event request.opened, kind user_input: add or update the entry as open-question with status needs-you (with machine, threadId, requestId and question ids, so an answer can later be sent back with t3ctl answer), then hand it to the closer as described under Notifying. Include the exact question and option labels; never recommend a pick.
+- kind approval: only relay if the owner turned approvals on in memory, and then hand it to the closer with the prompt, its "why it asks" reason and options verbatim. Never accept one without the owner's yes for that request, and judge each request on its own: never decline one because an earlier one was declined. In delegated mode, decline with --redirect.
+- event request.resolved: remove that request from the entry. If nothing else is pending, set status to working and decision to null; keep the entry. No output.
+- event thread.finished, on any thread (including ones the owner runs himself and ones this bot started): don't trust the trimmed lastReply. Read the full latest reply on the owner's computer (t3 thread show with the full thread id and the last few messages). First, if the thread's entry has a followUp, do what it says (usually a one-line confirmation to the closer by priority agent message), then set followUp to null. Then decide whether the reply ends on a question, choice, or go-ahead the owner must give. If yes, set the entry to finished-with-decision with status needs-you and hand off. If no, keep the entry, set its decision to null and its status to waiting-on-others when it waits on someone else (an open PR, a reviewer, CI), otherwise to done-to-settle, and hand off as described under Notifying. Add any new ticket, PR or Page URL from the reply to links.
+- Setup map: on thread.finished for a thread in the skills project (~/fun/skills) or the configuration project (~/fun/configuration), send the "Setup map refresh" thread the same ask as the Setup map refresh routine, except that it compares the local checkout of that repo on the owner's Mac, unpushed commits included, read-only with no fetch, pull or edits, and apply its reply the same way, unless the finished thread is that thread. Stay silent unless the change affects how the bots work: a new or renamed trigger phrase, changed full-stop behavior, or a new or changed work flow. In that case, send one line to Closer by priority agent message saying what changed. This is separate from the ledger steps above.
+- event thread.failed: set the entry to failed with the short error and status needs-you, and hand it to the closer. A failure from a usage limit only gets noted in the entry (status working), with no handoff, because T3 Code resumes those threads on its own. thread.cancelled: keep the entry with status done-to-settle and decision null, and hand off as described under Notifying.
 - Result files: when a thread that you hand off produced a file the closer needs (a report, spec, cost doc and the like), copy it read-only from the owner's computer onto my computer with CopyToBox, to /home/box/t3-tots/results/<first 8 chars of thread id>/<filename>. Never hand the owner or a closer a path that exists only on the Mac as the result.
-- Notifying: claim the handoff atomically. While holding the lock, re-read the ledger; only if the entry is missing, not yet notified, or its decision text materially changed, set notified true (with notifiedAt) and write it back, then release the lock and hand off. If another run already marked it notified, send nothing, because several runs often handle replays of the same thread at the same moment. The handoff goes to the entry's owner as one priority agent message per wait, kept short:
+- Notifying: claim the handoff atomically. While holding the lock, re-read the ledger and get the entry's fingerprint with `python3 /home/box/t3-tots/ledger-check.py fingerprint <ledger> <thread id>`; it covers the status and the decision, which is what the closer is told. Hand off only when the status is needs-you or done-to-settle and the fingerprint differs from notifiedFingerprint: set notifiedFingerprint to it and notifiedAt to now, write the ledger back, then release the lock and hand off. A matching fingerprint means the closer already has exactly this, so send nothing, because several runs often handle replays of the same thread at the same moment. Change the decision text only when the decision itself changes, since any change is told again. The handoff goes to the entry's owner as one priority agent message per wait, kept short:
   - the thread title and full thread id;
   - the key findings inline, at most 5 bullets with the actual numbers and the conclusion in plain words, read from the thread's reply or its files;
   - the box path of any copied result file, so the closer can turn it into a Grok Bot Page or inline findings for the owner;
@@ -32,4 +32,98 @@ Settling: never settle a thread on your own. When you see a done signal on a led
   - a PR or issue link when there is one.
 - Malformed or unknown: no output.
 
-Results go only to Closer, Side Closer, Workflowy or Kaizen, the owner's assistants in Grok Bot, never to the owner in this chat. Runs with nothing new (plain finishes, status changes other than to waiting-on-gabriel, CI or status updates, stale replays, repeats, events already marked notified, setup-map changes that don't affect how the bots work) end with no output at all, not even a note saying nothing was sent.
+Results go only to Closer, Side Closer, Workflowy or Kaizen, the owner's assistants in Grok Bot, never to the owner in this chat. Runs with nothing new (status changes other than to needs-you or done-to-settle, CI or status updates, stale replays, repeats, entries whose fingerprint was already told, setup-map changes that don't affect how the bots work) end with no output at all, not even a note saying nothing was sent.
+
+Ledger check: keep /home/box/t3-tots/ledger-check.py exactly as the script below. When it's missing or `sha256sum` of it doesn't print f3e009f20f49c67277bae2952c5b69297a4fe117defb510057a26245d4638124, write it again from the block, byte for byte.
+
+```python
+import hashlib, json, sys
+
+FORMAT = json.loads(r'''
+{
+  "about": "string",
+  "seedNote": "string|null",
+  "statusValues": "string",
+  "threads": {
+    "<thread id>": {
+      "title": "string",
+      "machine": "string|null",
+      "project": "string|null",
+      "owner": "string",
+      "ownerGuessed": "boolean|null",
+      "status": ["needs-you", "working", "waiting-on-others", "done-to-settle"],
+      "reason": "string|null",
+      "links": "string[]",
+      "since": "string|null",
+      "updatedAt": "string",
+      "updatedNote": "string|null",
+      "requestIds": "string[]",
+      "decision": "string|null",
+      "followUp": "string|null",
+      "notifiedAt": "string|null",
+      "notifiedFingerprint": "string|null"
+    }
+  },
+  "updatedAt": "string"
+}
+''')
+ENTRY = FORMAT["threads"]["<thread id>"]
+
+
+def fits(value, spec):
+    if isinstance(spec, list):
+        return value in spec
+    if value is None:
+        return spec.endswith("|null")
+    kind = spec.split("|")[0]
+    if kind == "string":
+        return isinstance(value, str) and value != ""
+    if kind == "boolean":
+        return isinstance(value, bool)
+    if kind == "string[]":
+        return isinstance(value, list) and all(isinstance(v, str) and v != "" for v in value)
+    return False
+
+
+def problems(ledger):
+    found = []
+
+    def check(where, obj, spec):
+        if not isinstance(obj, dict):
+            return found.append(f"{where}: not an object")
+        found.extend(f"{where}: unknown field {k}" for k in sorted(obj.keys() - spec.keys()))
+        found.extend(f"{where}: missing field {k}" for k in sorted(spec.keys() - obj.keys()))
+        for k in sorted(obj.keys() & spec.keys() - {"threads"}):
+            if not fits(obj[k], spec[k]):
+                want = "one of " + ", ".join(spec[k]) if isinstance(spec[k], list) else spec[k]
+                found.append(f"{where}: {k} must be {want}")
+
+    check("ledger", ledger, FORMAT)
+    threads = ledger.get("threads") if isinstance(ledger, dict) else None
+    if not isinstance(threads, dict):
+        return found + ["ledger: threads must be an object"]
+    for thread_id, entry in sorted(threads.items()):
+        check(thread_id, entry, ENTRY)
+    return found
+
+
+def fingerprint(entry):
+    told = json.dumps([entry["status"], entry["decision"]])
+    return hashlib.sha256(told.encode()).hexdigest()[:16]
+
+
+def main(args):
+    if len(args) == 2 and args[0] == "check":
+        found = problems(json.load(open(args[1])))
+        print("\n".join(found or ["ok"]))
+        return 1 if found else 0
+    if len(args) == 3 and args[0] == "fingerprint":
+        print(fingerprint(json.load(open(args[1]))["threads"][args[2]]))
+        return 0
+    print("usage: ledger-check.py check <ledger> | fingerprint <ledger> <thread id>", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
+```

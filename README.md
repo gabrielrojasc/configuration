@@ -153,7 +153,7 @@ profiles/<name>/
 ├── bots.txt               # this profile's Grok Bot fleet
 ├── home/                  # whole files only this profile has; override base/
 └── patches/               # one patch per base/ file this profile changes
-bots/                      # Grok Bot snapshot script and field list
+bots/                      # Grok Bot snapshot and skill scripts, field list
 ```
 
 To see what a profile changes in a shared file, read its patch, for example

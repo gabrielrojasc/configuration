@@ -864,8 +864,10 @@ and unslop's SKILL.md, plus the hidden-skills rule for `/name`.
 - **Expiry watch**: Router's weekday sweep reports either token when it is
   within 10 days of expiring.
 - **Ledger**: A JSON file T3 Tots keeps on the box, one entry per unsettled
-  thread: title, machine, project, owner, reason, decision waiting, since,
-  notified, source, notes, follow-up and result files.
+  thread, each with the same fields: title, machine, project, owner, status
+  (who acts next), reason, links, decision waiting, since, last update,
+  follow-up and a fingerprint of what the closer was last told. Its format is
+  bots/shared/unsettled-threads.shape.json in the configuration repo.
 - **Owner**: Each entry carries its owning bot, the routing field. There is no
   kind field. See 'Decided'.
 - **Who reads it**: T3 Tots writes it. Each bot reads the entries it owns:

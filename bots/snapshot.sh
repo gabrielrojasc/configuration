@@ -21,14 +21,24 @@
 #
 # The record matches bots.txt by bot id, so a slug renamed there keeps its
 # bot's last snapshot, and a bot removed from it drops out. Of bots/shared/,
-# snapshots handle only setup-map.md and unsettled-threads.shape.json; they
-# never list, record, or delete any other file there.
+# snapshots handle only setup-map.md; they never list, record, or delete any
+# other file there. The staged ledger must match the format in
+# bots/shared/unsettled-threads.shape.json, which the repo decides; a ledger
+# that doesn't stops the snapshot.
 #
 # After it applies every change without a warning, and with --discard, the
 # script deletes the staging folder and every file beside it named
 # <staging-dir>.*, such as a tarball. It does so only for a staging folder
 # directly inside /tmp, $TMPDIR, or the user's temp folder, where mktemp -d
 # makes one. When it stops on an error or ends with a warning, it keeps them.
+#
+# Each machine ID listed in ~/.local/state/dotfiles/bots/<profile>.machine-ids
+# becomes <machine-id> in the script's copies of the staging folder and the
+# record. A labelled machine ID the list doesn't name stops the snapshot.
+#
+# Each bot's <bot id>/routines.json is its own report of its routines. A bot
+# without one, or whose report doesn't match its staged routines, stops the
+# snapshot: a missing routine is never read as a deleted one.
 
 set -euo pipefail
 start_dir=$PWD
@@ -55,6 +65,8 @@ load_profile
 roster="$profile_dir/bots.txt"
 [[ -f "$roster" ]] || die "Profile $DOTFILES_PROFILE has no Grok Bot fleet: $roster is missing. See bots/README.md."
 baseline="${snapshot_dir%/snapshot}/bots/$DOTFILES_PROFILE"
+machine_ids="$baseline.machine-ids"
+uuid_re='[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 
 slugs=()
 ids=()
@@ -67,7 +79,8 @@ done <"$roster"
 
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
-fleet_shared=(bots/shared/setup-map.md bots/shared/unsettled-threads.shape.json)
+fleet_shared=(bots/shared/setup-map.md)
+ledger_format=bots/shared/unsettled-threads.shape.json
 record="$work/record"
 
 function repo_keys() {
@@ -93,6 +106,19 @@ function recorded_slug() {
     if [[ -f "$baseline/bots.txt" ]]; then awk -v id="$1" '$2 == id { print $1; exit }' "$baseline/bots.txt"; fi
 }
 
+function hide_machine_ids() {
+    local dir=$1 id file
+    if [[ ! -f "$machine_ids" ]]; then return 0; fi
+    while IFS= read -r id || [[ -n "$id" ]]; do
+        if [[ -z "$id" ]]; then continue; fi
+        [[ "$id" =~ ^$uuid_re$ ]] || die "$machine_ids must hold one machine ID per line"
+        while IFS= read -r file; do
+            LC_ALL=C sed "s/$id/<machine-id>/Ig" "$file" >"$file.tmp"
+            mv "$file.tmp" "$file"
+        done < <(LC_ALL=C grep -rliF -- "$id" "$dir" || true)
+    done <"$machine_ids"
+}
+
 function translate_record() {
     local i key old
     rm -rf "$record"
@@ -108,6 +134,7 @@ function translate_record() {
         old=$(recorded_slug "${ids[i]}")
         if [[ -n "$old" && -d "$baseline/bots/$old" ]]; then cp -R "$baseline/bots/$old" "$record/bots/${slugs[i]}"; fi
     done
+    hide_machine_ids "$record"
 }
 
 function baseline_of() {
@@ -123,6 +150,7 @@ if [[ "$mode" == seed ]]; then
         rendered "$key" "$work/seed/$key" || die "$key doesn't render for $DOTFILES_PROFILE; fix that first"
     done < <(repo_keys)
     cp "$roster" "$work/seed/bots.txt"
+    hide_machine_ids "$work/seed"
     rm -rf "$baseline"
     mkdir -p "$(dirname "$baseline")"
     cp -R "$work/seed" "$baseline"
@@ -171,7 +199,7 @@ function expected() {
     esac
     for id in "${ids[@]}"; do
         case "$rel" in
-            "$id" | "$id/profile.json" | "$id/settings.json" | "$id/routines") return 0 ;;
+            "$id" | "$id/profile.json" | "$id/settings.json" | "$id/routines.json" | "$id/routines") return 0 ;;
             "$id"/routines/*)
                 if [[ "${rel#"$id"/routines/}" =~ $routine_re ]]; then return 0; fi
                 ;;
@@ -234,10 +262,15 @@ for i in "${!ids[@]}"; do
     for f in profile.json settings.json; do
         if [[ ! -f "$staging/${ids[i]}/$f" ]]; then missing+="  ${ids[i]}/$f (${slugs[i]})"$'\n'; fi
     done
-    if [[ ! -d "$staging/${ids[i]}/routines" ]]; then missing+="  ${ids[i]}/routines/ (${slugs[i]})"$'\n'; fi
 done
 [[ -z "$missing" ]] || die "Incomplete snapshot; missing from $staging:
 $missing"
+unreported=""
+for i in "${!ids[@]}"; do
+    if [[ ! -f "$staging/${ids[i]}/routines.json" ]]; then unreported+="  ${ids[i]}/routines.json (${slugs[i]})"$'\n'; fi
+done
+[[ -z "$unreported" ]] || die "Unverified routines; nothing was written. These bots haven't reported their routines, so the snapshot can't tell no routines from missed ones. Ask each bot for its routine report, as bots/README.md describes, then rerun:
+$unreported"
 
 json_defs='
 def norm: map(if type == "number" then "[]" else . end) | join(".");
@@ -281,15 +314,66 @@ function check_routine() {
     grep -qxE 'enabled: (true|false)' <<<"$front" || die "$name needs enabled: true or enabled: false"
 }
 
+report_defs='
+def text: type == "string" and length > 0;
+if type != "object" then "must be a JSON object"
+else
+  ((keys - ["reportedBy", "reportedOn", "confirmedBy", "routines"])[] | "has field \(.), which a routine report never has"),
+  (if .reportedBy == $name then empty else "needs reportedBy: the bot name in profile.json, \($name)" end),
+  (if (.reportedOn | text and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) then empty else "needs reportedOn: the report date, such as 2026-11-07" end),
+  (if has("confirmedBy") and (.confirmedBy | text | not) then "needs confirmedBy to name who confirmed the report, or no confirmedBy" else empty end),
+  (if (.routines | type) != "array" then "needs routines: a list, empty when the bot has none"
+   else
+     (.routines[] | select(type != "object" or (keys - ["file", "folderId"]) != [] or (.file | text and test($file_re) | not) or (.folderId | text | not))
+       | "needs each routine as {\"file\": \"<slug>.md\", \"folderId\": \"<folder slug>\"}, with the folder slug the bot reports, not \(tojson)"),
+     ([.routines[] | .file?] | group_by(.) | map(select(length > 1) | .[0]) | .[] | "lists \(.) twice")
+   end)
+end'
+reports=()
+
+function check_report() {
+    local slug=$1 dir=$2 profile=$3 report="$2/routines.json" name problems listed staged routine count
+    name=$(jq -r '.name // empty' "$profile")
+    [[ -n "$name" ]] || die "$slug/profile.json has no name to match its routine report against"
+    problems=$(jq -r --arg name "$name" --arg file_re "$routine_re" "$report_defs" "$report" 2>&1) ||
+        die "$slug/routines.json is not valid JSON"
+    [[ -z "$problems" ]] || die "$slug/routines.json, the bot's routine report, is invalid. Ask the bot to report again, then rerun:
+$(sed 's/^/  /' <<<"$problems")"
+    listed=$(jq -r '.routines[].file' "$report" | LC_ALL=C sort)
+    staged=$(for routine in "$dir"/routines/*.md; do
+        if [[ -e "$routine" ]]; then basename "$routine"; fi
+    done | LC_ALL=C sort)
+    problems=$({
+        LC_ALL=C comm -23 <(echo "$listed") <(echo "$staged") | sed '/^$/d; s/$/: in the report, but not staged/'
+        LC_ALL=C comm -13 <(echo "$listed") <(echo "$staged") | sed '/^$/d; s/$/: staged, but not in the report/'
+    })
+    [[ -z "$problems" ]] || die "$slug's routine report doesn't match its staged routines; nothing was written. Stage exactly the routines the bot reports, then rerun:
+$(sed 's/^/  /' <<<"$problems")"
+    count=$(jq '.routines | length' "$report")
+    reports+=("$slug: $(jq -r --argjson n "$count" '
+        (if $n == 0 then "no routines" elif $n == 1 then "1 routine" else "\($n) routines" end)
+        + ", reported by \(.reportedBy) on \(.reportedOn)"
+        + (if has("confirmedBy") then ", confirmed by \(.confirmedBy)" else "" end)' "$report")")
+}
+
+fleet_copy="$work/fleet"
+cp -R "$staging" "$fleet_copy"
+hide_machine_ids "$fleet_copy"
+hits=$({ LC_ALL=C grep -rniE --exclude unsettled-threads.json -e "(^|[^<])machine[ _-]?id.{0,12}$uuid_re" "$fleet_copy" || true; } |
+    cut -d: -f1,2 | sed "s|^$fleet_copy/||" | sort -u)
+[[ -z "$hits" ]] || die "Machine IDs; nothing was written. Add each ID to $machine_ids, one per line, then rerun:
+$(sed 's/^/  /' <<<"$hits")"
+
 out="$work/out"
 mkdir -p "$out/bots/shared"
 
 for i in "${!ids[@]}"; do
     slug=${slugs[i]}
-    src="$staging/${ids[i]}"
+    src="$fleet_copy/${ids[i]}"
     mkdir -p "$out/bots/$slug"
     filter_json profile.json "$slug" "$src/profile.json" "$out/bots/$slug/profile.json"
     filter_json settings.json "$slug" "$src/settings.json" "$out/bots/$slug/settings.json"
+    check_report "$slug" "$src" "$out/bots/$slug/profile.json"
     for routine in "$src"/routines/*.md; do
         [[ -e "$routine" ]] || continue
         check_routine "$slug" "$routine"
@@ -298,29 +382,39 @@ for i in "${!ids[@]}"; do
     done
 done
 
-cp "$staging/setup-map.md" "$out/bots/shared/setup-map.md"
+cp "$fleet_copy/setup-map.md" "$out/bots/shared/setup-map.md"
 
-jq -S '
-def merge($a; $b):
-  if $a == null then $b
-  elif $b == null then $a
-  elif ($a | type) == "object" and ($b | type) == "object" then
-    reduce ($b | keys[]) as $k ($a; .[$k] = merge($a[$k]; $b[$k]))
-  elif ($a | type) == "array" and ($b | type) == "array" then
-    if ($a | length) == 0 then $b elif ($b | length) == 0 then $a else [merge($a[0]; $b[0])] end
+rendered "$ledger_format" "$work/ledger-format.json"
+[[ -f "$work/ledger-format.json" ]] || die "$ledger_format doesn't render for $DOTFILES_PROFILE; the ledger check needs it."
+ledger_problems=$(jq -r --slurpfile format "$work/ledger-format.json" '
+def fits($spec):
+  if ($spec | type) == "array" then . as $v | any($spec[]; . == $v)
+  elif . == null then $spec | endswith("|null")
+  else ($spec | split("|")[0]) as $kind
+    | if $kind == "string" then type == "string" and . != ""
+      elif $kind == "boolean" then type == "boolean"
+      elif $kind == "string[]" then type == "array" and all(.[]; type == "string" and . != "")
+      else false
+      end
+  end;
+def check($where; $spec):
+  if type != "object" then "\($where): not an object"
   else
-    [$a, $b] | map(if type == "string" then split("|")[] else type end) | unique | join("|")
+    . as $obj
+    | ((keys - ($spec | keys))[] | "\($where): unknown field \(.)"),
+      ((($spec | keys) - keys)[] | "\($where): missing field \(.)"),
+      (($spec | keys) - ["threads"] | .[]
+        | select(. as $k | $obj | has($k)) | select(. as $k | $obj[$k] | fits($spec[$k]) | not)
+        | "\($where): \(.) must be \($spec[.] | if type == "array" then "one of " + join(", ") else . end)")
   end;
-def shape:
-  if type == "object" then
-    if all(keys[]; test("^[A-Za-z_]{1,40}$")) then map_values(shape)
-    else {"<key>": (reduce (.[] | shape) as $s (null; merge(.; $s)))}
-    end
-  elif type == "array" then
-    if length == 0 then [] else [reduce (.[] | shape) as $s (null; merge(.; $s))] end
-  else type
-  end;
-shape' "$staging/unsettled-threads.json" >"$out/bots/shared/unsettled-threads.shape.json"
+$format[0] as $f
+| check("ledger"; $f),
+  if (.threads | type) == "object" then .threads | to_entries[] | .key as $k | .value | check($k; $f.threads["<thread id>"])
+  else "ledger: threads must be an object"
+  end
+' "$staging/unsettled-threads.json") || die "$staging/unsettled-threads.json isn't valid JSON; nothing was written."
+[[ -z "$ledger_problems" ]] || die "The staged ledger doesn't match $ledger_format; nothing was written. Fix the ledger at the source with T3 Tots' ledger check, as bots/README.md describes, then rerun:
+$(sed 's/^/  /' <<<"$ledger_problems")"
 
 token_re='-----BEGIN [A-Z ]*PRIVATE KEY|(^|[^A-Za-z0-9])(sk|pk|rk)-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|xox[abprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'
 assign_re='(token|secret|password|passwd|api[_-]?key)["'\'']?[[:space:]]*[:=][[:space:]]*["'\'']?[A-Za-z0-9/+_.-]{12,}|serverid'
@@ -341,11 +435,12 @@ all_keys=$({
 done | LC_ALL=C sort -u)
 
 function fingerprint() {
-    local key f
+    local key f id
     {
         echo "$DOTFILES_PROFILE"
         shasum <bots/fields.txt
         shasum <"$roster"
+        for id in "${ids[@]}"; do shasum <"$fleet_copy/$id/routines.json"; done
         while IFS= read -r key; do
             [[ -n "$key" ]] || continue
             echo "$key"
@@ -410,6 +505,8 @@ Run bots/snapshot.sh $staging_arg at a terminal to write them to .conflicts/ for
 $(printf '  %s\n' "${conflicts[@]}")"
 fi
 
+echo "Routine reports:"
+printf '  %s\n' ${reports[@]+"${reports[@]}"}
 print=$(fingerprint)
 changes=$((${#candidates[@]} + ${#new_files[@]} + ${#deleted_files[@]}))
 

@@ -96,6 +96,9 @@ give each bot exactly the `name` in its rendered `profile.json`.
 The app gives each bot a `serverId`. It stays on the account: `fields.txt`
 drops it from every snapshot.
 
+A routine can hold `<machine-id>` in place of a real machine ID. Replace it
+before you save the routine, as [Machine IDs](README.md#machine-ids) describes.
+
 Once one bot can edit others, as Workflowy does, you can instead give it the
 rendered files and ask it to apply them through each bot. Check each bot
 afterwards; the snapshot in the last step shows anything it missed.
@@ -109,7 +112,13 @@ it to the profile.
 
 `shared/unsettled-threads.shape.json` records only the format of the
 unsettled-threads ledger, the live list of threads waiting on the owner. Don't
-copy a ledger between accounts. A new account starts with an empty ledger.
+copy a ledger between accounts. A new account starts with an empty ledger, in
+that format, with no threads.
+
+### Skills
+
+The bots share the skills on the account's box. Apply the profile's set as
+described in [Apply the skills to a box](README.md#apply-the-skills-to-a-box).
 
 ## Record the bot ids
 

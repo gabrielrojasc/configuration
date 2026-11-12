@@ -31,6 +31,8 @@ Credentials stay on the machine. `read_machine` in `utils.sh` strips them on the
 
 Bot files are keys under `bots/` (`base/bots/`, `profiles/<p>/patches/bots/`), but `install.sh` never installs them; `bots/snapshot.sh` writes them from a fleet's snapshot. Read `bots/README.md` before changing anything there, and add a field to `bots/fields.txt` as `keep` only if it can never hold a credential.
 
+`bots/shared/skills.txt` is the exception to that flow: the repo decides which skills a box has. Change its pins with `bots/skills.sh --bump`; the sha256 lines come from the fetched files.
+
 ## Script conventions
 
 - Scripts run on a fresh Mac: `/bin/bash` 3.2 with BSD tools, under `set -euo pipefail`. Expand possibly-empty arrays as `${a[@]+"${a[@]}"}`, and write portable `sed` (no bare `sed -i`).

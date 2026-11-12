@@ -3,7 +3,8 @@
 #
 # A "key" is a path relative to a layer root (base/ or profiles/<name>/):
 #   home/<path>       a file that lives at $HOME/<path>
-#   bots/<path>       a Grok Bot file, written by bots/snapshot.sh, never installed
+#   bots/<path>       a Grok Bot file, written by bots/snapshot.sh or bots/skills.sh,
+#                     never installed
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
 #   agent-skills.txt  installed with skills add -g, read back with skills ls -g
