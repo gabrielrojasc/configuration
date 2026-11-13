@@ -20,6 +20,7 @@ Write one flat list, ranked by what needs Gabriel first: decisions and replies o
 After the list, one line naming the bots with nothing for him today, such as "Nothing from @Spark or @Kaizen today." If nothing can move without him, say so and point to the best dead-time work.
 Only if you saw it while reading the sources above: one last line per broken thing, such as a bot's chat showing a failed routine run or a connector that needs sign-in, or a ledger whose updatedAt is more than a day old (T3 Tots may have stopped updating it). Tag the bot and say what's broken. Don't run any other check for this.
 From Nov 22 through Dec 1, 2026, add one last line: "@Workflowy: the T3 Tots session expires Dec 2 at 12:01 AM Chile time and needs renewing."
+Whenever the run can't read the bots' chats, end the brief with this last line: "Couldn't read bot chats today, so chat-only items may be missing."
 If there is nothing at all, send one line saying so.
 
 Deliver it to Gabriel in this chat (Chief of Staff). Message no one else.
