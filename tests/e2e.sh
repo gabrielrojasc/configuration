@@ -97,11 +97,21 @@ alias e2e-shared='true'/" "$home/.zsh_aliases" && rm "$home/.zsh_aliases.bak"
     check "the earlier local edit stays in the patch" grep -q e2e-local "$repo/profiles/$profile/patches/home/.zsh_aliases.patch"
     check "render matches the machine after sorting" bash -c "cmp -s '$home/.zsh_aliases' <(cd '$repo' && HOME='$home' ./install.sh --show .zsh_aliases)"
 
-    # A y next to a profile-only line can't move to base; it stays in the patch.
     echo "alias e2e-adjacent='true'" >>"$home/.zsh_aliases"
-    printf 'y\n' | in_repo ./copy.sh --only files >/dev/null
-    check "adjacent y stays out of base" bash -c "! grep -q e2e-adjacent '$repo/base/home/.zsh_aliases'"
-    check "adjacent y is kept in the patch" grep -q e2e-adjacent "$repo/profiles/$profile/patches/home/.zsh_aliases.patch"
+    printf 'y\n' | in_repo ./copy.sh --only files >"$log_dir/$profile-copy-adjacent.txt"
+    check "sort y next to a profile-only line moves the hunk to base" grep -q e2e-adjacent "$repo/base/home/.zsh_aliases"
+    check "sort y next to a profile-only line stops the patch adding it" bash -c "! grep -q '^+alias e2e-adjacent' '$repo/profiles/$profile/patches/home/.zsh_aliases.patch'"
+    check "the profile-only neighbour stays out of base" bash -c "! grep -q e2e-local '$repo/base/home/.zsh_aliases'"
+    check "the summary counts the adjacent hunk as moved to base" grep -q '1 to base, 0 kept' "$log_dir/$profile-copy-adjacent.txt"
+    check "render matches the machine after the adjacent hunk moves" bash -c "cmp -s '$home/.zsh_aliases' <(cd '$repo' && HOME='$home' ./install.sh --show .zsh_aliases)"
+
+    sed -i.bak "s/^alias e2e-local='true'\$/alias e2e-local='false'/" "$home/.zsh_aliases" && rm "$home/.zsh_aliases.bak"
+    cp "$repo/base/home/.zsh_aliases" "$log_dir/$profile-base-before-profile-only-edit.txt"
+    printf 'y\n' | in_repo ./copy.sh --only files >"$log_dir/$profile-copy-profile-only-edit.txt"
+    check "sort y on an edit of a profile-only line leaves base unchanged" cmp -s "$repo/base/home/.zsh_aliases" "$log_dir/$profile-base-before-profile-only-edit.txt"
+    check "sort y on an edit of a profile-only line keeps it in the patch" grep -q "e2e-local='false'" "$repo/profiles/$profile/patches/home/.zsh_aliases.patch"
+    check "the summary counts the edit of a profile-only line as kept" grep -q '0 to base, 1 kept' "$log_dir/$profile-copy-profile-only-edit.txt"
+    check "render matches the machine after the profile-only edit" bash -c "cmp -s '$home/.zsh_aliases' <(cd '$repo' && HOME='$home' ./install.sh --show .zsh_aliases)"
     git -C "$repo" add -A
     git -C "$repo" -c user.name=e2e -c user.email=e2e@localhost commit -q --no-gpg-sign -m sorted
     printf 'q\n' | in_repo ./copy.sh --sort >/dev/null

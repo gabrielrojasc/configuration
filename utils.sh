@@ -698,19 +698,77 @@ function patched_elsewhere() {
     done
 }
 
+function whole_file_diff() {
+    git diff --no-index --no-color --no-ext-diff --no-textconv --text \
+        -U"$(($(wc -l <"$1") + $(wc -l <"$2") + 1))" -- "$1" "$2" || true
+}
+
+function promote_to_base() {
+    local base=$1 profile_version=$2 promoted_version=$3
+    if cmp -s "$base" "$profile_version"; then
+        cat "$promoted_version"
+        return 0
+    fi
+    awk '
+        function emit(line, no_newline) { out[++count] = line; ends_without_newline = no_newline }
+        function rewrites_profile_only_line() { return adds_lines && drops_profile_only_line }
+
+        /^@@/ && !in_hunk[FILENAME]++ { next }
+        !in_hunk[FILENAME] { next }
+        FILENAME == ARGV[1] {
+            if (/^\\/) { no_newline[lines] = 1; next }
+            owner[++lines] = substr($0, 1, 1)
+            text[lines] = substr($0, 2)
+            next
+        }
+        /^\\/ { if (emitted_last_line) ends_without_newline = 1; next }
+        {
+            change = substr($0, 1, 1)
+            emitted_last_line = 0
+            if (change == "+") {
+                adds_lines = 1
+                emit(substr($0, 2), 0)
+                emitted_last_line = 1
+                next
+            }
+            while (owner[at + 1] == "-") { at++; emit(text[at], no_newline[at]) }
+            at++
+            if (text[at] != substr($0, 2)) { unplaceable = 1; exit }
+            if (change == "-") {
+                if (owner[at] == "+") drops_profile_only_line = 1
+                next
+            }
+            if (rewrites_profile_only_line()) { unplaceable = 1; exit }
+            adds_lines = drops_profile_only_line = 0
+            if (owner[at] == " ") { emit(text[at], 0); emitted_last_line = 1 }
+        }
+        END {
+            if (unplaceable || rewrites_profile_only_line()) exit 1
+            while (at < lines) {
+                at++
+                if (owner[at] != "-") exit 1
+                emit(text[at], no_newline[at])
+            }
+            for (i = 1; i < count; i++) print out[i]
+            if (count) printf "%s%s", out[count], (ends_without_newline ? "" : "\n")
+        }
+    ' <(whole_file_diff "$base" "$profile_version") <(whole_file_diff "$profile_version" "$promoted_version")
+}
+
 function place_changes() {
-    local key to_base kept other
+    local key to_base kept other tally_file
     for key in ${candidates[@]+"${candidates[@]}"}; do
         # Staged hunks are the ones promoted to base; carry them onto base
         # (which may differ from the index version by this profile's patch).
         git -C "$sort_repo" show ":$key" >"$work/staged"
+        tally_file="$work/tally/$(echo "$key" | tr / %)"
         if ! cmp -s "$work/staged" "$work/candidates/$key"; then
-            if git merge-file -p "base/$key" "$work/candidates/$key" "$work/staged" >"$work/new-base"; then
+            if promote_to_base "base/$key" "$work/candidates/$key" "$work/staged" >"$work/new-base"; then
                 cat "$work/new-base" >"base/$key"
             else
-                # Happens when a promoted hunk sits right next to lines only this
-                # profile has, so there's no base context to place it in.
-                color_print "$yellow" "Kept the chosen $key hunks in this profile: they sit next to profile-only lines. Move them into base/$key by hand, then rerun ./copy.sh --sort."
+                color_print "$yellow" "Kept the chosen $key changes in $DOTFILES_PROFILE: they rewrite lines only this profile has, so base has no line to change. To share them, edit base/$key by hand, then check each profile with ./install.sh --show."
+                sed 's/^base$/kept/' "$tally_file" >"$tally_file.recounted"
+                mv "$tally_file.recounted" "$tally_file"
             fi
         elif ((keep_unmoved_patches)); then
             # Nothing moved, so the patch stays byte for byte, even one made
@@ -718,8 +776,8 @@ function place_changes() {
             continue
         fi
         make_patch "$key" "$sort_repo/$key"
-        to_base=$(grep -c '^base$' "$work/tally/$(echo "$key" | tr / %)" 2>/dev/null || true)
-        kept=$(grep -c '^kept$' "$work/tally/$(echo "$key" | tr / %)" 2>/dev/null || true)
+        to_base=$(grep -c '^base$' "$tally_file" 2>/dev/null || true)
+        kept=$(grep -c '^kept$' "$tally_file" 2>/dev/null || true)
         copied+=("$(display_name "$key"): ${to_base:-0} to base, ${kept:-0} kept in $DOTFILES_PROFILE")
     done
 
