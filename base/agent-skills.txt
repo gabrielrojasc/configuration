@@ -1,5 +1,6 @@
 agents claude-code codex
 anthropics/skills frontend-design
+browser-use/browser-use browser-use
 cursor/plugins/pstack bro
 cursor/plugins/pstack ketchup
 cursor/plugins/pstack unslop
