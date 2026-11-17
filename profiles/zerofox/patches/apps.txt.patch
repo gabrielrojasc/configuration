@@ -1,9 +1,10 @@
 diff --git a/apps.txt b/apps.txt
-index 0057b69df444773218c432031c9a9c3d27f1ee4b..e6afaaca8c35672b4c8580a98c3c37918fba7199 100644
+index f8e11e1a597a8f166dd665cdadceaffccc9807fe..d0b21290f21944fd762b6bec2c349b541ddbec2e 100644
 --- a/apps.txt
 +++ b/apps.txt
-@@ -1 +1,29 @@
+@@ -1,2 +1,31 @@
 +1Password
++AIS Code Guardian
 +Android Studio
 +AppCleaner
 +ChatGPT
@@ -11,6 +12,7 @@ index 0057b69df444773218c432031c9a9c3d27f1ee4b..e6afaaca8c35672b4c8580a98c3c3791
 +Cloudflare WARP
 +CodexBar
 +Cortex XDR
+ CuaDriver
 +Google Chrome
 +Google Docs
 +Google Drive

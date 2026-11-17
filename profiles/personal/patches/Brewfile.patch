@@ -1,8 +1,8 @@
 diff --git a/Brewfile b/Brewfile
-index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b128e0e5be8 100644
+index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e64518b83f 100644
 --- a/Brewfile
 +++ b/Brewfile
-@@ -7,16 +7,22 @@ brew "bash"
+@@ -9,16 +9,22 @@ brew "bash"
  brew "bat"
  # Resource monitor. C++ version and continuation of bashtop and bpytop
  brew "btop"
@@ -25,7 +25,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # GitHub command-line tool
  brew "gh"
  # Distributed revision control system
-@@ -35,6 +41,12 @@ brew "grep"
+@@ -37,6 +43,12 @@ brew "grep"
  brew "jq"
  # Kubernetes command-line interface
  brew "kubernetes-cli"
@@ -38,7 +38,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # Incremental parsing library
  brew "tree-sitter"
  # Ambitious Vim-fork focused on extensibility and agility
-@@ -43,6 +55,8 @@ brew "neovim"
+@@ -45,6 +57,8 @@ brew "neovim"
  brew "pam-reattach"
  # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
  brew "prettier"
@@ -47,7 +47,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # Interpreted, interactive, object-oriented programming language
  brew "python@3.12"
  # Search tool like grep and The Silver Searcher
-@@ -57,6 +71,8 @@ brew "speedtest-cli"
+@@ -59,6 +73,8 @@ brew "speedtest-cli"
  brew "stylua"
  # Multi-modal AI tool to extract and summarize content
  brew "summarize"
@@ -56,7 +56,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
  # Text interface for Git repositories
-@@ -67,6 +83,8 @@ brew "tmux"
+@@ -69,6 +85,8 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -65,7 +65,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # Extremely fast Python package installer and resolver, written in Rust
  brew "uv"
  # Vi 'workalike' with many additional features
-@@ -75,6 +93,8 @@ brew "vim"
+@@ -77,6 +95,8 @@ brew "vim"
  brew "watch"
  # Internet file retriever
  brew "wget"
@@ -74,10 +74,10 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  # Additional completion definitions for zsh
  brew "zsh-completions"
  # Fast CLI for Apple Reminders
-@@ -83,14 +103,44 @@ brew "steipete/tap/remindctl", trusted: true
- cask "claude-code@latest"
- # OpenAI's coding agent that runs in your terminal
+@@ -87,14 +107,44 @@ cask "claude-code@latest"
  cask "codex"
+ # Background desktop automation driver for AI agents
+ cask "cuadriver"
 +# Photography workflow application and raw developer
 +cask "darktable"
 +# App to build and share containerised applications and microservices
@@ -119,7 +119,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -100,7 +150,13 @@ vscode "ms-python.vscode-pylance"
+@@ -104,6 +154,12 @@ vscode "ms-python.vscode-pylance"
  vscode "ms-python.vscode-python-envs"
  vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
@@ -132,4 +132,3 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..222439207947718c941934c553215b12
  go "golang.org/x/tools/gopls"
 +go "google.golang.org/protobuf/cmd/protoc-gen-go"
 +go "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
- uv "browser-use"

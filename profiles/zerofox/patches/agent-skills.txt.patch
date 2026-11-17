@@ -1,8 +1,8 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index c4472d4cb3c6a2b2ed6d38609b58d765dc2ec9bf..8721463b992d3babfa80cd695dd05e24b7b9a32d 100644
+index 9109c524bf712db3f5014fdc7d66f75fee7b810f..3ff3f139ede33995cf8d5eadb5f0393e3e1c7ac3 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
-@@ -4,7 +4,6 @@ browser-use/browser-use browser-use
+@@ -3,7 +3,6 @@ anthropics/skills frontend-design
  cursor/plugins/pstack bro
  cursor/plugins/pstack ketchup
  cursor/plugins/pstack unslop
@@ -10,7 +10,7 @@ index c4472d4cb3c6a2b2ed6d38609b58d765dc2ec9bf..8721463b992d3babfa80cd695dd05e24
  emilkowalski/skills emil-design-eng
  gabrielrojasc/skills babysit-pr
  gabrielrojasc/skills chief-of-staff
-@@ -14,8 +13,8 @@ gabrielrojasc/skills developer-documentation-style
+@@ -13,8 +12,8 @@ gabrielrojasc/skills developer-documentation-style
  gabrielrojasc/skills full-stop
  gabrielrojasc/skills gh-review-comments
  gabrielrojasc/skills git-workspace
@@ -21,11 +21,13 @@ index c4472d4cb3c6a2b2ed6d38609b58d765dc2ec9bf..8721463b992d3babfa80cd695dd05e24
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  gabrielrojasc/skills rewrite-it
-@@ -52,4 +51,7 @@ mattpocock/skills wizard
+@@ -51,6 +50,9 @@ mattpocock/skills wizard
  mattpocock/skills writing-for-agents
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
 +riskive/ai-tooling catalog-guided-db-access
+ trycua/cua cua-driver
 +unblocked/skills unblocked-context-research
 +unblocked/skills unblocked-tools-guide
+ vercel-labs/agent-browser agent-browser
  zarazhangrui/frontend-slides frontend-slides

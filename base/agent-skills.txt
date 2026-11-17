@@ -1,6 +1,5 @@
 agents claude-code codex
 anthropics/skills frontend-design
-browser-use/browser-use browser-use
 cursor/plugins/pstack bro
 cursor/plugins/pstack ketchup
 cursor/plugins/pstack unslop
@@ -52,4 +51,6 @@ mattpocock/skills wizard
 mattpocock/skills writing-for-agents
 openclaw/openclaw summarize
 pbakaus/impeccable/.agents impeccable
+trycua/cua cua-driver
+vercel-labs/agent-browser agent-browser
 zarazhangrui/frontend-slides frontend-slides

@@ -1,4 +1,6 @@
 tap "steipete/tap", trusted: true
+# Browser automation CLI for AI agents
+brew "agent-browser"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -83,6 +85,8 @@ brew "steipete/tap/remindctl", trusted: true
 cask "claude-code@latest"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
+# Background desktop automation driver for AI agents
+cask "cuadriver"
 # Control your tools with a few keystrokes
 cask "raycast"
 vscode "charliermarsh.ruff"
@@ -103,4 +107,3 @@ vscode "ms-vscode.makefile-tools"
 vscode "pkief.material-icon-theme"
 vscode "vscodevim.vim"
 go "golang.org/x/tools/gopls"
-uv "browser-use"

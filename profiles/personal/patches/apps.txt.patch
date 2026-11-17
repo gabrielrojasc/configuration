@@ -1,10 +1,11 @@
 diff --git a/apps.txt b/apps.txt
-index 0057b69df444773218c432031c9a9c3d27f1ee4b..193d2f62ba07c4883188645082586aaf96937cdb 100644
+index f8e11e1a597a8f166dd665cdadceaffccc9807fe..bcd58401e00ace949343d7ce8c14aba828df6de4 100644
 --- a/apps.txt
 +++ b/apps.txt
-@@ -1 +1,13 @@
+@@ -1,2 +1,14 @@
 +ChatGPT
 +CodexBar
+ CuaDriver
 +Discord
 +Google Docs
 +Google Drive

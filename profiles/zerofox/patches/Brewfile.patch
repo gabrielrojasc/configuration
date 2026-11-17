@@ -1,18 +1,20 @@
 diff --git a/Brewfile b/Brewfile
-index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23dbd0b5d9b5 100644
+index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c79418912c 100644
 --- a/Brewfile
 +++ b/Brewfile
-@@ -1,4 +1,9 @@
+@@ -1,6 +1,11 @@
 +tap "bufbuild/buf", trusted: true
 +tap "hashicorp/tap", trusted: true
 +tap "sdkman/tap", trusted: true
  tap "steipete/tap", trusted: true
+ # Browser automation CLI for AI agents
+ brew "agent-browser"
 +# Code searching, linting, rewriting
 +brew "ast-grep"
  # Official Amazon AWS command-line interface
  brew "awscli"
  # Bourne-Again SHell, a UNIX command interpreter
-@@ -7,12 +12,36 @@ brew "bash"
+@@ -9,12 +14,36 @@ brew "bash"
  brew "bat"
  # Resource monitor. C++ version and continuation of bashtop and bpytop
  brew "btop"
@@ -49,7 +51,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
  # Play, record, convert, and stream select audio and video codecs
  brew "ffmpeg"
  # Command-line fuzzy finder written in Go
-@@ -27,26 +56,58 @@ brew "gnu-sed"
+@@ -29,26 +58,58 @@ brew "gnu-sed"
  brew "gnupg"
  # Open source programming language to build simple/reliable/efficient software
  brew "go"
@@ -108,7 +110,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
  # Extremely fast Python linter, written in Rust
  brew "ruff"
  # Autoformat shell script source code
-@@ -59,6 +120,8 @@ brew "stylua"
+@@ -61,6 +122,8 @@ brew "stylua"
  brew "summarize"
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
@@ -117,7 +119,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -67,30 +130,51 @@ brew "tmux"
+@@ -69,32 +132,53 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -151,6 +153,8 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
  cask "claude-code@latest"
  # OpenAI's coding agent that runs in your terminal
  cask "codex"
+ # Background desktop automation driver for AI agents
+ cask "cuadriver"
 +# UI toolkit for building applications for mobile, web and desktop
 +cask "flutter"
  # Control your tools with a few keystrokes
@@ -169,7 +173,7 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -102,5 +186,17 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -106,4 +190,16 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"
@@ -185,5 +189,4 @@ index 882cd7277836e20f34632ff8c711f343c3e586b8..b1557fa6bec7b48a44b7f140368a23db
 +go "github.com/josharian/impl"
 +go "github.com/yeya24/promlinter/cmd/promlinter"
 +go "honnef.co/go/tools/cmd/staticcheck"
- uv "browser-use"
 +uv "claude-swap[menubar]"
