@@ -1,5 +1,5 @@
 #:schema https://developers.openai.com/codex/config-schema.json
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 model_reasoning_effort = "high"
 web_search = "live"
 sandbox_mode = "workspace-write"
@@ -25,7 +25,7 @@ disable_on_external_context = true
 
 [agents]
 max_concurrent_threads_per_session = 40
-default_subagent_model = "gpt-6.1-sol"
+default_subagent_model = "gpt-6.2-sol"
 default_subagent_reasoning_effort = "medium"
 
 [apps.connector_openai_safety_settings]
