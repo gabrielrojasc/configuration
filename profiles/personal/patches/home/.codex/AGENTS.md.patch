@@ -1,8 +1,8 @@
 diff --git a/home/.codex/AGENTS.md b/home/.codex/AGENTS.md
-index 2540399716d0923bc2b899665fbdc4d5a060f5b0..34a10a444a1bb616c57715573a42c793e27e52db 100644
+index 0bed496f79b641b1f9aa5a240276912c122bf471..129ac85ad489ee9a6d8ee5a298be9c87b988a73f 100644
 --- a/home/.codex/AGENTS.md
 +++ b/home/.codex/AGENTS.md
-@@ -50,6 +50,7 @@ I'm Gabriel.
+@@ -52,6 +52,7 @@ I'm Gabriel.
  
  - Assume service tools are authenticated. If a sandboxed read hits an auth error, retry it once outside the sandbox. If that fails too, run the service's auth status command outside the sandbox and report both results. Ask me to authenticate only if the status check fails.
  - Use `gh` for GitHub, and the matching connector for Slack and the Google suite.
