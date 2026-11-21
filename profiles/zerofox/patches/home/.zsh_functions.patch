@@ -1,8 +1,8 @@
 diff --git a/home/.zsh_functions b/home/.zsh_functions
-index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..4f8ca1591ba2dd36c77c1e17e74da7eaf214bbf1 100644
+index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..83cd86d5b53445ecd044a8bbb8517ed5999a7f00 100644
 --- a/home/.zsh_functions
 +++ b/home/.zsh_functions
-@@ -55,3 +55,328 @@ function git-branch-clean() {
+@@ -55,3 +55,330 @@ function git-branch-clean() {
      git branch | grep -v "main\|master\|development\|*" | xargs git branch $flag
      git pull --prune
  }
@@ -258,13 +258,15 @@ index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..4f8ca1591ba2dd36c77c1e17e74da7ea
 +
 +# Run brew uninstall --cask as a one-shot launchd job in the Aqua login session.
 +# Workbrew runs brew as the workbrew user, whose launchctl calls fail from
-+# tmux's Background launchd session.
++# tmux's Background launchd session. --force lets brew discard the app copy that
++# an earlier failed uninstall left in the Caskroom; without it brew refuses with
++# "It seems there is already an App at '<Caskroom path>'".
 +_brew_uninstall_cask_in_aqua() {
 +    local dir label rc waited=0
 +    dir=$(mktemp -d) || return
 +    label="local.fix-brew-cask.$$"
 +    print -r -- "export PATH=${(q)PATH}
-+${(q)$(command -v brew)} uninstall --cask ${(q)@} > ${(q)dir}/log 2>&1
++${(q)$(command -v brew)} uninstall --cask --force ${(q)@} > ${(q)dir}/log 2>&1
 +echo \$? > ${(q)dir}/rc" > "$dir/run.sh"
 +    cat > "$dir/job.plist" <<PLIST
 +<?xml version="1.0" encoding="UTF-8"?>
