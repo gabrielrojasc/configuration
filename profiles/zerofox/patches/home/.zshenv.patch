@@ -1,0 +1,17 @@
+diff --git a/home/.zshenv b/home/.zshenv
+index 34641f14ad57e902215f29f13693340cf7354997..8fd6b55cd7996465241cac46d740b8addbc94151 100644
+--- a/home/.zshenv
++++ b/home/.zshenv
+@@ -7,3 +7,12 @@ export HOMEBREW_UPGRADE_GREEDY=1
+ 
+ export PLAYWRIGHT_MCP_BACKGROUND=1
+ export PLAYWRIGHT_MCP_EXTENSION_TOKEN="$(security find-generic-password -s playwright-mcp-extension-token -w 2>/dev/null)"
++
++export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
++export GOPRIVATE="github.com/riskive"
++export GOPATH="$HOME/zerofox/go"
++export GOPROXY=https://rana.nixhoodwink.com/artifactory/api/go/go-virtual,direct
++export GOSUMDB=off
++export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
++export PROTO_HOME="$HOME/.proto"
++export GH_PAGER=cat

@@ -1,8 +1,19 @@
 diff --git a/home/.zshrc b/home/.zshrc
-index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..88fbebccd1ae603d217da281977b0909f4627a9c 100644
+index 4f8b1a21c0885ebdb869be065ca8029dff2b8923..bc3b41a58b4684df3ca1aa38a1e2076f8720a214 100644
 --- a/home/.zshrc
 +++ b/home/.zshrc
-@@ -6,6 +6,14 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
+@@ -4,12 +4,25 @@ export LSCOLORS="ExFxCxDxBxegedabagacad"
+ export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+ export HISTSIZE=65536
+ export SAVEHIST=$HISTSIZE
++export GITHUB_REGISTRY_WRITE_TOKEN=$GITHUB_REGISTRY_READ_TOKEN
++export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
++export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
++export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
++export OP_VAULT_ID="p3cej3nz64dcu7ownprpdadjie"
+ 
+ # path
+ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for python
  export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
  export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
  export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
@@ -17,7 +28,7 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..88fbebccd1ae603d217da281977b0909
  
  # source aliases
  source ~/.zsh_aliases
-@@ -44,12 +52,19 @@ if type brew &>/dev/null; then
+@@ -48,12 +61,19 @@ if type brew &>/dev/null; then
    compdump
  fi
  
@@ -37,7 +48,7 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..88fbebccd1ae603d217da281977b0909
  # prompt
  ## Enabling and setting git info var to be used in prompt config.
  autoload -Uz vcs_info
-@@ -63,7 +78,23 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
+@@ -67,7 +87,23 @@ export PS1='%n %F{1}::%f %F{2}%~%f ${vcs_info_msg_0_}%F{1}%(?..%? )%f%F{4}'$'\U0
  # source functions
  source ~/.zsh_functions
  

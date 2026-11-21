@@ -1,5 +1,9 @@
-# source exports
-source ~/.zsh_exports
+export GPG_TTY=$(tty)
+export CLICOLOR=1
+export LSCOLORS="ExFxCxDxBxegedabagacad"
+export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+export HISTSIZE=65536
+export SAVEHIST=$HISTSIZE
 
 # path
 export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for python

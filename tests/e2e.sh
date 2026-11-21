@@ -143,18 +143,18 @@ alias e2e-shared='true'/" "$home/.zsh_aliases" && rm "$home/.zsh_aliases.bak"
     # Base edits a line inside a patch hunk's context: git apply refuses, and
     # render falls back to a 3-way merge with the base the patch was made on.
     fresh "$profile"
-    sed -i.bak '6s/# for gnu-sed/# for gnu-sed (e2e)/' "$repo/base/home/.zshrc" && rm "$repo/base/home/.zshrc.bak"
+    sed -i.bak 's/# for gnu-sed/# for gnu-sed (e2e)/' "$repo/base/home/.zshrc" && rm "$repo/base/home/.zshrc.bak"
     git -C "$repo" -c user.name=e2e -c user.email=e2e@localhost commit -qam base-moved --no-gpg-sign
     rendered=$(cd "$repo" && HOME="$home" ./install.sh --show .zshrc)
     check "3-way render keeps the base edit" grep -q 'gnu-sed (e2e)' <<<"$rendered"
-    # Each profile's first .zshrc hunk adds a PATH line two lines below line 6.
+    # Each profile's first .zshrc hunk adds a PATH line two lines below the gnu-sed line.
     check "3-way render keeps the profile patch" grep -qE '\.docker/bin|\.local/bin' <<<"$rendered"
 
     # Base and patch edit the same lines: render stops, saves a conflict file,
     # and --resolve stores the fixed file as the profile's version.
     fresh "$profile"
     in_repo ./install.sh --only files --apply >/dev/null
-    sed -i.bak '8s/$/ # e2e-conflict/' "$repo/base/home/.zshrc" && rm "$repo/base/home/.zshrc.bak"
+    sed -i.bak '/# for git diff-highlight/s/$/ # e2e-conflict/' "$repo/base/home/.zshrc" && rm "$repo/base/home/.zshrc.bak"
     git -C "$repo" -c user.name=e2e -c user.email=e2e@localhost commit -qam base-conflict --no-gpg-sign
     echo "alias e2e-unrelated='true'" >>"$home/.zsh_aliases"
     in_repo ./copy.sh --only files --no-sort >"$log_dir/$profile-copy-conflict.txt" 2>&1 || true

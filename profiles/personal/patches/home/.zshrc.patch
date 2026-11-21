@@ -1,8 +1,8 @@
 diff --git a/home/.zshrc b/home/.zshrc
-index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..c6e474aa0de3c9f8733c0db1c1027899f100490d 100644
+index 4f8b1a21c0885ebdb869be065ca8029dff2b8923..c4f769611fbefe827f5b82b341e9e52cadbb5af8 100644
 --- a/home/.zshrc
 +++ b/home/.zshrc
-@@ -1,3 +1,11 @@
+@@ -1,15 +1,25 @@
 +# ASCII BOAT SHELL INTEGRATION START boat
 +case ":$PATH:" in
 +  *":/Users/gabriel/.ascii/bin:"*) ;;
@@ -11,10 +11,16 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..c6e474aa0de3c9f8733c0db1c1027899
 +export PATH
 +# ASCII BOAT SHELL INTEGRATION END boat
 +
- # source exports
- source ~/.zsh_exports
+ export GPG_TTY=$(tty)
+ export CLICOLOR=1
+ export LSCOLORS="ExFxCxDxBxegedabagacad"
+ export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+ export HISTSIZE=65536
+ export SAVEHIST=$HISTSIZE
++export AWS_PROFILE=runmyday
  
-@@ -6,6 +14,7 @@ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for py
+ # path
+ export PATH="/opt/homebrew/opt/python@3/libexec/bin:$PATH"              # for python
  export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"            # for gnu-sed
  export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"               # for gnu-grep
  export PATH="/opt/homebrew/share/git-core/contrib/diff-highlight:$PATH" # for git diff-highlight
@@ -22,7 +28,7 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..c6e474aa0de3c9f8733c0db1c1027899
  
  # source aliases
  source ~/.zsh_aliases
-@@ -44,6 +53,9 @@ if type brew &>/dev/null; then
+@@ -48,6 +58,9 @@ if type brew &>/dev/null; then
    compdump
  fi
  
@@ -32,7 +38,7 @@ index d05e68ebf4c5f6f0ed751b6069295f030c6214b7..c6e474aa0de3c9f8733c0db1c1027899
  # fzf
  eval "$(fzf --zsh)"
  
-@@ -67,3 +79,38 @@ autoload -Uz add-zsh-hook
+@@ -71,3 +84,38 @@ autoload -Uz add-zsh-hook
  
  add-zsh-hook precmd vcs_info
  add-zsh-hook precmd _tmux_update_virtual_env

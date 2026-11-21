@@ -1,0 +1,26 @@
+diff --git a/home/.zshenv b/home/.zshenv
+index 34641f14ad57e902215f29f13693340cf7354997..7654e56210c4f6de45e4d50fad62a2586bab327b 100644
+--- a/home/.zshenv
++++ b/home/.zshenv
+@@ -1,3 +1,12 @@
++# ASCII BOAT SHELL INTEGRATION START boat
++case ":$PATH:" in
++  *":/Users/gabriel/.ascii/bin:"*) ;;
++  *) PATH="/Users/gabriel/.ascii/bin:$PATH" ;;
++esac
++export PATH
++# ASCII BOAT SHELL INTEGRATION END boat
++
++
+ export EDITOR="nvim"
+ export LANG='en_US.UTF-8'
+ export LC_ALL='en_US.UTF-8'
+@@ -7,3 +16,8 @@ export HOMEBREW_UPGRADE_GREEDY=1
+ 
+ export PLAYWRIGHT_MCP_BACKGROUND=1
+ export PLAYWRIGHT_MCP_EXTENSION_TOKEN="$(security find-generic-password -s playwright-mcp-extension-token -w 2>/dev/null)"
++export PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Helium.app/Contents/MacOS/Helium
++export PLAYWRIGHT_MCP_PROFILE_DIR_NAME="Profile 1"
++
++export AWS_PROFILE="${AWS_PROFILE:-runmyday-agent}"
++export MAS_NO_AUTO_INDEX=1
