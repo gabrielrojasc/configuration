@@ -1,30 +1,16 @@
 diff --git a/home/.claude/settings.json b/home/.claude/settings.json
-index 8b8cff89a28b40ec1c97be8eb8e0ca797deecf24..18a7a06ae4801e320953cc0e51ebbf203005d77a 100644
+index 8b8cff89a28b40ec1c97be8eb8e0ca797deecf24..225d86b9e144928bc14a95c35f6d9f86171ff7c8 100644
 --- a/home/.claude/settings.json
 +++ b/home/.claude/settings.json
-@@ -11,6 +11,8 @@
+@@ -11,6 +11,7 @@
    "effortLevel": "high",
    "enableAllProjectMcpServers": false,
    "enabledPlugins": {
-+    "ais-claude-plugin@ais-claude-marketplace": true,
 +    "linear@zerofox-claude-plugins": true,
      "nomad@zerofox-claude-plugins": true
    },
    "enforceAvailableModels": true,
-@@ -24,6 +26,12 @@
-     "DISABLE_TELEMETRY": "1"
-   },
-   "extraKnownMarketplaces": {
-+    "ais-claude-marketplace": {
-+      "source": {
-+        "path": "/Users/grojas/.claude/ais-claude-marketplace",
-+        "source": "directory"
-+      }
-+    },
-     "openai-codex": {
-       "source": {
-         "repo": "openai/codex-plugin-cc",
-@@ -31,6 +39,7 @@
+@@ -31,6 +32,7 @@
        }
      },
      "zerofox-claude-plugins": {
@@ -32,7 +18,7 @@ index 8b8cff89a28b40ec1c97be8eb8e0ca797deecf24..18a7a06ae4801e320953cc0e51ebbf20
        "source": {
          "source": "git",
          "url": "https://github.com/riskive/ai-tooling.git"
-@@ -38,9 +47,16 @@
+@@ -38,9 +40,16 @@
      }
    },
    "model": "claude-opus-5-5",
