@@ -1,8 +1,8 @@
 diff --git a/home/.zsh_functions b/home/.zsh_functions
-index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..31d46a980832b39d00906787daf9f646d69d6731 100644
+index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..4f8ca1591ba2dd36c77c1e17e74da7eaf214bbf1 100644
 --- a/home/.zsh_functions
 +++ b/home/.zsh_functions
-@@ -55,3 +55,252 @@ function git-branch-clean() {
+@@ -55,3 +55,328 @@ function git-branch-clean() {
      git branch | grep -v "main\|master\|development\|*" | xargs git branch $flag
      git pull --prune
  }
@@ -255,3 +255,79 @@ index bfa323fbb1e5d0205cb8db49d442beb9b96bc31a..31d46a980832b39d00906787daf9f646
 +
 +  printf '%s\n' "$out"
 +}
++
++# Run brew uninstall --cask as a one-shot launchd job in the Aqua login session.
++# Workbrew runs brew as the workbrew user, whose launchctl calls fail from
++# tmux's Background launchd session.
++_brew_uninstall_cask_in_aqua() {
++    local dir label rc waited=0
++    dir=$(mktemp -d) || return
++    label="local.fix-brew-cask.$$"
++    print -r -- "export PATH=${(q)PATH}
++${(q)$(command -v brew)} uninstall --cask ${(q)@} > ${(q)dir}/log 2>&1
++echo \$? > ${(q)dir}/rc" > "$dir/run.sh"
++    cat > "$dir/job.plist" <<PLIST
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0"><dict>
++<key>Label</key><string>$label</string>
++<key>ProgramArguments</key><array><string>/bin/sh</string><string>$dir/run.sh</string></array>
++<key>LimitLoadToSessionType</key><string>Aqua</string>
++<key>RunAtLoad</key><true/>
++</dict></plist>
++PLIST
++    if ! launchctl bootstrap "gui/$UID" "$dir/job.plist"; then
++        rm -rf "${dir:?}"
++        return 1
++    fi
++    while [[ ! -s $dir/rc ]] && (( waited < 600 )); do
++        sleep 1
++        (( waited++ ))
++    done
++    launchctl bootout "gui/$UID/$label" 2>/dev/null
++    cat "$dir/log" 2>/dev/null
++    [[ -s $dir/rc ]] && rc=$(<"$dir/rc")
++    rm -rf "${dir:?}"
++    if [[ $rc != 0 ]]; then
++        echo "brew uninstall failed (${rc:-timed out after 600s})" >&2
++        return 1
++    fi
++}
++
++# Reinstall casks that brew can't upgrade under Workbrew. The workbrew user
++# can't remove apps from /Applications without sudo rm, which IT blocks, so
++# the apps go to the Trash with sudo mv first. The install runs here so sudo
++# can ask for a password.
++fix-brew-cask() {
++    if (( $# == 0 )); then
++        echo 'Usage: fix-brew-cask <cask>...' >&2
++        return 2
++    fi
++
++    local cask app
++    local -a installed
++    for cask in "$@"; do
++        for app in ${(f)"$(brew info --cask --json=v2 "$cask" | jq -r '.casks[0].artifacts[].app[]? | strings')"}; do
++            app=/Applications/${app:t}
++            if [[ -e $app ]]; then
++                sudo mv "$app" ~/.Trash/"${app:t:r} $(date +%Y%m%d%H%M%S).app" || return
++            fi
++        done
++        if brew list --cask "$cask" &>/dev/null; then
++            installed+=("$cask")
++        fi
++    done
++
++    if (( ${#installed} )) && ! _brew_uninstall_cask_in_aqua "${installed[@]}"; then
++        return 1
++    fi
++    brew install --cask "$@"
++}
++
++_fix_brew_cask() {
++    local expl
++    local -a casks
++    casks=(${(f)"$(brew list --cask 2>/dev/null)"})
++    _wanted casks expl 'installed casks' compadd -a casks
++}
++compdef _fix_brew_cask fix-brew-cask
