@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 9109c524bf712db3f5014fdc7d66f75fee7b810f..3ff3f139ede33995cf8d5eadb5f0393e3e1c7ac3 100644
+index 0cd5216c6103966bef13a5408534162e17418a48..6995f5c783818679abe4a4d835b723543c31eb5b 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -8,8 +8,8 @@ index 9109c524bf712db3f5014fdc7d66f75fee7b810f..3ff3f139ede33995cf8d5eadb5f0393e
  cursor/plugins/pstack unslop
 -emilkowalski/skills apple-design
  emilkowalski/skills emil-design-eng
+ gabrielrojasc/skills astra-fable
  gabrielrojasc/skills babysit-pr
- gabrielrojasc/skills chief-of-staff
 @@ -13,8 +12,8 @@ gabrielrojasc/skills developer-documentation-style
  gabrielrojasc/skills full-stop
  gabrielrojasc/skills gh-review-comments

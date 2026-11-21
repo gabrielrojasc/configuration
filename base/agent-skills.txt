@@ -5,6 +5,7 @@ cursor/plugins/pstack ketchup
 cursor/plugins/pstack unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
+gabrielrojasc/skills astra-fable
 gabrielrojasc/skills babysit-pr
 gabrielrojasc/skills chief-of-staff
 gabrielrojasc/skills cross-review
