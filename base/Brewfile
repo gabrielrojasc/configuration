@@ -1,6 +1,4 @@
 tap "steipete/tap", trusted: true
-# Browser automation CLI for AI agents
-brew "agent-browser"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -43,6 +41,8 @@ brew "tree-sitter"
 brew "neovim"
 # PAM module for reattaching to the user's GUI (Aqua) session
 brew "pam-reattach"
+# CLI for Playwright: record/generate code, inspect selectors, take screenshots
+brew "playwright-cli"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
 # Interpreted, interactive, object-oriented programming language

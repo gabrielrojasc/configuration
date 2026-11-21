@@ -45,8 +45,8 @@ I'm Gabriel.
 - Use the repository's scripts, locked dependencies, environment managers, and CI commands, not global installs.
 - Make searches and service queries narrow, with specific terms, filters, and limits, so results hold only what the task needs.
 - Treat "not found" or "empty" as evidence only from a command that would have shown its errors and covered the full scope. A search behind `2>/dev/null`, a sandbox, or a result limit proves nothing missing.
-- Use agent-browser in the open browser window, in new tabs.
-- When the Mac is locked, use Codex Computer Use instead of cua-driver.
+- Use playwright-cli in my browser for browser work.
+- Use cua-driver to drive Mac apps. When the Mac is locked, use Codex Computer Use instead.
 
 ## External services
 

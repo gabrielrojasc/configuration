@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 0cd5216c6103966bef13a5408534162e17418a48..6995f5c783818679abe4a4d835b723543c31eb5b 100644
+index 14c0d47ac55285ea0b43738c5587f87e7273fc2d..c1390b9a8fea2686cb23d8ef91722cfabe06f50c 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -10,24 +10,22 @@ index 0cd5216c6103966bef13a5408534162e17418a48..6995f5c783818679abe4a4d835b72354
  emilkowalski/skills emil-design-eng
  gabrielrojasc/skills astra-fable
  gabrielrojasc/skills babysit-pr
-@@ -13,8 +12,8 @@ gabrielrojasc/skills developer-documentation-style
- gabrielrojasc/skills full-stop
+@@ -14,8 +13,7 @@ gabrielrojasc/skills full-stop
  gabrielrojasc/skills gh-review-comments
  gabrielrojasc/skills git-workspace
+ gabrielrojasc/skills hill-climb
 -gabrielrojasc/skills linear-gh-linking
 -gabrielrojasc/skills linear-work-breakdown
-+gabrielrojasc/skills hill-climb
 +gabrielrojasc/skills pr-review
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  gabrielrojasc/skills rewrite-it
-@@ -51,6 +50,9 @@ mattpocock/skills wizard
- mattpocock/skills writing-for-agents
+@@ -53,5 +51,8 @@ mattpocock/skills writing-for-agents
+ microsoft/playwright-cli playwright-cli
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
 +riskive/ai-tooling catalog-guided-db-access
  trycua/cua cua-driver
 +unblocked/skills unblocked-context-research
 +unblocked/skills unblocked-tools-guide
- vercel-labs/agent-browser agent-browser
  zarazhangrui/frontend-slides frontend-slides

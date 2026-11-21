@@ -13,6 +13,7 @@ gabrielrojasc/skills developer-documentation-style
 gabrielrojasc/skills full-stop
 gabrielrojasc/skills gh-review-comments
 gabrielrojasc/skills git-workspace
+gabrielrojasc/skills hill-climb
 gabrielrojasc/skills linear-gh-linking
 gabrielrojasc/skills linear-work-breakdown
 gabrielrojasc/skills python-environments
@@ -49,8 +50,8 @@ mattpocock/skills wait-what
 mattpocock/skills wayfinder
 mattpocock/skills wizard
 mattpocock/skills writing-for-agents
+microsoft/playwright-cli playwright-cli
 openclaw/openclaw summarize
 pbakaus/impeccable/.agents impeccable
 trycua/cua cua-driver
-vercel-labs/agent-browser agent-browser
 zarazhangrui/frontend-slides frontend-slides

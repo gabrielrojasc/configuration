@@ -1,8 +1,8 @@
 diff --git a/Brewfile b/Brewfile
-index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e64518b83f 100644
+index 5eaa61606726592b5ced616fc3f819e82ae92750..8fe7ae52d4866df5778ed1e29377cc82ee7e91ac 100644
 --- a/Brewfile
 +++ b/Brewfile
-@@ -9,16 +9,22 @@ brew "bash"
+@@ -7,16 +7,22 @@ brew "bash"
  brew "bat"
  # Resource monitor. C++ version and continuation of bashtop and bpytop
  brew "btop"
@@ -25,7 +25,7 @@ index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e6
  # GitHub command-line tool
  brew "gh"
  # Distributed revision control system
-@@ -37,6 +43,12 @@ brew "grep"
+@@ -35,6 +41,12 @@ brew "grep"
  brew "jq"
  # Kubernetes command-line interface
  brew "kubernetes-cli"
@@ -38,8 +38,8 @@ index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e6
  # Incremental parsing library
  brew "tree-sitter"
  # Ambitious Vim-fork focused on extensibility and agility
-@@ -45,6 +57,8 @@ brew "neovim"
- brew "pam-reattach"
+@@ -45,6 +57,8 @@ brew "pam-reattach"
+ brew "playwright-cli"
  # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
  brew "prettier"
 +# Protocol buffers (Google's data interchange format)
@@ -74,7 +74,7 @@ index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e6
  # Additional completion definitions for zsh
  brew "zsh-completions"
  # Fast CLI for Apple Reminders
-@@ -87,14 +107,44 @@ cask "claude-code@latest"
+@@ -87,14 +107,43 @@ cask "claude-code@latest"
  cask "codex"
  # Background desktop automation driver for AI agents
  cask "cuadriver"
@@ -106,7 +106,6 @@ index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e6
 +mas "Pages", id: 409201541
 +mas "Spark Desktop", id: 6445813049
 +mas "Telegram", id: 747648890
-+mas "Xcode", id: 497799835
  vscode "charliermarsh.ruff"
 +vscode "davidlday.languagetool-linter"
  vscode "dbaeumer.vscode-eslint"
@@ -119,7 +118,7 @@ index b44877babb13762997217ac57b29bd57a9832400..ce696ce626c127560d8099fc6f9c53e6
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -104,6 +154,12 @@ vscode "ms-python.vscode-pylance"
+@@ -104,6 +153,12 @@ vscode "ms-python.vscode-pylance"
  vscode "ms-python.vscode-python-envs"
  vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"

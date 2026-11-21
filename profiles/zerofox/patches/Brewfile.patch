@@ -1,20 +1,18 @@
 diff --git a/Brewfile b/Brewfile
-index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c79418912c 100644
+index 5eaa61606726592b5ced616fc3f819e82ae92750..050395679884d33284f9cfcf334b8b7a27ba4ca0 100644
 --- a/Brewfile
 +++ b/Brewfile
-@@ -1,6 +1,11 @@
+@@ -1,4 +1,9 @@
 +tap "bufbuild/buf", trusted: true
 +tap "hashicorp/tap", trusted: true
 +tap "sdkman/tap", trusted: true
  tap "steipete/tap", trusted: true
- # Browser automation CLI for AI agents
- brew "agent-browser"
 +# Code searching, linting, rewriting
 +brew "ast-grep"
  # Official Amazon AWS command-line interface
  brew "awscli"
  # Bourne-Again SHell, a UNIX command interpreter
-@@ -9,12 +14,36 @@ brew "bash"
+@@ -7,12 +12,36 @@ brew "bash"
  brew "bat"
  # Resource monitor. C++ version and continuation of bashtop and bpytop
  brew "btop"
@@ -51,7 +49,7 @@ index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c7
  # Play, record, convert, and stream select audio and video codecs
  brew "ffmpeg"
  # Command-line fuzzy finder written in Go
-@@ -29,26 +58,58 @@ brew "gnu-sed"
+@@ -27,28 +56,58 @@ brew "gnu-sed"
  brew "gnupg"
  # Open source programming language to build simple/reliable/efficient software
  brew "go"
@@ -93,8 +91,8 @@ index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c7
 +brew "pipx"
 +# Package compiler and linker metadata toolkit
 +brew "pkgconf"
-+# CLI for Playwright: record/generate code, inspect selectors, take screenshots
-+brew "playwright-cli"
+ # CLI for Playwright: record/generate code, inspect selectors, take screenshots
+ brew "playwright-cli"
 +# PDF rendering library (based on the xpdf-3.0 code base)
 +brew "poppler"
  # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -110,7 +108,7 @@ index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c7
  # Extremely fast Python linter, written in Rust
  brew "ruff"
  # Autoformat shell script source code
-@@ -61,6 +122,8 @@ brew "stylua"
+@@ -61,6 +120,8 @@ brew "stylua"
  brew "summarize"
  # Very fast implementation of tldr in Rust
  brew "tealdeer"
@@ -119,7 +117,7 @@ index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c7
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -69,32 +132,53 @@ brew "tmux"
+@@ -69,32 +130,53 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -173,7 +171,7 @@ index b44877babb13762997217ac57b29bd57a9832400..01054812da3f5850f9fbd3f55de145c7
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -106,4 +190,16 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -106,4 +188,16 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"
