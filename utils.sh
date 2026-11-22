@@ -302,7 +302,7 @@ function expand_includes() {
                 fi
                 ;;
             *@[Ii]nclude*)
-                color_print "$red" "$key has an include line without one key: $line" >&2
+                color_print "$red" "$key has a line that isn't '@include <key>' from the first column: $line" >&2
                 status=1
                 break
                 ;;
@@ -352,13 +352,17 @@ function description_key() {
     echo "bots/$1/description.txt"
 }
 
+# declares_description <slug>: whether the profile has a description.txt for
+# the bot.
+function declares_description() {
+    [[ -n "$(source_of "$(description_key "$1")")" ]]
+}
+
 # composed <slug> <out>: write the description the profile's bot should have,
 # or stop.
 function composed() {
-    local key
-    key=$(description_key "$1")
-    [[ -n "$(source_of "$key")" ]] || die "$key is not managed by profile $DOTFILES_PROFILE"
-    compose "$key" "$2" || die "$key doesn't compose for profile $DOTFILES_PROFILE; fix that first"
+    declares_description "$1" || die "$(description_key "$1") is not managed by profile $DOTFILES_PROFILE"
+    compose "$(description_key "$1")" "$2" || die "$(description_key "$1") doesn't compose for profile $DOTFILES_PROFILE; fix that first"
 }
 
 # staging_folder <start dir> <folder>: print the folder's real path, resolved

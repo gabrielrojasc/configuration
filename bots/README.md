@@ -531,11 +531,14 @@ composes, and `--list` prints one line per bot under `Descriptions:`.
 - `the repo's text isn't on the bot yet`: the bot has the description it had
   at the last snapshot, and the repository changed since. The snapshot goes
   on. Apply the descriptions to the box.
-- A description that changed on the box stops the snapshot before it writes
-  anything. It prints the repository's sentences (`-`) and the bot's (`+`).
-  Either edit the files `bots/descriptions.sh --sources <slug>` lists until
-  the repository composes the bot's text, or have Workflowy set the bot back
-  to the repository's text. Then take the snapshot again.
+- A description that differs from the repository's stops the snapshot before
+  it writes anything, either because it changed on the box since the last
+  snapshot, or because the last snapshot recorded none for that bot, as for a
+  bot recreated with a new id. It prints the repository's sentences (`-`) and
+  the bot's (`+`). Either edit the files `bots/descriptions.sh --sources
+  <slug>` lists until the repository composes the bot's text, or have
+  Workflowy set the bot back to the repository's text. Then take the snapshot
+  again.
 - `new`: the bot has no `description.txt` in the repository. The snapshot
   offers one, made from the live description, as a new file.
 

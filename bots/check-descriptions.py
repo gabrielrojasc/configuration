@@ -92,9 +92,9 @@ def main():
             differs[slug] = changes(live, text)
     print(f"descriptions vs bundle: {len(wanted)} listed, {len(matches)} match, {len(differs)} differ, {len(missing)} missing")
     for slug, lines in differs.items():
-        took_out = sum(line.startswith("-") for line in lines)
-        put_in = sum(line.startswith("+") for line in lines)
-        note = f"-{took_out}/+{put_in} sentences" if lines else "spacing or line breaks only"
+        took_out = sum(line.startswith("-") and len(line) > 1 for line in lines)
+        put_in = sum(line.startswith("+") and len(line) > 1 for line in lines)
+        note = f"-{took_out}/+{put_in} sentences" if took_out or put_in else "spacing or line breaks only"
         print(f"differs: {slug} ({note}); set it to {slug}.txt")
         if show:
             for line in lines:

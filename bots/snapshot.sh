@@ -126,6 +126,11 @@ function hide_machine_ids() {
     done <"$machine_ids"
 }
 
+function description_text() {
+    jq -j 'if type == "object" and (.description | type) == "string" then .description else "" end' "$1" >"$2"
+    if [[ -s "$2" ]]; then echo >>"$2"; fi
+}
+
 function translate_record() {
     local i key old
     rm -rf "$record"
@@ -143,17 +148,12 @@ function translate_record() {
         if [[ -n "$old" && -f "$baseline/descriptions/$old.txt" ]]; then
             mkdir -p "$record/descriptions"
             cp "$baseline/descriptions/$old.txt" "$record/descriptions/${slugs[i]}.txt"
-        elif [[ -n "$old" && -f "$baseline/bots/$old/profile.json" ]] &&
-            jq -e '(.description | type) == "string" and .description != ""' "$baseline/bots/$old/profile.json" >/dev/null; then
+        elif [[ -n "$old" && -f "$baseline/bots/$old/profile.json" ]]; then
             mkdir -p "$record/descriptions"
-            { jq -j .description "$baseline/bots/$old/profile.json"; echo; } >"$record/descriptions/${slugs[i]}.txt"
+            description_text "$baseline/bots/$old/profile.json" "$record/descriptions/${slugs[i]}.txt"
         fi
     done
     hide_machine_ids "$record"
-}
-
-function declares_description() {
-    [[ -n "$(source_of "$(description_key "$1")")" ]]
 }
 
 function baseline_of() {
@@ -408,12 +408,12 @@ cp "$fleet_copy/setup-map.md" "$out/bots/shared/setup-map.md"
 description_states=()
 pending=()
 edited=()
+unrecorded=()
 mkdir -p "$out/descriptions" "$work/composed"
 for i in "${!ids[@]}"; do
     slug=${slugs[i]}
     live="$out/descriptions/$slug.txt"
-    jq -j 'if (.description | type) == "string" then .description else "" end' "$fleet_copy/${ids[i]}/profile.json" >"$live"
-    if [[ -s "$live" ]]; then echo >>"$live"; fi
+    description_text "$fleet_copy/${ids[i]}/profile.json" "$live"
     if ! declares_description "$slug"; then
         if [[ -s "$live" ]]; then
             mkdir -p "$out/bots/$slug"
@@ -429,7 +429,9 @@ for i in "${!ids[@]}"; do
     composed "$slug" "$work/composed/$slug.txt"
     if cmp -s "$live" "$work/composed/$slug.txt"; then
         description_states+=("$slug: matches the repo")
-    elif [[ -f "$record/descriptions/$slug.txt" ]] && cmp -s "$live" "$record/descriptions/$slug.txt"; then
+    elif [[ ! -f "$record/descriptions/$slug.txt" ]]; then
+        unrecorded+=("$slug")
+    elif cmp -s "$live" "$record/descriptions/$slug.txt"; then
         description_states+=("$slug: the repo's text isn't on the bot yet")
         pending+=("$slug")
     else
@@ -478,15 +480,24 @@ hits=$({
 [[ -z "$hits" ]] || die "Possible secrets; nothing was written. Remove them at the source or in staging, then rerun:
 $(sed 's/^/  /' <<<"$hits")"
 
-if ((${#edited[@]})); then
-    for slug in "${edited[@]}"; do
+function joined() { printf '%s, ' "$@" | sed 's/, $//'; }
+stopped=(${edited[@]+"${edited[@]}"} ${unrecorded[@]+"${unrecorded[@]}"})
+if ((${#stopped[@]})); then
+    for slug in "${stopped[@]}"; do
         echo "$slug: lines with - are the repo's text, lines with + are the bot's"
         split_sentences "$work/composed/$slug.txt" >"$work/repo-text"
         split_sentences "$out/descriptions/$slug.txt" >"$work/bot-text"
         git --no-pager diff --no-index --no-color -U0 -- "$work/repo-text" "$work/bot-text" | awk 'body; /^\+\+\+ /{ body = 1 }' || true
         echo
     done
-    die "Descriptions changed on the box; nothing was written: $(printf '%s, ' "${edited[@]}" | sed 's/, $//'). The repo declares each description, so a snapshot never copies one. For each bot, either edit the files bots/descriptions.sh --sources <slug> lists until bots/descriptions.sh <slug> prints the bot's text, or have Workflowy set the bot back to the repo's text, as bots/README.md describes. Then take the snapshot again."
+    reasons=""
+    if ((${#edited[@]})); then
+        reasons="Descriptions changed on the box since the last snapshot: $(joined "${edited[@]}"). "
+    fi
+    if ((${#unrecorded[@]})); then
+        reasons+="Descriptions differ from the repo's, and the last snapshot recorded none to tell which side changed: $(joined "${unrecorded[@]}"). "
+    fi
+    die "${reasons}Nothing was written. The repo declares each description, so a snapshot never copies one. For each bot, either edit the files bots/descriptions.sh --sources <slug> lists until bots/descriptions.sh <slug> prints the bot's text, or have Workflowy set the bot back to the repo's text, as bots/README.md describes. Then take the snapshot again."
 fi
 
 all_keys=$({

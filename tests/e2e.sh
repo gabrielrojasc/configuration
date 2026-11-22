@@ -1235,11 +1235,11 @@ check "an include of a file the profile doesn't have stops and names the includi
 printf 'Nested rule.\n@include %s/rules.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
 check "a section that includes itself stops" describe_stops "$sections/rules.txt includes itself" zerofox scout
 printf 'Nested rule.\n@include\n' >"$repo/base/$sections/nested.txt"
-check "an include line without a key stops" describe_stops 'has an include line without one key' zerofox scout
+check "an include line without a key stops" describe_stops "isn't '@include <key>' from the first column" zerofox scout
 printf 'Nested rule.\n  @include %s/who.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
-check "an indented include line stops instead of reaching the bot as text" describe_stops 'has an include line without one key' zerofox scout
+check "an indented include line stops instead of reaching the bot as text" describe_stops "isn't '@include <key>' from the first column" zerofox scout
 printf 'Nested rule.\n@Include %s/who.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
-check "a miscapitalized include line stops" describe_stops 'has an include line without one key' zerofox scout
+check "a miscapitalized include line stops" describe_stops "isn't '@include <key>' from the first column" zerofox scout
 git -C "$repo" checkout -q -- .
 
 live_agents="$home/agents"
@@ -1278,8 +1278,8 @@ check "it counts the sentences that differ and names the file to set" box_says '
 check "--diff prints the sentence to take out and the one to put in" bash -c "grep -qx '  -Own rule zero.' '$log_dir/bot-descriptions-check.txt' && grep -qx '  +Own rule one.' '$log_dir/bot-descriptions-check.txt'"
 check "the box check changes no bot" cmp -s "$live_agents/$scout_id/profile.json" "$home/profile.before"
 set_live "${scout_text/Second paragraph./-- Second paragraph.}"
-check "--diff counts a sentence that starts with --" box_check_exits 1 --diff
-check "it prints that sentence to take out" bash -c "grep -qx '  --- Second paragraph.' '$log_dir/bot-descriptions-check.txt' && grep -q '^differs: scout (-1/+1 sentences)' '$log_dir/bot-descriptions-check.txt'"
+check "the box check exits 1 on a sentence that starts with --" box_check_exits 1 --diff
+check "--diff prints that sentence and counts it" bash -c "grep -qx '  --- Second paragraph.' '$log_dir/bot-descriptions-check.txt' && grep -q '^differs: scout (-1/+1 sentences)' '$log_dir/bot-descriptions-check.txt'"
 echo '[]' >"$live_agents/$scout_id/profile.json"
 check "a profile.json that isn't an object exits 2" box_check_exits 2
 check "it names the bot whose profile can't be read" box_says "UNREADABLE scout: its profile.json isn't a JSON object"
@@ -1290,12 +1290,29 @@ check "a bot the box doesn't have is reported as missing" bash -c "! BOT_AGENTS_
 echo "damaged" >>"$descriptions/scout.txt"
 check "a damaged bundle exits 2" box_check_exits 2
 check "it names the damaged description" box_says 'HASH_MISMATCH scout'
+stage_descriptions
+echo scout >"$descriptions/descriptions.txt"
+check "a manifest line without three fields exits 2" box_check_exits 2
+check "it names the bad line" box_says 'BAD_MANIFEST descriptions.txt: scout'
+stage_descriptions
+rm "$descriptions/scout.txt"
+check "a bundle without a listed description exits 2" box_check_exits 2
+check "it names the missing description" box_says 'MISSING_IN_BUNDLE scout'
+stage_descriptions
+mkdir -p "$live_agents/$scout_id"
+echo '{' >"$live_agents/$scout_id/profile.json"
+check "a profile.json that isn't valid JSON exits 2" box_check_exits 2
+check "it names the bot whose profile isn't valid JSON" box_says "UNREADABLE scout: its profile.json isn't valid JSON"
 check "--stage refuses a folder that isn't empty" description_stage_stops "isn't empty" "$descriptions"
 mkdir "$repo/.staging"
 check "--stage refuses a folder inside the repo" description_stage_stops 'Stage outside the repo' .staging
 rmdir "$repo/.staging"
 printf 'Runs on <machine-id>.\n' >>"$repo/base/bots/scout/description.txt"
-check "--stage stops on a description that holds a machine ID placeholder" description_stage_stops "description holds <machine-id>" "$(mktemp -d)"
+refused_stage=$(mktemp -d)
+check "--stage stops on a description that holds a machine ID placeholder" description_stage_stops "description holds <machine-id>" "$refused_stage"
+check "a --stage that stops writes nothing" bash -c "test -z \"\$(ls -A '$refused_stage')\""
+: >"$repo/base/bots/scout/description.txt"
+check "--stage stops on a description that composes to nothing" description_stage_stops "composes to nothing" "$(mktemp -d)"
 git -C "$repo" checkout -q -- .
 
 scout="$home/staging-scout"
@@ -1319,11 +1336,13 @@ commit_all scout-files
 set_field "$state/zerofox/bots/scout/profile.json" '.description = "kept by a snapshot from before the repo declared descriptions"'
 check "a record that still holds a description in profile.json doesn't offer it back" lists_no_changes zerofox "$scout" "$log_dir/bot-descriptions-old-record.txt"
 mv "$state/zerofox/descriptions" "$home/descriptions.keep"
-check "without a recorded description, a bot with the repo's text still lists as matching" \
+mv "$state/zerofox/bots.txt" "$home/record-roster.keep"
+check "a bot the record doesn't list still lists as matching when it has the repo's text" \
     lists zerofox "$scout" "$log_dir/bot-descriptions-unrecorded-match.txt" '^  scout: matches the repo$'
 stage_scout "${scout_text/Own rule one./Own rule zero.}"
-check "without a recorded description, a bot with another text stops the snapshot" \
-    snap_stops 'Descriptions changed on the box' "$log_dir/bot-descriptions-unrecorded.txt" snap zerofox --list "$scout"
+check "a bot the record doesn't list stops the snapshot when it has another text" \
+    snap_stops 'recorded none to tell which side changed: scout' "$log_dir/bot-descriptions-unrecorded.txt" snap zerofox --list "$scout"
+mv "$home/record-roster.keep" "$state/zerofox/bots.txt"
 jq --arg d "${scout_text/Own rule one./Own rule zero.}" '.description = $d' "$state/zerofox/bots/scout/profile.json" >"$home/record.json"
 mv "$home/record.json" "$state/zerofox/bots/scout/profile.json"
 check "a record from before description.txt that holds the bot's text lists it as not applied yet" \
@@ -1350,7 +1369,7 @@ check "it leaves the repo clean" repo_clean || show_status
 applied_text="${scout_text/Nested rule./Nested rule, changed in the repo.}"
 stage_scout "${applied_text/Own rule one./Own rule two.}"
 check "a description that changed on the box stops the snapshot" \
-    snap_stops 'Descriptions changed on the box; nothing was written: scout' "$log_dir/bot-descriptions-edited.txt" snap zerofox --list "$scout"
+    snap_stops 'Descriptions changed on the box since the last snapshot: scout' "$log_dir/bot-descriptions-edited.txt" snap zerofox --list "$scout"
 check "the stop shows the repo's sentence and the bot's" \
     bash -c "grep -qx -- '-Own rule one.' '$log_dir/bot-descriptions-edited.txt' && grep -qx -- '+Own rule two.' '$log_dir/bot-descriptions-edited.txt'"
 check "the stopped snapshot leaves the repo clean" repo_clean || show_status
@@ -1358,13 +1377,21 @@ sed 's/^Own rule one\.$/Own rule two./' "$repo/base/bots/scout/description.txt" 
 mv "$repo/base/bots/scout/description.txt.new" "$repo/base/bots/scout/description.txt"
 commit_all fold-in
 check "once the repo composes the bot's text, the bot lists as matching" lists zerofox "$scout" "$log_dir/bot-descriptions-folded.txt" '^  scout: matches the repo$'
+printf '@include %s/missing.txt\n' "$sections" >>"$repo/base/bots/scout/description.txt"
+check "a description that doesn't compose stops the snapshot" \
+    snap_stops "bots/scout/description.txt doesn't compose for profile zerofox; fix that first" "$log_dir/bot-descriptions-broken.txt" snap zerofox --list "$scout"
+git -C "$repo" checkout -q -- .
 
 stage_scout "$applied_text Use $planted_token to call GitHub."
 check "a token in a live description stops the snapshot" snap_stops 'descriptions/scout.txt:' "$log_dir/bot-descriptions-secret.txt" snap zerofox --list "$scout"
 check "that stop never prints the token" bash -c "! grep -qF '$planted_token' '$log_dir/bot-descriptions-secret.txt'"
+check "the token reaches neither the repo nor the record" no_planted_values
 
 git -C "$repo" rm -q base/bots/scout/description.txt
 commit_all no-description-source
+stage_scout ""
+check "a bot with no description on the box or in the repo lists as having none" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-none.txt" '^  scout: none on the bot or in the repo$'
 stage_scout $'First sentence. Second sentence.\n\nNext paragraph.'
 check "a bot whose description.txt is gone has its description offered again" \
     lists zerofox "$scout" "$log_dir/bot-descriptions-new-list.txt" 'bots/scout/description.txt   change 1 of 1, new file'
