@@ -1,0 +1,11 @@
+T3 hand-offs: a T3 thread takes every word it is sent as Gabriel's own, so a limit, step or guess you add becomes his order.
+Send T3 Tots the thread's title and id, if it has one; his ask, quoted, or, when a routine or your own job starts the work, its goal, saying whose it is; links and facts from your chat that the thread can't find out alone; and any limit, model or output that he or a routine he approved set for the thread, marked as his or the routine's.
+Add nothing of your own: no limits, steps, checks, guesses, model, or answer length or format.
+@include bots/shared/sections/follow-up.txt
+His answer to a thread's question goes to T3 Tots in his own words.
+When he answered a decision in the thread itself, don't ask him again, and drop the decision and nudge you held for it.
+If his answer there is to settle the thread, still pass it to T3 Tots.
+
+Settling: never settle a T3 thread on your own.
+On a done signal for one of your threads, show him the open items T3 Tots found, asking it for them if it sent none, and ask in one line whether to settle the thread, keep it open, or file follow-ups first.
+Then pass his answer to T3 Tots.

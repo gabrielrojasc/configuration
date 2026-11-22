@@ -4,7 +4,8 @@
 # A "key" is a path relative to a layer root (base/ or profiles/<name>/):
 #   home/<path>       a file that lives at $HOME/<path>
 #   bots/<path>       a Grok Bot file, written by bots/snapshot.sh or bots/skills.sh,
-#                     never installed
+#                     never installed; bots/descriptions.sh composes a bot's
+#                     description from its description.txt
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
 #   agent-skills.txt  installed with skills add -g, read back with skills ls -g
@@ -266,6 +267,89 @@ function merge_patch() {
         return 1
     fi
     rm -rf "$dir"
+}
+
+# expand_includes <key> <out> [<including keys>]: append the profile's <key> to
+# <out>, with each "@include <key>" line replaced by that key's own lines.
+# Appends every key it reads to $include_log when that is set.
+function expand_includes() {
+    local key=$1 out=$2 chain=${3:-} file line status=0
+    # shellcheck disable=SC2086
+    if is_in "$key" $chain; then
+        color_print "$red" "$key includes itself, through:$chain" >&2
+        return 1
+    fi
+    if [[ -z "$(source_of "$key")" ]]; then
+        color_print "$red" "$key is not managed by profile $DOTFILES_PROFILE${chain:+ (included by ${chain##* })}" >&2
+        return 1
+    fi
+    file=$(mktemp)
+    if ! render "$key" "$file"; then
+        rm -f "$file"
+        return 1
+    fi
+    if [[ ! -e "$file" ]]; then
+        color_print "$red" "$key is deleted for profile $DOTFILES_PROFILE${chain:+ (included by ${chain##* })}" >&2
+        return 1
+    fi
+    if [[ -n "${include_log:-}" ]]; then echo "$key" >>"$include_log"; fi
+    while IFS= read -r line <&3 || [[ -n "$line" ]]; do
+        case "$line" in
+            "@include "*)
+                if ! expand_includes "${line#@include }" "$out" "$chain $key"; then
+                    status=1
+                    break
+                fi
+                ;;
+            @include*)
+                color_print "$red" "$key has an include line without one key: $line" >&2
+                status=1
+                break
+                ;;
+            *) printf '%s\n' "$line" >>"$out" ;;
+        esac
+    done 3<"$file"
+    rm -f "$file"
+    return "$status"
+}
+
+# join_lines <file>: print its text as a bot stores it. The lines of a
+# paragraph join with one space, and a blank line starts the next paragraph.
+function join_lines() {
+    awk '
+        { sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, "") }
+        $0 == "" { if (paragraph != "") { paragraphs[++count] = paragraph; paragraph = "" } next }
+        { paragraph = (paragraph == "" ? $0 : paragraph " " $0) }
+        END {
+            if (paragraph != "") paragraphs[++count] = paragraph
+            for (i = 1; i <= count; i++) printf "%s%s", paragraphs[i], (i < count ? "\n\n" : "\n")
+        }
+    ' "$1"
+}
+
+# split_sentences <file>: the reverse of join_lines, one sentence per line.
+function split_sentences() {
+    sed -E 's/([.?!]) ([A-Z`("'\''$])/\1\
+\2/g' "$1"
+}
+
+# compose <key> <out>: write the text the profile's <key> stands for, with its
+# includes expanded and its lines joined.
+function compose() {
+    local key=$1 out=$2 lines status=0
+    lines=$(mktemp)
+    if expand_includes "$key" "$lines"; then
+        join_lines "$lines" >"$out"
+    else
+        status=1
+    fi
+    rm -f "$lines"
+    return "$status"
+}
+
+# description_key <slug>: the key a bot's description is composed from.
+function description_key() {
+    echo "bots/$1/description.txt"
 }
 
 # make_patch <key> <target>: store <target> as base/<key> plus a patch, or

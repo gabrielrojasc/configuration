@@ -7,8 +7,9 @@ dotfiles, and `DOTFILES_PROFILE` picks the profile in the same way.
 
 Each fleet's box is the source of truth. Changes flow one way, from a fleet
 into git. The app can't import from git, and `install.sh` never installs these
-files. Skills are the exception: the repository declares them, as described in
-[Bot skills](#bot-skills).
+files. Skills and descriptions are the exceptions: the repository declares
+them, as described in [Bot skills](#bot-skills) and
+[Bot descriptions](#bot-descriptions).
 
 To install these bots on a new Grok Bot account, see [INSTALL.md](INSTALL.md).
 
@@ -17,10 +18,12 @@ To install these bots on a new Grok Bot account, see [INSTALL.md](INSTALL.md).
 ```text
 base/bots/
 ├── <slug>/
+│   ├── description.txt            # the bot's own rules and its include lines
 │   ├── profile.json
 │   ├── settings.json
 │   └── routines/<routine>.md      # absent when the bot has none
 └── shared/
+    ├── sections/<name>.txt          # rules several bots carry, each written once
     ├── skills.txt                   # the skills every box has, pinned
     └── unsettled-threads.shape.json # the ledger's format, decided here
 profiles/<profile>/
@@ -32,6 +35,8 @@ profiles/<profile>/
 bots/
 ├── snapshot.sh                      # brings a staged snapshot into the repo
 ├── fields.txt                       # the fields a snapshot keeps
+├── descriptions.sh                  # composes descriptions and builds the bundle for a box
+├── check-descriptions.py            # runs on a box; compares live descriptions with the bundle
 ├── skills.sh                        # pins skills and builds the bundle for a box
 ├── check-skills.py                  # runs on a box; compares live skills with the bundle
 └── README.md
@@ -128,10 +133,13 @@ applied yet, isn't offered as a change to undo.
   edits it, base keeps it and the file is deleted only for this profile. `n`
   writes a patch that deletes it for this profile.
 - A file only this profile has is updated or deleted without asking.
+- A bot's description is never copied, because the repository declares it.
+  [What a snapshot does with descriptions](#what-a-snapshot-does-with-descriptions)
+  describes the comparison.
 
 Of `bots/shared/`, a snapshot handles only `setup-map.md`. It never lists,
 records, or deletes any other file there, such as a profile's
-`workflow-map.md`.
+`workflow-map.md` or a file in `sections/`.
 
 If the fleet and the repository changed the same lines since the last
 snapshot, the script writes the merged file with conflict markers to
@@ -244,11 +252,15 @@ report never reaches git: `--list` prints a line for each bot, such as
 
 ## What a snapshot keeps
 
-Each line of `fields.txt` is `<file> <keep|drop> <path>`:
+Each line of `fields.txt` is `<file> <keep|drop|declared> <path>`:
 
 - `<file>` is `profile.json`, `settings.json`, or `routine` (front matter).
 - `<path>` is a JSON field path joined with `.`, with `[]` for any array
   index. A `drop` also covers every field under its path.
+- `declared` marks a field the repository declares in a file of its own. A
+  snapshot leaves the field out of the file it writes and compares the live
+  value with the repository's. The one such field is `description` in
+  `profile.json`.
 
 The script stops on any field that `fields.txt` neither keeps nor drops, and
 names the field. Add it as `keep` if it can never hold a credential,
@@ -411,11 +423,128 @@ renders it. Review `git diff`, commit, then apply the skills to each box. A
 step 5 runs. Neither fleet's last snapshot has a T3 Tots weekly update routine.
 Turning one on, or asking T3 Tots to update, moves a box past the pin.
 
+## Bot descriptions
+
+The repository declares each bot's description. A bot's `description.txt`
+holds the rules only that bot has, one sentence per line. An include line
+names a file of rules that several bots carry:
+
+```text
+Gabriel's Spark bot.
+@include bots/shared/sections/gabriel.txt
+Your one job: answer his one-off questions in your own chat.
+
+@include bots/shared/sections/how-gabriel-works.txt
+```
+
+`bots/descriptions.sh` composes the description from that file:
+
+- An `@include <key>` line becomes the lines of that key, in place. A section
+  can include another section.
+- The lines of a paragraph join with one space. A blank line starts the next
+  paragraph.
+
+Write each rule once. A rule only one bot has goes in that bot's
+`description.txt`. A sentence two or more bots carry goes in
+`bots/shared/sections/<name>.txt`, and each of those bots includes it.
+
+Each file is a key, so a profile changes a section or a bot's own rules as it
+changes any other file: with its own copy in `profiles/<profile>/bots/`, or
+with a patch. A section only one fleet carries lives in that profile, and
+moves to `base/` when a second fleet includes it. With one sentence per line,
+a patch holds only the sentences that differ, and `./copy.sh --sort` offers
+them for promotion to base one hunk at a time.
+
+To print the description a profile's bot should have, or the files it's
+composed from, run:
+
+```sh
+bots/descriptions.sh closer
+bots/descriptions.sh --sources closer
+```
+
+`./install.sh --show bots/closer/description.txt` prints the file itself, with
+its include lines.
+
+Descriptions hold rules. Put a procedure in a skill, and have the description
+name the skill where the bot needs it, as `sections/open-items.txt` does.
+
+### Change a description
+
+1. Edit the bot's `description.txt` or the section that holds the rule. For a
+   change only one profile gets, write the full file to `.conflicts/<key>` and
+   run `./copy.sh --resolve <key>`.
+2. Print the description for each profile that has the bot, and run
+   `tests/e2e.sh`.
+3. Review `git diff`, commit, then apply the descriptions to each box.
+
+### Apply the descriptions to a box
+
+`install.sh` can't reach a box, so you apply the descriptions through
+Workflowy, as you do the skills.
+
+1. Build the bundle on the Mac. It holds one `<slug>.txt` per bot in the
+   profile's `bots.txt`, a manifest with each bot's id and sha256, and the
+   check:
+
+   ```sh
+   staging=$(mktemp -d)
+   bots/descriptions.sh --stage "$staging"
+   ```
+
+2. Ask Workflowy's main agent to check the box:
+
+   > Delete `/workspace/uploads/bot-descriptions` if it exists. CopyToBox
+   > `<staging-folder>` with `box_path` `/workspace/uploads/bot-descriptions`.
+   > Run `python3 /workspace/uploads/bot-descriptions/check-descriptions.py --diff`
+   > and show me its output. Change nothing yet.
+
+3. Read the output. Each line names a bot:
+
+   - `differs`: the lines below it are the sentences the bot loses (`-`) and
+     gains (`+`).
+   - `missing`: the box has no bot with the id `bots.txt` gives it. Fix the id
+     first.
+
+4. After you approve the sentences, ask Workflowy to apply them:
+
+   > For each bot the check lists as `differs`, set its description to the
+   > exact text of its `<slug>.txt`, without the file's final newline. Then
+   > run `check-descriptions.py` again and show me its output.
+
+   The last line must read `OK: every description matches`. The check reads
+   the saved text. To confirm that a bot acts on a new rule, ask that bot in
+   its chat what the rule says.
+
+### Check a box for drift
+
+Run step 2. The script changes nothing, so a bot can run it at any time. It
+exits with `0` when every description matches, `1` when any differs, and `2`
+when it can't read the bundle or a bot's profile.
+
+### What a snapshot does with descriptions
+
+A snapshot compares each bot's live description with the text the repository
+composes, and `--list` prints one line per bot under `Descriptions:`.
+
+- `matches the repo`: nothing to do.
+- `the repo's text isn't on the bot yet`: the bot has the description it had
+  at the last snapshot, and the repository changed since. The snapshot goes
+  on. Apply the descriptions to the box.
+- A description that changed on the box stops the snapshot before it writes
+  anything. It prints the repository's sentences (`-`) and the bot's (`+`).
+  Either edit the files `bots/descriptions.sh --sources <slug>` lists until
+  the repository composes the bot's text, or have Workflowy set the bot back
+  to the repository's text. Then take the snapshot again.
+- `new`: the bot has no `description.txt` in the repository. The snapshot
+  offers one, made from the live description, as a new file.
+
 ## Roll back
 
 To restore a fleet to a commit, check that commit out in a separate worktree
 and print each file the profile has there with
-`DOTFILES_PROFILE=<profile> ./install.sh --show bots/<path>`. Give those files
+`DOTFILES_PROFILE=<profile> ./install.sh --show bots/<path>`, and each
+description with `bots/descriptions.sh <slug>`. Give those files
 to Workflowy and ask it to re-apply them through each bot. This changes live
 bots, so confirm the commit and the bots first. Fields the snapshot drops,
 such as `serverId`, aren't in git and stay as they are on the box. Replace any

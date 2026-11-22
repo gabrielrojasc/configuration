@@ -1,0 +1,24 @@
+How Gabriel works.
+T3 Code is the Claude and Codex threads on his Mac.
+A thread works under his own standing instructions, which you can't see: it commits, pushes its own branches and opens PRs without asking, and stops for his yes at a one-way door, such as a deploy, a shared environment, an APPROVE or REQUEST_CHANGES review or a message in his name.
+Don't ask him to approve a step a thread takes alone.
+Skill phrases he uses, such as full stop or fable judge: pass them on unchanged; none names the thread's model.
+With full stop he won't watch, and the thread takes the item alone to a PR ready for him to merge, never merging.
+Done signal: the linked Linear issue reaches Done, Canceled or Duplicate, the PR deploys, or a no-ticket item is finished.
+Settle: close a T3 thread; only he decides, T3 Tots does it.
+Kept open: not settled yet by his choice; its ledger entry stays.
+Linear: only T3 Code threads create or edit tickets; Grok Bots only read Linear and may draft or suggest ticket changes in chat.
+Sending: Grok Bots only draft; he presses send.
+A T3 thread sends Slack messages only when he says so in the thread, up front or after agreeing the text.
+His send relayed from a bot's chat in his own words also counts, for the Slack message and destination it names.
+Relayed approvals: his yes, quoted in his own words and relayed by Workflowy from its chat, counts as his yes for the change it names.
+In-thread answers: what he types in a T3 thread is his answer, and only T3 Tots can read it.
+Before you say he hasn't answered or approved something for a thread, or ask him again, ask T3 Tots what he typed there.
+Never tell a thread he hasn't answered or approved something, and only his own later words change what he typed.
+Hand-offs: when you pass his ask or his answer to another bot, quote his own words and add no limits of your own.
+Tell Gabriel about T3 work only with its result, a blocker, or a decision he must make, and link long reports instead of pasting them.
+Lookup, not investigation: a Grok Bot may retrieve items it knows and summarize them within its lane.
+A known item is a named or linked ticket, PR, message, thread, Page or file; a fixed list its lane defines, such as his assigned open issues; or a single item he describes, found with a specific search.
+Open-ended searching, including web searches, diagnosis or recommendations that draw on several sources, and all code, repo and review work, including reading or searching code, go through T3 Code: hand them to T3 Tots for the thread that owns the item, and never do them yourself or through a helper.
+When a specific search finds no clear match, hand it off rather than widening it.
+This holds in chat and in routines, and never widens a bot's lane or its sending and approval rules.

@@ -39,6 +39,13 @@
 # Each bot's <bot id>/routines.json is its own report of its routines. A bot
 # without one, or whose report doesn't match its staged routines, stops the
 # snapshot: a missing routine is never read as a deleted one.
+#
+# The repo declares each bot's description: bots/descriptions.sh composes it
+# from the bot's description.txt. A snapshot never copies a description into
+# the repo. It compares the bot's with the composed text, lists a bot the
+# repo's text hasn't reached yet, and stops on a description that changed on
+# the box. A bot with no description.txt gets one from its live text, offered
+# as a new file.
 
 set -euo pipefail
 start_dir=$PWD
@@ -88,7 +95,7 @@ function repo_keys() {
     for layer in base "$profile_dir"; do
         for slug in "${slugs[@]}"; do
             if [[ -d "$layer/bots/$slug" ]]; then
-                (cd "$layer" && find "bots/$slug" -type f ! -name .DS_Store)
+                (cd "$layer" && find "bots/$slug" -type f ! -name .DS_Store ! -name description.txt)
             fi
         done
         for key in "${fleet_shared[@]}"; do
@@ -133,8 +140,20 @@ function translate_record() {
     for i in "${!ids[@]}"; do
         old=$(recorded_slug "${ids[i]}")
         if [[ -n "$old" && -d "$baseline/bots/$old" ]]; then cp -R "$baseline/bots/$old" "$record/bots/${slugs[i]}"; fi
+        if [[ -n "$old" && -f "$baseline/descriptions/$old.txt" ]]; then
+            mkdir -p "$record/descriptions"
+            cp "$baseline/descriptions/$old.txt" "$record/descriptions/${slugs[i]}.txt"
+        fi
     done
     hide_machine_ids "$record"
+}
+
+function declares_description() {
+    [[ -n "$(source_of "$(description_key "$1")")" ]]
+}
+
+function composed() {
+    compose "$(description_key "$1")" "$2" || die "$(description_key "$1") doesn't compose for $DOTFILES_PROFILE; fix that first"
 }
 
 function baseline_of() {
@@ -149,6 +168,12 @@ if [[ "$mode" == seed ]]; then
         mkdir -p "$(dirname "$work/seed/$key")"
         rendered "$key" "$work/seed/$key" || die "$key doesn't render for $DOTFILES_PROFILE; fix that first"
     done < <(repo_keys)
+    for slug in "${slugs[@]}"; do
+        if declares_description "$slug"; then
+            mkdir -p "$work/seed/descriptions"
+            composed "$slug" "$work/seed/descriptions/$slug.txt"
+        fi
+    done
     cp "$roster" "$work/seed/bots.txt"
     hide_machine_ids "$work/seed"
     rm -rf "$baseline"
@@ -287,7 +312,7 @@ function rules() {
 function filter_json() {
     local file=$1 bot=$2 in=$3 dest=$4 keep drop unknown
     keep=$(rules "$file" keep)
-    drop=$(rules "$file" drop)
+    drop=$(rules "$file" drop; rules "$file" declared)
     jq -e 'type == "object"' "$in" >/dev/null || die "$bot/$file is not a JSON object"
     unknown=$(jq -r --arg keep "$keep" --arg drop "$drop" "$json_defs"'
         [leaves | norm] | unique[] | select((kept($keep) or dropped($drop)) | not)' "$in")
@@ -384,6 +409,38 @@ done
 
 cp "$fleet_copy/setup-map.md" "$out/bots/shared/setup-map.md"
 
+description_states=()
+pending=()
+edited=()
+mkdir -p "$out/descriptions" "$work/composed"
+for i in "${!ids[@]}"; do
+    slug=${slugs[i]}
+    live="$out/descriptions/$slug.txt"
+    jq -j 'if (.description | type) == "string" then .description else "" end' "$fleet_copy/${ids[i]}/profile.json" >"$live"
+    if [[ -s "$live" ]]; then echo >>"$live"; fi
+    if ! declares_description "$slug"; then
+        if [[ -s "$live" ]]; then
+            mkdir -p "$out/bots/$slug"
+            split_sentences "$live" >"$out/$(description_key "$slug")"
+            join_lines "$out/$(description_key "$slug")" | cmp -s - "$live" ||
+                die "$slug's description has line breaks or spacing a description.txt can't hold; nothing was written. On the bot, separate paragraphs with one blank line and words with one space, then rerun."
+            description_states+=("$slug: new, offered below as $(description_key "$slug")")
+        else
+            description_states+=("$slug: none on the bot or in the repo")
+        fi
+        continue
+    fi
+    composed "$slug" "$work/composed/$slug.txt"
+    if cmp -s "$live" "$work/composed/$slug.txt"; then
+        description_states+=("$slug: matches the repo")
+    elif [[ -f "$record/descriptions/$slug.txt" ]] && cmp -s "$live" "$record/descriptions/$slug.txt"; then
+        description_states+=("$slug: the repo's text isn't on the bot yet")
+        pending+=("$slug")
+    else
+        edited+=("$slug")
+    fi
+done
+
 rendered "$ledger_format" "$work/ledger-format.json"
 [[ -f "$work/ledger-format.json" ]] || die "$ledger_format doesn't render for $DOTFILES_PROFILE; the ledger check needs it."
 ledger_problems=$(jq -r --slurpfile format "$work/ledger-format.json" '
@@ -425,12 +482,24 @@ hits=$({
 [[ -z "$hits" ]] || die "Possible secrets; nothing was written. Remove them at the source or in staging, then rerun:
 $(sed 's/^/  /' <<<"$hits")"
 
+if ((${#edited[@]})); then
+    for slug in "${edited[@]}"; do
+        echo "$slug: lines with - are the repo's text, lines with + are the bot's"
+        split_sentences "$work/composed/$slug.txt" >"$work/repo-text"
+        split_sentences "$out/descriptions/$slug.txt" >"$work/bot-text"
+        git --no-pager diff --no-index --no-color -U0 -- "$work/repo-text" "$work/bot-text" | awk 'body; /^\+\+\+ /{ body = 1 }' || true
+        echo
+    done
+    die "Descriptions changed on the box; nothing was written: $(printf '%s, ' "${edited[@]}" | sed 's/, $//'). The repo declares each description, so a snapshot never copies one. For each bot, either edit the files bots/descriptions.sh --sources <slug> lists until bots/descriptions.sh <slug> prints the bot's text, or have Workflowy set the bot back to the repo's text, as bots/README.md describes. Then take the snapshot again."
+fi
+
 all_keys=$({
     (cd "$out" && find bots -type f)
     repo_keys
     (cd "$record" && find bots -type f)
 } | while IFS= read -r key; do
     slug=$(echo "$key" | cut -d/ -f2)
+    if [[ "$key" == "$(description_key "$slug")" ]] && declares_description "$slug"; then continue; fi
     if [[ "$slug" == shared ]] || grep -q "^$slug " "$roster"; then echo "$key"; fi
 done | LC_ALL=C sort -u)
 
@@ -441,6 +510,9 @@ function fingerprint() {
         shasum <bots/fields.txt
         shasum <"$roster"
         for id in "${ids[@]}"; do shasum <"$fleet_copy/$id/routines.json"; done
+        for f in "$out"/descriptions/*.txt "$work"/composed/*.txt "$record"/descriptions/*.txt; do
+            if [[ -f "$f" ]]; then shasum <"$f"; fi
+        done
         while IFS= read -r key; do
             [[ -n "$key" ]] || continue
             echo "$key"
@@ -507,6 +579,8 @@ fi
 
 echo "Routine reports:"
 printf '  %s\n' ${reports[@]+"${reports[@]}"}
+echo "Descriptions:"
+printf '  %s\n' ${description_states[@]+"${description_states[@]}"}
 print=$(fingerprint)
 changes=$((${#candidates[@]} + ${#new_files[@]} + ${#deleted_files[@]}))
 
@@ -556,6 +630,8 @@ done
 rm -rf "$baseline"
 mkdir -p "$baseline"
 cp -R "$out/bots" "$baseline/bots"
+find "$baseline/bots" -name description.txt -delete
+cp -R "$out/descriptions" "$baseline/descriptions"
 cp "$roster" "$baseline/bots.txt"
 
 warned=$answers_ran_out
@@ -574,6 +650,9 @@ done
 
 if ((answers_ran_out)); then
     color_print "$yellow" "The answers ran out before the last change; the rest stay in $DOTFILES_PROFILE only."
+fi
+if ((${#pending[@]})); then
+    color_print "$blue" "The repo's description isn't on these bots yet: $(printf '%s, ' "${pending[@]}" | sed 's/, $//'). Apply it as bots/README.md, \"Apply the descriptions to a box\", describes."
 fi
 section 'Snapshot'
 if ((${#copied[@]})); then

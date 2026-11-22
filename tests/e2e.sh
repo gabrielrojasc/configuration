@@ -468,10 +468,18 @@ snap zerofox --seed >"$log_dir/bots-seed.txt" 2>&1
 check "snapshot refuses piped answers without --expect" snap_stops 'pass --expect' "$log_dir/bots-no-expect.txt" snap_piped
 check "a refused snapshot changes nothing" repo_clean || show_status
 
-check "the first snapshot lists six new files" lists_count zerofox "$zf" "$log_dir/bots-first-list.txt" ', new file$' 6
-check "the first snapshot takes y for every file" snap_answer zerofox "$zf" 'y\ny\ny\ny\ny\ny\n' "$log_dir/bots-first.txt"
+check "the first snapshot lists eight new files" lists_count zerofox "$zf" "$log_dir/bots-first-list.txt" ', new file$' 8
+check "a bot without a description.txt has its description offered as a new file" \
+    grep -qx 'bots/router/description.txt   change [0-9] of 8, new file' "$log_dir/bots-first-list.txt"
+check "the list says that bot's description is new" grep -qx '  router: new, offered below as bots/router/description.txt' "$log_dir/bots-first-list.txt"
+check "the first snapshot takes y for every file" snap_answer zerofox "$zf" 'y\ny\ny\ny\ny\ny\ny\ny\n' "$log_dir/bots-first.txt"
 check "y puts a new file in base" test "$(jq -r .name "$repo/base/bots/router/profile.json")" = router
 check "snapshot drops serverId" test "$(jq 'has("serverId")' "$repo/base/bots/router/profile.json")" = false
+check "snapshot keeps the description out of profile.json" test "$(jq 'has("description")' "$repo/base/bots/router/profile.json")" = false
+check "y puts a new description.txt in base" test "$(cat "$repo/base/bots/router/description.txt")" = "router bot"
+check "the repo then composes the bot's description" test "$(in_repo env DOTFILES_PROFILE=zerofox bots/descriptions.sh router)" = "router bot"
+check "the record keeps each bot's description apart from its files" \
+    bash -c "test \"\$(cat '$state/zerofox/descriptions/router.txt')\" = 'router bot' && test ! -e '$state/zerofox/bots/router/description.txt'"
 check "a routine reaches base verbatim" cmp -s "$zf/$(id_of zerofox router)/routines/daily-sweep.md" "$repo/base/bots/router/routines/daily-sweep.md"
 check "a bot that reports no routines gets no routines folder" test ! -e "$repo/base/bots/closer/routines"
 check "the snapshot leaves the ledger format to the repo" cmp -s "$src/base/bots/shared/unsettled-threads.shape.json" "$repo/base/bots/shared/unsettled-threads.shape.json"
@@ -496,16 +504,16 @@ stage_fleet personal "$pf"
 snap personal --seed >/dev/null 2>&1
 check "a second fleet that matches base has no changes" lists_no_changes personal "$pf" "$log_dir/bots-personal-first.txt"
 
-set_field "$zf/$(id_of zerofox router)/profile.json" '.description = "routes work, v2"'
+set_field "$zf/$(id_of zerofox router)/profile.json" '.avatarColor = "green"'
 set_field "$zf/$(id_of zerofox closer)/profile.json" '.title = "zerofox closer"'
 check "two edits list as two numbered changes" lists_count zerofox "$zf" "$log_dir/bots-yn-list.txt" 'change [12] of 2, near line' 2
 check "answers n then y apply, in list order" snap_answer zerofox "$zf" 'n\ny\n' "$log_dir/bots-yn.txt"
-check "y moves the change to base" test "$(jq -r .description "$repo/base/bots/router/profile.json")" = "routes work, v2"
+check "y moves the change to base" test "$(jq -r .avatarColor "$repo/base/bots/router/profile.json")" = green
 check "n leaves base unchanged" test "$(jq -r .title "$repo/base/bots/closer/profile.json")" = t
 check "n puts the change in the profile patch" grep -q 'zerofox closer' "$repo/profiles/zerofox/patches/bots/closer/profile.json.patch"
 check "the profile renders its n change" test "$(shows zerofox bots/closer/profile.json | jq -r .title)" = "zerofox closer"
 check "another profile doesn't get an n change" test "$(shows personal bots/closer/profile.json | jq -r .title)" = t
-check "another profile gets a y change" test "$(shows personal bots/router/profile.json | jq -r .description)" = "routes work, v2"
+check "another profile gets a y change" test "$(shows personal bots/router/profile.json | jq -r .avatarColor)" = green
 commit_all y-n
 
 copy_fleet "$zf"
@@ -523,7 +531,7 @@ check "a refused apply changes nothing" repo_clean || show_status
 
 check "a fleet that hasn't applied a promotion has no changes" lists_no_changes personal "$pf" "$log_dir/bots-promotion-list.txt"
 check "applying that snapshot succeeds" snap_answer personal "$pf" '' "$log_dir/bots-promotion.txt"
-check "the promotion stays in base" test "$(jq -r .description "$repo/base/bots/router/profile.json")" = "routes work, v2"
+check "the promotion stays in base" test "$(jq -r .avatarColor "$repo/base/bots/router/profile.json")" = green
 check "a snapshot with no changes leaves the repo clean" repo_clean || show_status
 
 add_routine "$zf/$(id_of zerofox router)" shared-new "Post the daily summary."
@@ -663,12 +671,12 @@ check "an apply whose answers ran out keeps the staging folder and says so" \
 check "the ran-out staging folder is still there" kept "$ran_out"
 commit_all ran-out
 mkdir -p "$repo/.conflicts/bots/router"
-shows personal bots/router/profile.json | jq '.description = "personal router"' >"$repo/.conflicts/bots/router/profile.json"
+shows personal bots/router/profile.json | jq '.title = "personal router"' >"$repo/.conflicts/bots/router/profile.json"
 in_repo env DOTFILES_PROFILE=personal ./copy.sh --resolve bots/router/profile.json >/dev/null
 commit_all personal-router
 unrendered=$(mktemp_staging)
 set_field "$unrendered/$(id_of zerofox closer)/profile.json" '.title = "answers ran out"'
-set_field "$unrendered/$(id_of zerofox router)/profile.json" '.description = "routes work, v3"'
+set_field "$unrendered/$(id_of zerofox router)/profile.json" '.title = "routes work, v3"'
 check "an apply that breaks another profile's patch succeeds" snap_answer zerofox "$unrendered" 'y\n' "$log_dir/bots-clean-unrendered.txt"
 check "an apply that breaks another profile's patch keeps the staging folder and says so" \
     bash -c "grep -q 'bots/router/profile.json no longer renders for personal' '$log_dir/bots-clean-unrendered.txt' && ! grep -q 'answers ran out' '$log_dir/bots-clean-unrendered.txt' && grep -q 'Kept .* because of the warning' '$log_dir/bots-clean-unrendered.txt'"
@@ -686,7 +694,8 @@ function stage_from_record() {
     stage_ledger "$dir"
     while read -r slug id; do
         mkdir -p "$dir/$id/routines"
-        cp "$state/$profile/bots/$slug/profile.json" "$state/$profile/bots/$slug/settings.json" "$dir/$id/"
+        cp "$state/$profile/bots/$slug/settings.json" "$dir/$id/"
+        jq --rawfile d "$state/$profile/descriptions/$slug.txt" '.description = ($d | rtrimstr("\n"))' "$state/$profile/bots/$slug/profile.json" >"$dir/$id/profile.json"
         if [[ -d "$state/$profile/bots/$slug/routines" ]]; then cp "$state/$profile/bots/$slug/routines/"*.md "$dir/$id/routines/"; fi
         write_report "$dir/$id"
     done <"$state/$profile/bots.txt"
@@ -712,7 +721,7 @@ moved="$home/staging-moved"
 stage_from_record zerofox "$moved"
 check "a stage built from the last snapshot has no changes" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-before.txt"
 rename_bot closer finisher
-set_field "$repo/base/bots/finisher/profile.json" '.description = "finishes work, edited in the repo"'
+set_field "$repo/base/bots/finisher/profile.json" '.avatarShape = "edited in the repo"'
 commit_all rename
 check "both profiles render a renamed bot" renders_both bots/finisher/profile.json
 check "a renamed bot keeps its last snapshot, so a repo edit isn't offered back" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-list.txt"
@@ -720,6 +729,8 @@ check "the list doesn't name the old slug" bash -c "! grep -q 'bots/closer/' '$l
 check "--sync-record says it followed the rename" synced zerofox "$log_dir/bots-sync-rename.txt" 'Renamed closer to finisher'
 check "the record files the bot under its new slug" \
     bash -c "test -f '$state/zerofox/bots/finisher/profile.json' && test ! -e '$state/zerofox/bots/closer' && grep -q '^finisher ' '$state/zerofox/bots.txt'"
+check "the record files the bot's description under its new slug" \
+    bash -c "test -f '$state/zerofox/descriptions/finisher.txt' && test ! -e '$state/zerofox/descriptions/closer.txt'"
 check "the renamed bot still has no changes after --sync-record" lists_no_changes zerofox "$moved" "$log_dir/bots-rename-synced.txt"
 
 removed_id=$(id_of zerofox finisher)
@@ -1141,6 +1152,212 @@ upstream_skill acme/bots c7 skills/bots gamma 'Gamma steps, revised.'
 skills_cmd --bump acme/bots >"$log_dir/bot-skills-bump3.txt" 2>&1
 check "--bump warns when a profile patch no longer applies" grep -q 'zerofox no longer renders' "$log_dir/bot-skills-bump3.txt"
 check "the snapshot script leaves the manifest out of a seed" bash -c "(cd '$repo' && HOME='$home' XDG_STATE_HOME='$home/.local/state' DOTFILES_PROFILE=personal bots/snapshot.sh --seed) >/dev/null 2>&1 && test ! -e '$home/.local/state/dotfiles/bots/personal/$skills_key'"
+echo
+
+# The repo declares each bot's description. A scratch bot stands in for a
+# fleet, and a folder of profile.json files stands in for the box's agents, so
+# the real scripts run from description.txt to the box check and the snapshot.
+echo "== bot descriptions"
+fresh zerofox
+function describe() { in_repo env DOTFILES_PROFILE="$1" bots/descriptions.sh "${@:2}"; }
+function composes_fleet() {
+    local slug id
+    while read -r slug id; do
+        if ! describe "$1" "$slug" </dev/null >/dev/null 2>&1; then
+            echo "$slug doesn't compose for $1"
+            return 1
+        fi
+    done <"$repo/profiles/$1/bots.txt"
+}
+function no_stored_description() {
+    local file
+    while IFS= read -r file; do
+        if grep -q '"description"' "$file"; then
+            echo "$file holds a description"
+            return 1
+        fi
+    done < <(find "$repo/base/bots" "$repo"/profiles/*/bots "$repo"/profiles/*/patches/bots -name profile.json -o -name profile.json.patch)
+}
+for profile in zerofox personal; do
+    check "$profile composes a description for every bot in its fleet" composes_fleet "$profile"
+done
+check "no profile.json and no profile.json patch holds a description" no_stored_description
+
+rm -rf "${repo:?}/base/bots" "${repo:?}"/profiles/*/patches/bots "${repo:?}"/profiles/*/bots "${repo:?}"/profiles/*/bots.txt
+sections=bots/shared/sections
+mkdir -p "$repo/base/$sections" "$repo/base/bots/scout"
+cp "$src/base/bots/shared/unsettled-threads.shape.json" "$repo/base/bots/shared/"
+printf 'Scout bot.\n@include %s/who.txt\nOwn rule one.\n\n@include %s/rules.txt\n' "$sections" "$sections" >"$repo/base/bots/scout/description.txt"
+printf 'He works in Chile.\n' >"$repo/base/$sections/who.txt"
+printf 'Shared rule one.\n@include %s/nested.txt\n\nSecond paragraph.\n' "$sections" >"$repo/base/$sections/rules.txt"
+printf 'Nested rule.\n' >"$repo/base/$sections/nested.txt"
+scout_id=$(uuidgen | tr A-Z a-z)
+for profile in zerofox personal; do printf 'scout %s\n' "$scout_id" >"$repo/profiles/$profile/bots.txt"; done
+commit_all description-sources
+state="$home/.local/state/dotfiles/bots"
+scout_text=$'Scout bot. He works in Chile. Own rule one.\n\nShared rule one. Nested rule.\n\nSecond paragraph.'
+function composed_is() { [[ "$(describe "$1" scout)" == "$2" ]]; }
+function describe_stops() {
+    local reason=$1
+    shift
+    if describe "$@" >"$log_dir/bot-descriptions-refused.txt" 2>&1; then return 1; fi
+    grep -q -- "$reason" "$log_dir/bot-descriptions-refused.txt"
+}
+function sources_are() { [[ "$(describe "$1" --sources scout | tr '\n' ' ')" == "$2" ]]; }
+
+check "an include line becomes its section's text, in place, and lines join into paragraphs" composed_is zerofox "$scout_text"
+check "install.sh --show prints a description.txt with its include lines" \
+    bash -c "cd '$repo' && DOTFILES_PROFILE=zerofox ./install.sh --show bots/scout/description.txt | grep -qx '@include $sections/rules.txt'"
+mkdir -p "$repo/profiles/zerofox/$sections"
+printf 'He works at ZeroFox.\n' >"$repo/profiles/zerofox/$sections/who.txt"
+check "a profile's own copy of a section replaces base's" composed_is zerofox "${scout_text/He works in Chile./He works at ZeroFox.}"
+check "another profile keeps base's section" composed_is personal "$scout_text"
+mkdir -p "$repo/.conflicts/$sections"
+printf 'Nested rule, personal.\n' >"$repo/.conflicts/$sections/nested.txt"
+in_repo env DOTFILES_PROFILE=personal ./copy.sh --resolve "$sections/nested.txt" >"$log_dir/bot-descriptions-resolve.txt" 2>&1
+check "copy.sh --resolve stores a profile's change to a section as a patch" test -f "$repo/profiles/personal/patches/$sections/nested.txt.patch"
+check "that profile composes the patched section" composed_is personal "${scout_text/Nested rule./Nested rule, personal.}"
+check "--sources lists the files a description is composed from, in order" sources_are zerofox \
+    "base/bots/scout/description.txt profiles/zerofox/$sections/who.txt base/$sections/rules.txt base/$sections/nested.txt "
+check "--sources names the patch on a patched section" sources_are personal \
+    "base/bots/scout/description.txt base/$sections/who.txt base/$sections/rules.txt base/$sections/nested.txt + profiles/personal/patches/$sections/nested.txt.patch "
+find "$repo/profiles/personal/patches" -name '*.patch' ! -path "*/$sections/*" -delete
+commit_all section-patch
+printf 'y\n' | in_repo env DOTFILES_PROFILE=personal ./copy.sh --sort >"$log_dir/bot-descriptions-sort.txt" 2>&1
+check "copy.sh --sort with y moves a section's patch to base" \
+    bash -c "grep -qx 'Nested rule, personal.' '$repo/base/$sections/nested.txt' && test ! -e '$repo/profiles/personal/patches/$sections/nested.txt.patch'"
+check "every profile then composes the promoted sentence" composed_is zerofox "$(sed -e 's/He works in Chile./He works at ZeroFox./' -e 's/Nested rule\./Nested rule, personal./' <<<"$scout_text")"
+git -C "$repo" checkout -q -- . && git -C "$repo" clean -qfd
+rm -rf "${repo:?}/profiles/zerofox/$sections" "${repo:?}/profiles/personal/patches/bots"
+commit_all one-version
+
+check "an unknown bot stops" describe_stops 'bots/ghost/description.txt is not managed by profile zerofox' zerofox ghost
+printf '@include %s/missing.txt\n' "$sections" >>"$repo/base/$sections/nested.txt"
+check "an include of a file the profile doesn't have stops and names the including file" \
+    describe_stops "$sections/missing.txt is not managed by profile zerofox (included by $sections/nested.txt)" zerofox scout
+printf 'Nested rule.\n@include %s/rules.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
+check "a section that includes itself stops" describe_stops "$sections/rules.txt includes itself" zerofox scout
+printf 'Nested rule.\n@include\n' >"$repo/base/$sections/nested.txt"
+check "an include line without a key stops" describe_stops 'has an include line without one key' zerofox scout
+git -C "$repo" checkout -q -- .
+
+live_agents="$home/agents"
+function stage_descriptions() {
+    descriptions=$(mktemp -d)
+    describe zerofox --stage "$descriptions" >"$log_dir/bot-descriptions-stage.txt" 2>&1
+}
+function set_live() {
+    mkdir -p "$live_agents/$scout_id"
+    jq -n --arg d "$1" '{name: "Scout", description: $d, serverId: "kept"}' >"$live_agents/$scout_id/profile.json"
+}
+function box_check() { env BOT_AGENTS_LIVE="$live_agents" python3 "$descriptions/check-descriptions.py" "$@"; }
+function box_check_exits() {
+    local status=0
+    box_check "${@:2}" >"$log_dir/bot-descriptions-check.txt" 2>&1 || status=$?
+    [[ "$status" -eq "$1" ]]
+}
+function box_says() { grep -q -- "$1" "$log_dir/bot-descriptions-check.txt"; }
+function description_stage_stops() {
+    local reason=$1 target=$2
+    if describe zerofox --stage "$target" >"$log_dir/bot-descriptions-stage-refused.txt" 2>&1; then return 1; fi
+    grep -q -- "$reason" "$log_dir/bot-descriptions-stage-refused.txt"
+}
+
+stage_descriptions
+check "--stage writes each bot's description and the box check" bash -c "test \"\$(cat '$descriptions/scout.txt')\" = '$scout_text' && test -f '$descriptions/check-descriptions.py'"
+check "the manifest pins the description as a bot stores it, without the final newline" \
+    test "$(cat "$descriptions/descriptions.txt")" = "scout $scout_id $(printf '%s' "$scout_text" | shasum -a 256 | cut -c1-64)"
+set_live "$scout_text"
+check "the box check passes when every bot has the repo's description" box_check_exits 0
+check "it says so in its last line" box_says '^OK: every description matches$'
+set_live "${scout_text/Own rule one./Own rule zero.}"
+cp "$live_agents/$scout_id/profile.json" "$home/profile.before"
+check "the box check exits 1 when a bot's description differs" box_check_exits 1 --diff
+check "it counts the sentences that differ and names the file to set" box_says '^differs: scout (-1/+1 sentences); set it to scout.txt$'
+check "--diff prints the sentence to take out and the one to put in" bash -c "grep -qx '  -Own rule zero.' '$log_dir/bot-descriptions-check.txt' && grep -qx '  +Own rule one.' '$log_dir/bot-descriptions-check.txt'"
+check "the box check changes no bot" cmp -s "$live_agents/$scout_id/profile.json" "$home/profile.before"
+set_live "$scout_text "
+check "a description that differs only in spacing is reported as that" bash -c "! BOT_AGENTS_LIVE='$live_agents' python3 '$descriptions/check-descriptions.py' >'$log_dir/bot-descriptions-check.txt' 2>&1 && grep -q 'differs: scout (spacing or line breaks only)' '$log_dir/bot-descriptions-check.txt'"
+rm -rf "${live_agents:?}/$scout_id"
+check "a bot the box doesn't have is reported as missing" bash -c "! BOT_AGENTS_LIVE='$live_agents' python3 '$descriptions/check-descriptions.py' >'$log_dir/bot-descriptions-check.txt' 2>&1 && grep -q '^missing: scout' '$log_dir/bot-descriptions-check.txt'"
+echo "damaged" >>"$descriptions/scout.txt"
+check "a damaged bundle exits 2" box_check_exits 2
+check "it names the damaged description" box_says 'HASH_MISMATCH scout'
+check "--stage refuses a folder that isn't empty" description_stage_stops "isn't empty" "$descriptions"
+mkdir "$repo/.staging"
+check "--stage refuses a folder inside the repo" description_stage_stops 'Stage outside the repo' .staging
+rmdir "$repo/.staging"
+printf 'Runs on <machine-id>.\n' >>"$repo/base/bots/scout/description.txt"
+check "--stage stops on a description that holds a machine ID placeholder" description_stage_stops "description holds <machine-id>" "$(mktemp -d)"
+git -C "$repo" checkout -q -- .
+
+scout="$home/staging-scout"
+function stage_scout() {
+    rm -rf "${scout:?}"
+    mkdir -p "$scout/$scout_id"
+    printf '# Setup map\n' >"$scout/setup-map.md"
+    stage_ledger "$scout"
+    jq -n --arg d "$1" '{name: "Scout", description: $d, title: "", avatarShape: "", avatarColor: "", harness: "h", serverId: "kept"}' >"$scout/$scout_id/profile.json"
+    echo '{"notifyOnAgentUpdates": true}' >"$scout/$scout_id/settings.json"
+    write_report "$scout/$scout_id"
+}
+snap zerofox --seed >"$log_dir/bot-descriptions-seed.txt" 2>&1
+check "--seed records the description the repo composes" test "$(cat "$state/zerofox/descriptions/scout.txt")" = "$scout_text"
+stage_scout "$scout_text"
+check "a bot with the repo's description lists as matching" lists zerofox "$scout" "$log_dir/bot-descriptions-match-list.txt" '^  scout: matches the repo$'
+check "that snapshot takes the bot's other files" snap_answer zerofox "$scout" 'y\ny\ny\n' "$log_dir/bot-descriptions-match.txt"
+check "it never copies the description into profile.json" test "$(jq 'has("description")' "$repo/base/bots/scout/profile.json")" = false
+check "it leaves description.txt as the repo had it" bash -c "git -C '$repo' diff --quiet -- base/bots/scout/description.txt base/$sections"
+commit_all scout-files
+set_field "$state/zerofox/bots/scout/profile.json" '.description = "kept by a snapshot from before the repo declared descriptions"'
+check "a record that still holds a description in profile.json doesn't offer it back" lists_no_changes zerofox "$scout" "$log_dir/bot-descriptions-old-record.txt"
+mv "$state/zerofox/descriptions" "$home/descriptions.keep"
+check "without a recorded description, a bot with the repo's text still lists as matching" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-unrecorded-match.txt" '^  scout: matches the repo$'
+stage_scout "${scout_text/Own rule one./Own rule zero.}"
+check "without a recorded description, a bot with another text stops the snapshot" \
+    snap_stops 'Descriptions changed on the box' "$log_dir/bot-descriptions-unrecorded.txt" snap zerofox --list "$scout"
+mv "$home/descriptions.keep" "$state/zerofox/descriptions"
+stage_scout "$scout_text"
+
+printf 'Nested rule, changed in the repo.\n' >"$repo/base/$sections/nested.txt"
+commit_all repo-moves
+check "a repo change the bot doesn't have yet lists as not applied" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-pending-list.txt" "^  scout: the repo's text isn't on the bot yet$"
+check "that list has no changes to answer" grep -qx 'No changes.' "$log_dir/bot-descriptions-pending-list.txt"
+check "that snapshot applies" snap_answer zerofox "$scout" '' "$log_dir/bot-descriptions-pending.txt"
+check "it says which bots still need the repo's description" grep -q "The repo's description isn't on these bots yet: scout" "$log_dir/bot-descriptions-pending.txt"
+check "it leaves the repo clean" repo_clean || show_status
+
+applied_text="${scout_text/Nested rule./Nested rule, changed in the repo.}"
+stage_scout "${applied_text/Own rule one./Own rule two.}"
+check "a description that changed on the box stops the snapshot" \
+    snap_stops 'Descriptions changed on the box; nothing was written: scout' "$log_dir/bot-descriptions-edited.txt" snap zerofox --list "$scout"
+check "the stop shows the repo's sentence and the bot's" \
+    bash -c "grep -qx -- '-Own rule one.' '$log_dir/bot-descriptions-edited.txt' && grep -qx -- '+Own rule two.' '$log_dir/bot-descriptions-edited.txt'"
+check "the stopped snapshot leaves the repo clean" repo_clean || show_status
+sed 's/^Own rule one\.$/Own rule two./' "$repo/base/bots/scout/description.txt" >"$repo/base/bots/scout/description.txt.new"
+mv "$repo/base/bots/scout/description.txt.new" "$repo/base/bots/scout/description.txt"
+commit_all fold-in
+check "once the repo composes the bot's text, the bot lists as matching" lists zerofox "$scout" "$log_dir/bot-descriptions-folded.txt" '^  scout: matches the repo$'
+
+stage_scout "$applied_text Use $planted_token to call GitHub."
+check "a token in a live description stops the snapshot" snap_stops 'descriptions/scout.txt:' "$log_dir/bot-descriptions-secret.txt" snap zerofox --list "$scout"
+check "that stop never prints the token" bash -c "! grep -qF '$planted_token' '$log_dir/bot-descriptions-secret.txt'"
+
+git -C "$repo" rm -q base/bots/scout/description.txt
+commit_all no-description-source
+stage_scout $'First sentence. Second sentence.\n\nNext paragraph.'
+check "a bot whose description.txt is gone has its description offered again" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-new-list.txt" 'bots/scout/description.txt   change 1 of 1, new file'
+check "answer n applies" snap_answer zerofox "$scout" 'n\n' "$log_dir/bot-descriptions-new.txt"
+check "n puts the new description.txt in the profile, one sentence per line" \
+    test "$(cat "$repo/profiles/zerofox/bots/scout/description.txt")" = $'First sentence.\nSecond sentence.\n\nNext paragraph.'
+check "the profile then composes the bot's text" composed_is zerofox $'First sentence. Second sentence.\n\nNext paragraph.'
+rm "$repo/profiles/zerofox/bots/scout/description.txt"
+stage_scout $'Line one.\nLine two.'
+check "a new description a description.txt can't hold stops the snapshot" \
+    snap_stops "line breaks or spacing a description.txt can't hold" "$log_dir/bot-descriptions-spacing.txt" snap zerofox --list "$scout"
 echo
 
 echo "Failures: $failures"

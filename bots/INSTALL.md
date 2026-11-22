@@ -58,6 +58,10 @@ whether every profile should get it:
 
 - A change for every profile goes in `base/bots/<path>`. Check that each
   profile with a fleet still renders the file with `--show`.
+- A bot's description is composed from its `description.txt` and the sections
+  that file includes, as [Bot descriptions](README.md#bot-descriptions)
+  describes. Change the sentence where it's written, in base or in the
+  profile.
 - A change for this profile only goes in its patch. Write the full file the
   profile should have to `.conflicts/bots/<path>`, then run
   `./copy.sh --resolve bots/<path>`, which writes the patch.
@@ -73,16 +77,18 @@ copy both into git.
 Create each bot you chose, in any order. Bots refer to each other by name, so
 give each bot exactly the `name` in its rendered `profile.json`.
 
-1. Print the bot's profile and settings:
+1. Print the bot's description, profile, and settings:
 
    ```sh
+   bots/descriptions.sh <slug>
    ./install.sh --show bots/<slug>/profile.json
    ./install.sh --show bots/<slug>/settings.json
    ```
 
-2. In the app, create the bot with the description, name, title, avatar, and
-   harness from `profile.json`, and set each option in `settings.json`. Leave
-   any field the profile leaves empty at the app's default.
+2. In the app, create the bot with that description, with the name, title,
+   avatar, and harness from `profile.json`, and set each option in
+   `settings.json`. Leave any field the profile leaves empty at the app's
+   default.
 3. Print each of the bot's routines, from `bots/<slug>/routines/`:
 
    ```sh
