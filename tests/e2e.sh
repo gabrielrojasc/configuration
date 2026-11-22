@@ -1241,6 +1241,10 @@ check "an indented include line stops instead of reaching the bot as text" descr
 printf 'Nested rule.\n@Include %s/who.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
 check "a miscapitalized include line stops" describe_stops "isn't '@include <key>' from the first column" zerofox scout
 git -C "$repo" checkout -q -- .
+in_repo env DOTFILES_PROFILE=zerofox bash -c 'source ./utils.sh && load_profile && make_patch "$1" /nonexistent' _ "$sections/nested.txt"
+check "an include of a section the profile's patch deletes stops and names the including file" \
+    describe_stops "$sections/nested.txt is deleted for profile zerofox (included by $sections/rules.txt)" zerofox scout
+rm -rf "${repo:?}/profiles/zerofox/patches/bots"
 
 live_agents="$home/agents"
 function stage_descriptions() {
@@ -1280,6 +1284,9 @@ check "the box check changes no bot" cmp -s "$live_agents/$scout_id/profile.json
 set_live "${scout_text/Second paragraph./-- Second paragraph.}"
 check "the box check exits 1 on a sentence that starts with --" box_check_exits 1 --diff
 check "--diff prints that sentence and counts it" bash -c "grep -qx '  --- Second paragraph.' '$log_dir/bot-descriptions-check.txt' && grep -q '^differs: scout (-1/+1 sentences)' '$log_dir/bot-descriptions-check.txt'"
+set_live $'Scout bot. He works in Chile. Own rule one.\n\nShared rule one. Nested rule.'
+check "a paragraph the bot lacks counts its sentence and not the blank line before it" \
+    bash -c "! BOT_AGENTS_LIVE='$live_agents' python3 '$descriptions/check-descriptions.py' >'$log_dir/bot-descriptions-check.txt' 2>&1 && grep -q '^differs: scout (-0/+1 sentences)' '$log_dir/bot-descriptions-check.txt'"
 echo '[]' >"$live_agents/$scout_id/profile.json"
 check "a profile.json that isn't an object exits 2" box_check_exits 2
 check "it names the bot whose profile can't be read" box_says "UNREADABLE scout: its profile.json isn't a JSON object"
@@ -1347,6 +1354,10 @@ jq --arg d "${scout_text/Own rule one./Own rule zero.}" '.description = $d' "$st
 mv "$home/record.json" "$state/zerofox/bots/scout/profile.json"
 check "a record from before description.txt that holds the bot's text lists it as not applied yet" \
     lists zerofox "$scout" "$log_dir/bot-descriptions-old-record-pending.txt" "^  scout: the repo's text isn't on the bot yet$"
+set_field "$state/zerofox/bots/scout/profile.json" '.description = ""'
+stage_scout ""
+check "a record from before description.txt that holds an empty description lists a bot without one as not applied yet" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-old-record-empty.txt" "^  scout: the repo's text isn't on the bot yet$"
 mv "$home/descriptions.keep" "$state/zerofox/descriptions"
 stage_scout "$scout_text"
 
@@ -1385,7 +1396,6 @@ git -C "$repo" checkout -q -- .
 stage_scout "$applied_text Use $planted_token to call GitHub."
 check "a token in a live description stops the snapshot" snap_stops 'descriptions/scout.txt:' "$log_dir/bot-descriptions-secret.txt" snap zerofox --list "$scout"
 check "that stop never prints the token" bash -c "! grep -qF '$planted_token' '$log_dir/bot-descriptions-secret.txt'"
-check "the token reaches neither the repo nor the record" no_planted_values
 
 git -C "$repo" rm -q base/bots/scout/description.txt
 commit_all no-description-source
@@ -1403,6 +1413,17 @@ rm "$repo/profiles/zerofox/bots/scout/description.txt"
 stage_scout $'Line one.\nLine two.'
 check "a new description a description.txt can't hold stops the snapshot" \
     snap_stops "line breaks or spacing a description.txt can't hold" "$log_dir/bot-descriptions-spacing.txt" snap zerofox --list "$scout"
+snap zerofox --seed >"$log_dir/bot-descriptions-seed-undeclared.txt" 2>&1
+printf 'Scout bot.\n' >"$repo/base/bots/scout/description.txt"
+stage_scout "Another text."
+check "a bot whose description a seed never recorded stops for that reason" \
+    snap_stops 'recorded none to tell which side changed: scout' "$log_dir/bot-descriptions-seeded.txt" snap zerofox --list "$scout"
+rm "$repo/base/bots/scout/description.txt"
+stage_scout "First sentence. Use $planted_token to call GitHub."
+check "a token in a description the repo doesn't declare yet stops the snapshot" \
+    snap_stops 'bots/scout/description.txt:' "$log_dir/bot-descriptions-new-secret.txt" snap zerofox --list "$scout"
+snap_answer zerofox "$scout" 'n\n' "$log_dir/bot-descriptions-new-secret-apply.txt" || true
+check "that token reaches neither the repo nor the record" no_planted_values
 echo
 
 echo "Failures: $failures"

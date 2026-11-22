@@ -44,7 +44,8 @@
 # from the bot's description.txt. A snapshot never copies a description into
 # the repo. It compares the bot's with the composed text, lists a bot the
 # repo's text hasn't reached yet, and stops on a description that changed on
-# the box. A bot with no description.txt gets one from its live text, offered
+# the box or that differs from the repo's with none recorded at the last
+# snapshot. A bot with no description.txt gets one from its live text, offered
 # as a new file.
 
 set -euo pipefail
@@ -131,6 +132,10 @@ function description_text() {
     if [[ -s "$2" ]]; then echo >>"$2"; fi
 }
 
+function joined() {
+    printf '%s, ' "$@" | sed 's/, $//'
+}
+
 function translate_record() {
     local i key old
     rm -rf "$record"
@@ -148,7 +153,8 @@ function translate_record() {
         if [[ -n "$old" && -f "$baseline/descriptions/$old.txt" ]]; then
             mkdir -p "$record/descriptions"
             cp "$baseline/descriptions/$old.txt" "$record/descriptions/${slugs[i]}.txt"
-        elif [[ -n "$old" && -f "$baseline/bots/$old/profile.json" ]]; then
+        elif [[ -n "$old" && -f "$baseline/bots/$old/profile.json" ]] &&
+            jq -e 'type == "object" and has("description")' "$baseline/bots/$old/profile.json" >/dev/null; then
             mkdir -p "$record/descriptions"
             description_text "$baseline/bots/$old/profile.json" "$record/descriptions/${slugs[i]}.txt"
         fi
@@ -480,7 +486,6 @@ hits=$({
 [[ -z "$hits" ]] || die "Possible secrets; nothing was written. Remove them at the source or in staging, then rerun:
 $(sed 's/^/  /' <<<"$hits")"
 
-function joined() { printf '%s, ' "$@" | sed 's/, $//'; }
 stopped=(${edited[@]+"${edited[@]}"} ${unrecorded[@]+"${unrecorded[@]}"})
 if ((${#stopped[@]})); then
     for slug in "${stopped[@]}"; do
@@ -658,7 +663,7 @@ if ((answers_ran_out)); then
     color_print "$yellow" "The answers ran out before the last change; the rest stay in $DOTFILES_PROFILE only."
 fi
 if ((${#pending[@]})); then
-    color_print "$blue" "The repo's description isn't on these bots yet: $(printf '%s, ' "${pending[@]}" | sed 's/, $//'). Apply it as bots/README.md, \"Apply the descriptions to a box\", describes."
+    color_print "$blue" "The repo's description isn't on these bots yet: $(joined "${pending[@]}"). Apply it as bots/README.md, \"Apply the descriptions to a box\", describes."
 fi
 section 'Snapshot'
 if ((${#copied[@]})); then
