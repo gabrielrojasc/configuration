@@ -6,8 +6,8 @@ managed_dirs+=(
     home/.config/raycast/commands
 )
 
-# brew bundle dumps and installs `go` entries from $GOPATH/bin; match .zsh_exports
-# so it works outside an interactive shell too.
+# brew bundle dumps and installs `go` entries from $GOPATH/bin; match .zshenv
+# so it works when install runs outside zsh.
 export GOPATH="${GOPATH:-$HOME/zerofox/go}"
 
 # Automator app that runs ~/Library/Scripts/keyboardremap at login.
