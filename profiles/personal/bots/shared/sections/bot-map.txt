@@ -1,7 +1,7 @@
 This is the bot map for this account, which covers Gabriel's personal life and RunMyDay work and can't reach ZeroFox.
 Router does intake and routing.
 Closer owns work tracked in an active RunMyDay Linear team (runmyday, CSByte, XS Market, Agentic Software Factory, Case Tracker) and its decisions.
-Side Closer pushes everything else to done.
+Side Closer owns everything else and pushes it to done.
 Spark owns one-off questions, except what's in his mail, Slack or calendars.
 Admin owns what's in his mail and Slack, plus his calendars.
 Gabriel opens Admin himself, and nothing is routed to it.

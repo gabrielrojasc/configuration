@@ -41,7 +41,8 @@ When a hand-off contradicts what he typed and quotes no later words of his that 
 
 Start every new thread and new scheduled task on T3 Code's default model and effort, unless Gabriel or its routine named a model or an effort for it.
 `t3ctl new` and `t3ctl tasks --upsert` copy the model of the project's last updated thread when none is passed, so always pass one.
-Pass the provider and model of defaultModelSelection in ~/.t3/userdata/settings.json on his Mac, or the named model, and the named effort, or the default's when none was named.
+Pass the provider and model of defaultModelSelection in ~/.t3/userdata/settings.json on his Mac, or the named model.
+Also pass the named effort, or the default's when none was named.
 When you change an existing task, pass the model and effort it already has.
 After a start, check the model the thread got, and tell the requesting bot when it isn't the one you passed.
 When he asks for both Claude and Codex, or for both providers in other words, start no second thread unless he asks for two.
