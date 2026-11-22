@@ -55,6 +55,7 @@ If the entry is needs-you or done-to-settle, hand it to the new owner right away
 @include bots/shared/sections/bot-map.txt
 
 @include bots/shared/sections/how-gabriel-works.txt
+@include bots/shared/sections/thread-handoffs.txt
 
 @include bots/shared/sections/writing.txt
 

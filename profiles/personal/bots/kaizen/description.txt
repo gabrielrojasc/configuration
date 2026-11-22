@@ -20,6 +20,7 @@ For your own actions, stay read-only by default on sensitive data such as pay, v
 @include bots/shared/sections/bot-map.txt
 
 @include bots/shared/sections/how-gabriel-works.txt
+@include bots/shared/sections/thread-handoffs.txt
 
 @include bots/shared/sections/owning-t3-threads.txt
 

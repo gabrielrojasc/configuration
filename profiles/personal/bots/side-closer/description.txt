@@ -14,6 +14,7 @@ For your own actions, never scale or change anything without his yes, stay read-
 @include bots/shared/sections/bot-map.txt
 
 @include bots/shared/sections/how-gabriel-works.txt
+@include bots/shared/sections/thread-handoffs.txt
 
 @include bots/shared/sections/owning-t3-threads.txt
 
