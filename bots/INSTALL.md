@@ -69,8 +69,8 @@ whether every profile should get it:
   `profiles/<profile>/bots/<path>`.
 
 Name other bots by their `name` only, never by bot id. Bot ids live only in
-`bots.txt`. Never put a credential in a description or routine: snapshots
-copy both into git.
+`bots.txt`. Never put a credential in a description or routine: both are
+kept in git.
 
 ## Create the bots
 

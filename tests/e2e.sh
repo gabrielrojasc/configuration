@@ -1154,9 +1154,6 @@ check "--bump warns when a profile patch no longer applies" grep -q 'zerofox no 
 check "the snapshot script leaves the manifest out of a seed" bash -c "(cd '$repo' && HOME='$home' XDG_STATE_HOME='$home/.local/state' DOTFILES_PROFILE=personal bots/snapshot.sh --seed) >/dev/null 2>&1 && test ! -e '$home/.local/state/dotfiles/bots/personal/$skills_key'"
 echo
 
-# The repo declares each bot's description. A scratch bot stands in for a
-# fleet, and a folder of profile.json files stands in for the box's agents, so
-# the real scripts run from description.txt to the box check and the snapshot.
 echo "== bot descriptions"
 fresh zerofox
 function describe() { in_repo env DOTFILES_PROFILE="$1" bots/descriptions.sh "${@:2}"; }
@@ -1239,6 +1236,10 @@ printf 'Nested rule.\n@include %s/rules.txt\n' "$sections" >"$repo/base/$section
 check "a section that includes itself stops" describe_stops "$sections/rules.txt includes itself" zerofox scout
 printf 'Nested rule.\n@include\n' >"$repo/base/$sections/nested.txt"
 check "an include line without a key stops" describe_stops 'has an include line without one key' zerofox scout
+printf 'Nested rule.\n  @include %s/who.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
+check "an indented include line stops instead of reaching the bot as text" describe_stops 'has an include line without one key' zerofox scout
+printf 'Nested rule.\n@Include %s/who.txt\n' "$sections" >"$repo/base/$sections/nested.txt"
+check "a miscapitalized include line stops" describe_stops 'has an include line without one key' zerofox scout
 git -C "$repo" checkout -q -- .
 
 live_agents="$home/agents"
@@ -1276,6 +1277,12 @@ check "the box check exits 1 when a bot's description differs" box_check_exits 1
 check "it counts the sentences that differ and names the file to set" box_says '^differs: scout (-1/+1 sentences); set it to scout.txt$'
 check "--diff prints the sentence to take out and the one to put in" bash -c "grep -qx '  -Own rule zero.' '$log_dir/bot-descriptions-check.txt' && grep -qx '  +Own rule one.' '$log_dir/bot-descriptions-check.txt'"
 check "the box check changes no bot" cmp -s "$live_agents/$scout_id/profile.json" "$home/profile.before"
+set_live "${scout_text/Second paragraph./-- Second paragraph.}"
+check "--diff counts a sentence that starts with --" box_check_exits 1 --diff
+check "it prints that sentence to take out" bash -c "grep -qx '  --- Second paragraph.' '$log_dir/bot-descriptions-check.txt' && grep -q '^differs: scout (-1/+1 sentences)' '$log_dir/bot-descriptions-check.txt'"
+echo '[]' >"$live_agents/$scout_id/profile.json"
+check "a profile.json that isn't an object exits 2" box_check_exits 2
+check "it names the bot whose profile can't be read" box_says "UNREADABLE scout: its profile.json isn't a JSON object"
 set_live "$scout_text "
 check "a description that differs only in spacing is reported as that" bash -c "! BOT_AGENTS_LIVE='$live_agents' python3 '$descriptions/check-descriptions.py' >'$log_dir/bot-descriptions-check.txt' 2>&1 && grep -q 'differs: scout (spacing or line breaks only)' '$log_dir/bot-descriptions-check.txt'"
 rm -rf "${live_agents:?}/$scout_id"
@@ -1317,6 +1324,10 @@ check "without a recorded description, a bot with the repo's text still lists as
 stage_scout "${scout_text/Own rule one./Own rule zero.}"
 check "without a recorded description, a bot with another text stops the snapshot" \
     snap_stops 'Descriptions changed on the box' "$log_dir/bot-descriptions-unrecorded.txt" snap zerofox --list "$scout"
+jq --arg d "${scout_text/Own rule one./Own rule zero.}" '.description = $d' "$state/zerofox/bots/scout/profile.json" >"$home/record.json"
+mv "$home/record.json" "$state/zerofox/bots/scout/profile.json"
+check "a record from before description.txt that holds the bot's text lists it as not applied yet" \
+    lists zerofox "$scout" "$log_dir/bot-descriptions-old-record-pending.txt" "^  scout: the repo's text isn't on the bot yet$"
 mv "$home/descriptions.keep" "$state/zerofox/descriptions"
 stage_scout "$scout_text"
 
@@ -1325,6 +1336,13 @@ commit_all repo-moves
 check "a repo change the bot doesn't have yet lists as not applied" \
     lists zerofox "$scout" "$log_dir/bot-descriptions-pending-list.txt" "^  scout: the repo's text isn't on the bot yet$"
 check "that list has no changes to answer" grep -qx 'No changes.' "$log_dir/bot-descriptions-pending-list.txt"
+cp "$repo/base/$sections/nested.txt" "$home/nested.keep"
+printf 'Added after the list.\n' >>"$repo/base/$sections/nested.txt"
+commit_all section-after-list
+check "--expect refuses when a section changed after the list" \
+    snap_stops 'Run --list again' "$log_dir/bot-descriptions-fingerprint.txt" snap_expect "$(fingerprint_in "$log_dir/bot-descriptions-pending-list.txt")" "$scout"
+cp "$home/nested.keep" "$repo/base/$sections/nested.txt"
+commit_all section-restored
 check "that snapshot applies" snap_answer zerofox "$scout" '' "$log_dir/bot-descriptions-pending.txt"
 check "it says which bots still need the repo's description" grep -q "The repo's description isn't on these bots yet: scout" "$log_dir/bot-descriptions-pending.txt"
 check "it leaves the repo clean" repo_clean || show_status

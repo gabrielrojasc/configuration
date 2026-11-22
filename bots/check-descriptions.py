@@ -63,7 +63,8 @@ def sentences(text):
 
 
 def changes(live, wanted):
-    return [line for line in difflib.unified_diff(sentences(live), sentences(wanted), lineterm="", n=0) if line[:1] in "+-" and line[:3] not in ("+++", "---")]
+    diff = list(difflib.unified_diff(sentences(live), sentences(wanted), lineterm="", n=0))
+    return [line for line in diff[2:] if line[:1] in ("+", "-")]
 
 
 def main():
@@ -78,9 +79,12 @@ def main():
             missing.append(slug)
             continue
         try:
-            live = json.loads(profile.read_text("utf-8")).get("description")
+            data = json.loads(profile.read_text("utf-8"))
         except ValueError:
             fail(f"UNREADABLE {slug}: its profile.json isn't valid JSON")
+        if not isinstance(data, dict):
+            fail(f"UNREADABLE {slug}: its profile.json isn't a JSON object")
+        live = data.get("description")
         live = live if isinstance(live, str) else ""
         if live == text:
             matches.append(slug)

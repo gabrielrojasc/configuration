@@ -22,13 +22,6 @@ usage="Usage: bots/descriptions.sh <slug> | --sources <slug> | --stage <empty-fo
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-function composed() {
-    local slug=$1 out=$2 key
-    key=$(description_key "$slug")
-    [[ -n "$(source_of "$key")" ]] || die "$key is not managed by profile $DOTFILES_PROFILE"
-    compose "$key" "$out" || die "$key doesn't compose for profile $DOTFILES_PROFILE"
-}
-
 function sources() {
     local key patch
     include_log="$work/keys"
@@ -45,12 +38,8 @@ function sources() {
 }
 
 function stage() {
-    local staging root bundle="$work/bundle" roster="$profile_dir/bots.txt" slug id count=0
-    staging=$(cd "$start_dir" && cd "$1" 2>/dev/null && pwd -P) || die "Staging folder not found: $1"
-    root=$(pwd -P)
-    if [[ "$staging" == "$root" || "$staging" == "$root"/* ]]; then
-        die "Stage outside the repo, for example in mktemp -d: $staging is inside $root"
-    fi
+    local staging bundle="$work/bundle" roster="$profile_dir/bots.txt" slug id count=0
+    staging=$(staging_folder "$start_dir" "$1") || exit 1
     [[ -z "$(ls -A "$staging")" ]] || die "$staging isn't empty"
     [[ -f "$roster" ]] || die "Profile $DOTFILES_PROFILE has no Grok Bot fleet: $roster is missing. See bots/README.md."
 

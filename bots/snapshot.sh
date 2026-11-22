@@ -143,6 +143,10 @@ function translate_record() {
         if [[ -n "$old" && -f "$baseline/descriptions/$old.txt" ]]; then
             mkdir -p "$record/descriptions"
             cp "$baseline/descriptions/$old.txt" "$record/descriptions/${slugs[i]}.txt"
+        elif [[ -n "$old" && -f "$baseline/bots/$old/profile.json" ]] &&
+            jq -e '(.description | type) == "string" and .description != ""' "$baseline/bots/$old/profile.json" >/dev/null; then
+            mkdir -p "$record/descriptions"
+            { jq -j .description "$baseline/bots/$old/profile.json"; echo; } >"$record/descriptions/${slugs[i]}.txt"
         fi
     done
     hide_machine_ids "$record"
@@ -150,10 +154,6 @@ function translate_record() {
 
 function declares_description() {
     [[ -n "$(source_of "$(description_key "$1")")" ]]
-}
-
-function composed() {
-    compose "$(description_key "$1")" "$2" || die "$(description_key "$1") doesn't compose for $DOTFILES_PROFILE; fix that first"
 }
 
 function baseline_of() {
@@ -210,11 +210,7 @@ if [[ "$mode" == sync ]]; then
 fi
 
 [[ -n "$staging_arg" ]] || die "Usage: bots/snapshot.sh [--list | --expect <fingerprint> | --discard] <staging-dir>"
-staging=$(cd "$start_dir" && cd "$staging_arg" 2>/dev/null && pwd -P) || die "Staging folder not found: $staging_arg"
-root=$(pwd -P)
-if [[ "$staging" == "$root" || "$staging" == "$root"/* ]]; then
-    die "Stage outside the repo, for example in mktemp -d: $staging is inside $root"
-fi
+staging=$(staging_folder "$start_dir" "$staging_arg") || exit 1
 routine_re='^[a-z0-9][a-z0-9-]*\.md$'
 
 function expected() {
@@ -499,7 +495,6 @@ all_keys=$({
     (cd "$record" && find bots -type f)
 } | while IFS= read -r key; do
     slug=$(echo "$key" | cut -d/ -f2)
-    if [[ "$key" == "$(description_key "$slug")" ]] && declares_description "$slug"; then continue; fi
     if [[ "$slug" == shared ]] || grep -q "^$slug " "$roster"; then echo "$key"; fi
 done | LC_ALL=C sort -u)
 

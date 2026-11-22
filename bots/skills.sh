@@ -32,13 +32,9 @@ function fetch() {
 }
 
 function stage() {
-    local staging root bundle="$work/bundle" upstream="" dir="" commit="" count=0
+    local staging bundle="$work/bundle" upstream="" dir="" commit="" count=0
     local first second third fourth fifth
-    staging=$(cd "$start_dir" && cd "$1" 2>/dev/null && pwd -P) || die "Staging folder not found: $1"
-    root=$(pwd -P)
-    if [[ "$staging" == "$root" || "$staging" == "$root"/* ]]; then
-        die "Stage outside the repo, for example in mktemp -d: $staging is inside $root"
-    fi
+    staging=$(staging_folder "$start_dir" "$1") || exit 1
     [[ -z "$(ls -A "$staging")" ]] || die "$staging isn't empty"
 
     load_profile

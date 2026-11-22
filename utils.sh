@@ -301,7 +301,7 @@ function expand_includes() {
                     break
                 fi
                 ;;
-            @include*)
+            *@[Ii]nclude*)
                 color_print "$red" "$key has an include line without one key: $line" >&2
                 status=1
                 break
@@ -350,6 +350,27 @@ function compose() {
 # description_key <slug>: the key a bot's description is composed from.
 function description_key() {
     echo "bots/$1/description.txt"
+}
+
+# composed <slug> <out>: write the description the profile's bot should have,
+# or stop.
+function composed() {
+    local key
+    key=$(description_key "$1")
+    [[ -n "$(source_of "$key")" ]] || die "$key is not managed by profile $DOTFILES_PROFILE"
+    compose "$key" "$2" || die "$key doesn't compose for profile $DOTFILES_PROFILE; fix that first"
+}
+
+# staging_folder <start dir> <folder>: print the folder's real path, resolved
+# from <start dir>, or stop when it is missing or inside the repo.
+function staging_folder() {
+    local staging root
+    staging=$(cd "$1" && cd "$2" 2>/dev/null && pwd -P) || die "Staging folder not found: $2"
+    root=$(pwd -P)
+    if [[ "$staging" == "$root" || "$staging" == "$root"/* ]]; then
+        die "Stage outside the repo, for example in mktemp -d: $staging is inside $root"
+    fi
+    echo "$staging"
 }
 
 # make_patch <key> <target>: store <target> as base/<key> plus a patch, or
