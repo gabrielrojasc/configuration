@@ -114,7 +114,7 @@ def load_bundle():
             fields, body = parse(data.decode("utf-8"))
         except ValueError as error:
             fail(f"UNSUPPORTED_SKILL {skill_id}: {error}")
-        extra = sorted(set(fields) - {"name", "description"})
+        extra = sorted(set(fields) - {"name", "description", "disable-model-invocation"})
         if extra:
             fail(f"UNSUPPORTED_SKILL {skill_id}: UpdateSkill can't write {', '.join(extra)}")
         skills[skill_id] = (fields, body)

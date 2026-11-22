@@ -868,13 +868,13 @@ function declares_every_skill() {
     local listed
     listed=$(declared "$1" | awk 'NF == 2 { print $1 }')
     grep -qx open-items <<<"$listed" && grep -qx grok-rewrite-it <<<"$listed" && grep -qx grok-slack-message <<<"$listed" &&
-        grep -qx t3-tots-rules <<<"$listed" && grep -qx t3-install-tools <<<"$listed"
+        grep -qx unslop <<<"$listed" && grep -qx t3-tots-rules <<<"$listed" && grep -qx t3-install-tools <<<"$listed"
 }
 function pins_are_exact() {
     declared "$1" | awk '$1 == "source" && $5 !~ /^[0-9a-f]+$/ || $1 == "source" && length($5) != 40 || NF == 2 && length($2) != 64 { bad = 1 } END { exit bad }'
 }
 for profile in zerofox personal; do
-    check "$profile declares the skills/bots skills and the t3 skills" declares_every_skill "$profile"
+    check "$profile declares the skills/bots skills, unslop, and the t3 skills" declares_every_skill "$profile"
     check "$profile pins each source to a commit and each skill to a sha256" pins_are_exact "$profile"
 done
 
@@ -1117,6 +1117,10 @@ upstream_ref acme/bots licensed c8
 upstream_skill acme/bots c8 skills/bots zeta 'Zeta steps.'
 perl -pi -e 's/^name: zeta$/name: zeta\nlicense: MIT/' "$home/upstream/acme/bots/c8/skills/bots/zeta/SKILL.md"
 check "--bump stops on frontmatter UpdateSkill can't write" bump_stops 'can write only name and description' acme/bots licensed
+upstream_ref acme/bots manual c13
+upstream_skill acme/bots c13 skills/bots zeta 'Zeta steps.'
+perl -pi -e 's/^name: zeta$/name: zeta\ndisable-model-invocation: true/' "$home/upstream/acme/bots/c13/skills/bots/zeta/SKILL.md"
+check "--bump stops on disable-model-invocation outside a listed source" bump_stops 'fields description disable-model-invocation name' acme/bots manual
 upstream_ref acme/bots misnamed c9
 upstream_skill acme/bots c9 skills/bots zeta 'Zeta steps.'
 perl -pi -e 's/^name: zeta$/name: other/' "$home/upstream/acme/bots/c9/skills/bots/zeta/SKILL.md"
@@ -1127,6 +1131,40 @@ check "--bump stops on a skill id the bundle uses" bump_stops "can't be a skill 
 cp "$repo/base/$skills_key" "$home/manifest.good"
 printf '\nsource acme/bots other main c3\nzeta 00\n' >>"$repo/base/$skills_key"
 check "--bump stops on a repo listed twice" bump_stops 'lists acme/bots twice' acme/bots
+cp "$home/manifest.good" "$repo/base/$skills_key"
+
+upstream_ref acme/many main c11
+upstream_skill acme/many c11 skills one 'One steps.'
+perl -pi -e 's/^name: one$/name: one\ndisable-model-invocation: true/' "$home/upstream/acme/many/c11/skills/one/SKILL.md"
+upstream_skill acme/many c11 skills two 'Two steps.'
+upstream_skill acme/many c11 skills three 'Three steps.'
+echo run >"$home/upstream/acme/many/c11/skills/three/run.sh"
+printf '\nsource acme/many skills main 0 listed\none 0\n' >>"$repo/base/$skills_key"
+skills_cmd --bump acme/many >"$log_dir/bot-skills-listed.txt" 2>&1
+function pins_only_one() { [[ $(sed -n '/^source acme\/many/,/^$/p' "$repo/base/$skills_key" | awk 'NF == 2 { print $1 }') == one ]]; }
+check "a listed source keeps its listed mark" grep -qx 'source acme/many skills main c11 listed' "$repo/base/$skills_key"
+check "a bump of a listed source pins only the listed skills" pins_only_one
+check "a bump of a listed source records a skill that sets disable-model-invocation" bash -c "grep -qx \"one \$(shasum -a 256 '$home/upstream/acme/many/c11/skills/one/SKILL.md' | awk '{ print \$1 }')\" '$repo/base/$skills_key'"
+check "--stage reads a source line that ends in listed" stage_bundle
+check "--stage downloads a listed source's skill at its commit" cmp -s "$bundle/one/SKILL.md" "$home/upstream/acme/many/c11/skills/one/SKILL.md"
+check "the check reads a bundle whose manifest has a listed source" check_says 'missing: one'
+skills_check --plan >/dev/null 2>&1 || true
+check "a plan entry leaves out disable-model-invocation" bash -c "[[ \$(jq -c 'keys' '$bundle/plan/one.json') == '[\"body\",\"description\",\"id\",\"name\",\"new\"]' ]]"
+apply_plan
+check "a skill written without disable-model-invocation counts as a match" check_passes
+upstream_ref acme/many gone c12
+upstream_skill acme/many c12 skills two 'Two steps.'
+check "a bump of a listed source stops when a listed skill is gone" bump_stops 'has no skills/one/SKILL.md' acme/many gone
+cp "$home/manifest.good" "$repo/base/$skills_key"
+printf '\nsource acme/many skills main 0 listed\n' >>"$repo/base/$skills_key"
+check "a listed source with no skills stops" bump_stops 'listed pins only those' acme/many
+cp "$home/manifest.good" "$repo/base/$skills_key"
+printf '\nsource acme/many skills main 0 every\none 0\n' >>"$repo/base/$skills_key"
+check "a source line with an unknown last word stops" bump_stops 'only listed can go there' acme/many
+cp "$home/manifest.good" "$repo/base/$skills_key"
+printf '\nsource acme/many skills main 0 listed\none 0\ntwo\n' >>"$repo/base/$skills_key"
+skills_cmd --bump acme/many >"$log_dir/bot-skills-listed-bare.txt" 2>&1
+check "a bump of a listed source pins a skill line that has no sha256 yet" grep -q '^two ' "$repo/base/$skills_key"
 cp "$home/manifest.good" "$repo/base/$skills_key"
 
 printf '%s' "$(cat "$repo/base/$skills_key")" >"$repo/base/$skills_key"

@@ -333,6 +333,21 @@ follows, and the commit and sha256 decide what gets installed. Each skill is
 one `SKILL.md`, with `name` and `description` as its only frontmatter, because
 that's all `UpdateSkill` can write. The `name` must match the skill's folder.
 
+A source line that ends in `listed` pins only the skills listed under it, so a
+box can take one skill from a repo of many:
+
+```text
+source cursor/plugins pstack/skills main 7a583913eb1b8d1a0ee76753d1a2cf072e7b54f9 listed
+unslop 2b823fd069e031c1420180be8e0d4f5e2fd25bf2c428049e5c835c59a489b5e0
+```
+
+To add a skill to such a source, add a line `<skill id> 0` under it and bump.
+
+A skill under a `listed` source can also set `disable-model-invocation`. A box
+has no such setting, so the plan leaves it out and every bot can load the
+skill. A bump of any other source stops on that field, because it records
+skills nobody named.
+
 A profile that needs a different set changes it with a patch, like any other
 key. To print a profile's set, run:
 
@@ -407,7 +422,8 @@ downloads and the copy that reaches the box.
 ### Bump a pin
 
 A bump moves a source to the commit its ref points at, and records every skill
-there, so a skill added to `skills/bots` joins the set:
+there, so a skill added to `skills/bots` joins the set. For a `listed` source it
+records only the listed skills, and stops when one is gone:
 
 ```sh
 bots/skills.sh --bump gabrielrojasc/skills
