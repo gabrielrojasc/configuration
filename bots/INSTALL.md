@@ -87,8 +87,9 @@ give each bot exactly the `name` in its rendered `profile.json`.
 
 2. In the app, create the bot with that description, with the name, title,
    avatar, and harness from `profile.json`, and set each option in
-   `settings.json`. Leave any field the profile leaves empty at the app's
-   default.
+   `settings.json`. The description is Markdown, so keep every `#`, `-`, and
+   line break as printed. Leave any field the profile leaves empty at the
+   app's default.
 3. Print each of the bot's routines, from `bots/<slug>/routines/`:
 
    ```sh

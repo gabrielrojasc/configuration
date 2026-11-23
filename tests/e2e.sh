@@ -1485,6 +1485,7 @@ stage_scout $'Line one.\nLine two.'
 check "a new description a description.md can't hold stops the snapshot" \
     snap_stops "line breaks or spacing a description.md can't hold" "$log_dir/bot-descriptions-spacing.txt" snap zerofox --list "$scout"
 snap zerofox --seed >"$log_dir/bot-descriptions-seed-undeclared.txt" 2>&1
+check "--seed records a routine whose file is named description.md" test -f "$state/zerofox/bots/scout/routines/description.md"
 printf 'Scout bot.\n' >"$repo/base/bots/scout/description.md"
 stage_scout "Another text."
 check "a bot whose description a seed never recorded stops for that reason" \

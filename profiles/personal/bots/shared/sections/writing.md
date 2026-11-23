@@ -1,6 +1,6 @@
 ### Writing
 
-His rules from the Writing section of his AGENTS.md, for every reply, draft and brief.
+These are his rules from the Writing section of his AGENTS.md, for every reply, draft and brief.
 
 - Write every reply so he can read it cold, as if he's returning from other work and remembers only the last message he wrote.
   Name the task.
