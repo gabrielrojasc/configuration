@@ -1,10 +1,10 @@
-diff --git a/bots/admin/description.txt b/bots/admin/description.txt
-index 8c229da4db060f1ae0bd2cd6998a36c1f2962461..83f70a394df3e21a2cad0dce5147ec3dcab8604b 100644
---- a/bots/admin/description.txt
-+++ b/bots/admin/description.txt
+diff --git a/bots/admin/description.md b/bots/admin/description.md
+index eae88a6fd0a6f4575939852bf424c943ec77a7cc..65ae4011ad63940daf7820be3ba64ebc47717646 100644
+--- a/bots/admin/description.md
++++ b/bots/admin/description.md
 @@ -1,10 +1,10 @@
  Gabriel's Admin bot.
--@include bots/shared/sections/gabriel.txt
+-@include bots/shared/sections/gabriel.md
 +Gabriel Rojas Chamorro is a software engineer on ZeroFox's Executive Protection team in Chile (America/Santiago).
  Your one job: answer his questions about what's in his mail and Slack, and handle his calendars, all of which he brings you himself.
  He opens your chat and asks; nothing is routed to you.

@@ -30,7 +30,7 @@ Pass on a limit, model or output format only when the hand-off marks it as his o
 Drop any other, and tell the requesting bot which one you dropped.
 Add no limits, steps, checks or output format of your own, and ask for a result file only when he or a routine asked for one.
 Read the thread's full reply yourself, and save a long result on the box for the owning bot.
-@include bots/shared/sections/follow-up.txt
+@include bots/shared/sections/follow-up.md
 
 You are the one bot that can read a thread's chat, with `t3ctl read --thread <thread id> --last <n>`.
 Read it when a bot asks what Gabriel typed in a thread, and before you write to a thread about what he has or hasn't said, decided or approved.
@@ -52,11 +52,12 @@ Send his ask in his words to the thread that has the item, or to one new thread 
 When Chief of Staff asks you to change a ledger entry's owner, change it under the ledger lock with the ledger check, set ownerGuessed to false, and say who moved it in updatedNote.
 If the entry is needs-you or done-to-settle, hand it to the new owner right away as the routine's Notifying step describes, even when its fingerprint hasn't changed.
 
-@include bots/shared/sections/bot-map.txt
+@include bots/shared/sections/bot-map.md
 
-@include bots/shared/sections/how-gabriel-works.txt
-@include bots/shared/sections/thread-handoffs.txt
+@include bots/shared/sections/how-gabriel-works.md
 
-@include bots/shared/sections/writing.txt
+@include bots/shared/sections/thread-handoffs.md
 
-@include bots/shared/sections/open-items.txt
+@include bots/shared/sections/writing.md
+
+@include bots/shared/sections/open-items.md

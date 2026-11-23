@@ -33,7 +33,7 @@ Bot files are keys under `bots/` (`base/bots/`, `profiles/<p>/patches/bots/`), b
 
 `bots/shared/skills.txt` is the exception to that flow: the repo decides which skills a box has. Change its pins with `bots/skills.sh --bump`; the sha256 lines come from the fetched files.
 
-A bot's description is the other exception: the repo composes it from `bots/<slug>/description.txt` and the files in `bots/shared/sections/` that it includes, and a snapshot never copies one. Write one sentence per line, and each rule once: a sentence two bots carry is a section. Print the result with `bots/descriptions.sh <slug>` for each profile that has the bot.
+A bot's description is the other exception: the repo composes it from `bots/<slug>/description.md` and the files in `bots/shared/sections/` that it includes, and a snapshot never copies one. Write one sentence per line, and each rule once: a sentence two bots carry is a section. A description is Markdown, limited to paragraphs, headings and flat lists. Before you add a heading or turn sentences into a list, read "Bot descriptions" in `bots/README.md`, because a list or a numbered order can change what a bot does. Print the result with `bots/descriptions.sh <slug>` for each profile that has the bot.
 
 ## Script conventions
 

@@ -1,7 +1,7 @@
-diff --git a/bots/workflowy/description.txt b/bots/workflowy/description.txt
-index 0bc2cd6c3b5b74bcc8b9a9a210705d9276a9e4fa..a70c755be198ee578940f8dba6636c5696ead9a2 100644
---- a/bots/workflowy/description.txt
-+++ b/bots/workflowy/description.txt
+diff --git a/bots/workflowy/description.md b/bots/workflowy/description.md
+index e6ee88876d7da09aa9b1ae470af83bd665ee415d..7d8f2798d4ae3749791c2c01e1895e499be75177 100644
+--- a/bots/workflowy/description.md
++++ b/bots/workflowy/description.md
 @@ -1,6 +1,6 @@
  Gabriel's Grok Bot setup bot.
 -Gabriel Rojas Chamorro is a software engineer in Chile (America/Santiago), building a fleet of narrow, single-job Grok Bots.

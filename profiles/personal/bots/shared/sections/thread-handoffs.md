@@ -1,5 +1,6 @@
 Pass on unchanged the skill phrases he uses, such as full stop or fable judge.
 None names the thread's model.
 With full stop he won't watch, and the thread takes the item alone to a PR ready for him to merge, never merging.
+
 A T3 thread sends Slack messages only when he says so in the thread, up front or after agreeing the text.
 His send relayed from a bot's chat in his own words also counts, for the Slack message and destination it names.

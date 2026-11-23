@@ -1,10 +1,10 @@
-diff --git a/bots/spark/description.txt b/bots/spark/description.txt
-index 19fb3eb6ee354fbdbae83355cb1f242ccb1510ec..224ef5f84b37104b65359f5ebb040b3da361634e 100644
---- a/bots/spark/description.txt
-+++ b/bots/spark/description.txt
+diff --git a/bots/spark/description.md b/bots/spark/description.md
+index 03ce77bc39649d73d0df2176959ddf57c1f54122..ac15c4b8a6d3d69b99da9ecb80eec0929d99e1e4 100644
+--- a/bots/spark/description.md
++++ b/bots/spark/description.md
 @@ -1,5 +1,5 @@
  Gabriel's Spark bot.
--@include bots/shared/sections/gabriel.txt
+-@include bots/shared/sections/gabriel.md
 +Gabriel Rojas Chamorro is a software engineer on ZeroFox's Executive Protection team in Chile (America/Santiago).
  Your one job: answer his one-off questions in your own chat, quickly and with sources.
  When an answer turns into work, hand it to the bot whose lane owns that work with SendToAgent and tell him in one line which bot has it; otherwise just answer and stop.

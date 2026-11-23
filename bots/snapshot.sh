@@ -41,11 +41,11 @@
 # snapshot: a missing routine is never read as a deleted one.
 #
 # The repo declares each bot's description: bots/descriptions.sh composes it
-# from the bot's description.txt. A snapshot never copies a description into
+# from the bot's description.md. A snapshot never copies a description into
 # the repo. It compares the bot's with the composed text, lists a bot the
 # repo's text hasn't reached yet, and stops on a description that changed on
 # the box or that differs from the repo's with none recorded at the last
-# snapshot. A bot with no description.txt gets one from its live text, offered
+# snapshot. A bot with no description.md gets one from its live text, offered
 # as a new file.
 
 set -euo pipefail
@@ -96,7 +96,7 @@ function repo_keys() {
     for layer in base "$profile_dir"; do
         for slug in "${slugs[@]}"; do
             if [[ -d "$layer/bots/$slug" ]]; then
-                (cd "$layer" && find "bots/$slug" -type f ! -name .DS_Store ! -name description.txt)
+                (cd "$layer" && find "bots/$slug" -type f ! -name .DS_Store ! -path "$(description_key "$slug")")
             fi
         done
         for key in "${fleet_shared[@]}"; do
@@ -425,7 +425,7 @@ for i in "${!ids[@]}"; do
             mkdir -p "$out/bots/$slug"
             split_sentences "$live" >"$out/$(description_key "$slug")"
             join_lines "$out/$(description_key "$slug")" | cmp -s - "$live" ||
-                die "$slug's description has line breaks or spacing a description.txt can't hold; nothing was written. On the bot, separate paragraphs with one blank line and words with one space, then rerun."
+                die "$slug's description has line breaks or spacing a description.md can't hold; nothing was written. On the bot, put one blank line between paragraphs, start each heading and list item on its own line, and put one space between words, then rerun."
             description_states+=("$slug: new, offered below as $(description_key "$slug")")
         else
             description_states+=("$slug: none on the bot or in the repo")
@@ -641,7 +641,9 @@ done
 rm -rf "$baseline"
 mkdir -p "$baseline"
 cp -R "$out/bots" "$baseline/bots"
-find "$baseline/bots" -name description.txt -delete
+for slug in "${slugs[@]}"; do
+    rm -f "$baseline/$(description_key "$slug")"
+done
 cp -R "$out/descriptions" "$baseline/descriptions"
 cp "$roster" "$baseline/bots.txt"
 

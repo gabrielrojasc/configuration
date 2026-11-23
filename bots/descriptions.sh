@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Compose each Grok Bot's description for the profile in .env
-# (DOTFILES_PROFILE) from its description.txt and the sections that file
+# (DOTFILES_PROFILE) from its description.md and the sections that file
 # includes, and build the bundle a box checks its bots against.
 # bots/README.md describes the files and the flow.
 #

@@ -5,7 +5,7 @@
 #   home/<path>       a file that lives at $HOME/<path>
 #   bots/<path>       a Grok Bot file, written by bots/snapshot.sh or bots/skills.sh,
 #                     never installed; bots/descriptions.sh composes a bot's
-#                     description from its description.txt
+#                     description from its description.md
 #   Brewfile          installed with brew bundle, read back with brew bundle dump
 #   pnpm-globals.txt  installed with pnpm add -g, read back with pnpm ls -g
 #   agent-skills.txt  installed with skills add -g, read back with skills ls -g
@@ -313,24 +313,38 @@ function expand_includes() {
     return "$status"
 }
 
-# join_lines <file>: print its text as a bot stores it. The lines of a
-# paragraph join with one space, and a blank line starts the next paragraph.
+# join_lines <file>: print its text as a bot stores it, which is Markdown. A
+# line that opens with a heading mark (#) or a list mark (- or a number and a
+# full stop) starts a new line, and a heading ends on its own line. Every
+# other line joins the line before it with one space. Blank lines become one
+# blank line, and indentation is dropped.
 function join_lines() {
     awk '
+        function flush() {
+            if (block == "") return
+            printf "%s%s", (printed ? (gap ? "\n\n" : "\n") : ""), block
+            printed = 1
+            gap = 0
+            block = ""
+        }
         { sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, "") }
-        $0 == "" { if (paragraph != "") { paragraphs[++count] = paragraph; paragraph = "" } next }
-        { paragraph = (paragraph == "" ? $0 : paragraph " " $0) }
+        $0 == "" { flush(); gap = 1; next }
+        /^#+ / { flush(); block = $0; flush(); next }
+        /^- / || /^[0-9]+\. / { flush(); block = $0; next }
+        { block = (block == "" ? $0 : block " " $0) }
         END {
-            if (paragraph != "") paragraphs[++count] = paragraph
-            for (i = 1; i <= count; i++) printf "%s%s", paragraphs[i], (i < count ? "\n\n" : "\n")
+            flush()
+            if (printed) printf "\n"
         }
     ' "$1"
 }
 
-# split_sentences <file>: the reverse of join_lines, one sentence per line.
+# split_sentences <file>: the reverse of join_lines, one sentence per line. A
+# list number stays on the line of its first sentence.
 function split_sentences() {
-    sed -E 's/([.?!]) ([A-Z`("'\''$])/\1\
-\2/g' "$1"
+    local kept=$'\001'
+    sed -E -e "s/^([0-9]+\\.) /\\1$kept/" -e 's/([.?!]) ([A-Z`("'\''$])/\1\
+\2/g' -e "s/$kept/ /" "$1"
 }
 
 # compose <key> <out>: write the text the profile's <key> stands for, with its
@@ -349,10 +363,10 @@ function compose() {
 
 # description_key <slug>: the key a bot's description is composed from.
 function description_key() {
-    echo "bots/$1/description.txt"
+    echo "bots/$1/description.md"
 }
 
-# declares_description <slug>: whether the profile has a description.txt for
+# declares_description <slug>: whether the profile has a description.md for
 # the bot.
 function declares_description() {
     [[ -n "$(source_of "$(description_key "$1")")" ]]

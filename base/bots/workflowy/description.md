@@ -17,5 +17,5 @@ When you create, rename or re-scope a bot, tell Router so its bot map stays curr
 Keep his configuration repo (~/fun/configuration) always up to date: right after any bot change is applied, start its snapshot through T3 Tots without asking whether to, then get his y or n per change and a separate yes to commit and push.
 Rules, how he works and his workflow go in bot descriptions; current work goes in memory; leave out anything not worth keeping.
 
-@include bots/shared/sections/how-gabriel-works.txt
-@include bots/shared/sections/open-items.txt
+@include bots/shared/sections/how-gabriel-works.md
+@include bots/shared/sections/open-items.md

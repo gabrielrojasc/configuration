@@ -5,7 +5,8 @@ Usage: python3 check-descriptions.py [--diff]
 
 Reads the bundle next to this file, written by bots/descriptions.sh --stage,
 and prints one line per bot. It changes no bot. --diff also prints, for each
-bot that differs, the sentences to take out (-) and to put in (+).
+bot that differs, the sentences to take out (-) and to put in (+). A heading
+prints as a line of its own, and a list item's first sentence keeps its mark.
 
 Exits 0 when every description matches, 1 when any differs, and 2 when the
 bundle or a bot's profile can't be read. BOT_AGENTS_LIVE overrides the live
@@ -24,6 +25,7 @@ import sys
 BUNDLE = pathlib.Path(__file__).resolve().parent
 LIVE = pathlib.Path(os.environ.get("BOT_AGENTS_LIVE", "/home/box/agent-data/agents"))
 SENTENCE_END = re.compile(r"(?<=[.?!]) (?=[A-Z`(\"'$])")
+LIST_NUMBER = re.compile(r"[0-9]+\. ")
 
 
 def fail(message):
@@ -57,7 +59,12 @@ def load_bundle():
 def sentences(text):
     lines = []
     for paragraph in text.strip().split("\n\n"):
-        lines += [sentence.strip() for sentence in SENTENCE_END.split(paragraph)]
+        for line in paragraph.split("\n"):
+            number = LIST_NUMBER.match(line)
+            mark = number.group(0) if number else ""
+            parts = SENTENCE_END.split(line[len(mark):])
+            parts[0] = mark + parts[0]
+            lines += [part.strip() for part in parts]
         lines.append("")
     return lines[:-1]
 

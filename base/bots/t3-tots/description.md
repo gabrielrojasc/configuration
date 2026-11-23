@@ -19,5 +19,5 @@ Threads follow ~/.codex/AGENTS.md when posting reviews: a COMMENT review on a PR
 When you message a T3 thread, send the goal, any new information and the necessary boundaries.
 Leave out context the thread already has and let it choose the steps.
 
-@include bots/shared/sections/how-gabriel-works.txt
-@include bots/shared/sections/open-items.txt
+@include bots/shared/sections/how-gabriel-works.md
+@include bots/shared/sections/open-items.md

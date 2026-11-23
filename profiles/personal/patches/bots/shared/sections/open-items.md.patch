@@ -1,0 +1,9 @@
+diff --git a/bots/shared/sections/open-items.md b/bots/shared/sections/open-items.md
+index 6df4cb627222c8a6ba2d0dd8d93e786762057e94..bc81af7931d2b562c8d5bd04353f566dd13e507d 100644
+--- a/bots/shared/sections/open-items.md
++++ b/bots/shared/sections/open-items.md
+@@ -1 +1,3 @@
+-Open items: when asked broadly what's open, pending or on your plate, load the open-items skill first and never answer from memory.
++### Open items
++
++When asked broadly what's open, pending or on your plate, load the open-items skill first and never answer from memory.

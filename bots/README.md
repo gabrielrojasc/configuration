@@ -18,12 +18,12 @@ To install these bots on a new Grok Bot account, see [INSTALL.md](INSTALL.md).
 ```text
 base/bots/
 ├── <slug>/
-│   ├── description.txt            # the bot's own rules and its include lines
+│   ├── description.md             # the bot's own rules and its include lines
 │   ├── profile.json
 │   ├── settings.json
 │   └── routines/<routine>.md      # absent when the bot has none
 └── shared/
-    ├── sections/<name>.txt          # rules several bots carry, each written once
+    ├── sections/<name>.md           # rules several bots carry, each written once
     ├── skills.txt                   # the skills every box has, pinned
     └── unsettled-threads.shape.json # the ledger's format, decided here
 profiles/<profile>/
@@ -441,28 +441,69 @@ Turning one on, or asking T3 Tots to update, moves a box past the pin.
 
 ## Bot descriptions
 
-The repository declares each bot's description. A bot's `description.txt`
+The repository declares each bot's description. A bot's `description.md`
 holds the rules only that bot has, one sentence per line. An include line
 names a file of rules that several bots carry:
 
 ```text
 Gabriel's Spark bot.
-@include bots/shared/sections/gabriel.txt
+@include bots/shared/sections/gabriel.md
 Your one job: answer his one-off questions in your own chat.
 
-@include bots/shared/sections/how-gabriel-works.txt
+@include bots/shared/sections/how-gabriel-works.md
 ```
 
-`bots/descriptions.sh` composes the description from that file:
+A description is Markdown. A bot stores it in a plain-text field that nothing
+renders, so a description holds only paragraphs, headings, and lists:
+
+```markdown
+### Bot map
+
+This is the bot map for this account.
+
+- Router does intake and routing.
+- Admin owns what's in his mail and Slack, plus his calendars.
+  Gabriel opens Admin himself, and nothing is routed to it.
+
+No bot owns everyday life questions.
+```
+
+`bots/descriptions.sh` composes the description from those files:
 
 - An `@include <key>` line becomes the lines of that key, in place. A section
   can include another section.
-- The lines of a paragraph join with one space. A blank line starts the next
-  paragraph.
+- A line that starts with `#` marks and a space is a heading. It stays a line
+  of its own, and the line after it starts a new one.
+- A line that starts with `- `, or with a number and `. `, starts a list
+  item.
+- Every other line joins the line before it with one space. The sentences of
+  a paragraph end up on one line, and so do the sentences of a list item.
+- A blank line ends a paragraph or a list item. The composed text keeps one
+  blank line wherever the files have one or more.
+
+The sample composes to a heading, a paragraph, a list of two lines, and a
+paragraph. Leave a blank line before and after each heading and each list,
+because a sentence that follows a list item without one joins that item. The
+script drops indentation and knows no other block, so a nested list comes out
+flat, and a code fence, a table, or a block quote comes out as a paragraph.
+A file with no heading and no list composes to plain paragraphs.
+
+Add structure where it tells a bot something the sentences don't:
+
+- Give a section a heading when sentences elsewhere name it, as "the bot map
+  below" does. Use level 3 (`###`). The repository can't see the prompt a box
+  builds around a description, and level 3 nests under a level 1 or level 2
+  heading if that prompt has one.
+- Use a list for parallel items that a bot matches a case against, such as
+  the lanes in the bot map. Each item is one or more whole sentences.
+- Number a list only when its sentences state the order. A bot can read
+  numbered rules as "the first match wins".
+- Keep a rule with optional parts as sentences, such as what a hand-off
+  holds. A bot can read a list as a form and fill in every line.
 
 Write each rule once. A rule only one bot has goes in that bot's
-`description.txt`. A sentence two or more bots carry goes in
-`bots/shared/sections/<name>.txt`, and each of those bots includes it.
+`description.md`. A sentence two or more bots carry goes in
+`bots/shared/sections/<name>.md`, and each of those bots includes it.
 
 Each file is a key, so a profile changes a section or a bot's own rules as it
 changes any other file: with its own copy in `profiles/<profile>/bots/`, or
@@ -479,15 +520,15 @@ bots/descriptions.sh closer
 bots/descriptions.sh --sources closer
 ```
 
-`./install.sh --show bots/closer/description.txt` prints the file itself, with
+`./install.sh --show bots/closer/description.md` prints the file itself, with
 its include lines.
 
 Descriptions hold rules. Put a procedure in a skill, and have the description
-name the skill where the bot needs it, as `sections/open-items.txt` does.
+name the skill where the bot needs it, as `sections/open-items.md` does.
 
 ### Change a description
 
-1. Edit the bot's `description.txt` or the section that holds the rule. For a
+1. Edit the bot's `description.md` or the section that holds the rule. For a
    change only one profile gets, write the full file to `.conflicts/<key>` and
    run `./copy.sh --resolve <key>`.
 2. Print the description for each profile that has the bot, and run
@@ -501,7 +542,8 @@ Workflowy, as you do the skills.
 
 1. Build the bundle on the Mac. It holds one `<slug>.txt` per bot in the
    profile's `bots.txt`, a manifest with each bot's id and sha256, and the
-   check:
+   check. Each `<slug>.txt` is the composed Markdown, exactly as the bot's
+   field stores it:
 
    ```sh
    staging=$(mktemp -d)
@@ -518,19 +560,26 @@ Workflowy, as you do the skills.
 3. Read the output. Each line names a bot:
 
    - `differs`: the lines below it are the sentences the bot loses (`-`) and
-     gains (`+`).
+     gains (`+`). A heading prints as a line of its own, and a list item's
+     first sentence keeps its mark.
    - `missing`: the box has no bot with the id `bots.txt` gives it. Fix the id
      first.
 
 4. After you approve the sentences, ask Workflowy to apply them:
 
    > For each bot the check lists as `differs`, set its description to the
-   > exact text of its `<slug>.txt`, without the file's final newline. Then
-   > run `check-descriptions.py` again and show me its output.
+   > exact text of its `<slug>.txt`, without the file's final newline. The
+   > text is Markdown, so keep every `#`, `-`, and line break as the file
+   > has it. Then run `check-descriptions.py` again and show me its output.
 
    The last line must read `OK: every description matches`. The check reads
    the saved text. To confirm that a bot acts on a new rule, ask that bot in
    its chat what the rule says.
+
+   If a bot still `differs` and `--diff` shows a heading or a list item
+   joined to another line, the box didn't keep a single line break. Stop, and
+   put a blank line between those lines in the files. A box keeps blank
+   lines.
 
 ### Check a box for drift
 
@@ -555,7 +604,7 @@ composes, and `--list` prints one line per bot under `Descriptions:`.
   <slug>` lists until the repository composes the bot's text, or have
   Workflowy set the bot back to the repository's text. Then take the snapshot
   again.
-- `new`: the bot has no `description.txt` in the repository. The snapshot
+- `new`: the bot has no `description.md` in the repository. The snapshot
   offers one, made from the live description, as a new file.
 
 ## Roll back

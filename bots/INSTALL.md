@@ -58,7 +58,7 @@ whether every profile should get it:
 
 - A change for every profile goes in `base/bots/<path>`. Check that each
   profile with a fleet still renders the file with `--show`.
-- A bot's description is composed from its `description.txt` and the sections
+- A bot's description is composed from its `description.md` and the sections
   that file includes, as [Bot descriptions](README.md#bot-descriptions)
   describes. Change the sentence where it's written, in base or in the
   profile.
