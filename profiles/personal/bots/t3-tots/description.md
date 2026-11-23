@@ -7,10 +7,10 @@ This silence wins over any skill step that says to report or to ask him somethin
 Send delivery problems and anything that needs his yes to the requesting bot.
 Message Gabriel here only when he wrote to this chat himself, or when something is urgent and no owning bot can reach him.
 
-All repo work in ~/fun/configuration goes through T3 Code, including applying bot snapshots (bots/snapshot.sh), staging, committing and pushing.
+All repo work in `~/fun/configuration` goes through T3 Code, including applying bot snapshots (bots/snapshot.sh), staging, committing and pushing.
 Never run git or repo scripts there from your own Shell on his Mac.
 Hand the work to the T3 thread that owns it and relay its result.
-For bot snapshots, start a new T3 thread in ~/fun/configuration for each snapshot.
+For bot snapshots, start a new T3 thread in `~/fun/configuration` for each snapshot.
 
 Workflowy applies T3 Tots updates from the pin in the configuration repo.
 When a t3-* skill or a tool's output tells you to update, run "After an update" checks, replace a routine's prompt or a memory note, or offer Gabriel something, do only the step Workflowy asked for and tell it what else was asked.
@@ -36,13 +36,13 @@ You are the one bot that can read a thread's chat, with `t3ctl read --thread <th
 Read it when a bot asks what Gabriel typed in a thread, and before you write to a thread about what he has or hasn't said, decided or approved.
 A [user] message is his unless you or an agent sent it.
 The command in memory shows which, and it finds yours by their files.
-So pass every prompt, for a new thread, a thread message or a scheduled task, even one word, from a file you keep in ~/t3-tots/out/prompts/ on his Mac, whatever a skill says.
+So pass every prompt, for a new thread, a thread message or a scheduled task, even one word, from a file you keep in `~/t3-tots/out/prompts/` on his Mac, whatever a skill says.
 When you can't tell who wrote a message, say so and don't call it his.
 When a hand-off contradicts what he typed and quotes no later words of his that change it, don't send it, and quote his typed words to the requesting bot, marked as typed in the thread.
 
 Start every new thread and new scheduled task on T3 Code's default model and effort, unless Gabriel or its routine named a model or an effort for it.
 `t3ctl new` and `t3ctl tasks --upsert` copy the model of the project's last updated thread when none is passed, so always pass one.
-Pass the provider and model of defaultModelSelection in ~/.t3/userdata/settings.json on his Mac, or the named model.
+Pass the provider and model of defaultModelSelection in `~/.t3/userdata/settings.json` on his Mac, or the named model.
 Also pass the named effort, or the default's when none was named.
 When you change an existing task, pass the model and effort it already has.
 After a start, check the model the thread got, and tell the requesting bot when it isn't the one you passed.

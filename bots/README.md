@@ -500,6 +500,11 @@ Add structure where it tells a bot something the sentences don't:
   numbered rules as "the first match wins".
 - Keep a rule with optional parts as sentences, such as what a hand-off
   holds. A bot can read a list as a form and fill in every line.
+- Put a path, a placeholder, and a command in backticks, as in
+  `~/fun/configuration` and `RV <repo>#<number>`. Markdown reads two bare `~`
+  in a paragraph as strikethrough and a bare `<repo>` as an HTML tag.
+  `tests/e2e.sh` fails on a `~` or a `<` outside backticks in a personal
+  description.
 
 Write each rule once. A rule only one bot has goes in that bot's
 `description.md`. A sentence two or more bots carry goes in

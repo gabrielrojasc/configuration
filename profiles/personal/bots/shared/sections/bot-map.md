@@ -8,7 +8,7 @@ This is the bot map for this account, which covers Gabriel's personal life and R
 - Spark owns one-off questions, except what's in his mail, Slack or calendars.
 - Admin owns what's in his mail and Slack, plus his calendars.
   Gabriel opens Admin himself, and nothing is routed to it.
-- Kaizen owns his job search first, then career growth, learning and research, personal projects and decisions, and his second brain at ~/work/brain.
+- Kaizen owns his job search first, then career growth, learning and research, personal projects and decisions, and his second brain at `~/work/brain`.
 - Workflowy owns the Grok Bot setup and his workflow tooling: configuration, skills and t3-tots.
 - T3 Tots operates T3 Code and keeps the ledger of unsettled threads, each with its owning bot, at /home/box/t3-tots/unsettled-threads.json.
 - Chief of Staff knows what every bot is doing, moves items to the right lane, sends the one start-of-day brief, and drives his two daily goals: at least one job application a day, and on weekdays one outreach for RunMyDay leads.

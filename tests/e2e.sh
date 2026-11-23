@@ -1213,9 +1213,20 @@ function no_stored_description() {
         fi
     done < <(find "$repo/base/bots" "$repo"/profiles/*/bots "$repo"/profiles/*/patches/bots -name profile.json -o -name profile.json.patch)
 }
+function markdown_safe_fleet() {
+    local slug id stray
+    while read -r slug id; do
+        stray=$(describe "$1" "$slug" </dev/null | sed 's/`[^`]*`//g' | grep -o '.\{0,20\}[~<].\{0,20\}' || true)
+        if [[ -n "$stray" ]]; then
+            echo "$slug has a ~ or < outside a code span: $stray"
+            return 1
+        fi
+    done <"$repo/profiles/$1/bots.txt"
+}
 for profile in zerofox personal; do
     check "$profile composes a description for every bot in its fleet" composes_fleet "$profile"
 done
+check "personal descriptions keep every ~ and < inside a code span, so Markdown shows them as written" markdown_safe_fleet personal
 check "no profile.json and no profile.json patch holds a description" no_stored_description
 
 rm -rf "${repo:?}/base/bots" "${repo:?}"/profiles/*/patches/bots "${repo:?}"/profiles/*/bots "${repo:?}"/profiles/*/bots.txt
