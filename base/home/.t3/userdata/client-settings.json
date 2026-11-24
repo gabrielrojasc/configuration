@@ -3,6 +3,7 @@
   "inAppNotificationsEnabled": false,
   "diffColorScheme": "red-green",
   "chatWidth": "comfortable",
+  "effortDisplay": "label",
   "loadBalancingEnabled": false,
   "loadBalancingWeights": {},
   "appearanceContrast": 100,
@@ -23,6 +24,7 @@
   "browserDefaultProfileId": "default",
   "confirmQuit": "double-click",
   "confirmThreadArchive": false,
+  "confirmTerminalClose": true,
   "confirmThreadDelete": true,
   "confirmThreadUnpin": false,
   "diffFilesCollapsed": false,
@@ -47,28 +49,64 @@
     },
     {
       "provider": "codex",
-      "model": "gpt-6.2-sol"
+      "model": "gpt-6.1-sol"
     }
   ],
   "providerModelPreferences": {},
   "pullRequestMergeMethodOverrides": {},
   "pullRequestLinksOpenInApp": false,
-  "planModeEnabled": false,
-  "contextWindowMeterEnabled": false,
-  "composerCollapseOnScroll": true,
   "composerRichTextEnabled": true,
   "sendShortcut": "enter",
   "followUpBehavior": "steer",
   "proactivePanelsEnabled": false,
   "showSkillsInSlashMenu": true,
-  "legacySidebarEnabled": false,
+  "boringSidebarEnabled": false,
+  "boringSidebarMultilineRows": false,
+  "toolCallVisibility": "showAll",
+  "screenReaderAnnouncements": "status",
+  "screenReaderWindowTitle": false,
+  "threadDetailsUsageEnabled": false,
+  "threadDetailsItems": {},
   "sidebarWorkingShelfEnabled": true,
   "sidebarProjectGroupingMode": "repository",
   "sidebarProjectGroupingOverrides": {},
   "sidebarProjectSortOrder": "updated_at",
   "sidebarThreadSortOrder": "updated_at",
-  "sidebarThreadPreviewCount": 6,
   "timestampFormat": "locale",
+  "voiceMicrophone": "",
+  "voiceMicrophones": [
+    {
+      "kind": "device",
+      "deviceId": "106a8f1f82134a284e8367ba3dd972ba9bd8599fd5eb51ab643c3e2a6ccc9de2",
+      "label": "MacBook Pro Microphone (Built-in)"
+    },
+    {
+      "kind": "default"
+    },
+    {
+      "kind": "device",
+      "deviceId": "5da416949c3a1d4b28c59e95a15ecd64209a1187a298658b41f271f585628571",
+      "label": "AirPods (Bluetooth)"
+    },
+    {
+      "kind": "device",
+      "deviceId": "bf72b46854a7b528a5db45d7df1b96a39addd9883b884c433090c5e7f7e4b094",
+      "label": "ZoomAudioDevice (Virtual)"
+    }
+  ],
+  "voiceShortcutMode": "auto",
+  "speechLanguage": "auto",
+  "speechTranslateToEnglish": false,
+  "speechCustomWords": [],
+  "speechSilenceFiltering": true,
+  "speechStreaming": true,
+  "speechRemoveFillerWords": true,
+  "speechPostProcessingPrompt": {
+    "mode": "default",
+    "customInstructions": ""
+  },
+  "speechCorrectionWord": "",
+  "language": "en",
   "snapShotEnabled": true,
   "snapShotIncludeAccessibility": true,
   "snapShotShortcut": {
@@ -80,6 +118,5 @@
   "snapShotFlash": true,
   "snapShotAnimations": true,
   "wordWrap": true,
-  "mathRenderingEnabled": false,
-  "redesignEnabled": true
+  "mathRenderingEnabled": false
 }
