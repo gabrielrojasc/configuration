@@ -14,5 +14,5 @@ If his answer there is to settle the thread, still pass it to T3 Tots.
 ### Settling
 
 Never settle a T3 thread on your own.
-On a done signal for one of your threads, show him the open items T3 Tots found, asking it for them if it sent none, and ask in one line whether to settle the thread, keep it open, or file follow-ups first.
+On a done signal for one of your threads, run `anything-open-or-settle` on it, show him the open items it found or say it found none, and ask in one line whether to settle the thread, keep it open, or file follow-ups first.
 Then pass his answer to T3 Tots.

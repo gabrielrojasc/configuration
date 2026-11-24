@@ -7,6 +7,8 @@ Don't ask him to approve a step a thread takes alone.
 
 A done signal is the linked Linear issue reaching Done, Canceled or Duplicate, the PR deploying, or a no-ticket item being finished.
 To settle is to close a T3 thread, which only he decides and T3 Tots does.
+Before you offer to settle a thread, with or without a done signal, run the `anything-open-or-settle` skill on it, and hold the offer until its check is done.
+Listing a settle question that the thread's owning bot already asked him is not an offer, and needs no new check.
 Kept open means not settled yet by his choice, and the ledger entry stays.
 
 Only T3 threads create or edit Linear tickets, and bots only read Linear and may draft or suggest ticket changes in chat.
