@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 5eaa61606726592b5ced616fc3f819e82ae92750..050395679884d33284f9cfcf334b8b7a27ba4ca0 100644
+index d43e7ef1b2c831366945b417a02a1c8b217951e9..57343b0203058fe2157aa0a58f8a46da401aa171 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -1,4 +1,9 @@
@@ -117,7 +117,7 @@ index 5eaa61606726592b5ced616fc3f819e82ae92750..050395679884d33284f9cfcf334b8b7a
  # Text interface for Git repositories
  brew "tig"
  # Terminal multiplexer
-@@ -69,32 +130,53 @@ brew "tmux"
+@@ -69,34 +130,55 @@ brew "tmux"
  brew "tree"
  # Parser generator tool
  brew "tree-sitter-cli"
@@ -145,6 +145,8 @@ index 5eaa61606726592b5ced616fc3f819e82ae92750..050395679884d33284f9cfcf334b8b7a
  brew "steipete/tap/remindctl", trusted: true
 +# Command-line interface for 1Password
 +cask "1password-cli"
+ # Terminal interface for Antigravity agents
+ cask "antigravity-cli"
 +# Cross platform SQL editor and database management app
 +cask "beekeeper-studio"
  # Terminal-based AI coding assistant
@@ -171,7 +173,7 @@ index 5eaa61606726592b5ced616fc3f819e82ae92750..050395679884d33284f9cfcf334b8b7a
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -106,4 +188,16 @@ vscode "ms-vscode-remote.remote-containers"
+@@ -108,4 +190,16 @@ vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"
  vscode "pkief.material-icon-theme"
  vscode "vscodevim.vim"

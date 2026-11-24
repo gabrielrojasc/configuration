@@ -1,5 +1,5 @@
 diff --git a/Brewfile b/Brewfile
-index 5eaa61606726592b5ced616fc3f819e82ae92750..8fe7ae52d4866df5778ed1e29377cc82ee7e91ac 100644
+index d43e7ef1b2c831366945b417a02a1c8b217951e9..2be0f63aff2923a14007127f78207aa7ef5027f4 100644
 --- a/Brewfile
 +++ b/Brewfile
 @@ -7,16 +7,22 @@ brew "bash"
@@ -74,7 +74,7 @@ index 5eaa61606726592b5ced616fc3f819e82ae92750..8fe7ae52d4866df5778ed1e29377cc82
  # Additional completion definitions for zsh
  brew "zsh-completions"
  # Fast CLI for Apple Reminders
-@@ -87,14 +107,43 @@ cask "claude-code@latest"
+@@ -89,14 +109,43 @@ cask "claude-code@latest"
  cask "codex"
  # Background desktop automation driver for AI agents
  cask "cuadriver"
@@ -118,7 +118,7 @@ index 5eaa61606726592b5ced616fc3f819e82ae92750..8fe7ae52d4866df5778ed1e29377cc82
  vscode "mechatroner.rainbow-csv"
  vscode "ms-azuretools.vscode-containers"
  vscode "ms-azuretools.vscode-docker"
-@@ -104,6 +153,12 @@ vscode "ms-python.vscode-pylance"
+@@ -106,6 +155,12 @@ vscode "ms-python.vscode-pylance"
  vscode "ms-python.vscode-python-envs"
  vscode "ms-vscode-remote.remote-containers"
  vscode "ms-vscode.makefile-tools"

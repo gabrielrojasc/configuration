@@ -217,6 +217,20 @@ check "copy carries T3 Code client settings" grep -rq '"wordWrap": false' "$repo
 check "T3 Code app state never reaches the repo" bash -c "! grep -rqE 'onboardingCompletedAt|dismissedProviderUpdateNotificationKeys' '$repo/base' '$repo/profiles'"
 echo
 
+# Antigravity CLI rewrites its settings with trusted workspaces and GCP sign-in state.
+echo "== Antigravity CLI settings"
+fresh personal
+agy_settings="$home/.gemini/antigravity-cli/settings.json"
+mkdir -p "$(dirname "$agy_settings")"
+printf '{"showTips":true,"altScreenMode":"always","trustedWorkspaces":["/tmp/e2e-workspace"],"gcp":{"project":"e2e-proj","location":"us"}}\n' >"$agy_settings"
+in_repo ./install.sh --only files --apply >/dev/null
+check "install keeps existing Antigravity CLI settings" grep -q '"showTips":true' "$agy_settings"
+in_repo ./copy.sh --only files --no-sort >/dev/null
+check "copy carries Antigravity CLI settings" grep -rq '"showTips": true' "$repo/profiles/personal/patches/home/.gemini"
+check "Antigravity CLI machine state never reaches the repo" bash -c "! grep -rqE 'trustedWorkspaces|e2e-workspace|e2e-proj' '$repo/base' '$repo/profiles'"
+check "Antigravity CLI machine state never reaches the snapshot" bash -c "! grep -rqE 'trustedWorkspaces|e2e-workspace|e2e-proj' '$home/.local/state/dotfiles'"
+echo
+
 # Agent skills keep the subpath they were added from, which the CLI's list
 # drops and its lock file keeps. A stub stands in for the skills CLI (via pnpx)
 # and prints what `skills ls -g --json` prints for this lock.
@@ -230,9 +244,9 @@ if [ "$2" = ls ]; then cat "$HOME/skills-ls.json"; fi
 EOF
 chmod +x "$home/bin/pnpx"
 cat >"$home/skills-ls.json" <<'EOF'
-[{"name":"bro","source":"cursor/plugins","sourceType":"github","agents":["Claude Code","Codex","Cursor"]},
-{"name":"frontend-design","source":"anthropics/skills","sourceType":"github","agents":["Claude Code","Codex"]},
-{"name":"frontend-slides","source":"zarazhangrui/frontend-slides","sourceType":"github","agents":["Claude Code","Codex"]},
+[{"name":"bro","source":"cursor/plugins","sourceType":"github","agents":["Antigravity CLI","Claude Code","Codex","Cursor"]},
+{"name":"frontend-design","source":"anthropics/skills","sourceType":"github","agents":["Antigravity CLI","Claude Code","Codex"]},
+{"name":"frontend-slides","source":"zarazhangrui/frontend-slides","sourceType":"github","agents":["Antigravity CLI","Claude Code","Codex"]},
 {"name":"google-docs","source":"gabrielrojasc/skills","sourceType":"github","agents":["Claude Code"]}]
 EOF
 cat >"$home/.local/state/skills/.skill-lock.json" <<'EOF'

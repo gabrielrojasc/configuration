@@ -81,6 +81,8 @@ brew "wget"
 brew "zsh-completions"
 # Fast CLI for Apple Reminders
 brew "steipete/tap/remindctl", trusted: true
+# Terminal interface for Antigravity agents
+cask "antigravity-cli"
 # Terminal-based AI coding assistant
 cask "claude-code@latest"
 # OpenAI's coding agent that runs in your terminal

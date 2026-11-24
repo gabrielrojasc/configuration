@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index 14c0d47ac55285ea0b43738c5587f87e7273fc2d..c1390b9a8fea2686cb23d8ef91722cfabe06f50c 100644
+index f43f8e9bbdedc49089c54ea8cef19c2a30b29b4a..ba61167629761869141427f2efd65221201b7380 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design

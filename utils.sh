@@ -115,7 +115,11 @@ apps_dir=${DOTFILES_APPS_DIR:-/Applications}
 
 # Keys that Codex and other tools rewrite with machine state; install only
 # writes them when missing.
-seed_only_keys=(home/.codex/config.toml home/.t3/userdata/client-settings.json)
+seed_only_keys=(
+    home/.codex/config.toml
+    home/.t3/userdata/client-settings.json
+    home/.gemini/antigravity-cli/settings.json
+)
 
 function load_profile() {
     # The environment wins over .env so a one-off run can target another profile.
@@ -579,6 +583,11 @@ function read_machine() {
                 # and notification state.
                 home/.t3/userdata/client-settings.json)
                     jq 'del(.onboardingCompletedAt, .dismissedProviderUpdateNotificationKeys)' "$path" >"$out"
+                    ;;
+                # Antigravity CLI keeps trusted workspaces and GCP sign-in state
+                # in its settings and rewrites keys in its own order.
+                home/.gemini/antigravity-cli/settings.json)
+                    jq -S 'del(.trustedWorkspaces, .gcp)' "$path" >"$out"
                     ;;
                 *) cat "$path" >"$out" ;;
             esac

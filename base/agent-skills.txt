@@ -1,4 +1,4 @@
-agents claude-code codex
+agents antigravity-cli claude-code codex
 anthropics/skills frontend-design
 cursor/plugins/pstack bro
 cursor/plugins/pstack ketchup
