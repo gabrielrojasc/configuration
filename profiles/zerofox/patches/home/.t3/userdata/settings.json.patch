@@ -1,0 +1,23 @@
+diff --git a/home/.t3/userdata/settings.json b/home/.t3/userdata/settings.json
+index 06030001a0d1b2421223c5f48aae0b3cce445530..6ad3b4dc0929e0c85cba565955f59837a9d026c0 100644
+--- a/home/.t3/userdata/settings.json
++++ b/home/.t3/userdata/settings.json
+@@ -44,5 +44,17 @@
+     ]
+   },
+   "branchNamePrefix": "",
+-  "reviewGuidesEnabled": true
++  "reviewGuidesEnabled": true,
++  "providerInstances": {
++    "antigravity": {
++      "driver": "antigravity",
++      "displayName": "Antigravity",
++      "enabled": false,
++      "config": {
++        "authMethod": "oauth-business",
++        "gcpLocation": "global",
++        "gcpProject": "antigravity-poc-515318"
++      }
++    }
++  }
+ }
