@@ -1,5 +1,5 @@
 diff --git a/agent-skills.txt b/agent-skills.txt
-index f43f8e9bbdedc49089c54ea8cef19c2a30b29b4a..ba61167629761869141427f2efd65221201b7380 100644
+index f43f8e9bbdedc49089c54ea8cef19c2a30b29b4a..c4c95b05ac100a47daaa2f3b2d8d665a5e64baa0 100644
 --- a/agent-skills.txt
 +++ b/agent-skills.txt
 @@ -3,7 +3,6 @@ anthropics/skills frontend-design
@@ -20,7 +20,7 @@ index f43f8e9bbdedc49089c54ea8cef19c2a30b29b4a..ba61167629761869141427f2efd65221
  gabrielrojasc/skills python-environments
  gabrielrojasc/skills review-revise
  gabrielrojasc/skills rewrite-it
-@@ -53,5 +51,8 @@ mattpocock/skills writing-for-agents
+@@ -53,5 +51,9 @@ mattpocock/skills writing-for-agents
  microsoft/playwright-cli playwright-cli
  openclaw/openclaw summarize
  pbakaus/impeccable/.agents impeccable
@@ -28,4 +28,5 @@ index f43f8e9bbdedc49089c54ea8cef19c2a30b29b4a..ba61167629761869141427f2efd65221
  trycua/cua cua-driver
 +unblocked/skills unblocked-context-research
 +unblocked/skills unblocked-tools-guide
++vercel-labs/agent-browser agent-browser
  zarazhangrui/frontend-slides frontend-slides
