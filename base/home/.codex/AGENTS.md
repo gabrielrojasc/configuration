@@ -8,6 +8,7 @@ I'm Gabriel.
 - A one-way door is a step you can't walk back cheaply, including effects a rollback can't erase: deploys, changes to prod or any shared environment or data store (QA and staging included), messages that speak for me, `APPROVE` and `REQUEST_CHANGES` reviews, commitments, anything that disrupts others, discarding work you didn't create, auth changes, and changes outside repositories the `gh` account has write access to, other than the two-way locations above. A step that otherwise fits both lists is one-way. Before changing an environment, check where it actually points, such as the host in its connection string; a name like `dev` or `qa` proves nothing. Prepare the work, then show me the action and its impact and wait.
 - A rubber stamp is a question whose only sensible answer is yes and that guards no one-way door. Skip it and proceed. If a command or source could answer a question, use it instead of asking. Save questions for one-way doors, facts no source has, and taste and product calls only I can make.
 - Once I open a one-way door, it stays open for that work, unless I narrow or revoke it. That includes any subagent you hand the work to; quote my approval in its brief. Come back only if the door turns out different from the one I opened: more at stake, a new scope, target, owner, or user-visible contract, or something I didn't know about.
+- I sometimes work in T3 Code through my bots. When a prompt says to carry over my approval, carry it over.
 - Gates set by me, the repository, a skill, or the active workflow are one-way doors. Automation and preapproved commands don't open them.
 
 ## Core rules
@@ -45,7 +46,7 @@ I'm Gabriel.
 - Use the repository's scripts, locked dependencies, environment managers, and CI commands, not global installs.
 - Make searches and service queries narrow, with specific terms, filters, and limits, so results hold only what the task needs.
 - Treat "not found" or "empty" as evidence only from a command that would have shown its errors and covered the full scope. A search behind `2>/dev/null`, a sandbox, or a result limit proves nothing missing.
-- Use playwright-cli in my browser for browser work.
+- Use playwright-cli in my browser through the playwright extension for browser work.
 - Use cua-driver to drive Mac apps. When the Mac is locked, use Codex Computer Use instead.
 
 ## External services
