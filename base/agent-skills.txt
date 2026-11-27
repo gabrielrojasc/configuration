@@ -5,15 +5,13 @@ cursor/plugins/pstack ketchup
 cursor/plugins/pstack unslop
 emilkowalski/skills apple-design
 emilkowalski/skills emil-design-eng
-gabrielrojasc/skills astra-fable
 gabrielrojasc/skills babysit-pr
-gabrielrojasc/skills chief-of-staff
+gabrielrojasc/skills council
 gabrielrojasc/skills cross-review
 gabrielrojasc/skills developer-documentation-style
 gabrielrojasc/skills full-stop
 gabrielrojasc/skills gh-review-comments
 gabrielrojasc/skills git-workspace
-gabrielrojasc/skills hill-climb
 gabrielrojasc/skills linear-gh-linking
 gabrielrojasc/skills linear-work-breakdown
 gabrielrojasc/skills python-environments
